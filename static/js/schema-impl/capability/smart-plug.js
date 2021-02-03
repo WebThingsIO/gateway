@@ -23,14 +23,9 @@ class SmartPlug extends OnOffSwitch {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/smart_plug.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/smart_plug.svg',
+    });
   }
 
   /**
@@ -52,8 +47,10 @@ class SmartPlug extends OnOffSwitch {
     }
 
     // If necessary, match on name.
-    if (this.powerProperty === null &&
-        this.displayedProperties.hasOwnProperty('instantaneousPower')) {
+    if (
+      this.powerProperty === null &&
+      this.displayedProperties.hasOwnProperty('instantaneousPower')
+    ) {
       this.powerProperty = 'instantaneousPower';
     }
 
@@ -61,11 +58,9 @@ class SmartPlug extends OnOffSwitch {
     this.unit = 'watt';
 
     if (this.powerProperty) {
-      const property =
-        this.displayedProperties[this.powerProperty].convertedProperty;
+      const property = this.displayedProperties[this.powerProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-          `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 

@@ -67,12 +67,9 @@ class StringLabelProperty extends BaseComponent {
 `;
     super(template);
 
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-string-label-property-name');
-    this._container = this.shadowRoot.querySelector(
-      '.webthing-string-label-property-container');
-    this._value = this.shadowRoot.querySelector(
-      '.webthing-string-label-property-value');
+    this._name = this.shadowRoot.querySelector('.webthing-string-label-property-name');
+    this._container = this.shadowRoot.querySelector('.webthing-string-label-property-container');
+    this._value = this.shadowRoot.querySelector('.webthing-string-label-property-value');
     this._inverted = false;
   }
 
@@ -82,14 +79,11 @@ class StringLabelProperty extends BaseComponent {
     }
 
     if (!this.value) {
-      this.value =
-        typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
+      this.value = typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
     }
 
     this.inverted =
-      typeof this.dataset.inverted !== 'undefined' ?
-        this.dataset.inverted === 'true' :
-        false;
+      typeof this.dataset.inverted !== 'undefined' ? this.dataset.inverted === 'true' : false;
 
     if (this.uppercase) {
       this._value.classList.add('uppercase');
@@ -127,6 +121,5 @@ class StringLabelProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-string-label-property',
-                             StringLabelProperty);
+window.customElements.define('webthing-string-label-property', StringLabelProperty);
 module.exports = StringLabelProperty;

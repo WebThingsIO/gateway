@@ -10,10 +10,10 @@
  */
 
 import Deferred from '../deferred';
-import {AddonManagerProxy, Constants, Notifier} from 'gateway-addon';
-import {OutletDescription} from 'gateway-addon/lib/schema';
+import { AddonManagerProxy, Constants, Notifier } from 'gateway-addon';
+import { OutletDescription } from 'gateway-addon/lib/schema';
 import OutletProxy from './outlet-proxy';
-import {AddonManager} from '../addon-manager';
+import { AddonManager } from '../addon-manager';
 import Plugin from './plugin';
 const MessageType = Constants.MessageType;
 
@@ -30,7 +30,7 @@ export default class NotifierProxy extends Notifier {
     packageName: string,
     private plugin: Plugin
   ) {
-    super(<AddonManagerProxy><unknown>addonManager, notifierId, packageName);
+    super(<AddonManagerProxy>(<unknown>addonManager), notifierId, packageName);
     this.setName(name);
   }
 

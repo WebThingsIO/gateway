@@ -1,34 +1,30 @@
 import '../jsdom-common';
-import {createSchemaForm} from './test-utils';
+import { createSchemaForm } from './test-utils';
 
 describe('BooleanField', () => {
   it('should render a boolean field', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
       },
     });
 
-    expect(
-      node.querySelectorAll('.field input[type=checkbox]')
-    ).toHaveLength(1);
+    expect(node.querySelectorAll('.field input[type=checkbox]')).toHaveLength(1);
   });
 
   it('should render a boolean field with a label', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
         title: 'foo',
       },
     });
 
-    expect(
-      node.querySelector('.field .control-label')!.textContent!.trim()
-    ).toEqual('foo');
+    expect(node.querySelector('.field .control-label')!.textContent!.trim()).toEqual('foo');
   });
 
   it('should render a single label', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
         title: 'foo',
@@ -39,7 +35,7 @@ describe('BooleanField', () => {
   });
 
   it('should render a description', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
         description: 'my description',
@@ -51,7 +47,7 @@ describe('BooleanField', () => {
   });
 
   it('should assign a default value', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
         default: true,
@@ -62,13 +58,13 @@ describe('BooleanField', () => {
   });
 
   it('should default state value to false', () => {
-    const {schemaForm} = createSchemaForm({schema: {type: 'boolean'}});
+    const { schemaForm } = createSchemaForm({ schema: { type: 'boolean' } });
 
     expect(schemaForm.formData).toEqual(false);
   });
 
   it('should handle a change event', () => {
-    const {schemaForm, node} = createSchemaForm({
+    const { schemaForm, node } = createSchemaForm({
       schema: {
         type: 'boolean',
         default: false,
@@ -81,7 +77,7 @@ describe('BooleanField', () => {
   });
 
   it('should fill field with data', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
       },
@@ -92,7 +88,7 @@ describe('BooleanField', () => {
   });
 
   it('should render the input with the expected id', () => {
-    const {node} = createSchemaForm({
+    const { node } = createSchemaForm({
       schema: {
         type: 'boolean',
       },

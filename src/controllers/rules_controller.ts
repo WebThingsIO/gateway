@@ -25,11 +25,12 @@ class RulesController {
 
     this.controller.get('/', async (_req, res) => {
       const rules = await this.engine.getRules();
-      res.send(rules.map((rule) => {
-        return rule.toDescription();
-      }));
+      res.send(
+        rules.map((rule) => {
+          return rule.toDescription();
+        })
+      );
     });
-
 
     this.controller.get('/:id', async (req, res) => {
       try {
@@ -43,7 +44,7 @@ class RulesController {
 
     this.controller.post('/', this.parseRuleFromBody.bind(this), async (req, res) => {
       const ruleId = await this.engine.addRule((<express.Request & WithRule>req).rule);
-      res.send({id: ruleId});
+      res.send({ id: ruleId });
     });
 
     this.controller.put('/:id', this.parseRuleFromBody.bind(this), async (req, res) => {

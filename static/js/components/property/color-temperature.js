@@ -18,6 +18,5 @@ class ColorTemperatureProperty extends LevelProperty {
   }
 }
 
-window.customElements.define('webthing-color-temperature-property',
-                             ColorTemperatureProperty);
+window.customElements.define('webthing-color-temperature-property', ColorTemperatureProperty);
 module.exports = ColorTemperatureProperty;

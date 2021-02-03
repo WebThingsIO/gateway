@@ -11,9 +11,10 @@
 
 const LabelCapability = require('./label');
 
-class BarometricPressureCapability extends LabelCapability {
-}
+class BarometricPressureCapability extends LabelCapability {}
 
-window.customElements.define('webthing-barometric-pressure-sensor-capability',
-                             BarometricPressureCapability);
+window.customElements.define(
+  'webthing-barometric-pressure-sensor-capability',
+  BarometricPressureCapability
+);
 module.exports = BarometricPressureCapability;

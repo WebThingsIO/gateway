@@ -13,7 +13,7 @@ function build(): express.Router {
 
   function readVersion(packagePath: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      fs.readFile(packagePath, {encoding: 'utf8'}, (err, data) => {
+      fs.readFile(packagePath, { encoding: 'utf8' }, (err, data) => {
         if (err) {
           reject(err);
           return;
@@ -60,11 +60,11 @@ function build(): express.Router {
   } = {
     tag: null,
     time: 0,
-    value: {version: null},
+    value: { version: null },
   };
   const cacheDuration = 60 * 1000;
 
-  function cacheLatestInsert(response: express.Response, value: {version: string | null}): void {
+  function cacheLatestInsert(response: express.Response, value: { version: string | null }): void {
     cacheLatest.tag = response.get('etag');
     cacheLatest.time = Date.now();
     cacheLatest.value = value;
@@ -76,22 +76,20 @@ function build(): express.Router {
   controller.get('/latest', async (request, response) => {
     const etag = request.get('If-None-Match');
     if (etag) {
-      if (cacheLatest.tag === etag &&
-          Date.now() - cacheLatest.time < cacheDuration) {
+      if (cacheLatest.tag === etag && Date.now() - cacheLatest.time < cacheDuration) {
         response.sendStatus(304);
         return;
       }
     }
 
-    const res = await fetch(
-      config.get('updates.url'),
-      {headers: {'User-Agent': Utils.getGatewayUserAgent()}}
-    );
+    const res = await fetch(config.get('updates.url'), {
+      headers: { 'User-Agent': Utils.getGatewayUserAgent() },
+    });
 
     const releases = await res.json();
     if (!releases || !releases.filter) {
       console.warn('API returned invalid releases, rate limit likely exceeded');
-      const value = {version: null};
+      const value = { version: null };
       response.send(value);
       cacheLatestInsert(response, value);
       return;
@@ -109,13 +107,13 @@ function build(): express.Router {
     })[0];
     if (!latestRelease) {
       console.warn('No releases found');
-      const value = {version: null};
+      const value = { version: null };
       response.send(value);
       cacheLatestInsert(response, value);
       return;
     }
     const releaseVer = latestRelease.tag_name;
-    const value = {version: releaseVer};
+    const value = { version: releaseVer };
     response.send(value);
     cacheLatestInsert(response, value);
   });
@@ -173,8 +171,7 @@ function build(): express.Router {
   });
 
   controller.post('/update', async (_request, response) => {
-    child_process.exec('sudo systemctl start ' +
-      'webthings-gateway.check-for-update.service');
+    child_process.exec('sudo systemctl start webthings-gateway.check-for-update.service');
 
     response.json({});
   });
@@ -202,7 +199,7 @@ function build(): express.Router {
     }
 
     if (Platform.setSelfUpdateStatus(request.body.enabled)) {
-      response.status(200).json({enabled: request.body.enabled});
+      response.status(200).json({ enabled: request.body.enabled });
     } else {
       response.status(500).send('Failed to toggle auto updates');
     }

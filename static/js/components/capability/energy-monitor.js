@@ -21,6 +21,5 @@ class EnergyMonitorCapability extends LabelCapability {
   }
 }
 
-window.customElements.define('webthing-energy-monitor-capability',
-                             EnergyMonitorCapability);
+window.customElements.define('webthing-energy-monitor-capability', EnergyMonitorCapability);
 module.exports = EnergyMonitorCapability;

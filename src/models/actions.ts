@@ -8,9 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Action, {ActionDescription} from './action';
+import Action, { ActionDescription } from './action';
 import * as Constants from '../constants';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import Things from './things';
 import AddonManager from '../addon-manager';
 
@@ -82,35 +82,40 @@ class Actions extends EventEmitter {
    * therefore belong to the root Gateway
    */
   getGatewayActions(actionName?: string): { [name: string]: ActionDescription }[] {
-    return this.getAll().filter((action) => {
-      return !action.getThingId();
-    }).filter((action) => {
-      if (actionName) {
-        return actionName === action.getName();
-      }
+    return this.getAll()
+      .filter((action) => {
+        return !action.getThingId();
+      })
+      .filter((action) => {
+        if (actionName) {
+          return actionName === action.getName();
+        }
 
-      return true;
-    }).map((action) => {
-      return {[action.getName()]: action.getDescription()};
-    });
+        return true;
+      })
+      .map((action) => {
+        return { [action.getName()]: action.getDescription() };
+      });
   }
-
 
   /**
    * Get only the actions which are associated with a specific thing
    */
   getByThing(thingId: string, actionName?: string): { [name: string]: ActionDescription }[] {
-    return this.getAll().filter((action) => {
-      return action.getThingId() === thingId;
-    }).filter((action) => {
-      if (actionName) {
-        return actionName === action.getName();
-      }
+    return this.getAll()
+      .filter((action) => {
+        return action.getThingId() === thingId;
+      })
+      .filter((action) => {
+        if (actionName) {
+          return actionName === action.getName();
+        }
 
-      return true;
-    }).map((action) => {
-      return {[action.getName()]: action.getDescription()};
-    });
+        return true;
+      })
+      .map((action) => {
+        return { [action.getName()]: action.getDescription() };
+      });
   }
 
   /**
@@ -143,28 +148,32 @@ class Actions extends EventEmitter {
 
     switch (action.getName()) {
       case 'pair':
-        AddonManager.addNewThing((<Record<string, number>>action.getInput()!).timeout).then(() => {
-          action.updateStatus('completed');
-        }).catch((error: unknown) => {
-          action.setError(`${error}`);
-          action.updateStatus('error');
-          console.error('Thing was not added');
-          console.error(error);
-        });
+        AddonManager.addNewThing((<Record<string, number>>action.getInput()!).timeout)
+          .then(() => {
+            action.updateStatus('completed');
+          })
+          .catch((error: unknown) => {
+            action.setError(`${error}`);
+            action.updateStatus('error');
+            console.error('Thing was not added');
+            console.error(error);
+          });
         break;
       case 'unpair': {
         const thingId = (<Record<string, string>>action.getInput()!).id;
         if (thingId) {
           const _finally = (): void => {
             console.log('unpair: thing:', thingId, 'was unpaired');
-            Things.removeThing(thingId).then(() => {
-              action.updateStatus('completed');
-            }).catch((error: unknown) => {
-              action.setError(`${error}`);
-              action.updateStatus('error');
-              console.error('unpair of thing:', thingId, 'failed.');
-              console.error(error);
-            });
+            Things.removeThing(thingId)
+              .then(() => {
+                action.updateStatus('completed');
+              })
+              .catch((error: unknown) => {
+                action.setError(`${error}`);
+                action.updateStatus('error');
+                console.error('unpair of thing:', thingId, 'failed.');
+                console.error(error);
+              });
           };
 
           AddonManager.removeThing(thingId).then(_finally, _finally);
@@ -178,9 +187,7 @@ class Actions extends EventEmitter {
       }
       default:
         delete this.actions[id];
-        return Promise.reject(
-          new Error(`Invalid action name: "${action.getName()}"`)
-        );
+        return Promise.reject(new Error(`Invalid action name: "${action.getName()}"`));
     }
     return Promise.resolve();
   }
@@ -207,13 +214,15 @@ class Actions extends EventEmitter {
 
     if (action.getStatus() === 'pending') {
       if (action.getThingId()) {
-        Things.getThing(action.getThingId()!).then((thing) => {
-          if (!thing.removeAction(action)) {
-            throw new Error(`Invalid thing action name: "${action.getName()}"`);
-          }
-        }).catch((err: unknown) => {
-          console.error('Error removing thing action:', err);
-        });
+        Things.getThing(action.getThingId()!)
+          .then((thing) => {
+            if (!thing.removeAction(action)) {
+              throw new Error(`Invalid thing action name: "${action.getName()}"`);
+            }
+          })
+          .catch((err: unknown) => {
+            console.error('Error removing thing action:', err);
+          });
       } else {
         switch (action.getName()) {
           case 'pair':

@@ -18,15 +18,13 @@ const Constants = require('../constants');
 const EventList = require('./event-list');
 const fluent = require('../fluent');
 const Icons = require('../icons');
-const {createThingFromCapability} =
-  require('../schema-impl/capability/capabilities');
+const { createThingFromCapability } = require('../schema-impl/capability/capabilities');
 
-// eslint-disable-next-line no-unused-vars
 const ThingsScreen = {
   /**
    * Initialise Things Screen.
    */
-  init: function() {
+  init: function () {
     this.thingsElement = document.getElementById('things');
     this.thingTitleElement = document.getElementById('thing-title');
     this.addButton = document.getElementById('add-button');
@@ -34,15 +32,18 @@ const ThingsScreen = {
     this.backButton = document.getElementById('back-button');
     this.backRef = '/things';
     this.backButton.addEventListener('click', () => page(this.backRef));
-    this.addButton.addEventListener('click',
-                                    AddThingScreen.show.bind(AddThingScreen));
+    this.addButton.addEventListener('click', AddThingScreen.show.bind(AddThingScreen));
     this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
   },
 
-  renderThing: function(thingModel, description, format) {
+  renderThing: function (thingModel, description, format) {
     const thing = createThingFromCapability(
-      description.selectedCapability, thingModel, description, format);
+      description.selectedCapability,
+      thingModel,
+      description,
+      format
+    );
     this.things.push(thing);
     return thing;
   },
@@ -54,7 +55,7 @@ const ThingsScreen = {
    * @param {String} actionName Optional action input form to show.
    * @param {Boolean} events Whether or not to display the events screen.
    */
-  show: function(thingId, actionName, events, queryString) {
+  show: function (thingId, actionName, events, queryString) {
     const params = new URLSearchParams(`?${queryString || ''}`);
     if (params.has('referrer')) {
       this.backRef = params.get('referrer');
@@ -87,14 +88,13 @@ const ThingsScreen = {
       this.showThings();
 
       const messageArea = document.getElementById('message-area');
-      if (App.blockMessages &&
-          messageArea.innerText === fluent.getMessage('disconnected')) {
+      if (App.blockMessages && messageArea.innerText === fluent.getMessage('disconnected')) {
         App.hidePersistentMessage();
       }
     }
   },
 
-  refreshThings: function(things) {
+  refreshThings: function (things) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
@@ -114,14 +114,11 @@ const ThingsScreen = {
   /**
    * Display all connected web things.
    */
-  showThings: function() {
+  showThings: function () {
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThing);
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
-    App.gatewayModel.subscribe(
-      Constants.REFRESH_THINGS,
-      this.refreshThings,
-      true);
+    App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThings, true);
   },
 
   /**
@@ -129,53 +126,50 @@ const ThingsScreen = {
    *
    * @param {String} thingId The ID of the Thing to show.
    */
-  showThing: function(thingId) {
+  showThing: function (thingId) {
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThings);
 
     this.refreshThing = () => {
-      return App.gatewayModel.getThing(thingId).then(async (description) => {
-        if (!description) {
+      return App.gatewayModel
+        .getThing(thingId)
+        .then(async (description) => {
+          if (!description) {
+            this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+            return;
+          }
+
+          this.thingsElement.innerHTML = '';
+
+          const thingModel = await App.gatewayModel.getThingModel(thingId);
+          const thing = this.renderThing(thingModel, description, Constants.ThingFormat.EXPANDED);
+
+          const iconEl = document.getElementById('thing-title-icon');
+          const customIconEl = document.getElementById('thing-title-custom-icon');
+          if (thing.iconHref && thing.selectedCapability === 'Custom') {
+            customIconEl.iconHref = thing.iconHref;
+            customIconEl.classList.remove('hidden');
+            iconEl.style.backgroundImage = '';
+            iconEl.classList.add('custom-thing');
+          } else {
+            iconEl.style.backgroundImage = `url("${thing.baseIcon}")`;
+            iconEl.classList.remove('custom-thing');
+            customIconEl.classList.add('hidden');
+          }
+
+          document.getElementById('thing-title-title').innerText = thing.title;
+
+          this.thingTitleElement.classList.remove('hidden');
+        })
+        .catch((e) => {
+          console.error(`Thing id ${thingId} not found ${e}`);
           this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-          return;
-        }
-
-        this.thingsElement.innerHTML = '';
-
-        const thingModel = await App.gatewayModel.getThingModel(thingId);
-        const thing = this.renderThing(thingModel,
-                                       description,
-                                       Constants.ThingFormat.EXPANDED);
-
-        const iconEl = document.getElementById('thing-title-icon');
-        const customIconEl = document.getElementById('thing-title-custom-icon');
-        if (thing.iconHref && thing.selectedCapability === 'Custom') {
-          customIconEl.iconHref = thing.iconHref;
-          customIconEl.classList.remove('hidden');
-          iconEl.style.backgroundImage = '';
-          iconEl.classList.add('custom-thing');
-        } else {
-          iconEl.style.backgroundImage = `url("${thing.baseIcon}")`;
-          iconEl.classList.remove('custom-thing');
-          customIconEl.classList.add('hidden');
-        }
-
-        document.getElementById('thing-title-title').innerText = thing.title;
-
-        this.thingTitleElement.classList.remove('hidden');
-      }).catch((e) => {
-        console.error(`Thing id ${thingId} not found ${e}`);
-        this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-      });
+        });
     };
 
-    App.gatewayModel.subscribe(
-      Constants.REFRESH_THINGS,
-      this.refreshThing,
-      true
-    );
+    App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThing, true);
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThing);
   },
 
@@ -185,52 +179,57 @@ const ThingsScreen = {
    * @param {String} thingId The ID of the Thing to show.
    * @param {String} actionName The name of the action to show.
    */
-  showActionInputForm: function(thingId, actionName) {
-    App.gatewayModel.getThing(thingId).then((description) => {
-      this.thingsElement.innerHTML = '';
+  showActionInputForm: function (thingId, actionName) {
+    App.gatewayModel
+      .getThing(thingId)
+      .then((description) => {
+        this.thingsElement.innerHTML = '';
 
-      if (!description.hasOwnProperty('actions') ||
+        if (
+          !description.hasOwnProperty('actions') ||
           !description.actions.hasOwnProperty(actionName) ||
-          !description.actions[actionName].hasOwnProperty('input')) {
-        this.thingsElement.innerHTML = fluent.getMessage('action-not-found');
-        return;
-      }
-
-      let href;
-      for (const link of description.links) {
-        if (link.rel === 'actions') {
-          href = link.href;
-          break;
+          !description.actions[actionName].hasOwnProperty('input')
+        ) {
+          this.thingsElement.innerHTML = fluent.getMessage('action-not-found');
+          return;
         }
-      }
 
-      const icon = Icons.capabilityToIcon(description.selectedCapability);
-      const iconEl = document.getElementById('thing-title-icon');
-      const customIconEl = document.getElementById('thing-title-custom-icon');
-      if (description.iconHref &&
-          description.selectedCapability === 'Custom') {
-        customIconEl.iconHref = description.iconHref;
-        customIconEl.classList.remove('hidden');
-        iconEl.style.backgroundImage = '';
-        iconEl.classList.add('custom-thing');
-      } else {
-        iconEl.style.backgroundImage = `url("${icon}")`;
-        iconEl.classList.remove('custom-thing');
-        customIconEl.classList.add('hidden');
-      }
+        let href;
+        for (const link of description.links) {
+          if (link.rel === 'actions') {
+            href = link.href;
+            break;
+          }
+        }
 
-      document.getElementById('thing-title-title').innerText =
-        description.title;
+        const icon = Icons.capabilityToIcon(description.selectedCapability);
+        const iconEl = document.getElementById('thing-title-icon');
+        const customIconEl = document.getElementById('thing-title-custom-icon');
+        if (description.iconHref && description.selectedCapability === 'Custom') {
+          customIconEl.iconHref = description.iconHref;
+          customIconEl.classList.remove('hidden');
+          iconEl.style.backgroundImage = '';
+          iconEl.classList.add('custom-thing');
+        } else {
+          iconEl.style.backgroundImage = `url("${icon}")`;
+          iconEl.classList.remove('custom-thing');
+          customIconEl.classList.add('hidden');
+        }
 
-      this.thingsElement.innerHTML = '';
-      new ActionInputForm(href, actionName,
-                          description.actions[actionName].title ||
-                            description.actions[actionName].label,
-                          description.actions[actionName].input);
-    }).catch((e) => {
-      console.error(`Thing id ${thingId} not found ${e}`);
-      this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-    });
+        document.getElementById('thing-title-title').innerText = description.title;
+
+        this.thingsElement.innerHTML = '';
+        new ActionInputForm(
+          href,
+          actionName,
+          description.actions[actionName].title || description.actions[actionName].label,
+          description.actions[actionName].input
+        );
+      })
+      .catch((e) => {
+        console.error(`Thing id ${thingId} not found ${e}`);
+        this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+      });
   },
 
   /**
@@ -238,42 +237,44 @@ const ThingsScreen = {
    *
    * @param {String} thingId The ID of the Thing to show.
    */
-  showEvents: function(thingId) {
+  showEvents: function (thingId) {
     if (typeof this.eventList !== 'undefined') {
       this.eventList.cleanup();
     }
-    App.gatewayModel.getThing(thingId).then(async (description) => {
-      this.thingsElement.innerHTML = '';
-      if (!description.hasOwnProperty('events')) {
-        this.thingsElement.innerHTML = fluent.getMessage('events-not-found');
-        return;
-      }
+    App.gatewayModel
+      .getThing(thingId)
+      .then(async (description) => {
+        this.thingsElement.innerHTML = '';
+        if (!description.hasOwnProperty('events')) {
+          this.thingsElement.innerHTML = fluent.getMessage('events-not-found');
+          return;
+        }
 
-      const thingModel = await App.gatewayModel.getThingModel(thingId);
+        const thingModel = await App.gatewayModel.getThingModel(thingId);
 
-      const icon = Icons.capabilityToIcon(description.selectedCapability);
-      const iconEl = document.getElementById('thing-title-icon');
-      const customIconEl = document.getElementById('thing-title-custom-icon');
-      if (description.iconHref && description.selectedCapability === 'Custom') {
-        customIconEl.iconHref = description.iconHref;
-        customIconEl.classList.remove('hidden');
-        iconEl.style.backgroundImage = '';
-        iconEl.classList.add('custom-thing');
-      } else {
-        iconEl.style.backgroundImage = `url("${icon}")`;
-        iconEl.classList.remove('custom-thing');
-        customIconEl.classList.add('hidden');
-      }
+        const icon = Icons.capabilityToIcon(description.selectedCapability);
+        const iconEl = document.getElementById('thing-title-icon');
+        const customIconEl = document.getElementById('thing-title-custom-icon');
+        if (description.iconHref && description.selectedCapability === 'Custom') {
+          customIconEl.iconHref = description.iconHref;
+          customIconEl.classList.remove('hidden');
+          iconEl.style.backgroundImage = '';
+          iconEl.classList.add('custom-thing');
+        } else {
+          iconEl.style.backgroundImage = `url("${icon}")`;
+          iconEl.classList.remove('custom-thing');
+          customIconEl.classList.add('hidden');
+        }
 
-      document.getElementById('thing-title-title').innerText =
-        description.title;
+        document.getElementById('thing-title-title').innerText = description.title;
 
-      this.thingsElement.innerHTML = '';
-      this.eventList = new EventList(thingModel, description);
-    }).catch((e) => {
-      console.error(`Thing id ${thingId} not found ${e}`);
-      this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-    });
+        this.thingsElement.innerHTML = '';
+        this.eventList = new EventList(thingModel, description);
+      })
+      .catch((e) => {
+        console.error(`Thing id ${thingId} not found ${e}`);
+        this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+      });
   },
 };
 

@@ -83,11 +83,10 @@ class MultiLevelSwitchCapability extends BaseComponent {
   constructor() {
     super(template);
     this._container = this.shadowRoot.querySelector(
-      '.webthing-multi-level-switch-capability-container');
-    this._bar = this.shadowRoot.querySelector(
-      '.webthing-multi-level-switch-capability-bar');
-    this._label = this.shadowRoot.querySelector(
-      '.webthing-multi-level-switch-capability-label');
+      '.webthing-multi-level-switch-capability-container'
+    );
+    this._bar = this.shadowRoot.querySelector('.webthing-multi-level-switch-capability-bar');
+    this._label = this.shadowRoot.querySelector('.webthing-multi-level-switch-capability-label');
     this._on = false;
     this._level = 0;
     this._precision = 0;
@@ -101,14 +100,9 @@ class MultiLevelSwitchCapability extends BaseComponent {
 
     // Default to on=true to display level
     this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : true;
-    this.level =
-      typeof this.dataset.level !== 'undefined' ? this.dataset.level : this.min;
-    this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
-    this.precision =
-      typeof this.dataset.precision !== 'undefined' ?
-        this.dataset.precision :
-        0;
+    this.level = typeof this.dataset.level !== 'undefined' ? this.dataset.level : this.min;
+    this.unit = typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    this.precision = typeof this.dataset.precision !== 'undefined' ? this.dataset.precision : 0;
 
     if (typeof this._min === 'undefined') {
       this._min = 0;
@@ -170,14 +164,13 @@ class MultiLevelSwitchCapability extends BaseComponent {
     if (this._on) {
       bar = ON_BAR;
       blank = ON_BLANK;
-      this._label.innerHTML =
-        `${this._level.toFixed(this.precision)}${this.unit}`;
+      this._label.innerHTML = `${this._level.toFixed(this.precision)}${this.unit}`;
     } else {
       bar = OFF_BAR;
       blank = OFF_BLANK;
     }
 
-    const percent = (this.level - this.min) / (this.max - this.min) * 100;
+    const percent = ((this.level - this.min) / (this.max - this.min)) * 100;
 
     this._bar.style.background =
       `linear-gradient(${blank}, ${blank} ${100 - percent}%, ` +
@@ -204,12 +197,13 @@ class MultiLevelSwitchCapability extends BaseComponent {
     e.preventDefault();
     e.stopPropagation();
 
-    this.dispatchEvent(new CustomEvent('click', {
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('click', {
+        bubbles: true,
+      })
+    );
   }
 }
 
-window.customElements.define('webthing-multi-level-switch-capability',
-                             MultiLevelSwitchCapability);
+window.customElements.define('webthing-multi-level-switch-capability', MultiLevelSwitchCapability);
 module.exports = MultiLevelSwitchCapability;

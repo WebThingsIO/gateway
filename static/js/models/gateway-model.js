@@ -26,10 +26,9 @@ class GatewayModel extends Model {
   }
 
   addQueue(job) {
-    this.queue = this.queue.then(job)
-      .catch((e) => {
-        console.error(e);
-      });
+    this.queue = this.queue.then(job).catch((e) => {
+      console.error(e);
+    });
     return this.queue;
   }
 
@@ -55,10 +54,7 @@ class GatewayModel extends Model {
       thingModel.updateFromDescription(description);
     } else {
       const thingModel = new ThingModel(description, this.ws);
-      thingModel.subscribe(
-        Constants.DELETE_THING,
-        this.handleRemove.bind(this)
-      );
+      thingModel.subscribe(Constants.DELETE_THING, this.handleRemove.bind(this));
       if (this.connectedThings.has(thingId)) {
         thingModel.onConnected(this.connectedThings.get(thingId));
       }
@@ -84,7 +80,6 @@ class GatewayModel extends Model {
       return this.thingModels.get(thingId);
     });
   }
-
 
   /**
    * Remove the thing.
@@ -167,38 +162,42 @@ class GatewayModel extends Model {
 
   refreshThings() {
     return this.addQueue(() => {
-      return API.getThings().then((things) => {
-        const fetchedIds = new Set();
-        things.forEach((description) => {
-          const thingId = decodeURIComponent(description.href.split('/').pop());
-          fetchedIds.add(thingId);
-          this.setThing(thingId, description);
+      return API.getThings()
+        .then((things) => {
+          const fetchedIds = new Set();
+          things.forEach((description) => {
+            const thingId = decodeURIComponent(description.href.split('/').pop());
+            fetchedIds.add(thingId);
+            this.setThing(thingId, description);
+          });
+
+          const removedIds = Array.from(this.thingModels.keys()).filter((id) => {
+            return !fetchedIds.has(id);
+          });
+
+          removedIds.forEach((thingId) => this.handleRemove(thingId, true));
+
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things);
+        })
+        .catch((e) => {
+          console.error(`Get things failed ${e}`);
         });
-
-        const removedIds = Array.from(this.thingModels.keys()).filter((id) => {
-          return !fetchedIds.has(id);
-        });
-
-        removedIds.forEach((thingId) => this.handleRemove(thingId, true));
-
-        return this.handleEvent(Constants.REFRESH_THINGS, this.things);
-      }).catch((e) => {
-        console.error(`Get things failed ${e}`);
-      });
     });
   }
 
   refreshThing(thingId) {
     return this.addQueue(() => {
-      return API.getThing(thingId).then((description) => {
-        if (!description) {
-          throw new Error(`Unavailable Thing Description: ${description}`);
-        }
-        this.setThing(thingId, description);
-        return this.handleEvent(Constants.REFRESH_THINGS, this.things);
-      }).catch((e) => {
-        console.error(`Get thing id:${thingId} failed ${e}`);
-      });
+      return API.getThing(thingId)
+        .then((description) => {
+          if (!description) {
+            throw new Error(`Unavailable Thing Description: ${description}`);
+          }
+          this.setThing(thingId, description);
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things);
+        })
+        .catch((e) => {
+          console.error(`Get thing id:${thingId} failed ${e}`);
+        });
     });
   }
 }

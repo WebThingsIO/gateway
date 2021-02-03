@@ -8,10 +8,10 @@ import assert from 'assert';
 import Action from '../../models/action';
 import Actions from '../../models/actions';
 import AddonManager from '../../addon-manager';
-import Effect, {EffectDescription} from './Effect';
+import Effect, { EffectDescription } from './Effect';
 import Things from '../../models/things';
-import {State} from '../State';
-import {Input} from 'gateway-addon/lib/schema';
+import { State } from '../State';
+import { Input } from 'gateway-addon/lib/schema';
 
 export interface ActionEffectDescription extends EffectDescription {
   thing: string;
@@ -47,14 +47,11 @@ export default class ActionEffect extends Effect {
    * @return {EffectDescription}
    */
   toDescription(): ActionEffectDescription {
-    return Object.assign(
-      super.toDescription(),
-      {
-        thing: this.thing,
-        action: this.action,
-        parameters: this.parameters,
-      }
-    );
+    return Object.assign(super.toDescription(), {
+      thing: this.thing,
+      action: this.action,
+      parameters: this.parameters,
+    });
   }
 
   /**
@@ -74,8 +71,7 @@ export default class ActionEffect extends Effect {
 
       const action = new Action(this.action, this.parameters, thing);
       await Actions.add(action);
-      await AddonManager.requestAction(this.thing, action.getId(), this.action,
-                                       this.parameters);
+      await AddonManager.requestAction(this.thing, action.getId(), this.action, this.parameters);
     } catch (e) {
       console.warn('Unable to dispatch action', e);
     }

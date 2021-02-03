@@ -82,12 +82,9 @@ class EnumProperty extends BaseComponent {
 `;
     super(template);
 
-    this._select = this.shadowRoot.querySelector(
-      '.webthing-enum-property-select');
-    this._unit = this.shadowRoot.querySelector(
-      '.webthing-enum-property-unit');
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-enum-property-name');
+    this._select = this.shadowRoot.querySelector('.webthing-enum-property-select');
+    this._unit = this.shadowRoot.querySelector('.webthing-enum-property-unit');
+    this._name = this.shadowRoot.querySelector('.webthing-enum-property-name');
 
     this._type = 'string';
 
@@ -98,20 +95,13 @@ class EnumProperty extends BaseComponent {
 
   connectedCallback() {
     this.name = this.dataset.name;
-    this.value =
-      typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
-    this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
-    this.type =
-      typeof this.dataset.type !== 'undefined' ? this.dataset.type : 'string';
+    this.value = typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
+    this.unit = typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    this.type = typeof this.dataset.type !== 'undefined' ? this.dataset.type : 'string';
     this.choices =
-      typeof this.dataset.choices !== 'undefined' ?
-        JSON.parse(atob(this.dataset.choices)) :
-        [];
+      typeof this.dataset.choices !== 'undefined' ? JSON.parse(atob(this.dataset.choices)) : [];
     this.readOnly =
-      typeof this.dataset.readOnly !== 'undefined' ?
-        this.dataset.readOnly === 'true' :
-        false;
+      typeof this.dataset.readOnly !== 'undefined' ? this.dataset.readOnly === 'true' : false;
 
     this._upgradeProperty('value');
 
@@ -218,12 +208,14 @@ class EnumProperty extends BaseComponent {
     e.preventDefault();
     this.value = e.target.options[e.target.selectedIndex].value;
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        value: this.value,
-      },
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          value: this.value,
+        },
+        bubbles: true,
+      })
+    );
   }
 }
 

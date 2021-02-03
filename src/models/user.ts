@@ -35,15 +35,20 @@ export default class User {
 
   private name: string | null;
 
-  constructor(id: number | null, email: string, password: string,
-              name: string | null, mfaSharedSecret: string,
-              mfaEnrolled: number | boolean, mfaBackupCodes: string) {
+  constructor(
+    id: number | null,
+    email: string,
+    password: string,
+    name: string | null,
+    mfaSharedSecret: string,
+    mfaEnrolled: number | boolean,
+    mfaBackupCodes: string
+  ) {
     this.id = id;
     this.email = email;
     this.password = password; // Hashed
     this.mfaSharedSecret = mfaSharedSecret;
-    this.mfaEnrolled =
-      typeof mfaEnrolled === 'number' ? mfaEnrolled === 1 : mfaEnrolled;
+    this.mfaEnrolled = typeof mfaEnrolled === 'number' ? mfaEnrolled === 1 : mfaEnrolled;
     this.mfaBackupCodes = mfaBackupCodes ? JSON.parse(mfaBackupCodes) : [];
     this.name = name;
   }
@@ -67,7 +72,7 @@ export default class User {
     };
   }
 
-  async generateMfaParams(): Promise<{secret: string, url: string}> {
+  async generateMfaParams(): Promise<{ secret: string; url: string }> {
     const secret = speakeasy.generateSecret({
       issuer: 'WebThings Gateway',
       name: `WebThings:${this.email}`,

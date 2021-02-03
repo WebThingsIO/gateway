@@ -10,9 +10,9 @@
 
 import Actions from './actions';
 import * as Constants from '../constants';
-import {EventEmitter} from 'events';
-import {Utils} from 'gateway-addon';
-import {ActionDescription as AddonActionDescription, Input} from 'gateway-addon/lib/schema';
+import { EventEmitter } from 'events';
+import { Utils } from 'gateway-addon';
+import { ActionDescription as AddonActionDescription, Input } from 'gateway-addon/lib/schema';
 import Thing from './thing';
 
 export interface ActionDescription {

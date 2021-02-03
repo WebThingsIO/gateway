@@ -33,9 +33,7 @@ module.exports = {
 
   addonManager: {
     // URLs of add-on lists to parse, in order
-    listUrls: [
-      'https://api.webthings.io:8443/addons',
-    ],
+    listUrls: ['https://api.webthings.io:8443/addons'],
 
     // Whether or not to allow installation of test-only add-ons
     testAddons: false,

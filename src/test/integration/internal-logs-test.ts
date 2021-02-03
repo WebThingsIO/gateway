@@ -1,5 +1,5 @@
-import {server, chai} from '../common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai } from '../common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import fs from 'fs';
 import path from 'path';
 import JSZip from 'jszip';
@@ -11,12 +11,12 @@ describe('internal-logs/', () => {
 
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
-    fs.writeFileSync(path.join(UserProfile.logDir, 'test.log'),
-                     'hello, world!');
+    fs.writeFileSync(path.join(UserProfile.logDir, 'test.log'), 'hello, world!');
   });
 
   it('GET internal-logs index', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(Constants.INTERNAL_LOGS_PATH)
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -25,7 +25,8 @@ describe('internal-logs/', () => {
   });
 
   it('GET test.log', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.INTERNAL_LOGS_PATH}/files/test.log`)
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
@@ -35,7 +36,8 @@ describe('internal-logs/', () => {
 
   it('GET logs.zip', async () => {
     let responseData: string;
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.INTERNAL_LOGS_PATH}/zip`)
       .set(...headerAuth(jwt))
       .buffer()
@@ -46,9 +48,9 @@ describe('internal-logs/', () => {
           responseData += chunk;
         });
         res.on('end', () => {
-          JSZip
-            .loadAsync(responseData, {base64: false, checkCRC32: true})
-            .then((zip) => cb(null, zip));
+          JSZip.loadAsync(responseData, { base64: false, checkCRC32: true }).then((zip) =>
+            cb(null, zip)
+          );
         });
       });
     expect(res.status).toEqual(200);

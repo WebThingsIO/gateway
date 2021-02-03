@@ -7,7 +7,7 @@ import chai from './chai';
 import speakeasy from 'speakeasy';
 import http from 'http';
 import https from 'https';
-import {UserDescription} from '../models/user';
+import { UserDescription } from '../models/user';
 
 export const TEST_USER = {
   email: 'test@example.com',
@@ -34,9 +34,14 @@ export const TEST_USER_UPDATE_2 = {
   newPassword: 'strawberry',
 };
 
-async function getJWT(path: string, server: http.Server | https.Server,
-                      user: Record<string, unknown>): Promise<string> {
-  const res = await chai.request(server).keepOpen()
+async function getJWT(
+  path: string,
+  server: http.Server | https.Server,
+  user: Record<string, unknown>
+): Promise<string> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .post(path)
     .set('Accept', 'application/json')
     .send(user);
@@ -47,19 +52,28 @@ async function getJWT(path: string, server: http.Server | https.Server,
   return res.body.jwt;
 }
 
-export async function loginUser(server: http.Server | https.Server,
-                                user: Record<string, unknown>): Promise<string> {
+export async function loginUser(
+  server: http.Server | https.Server,
+  user: Record<string, unknown>
+): Promise<string> {
   return getJWT(Constants.LOGIN_PATH, server, user);
 }
 
-export async function createUser(server: http.Server | https.Server, user: Record<string, unknown>):
-Promise<string> {
+export async function createUser(
+  server: http.Server | https.Server,
+  user: Record<string, unknown>
+): Promise<string> {
   return getJWT(Constants.USERS_PATH, server, user);
 }
 
-export async function addUser(server: http.Server | https.Server, jwt: string,
-                              user: Record<string, unknown>): Promise<ChaiHttp.Response> {
-  const res = await chai.request(server).keepOpen()
+export async function addUser(
+  server: http.Server | https.Server,
+  jwt: string,
+  user: Record<string, unknown>
+): Promise<ChaiHttp.Response> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .post(Constants.USERS_PATH)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
@@ -70,9 +84,14 @@ export async function addUser(server: http.Server | https.Server, jwt: string,
   return res;
 }
 
-export async function editUser(server: http.Server | https.Server, jwt: string,
-                               user: Record<string, unknown>): Promise<ChaiHttp.Response> {
-  const res = await chai.request(server).keepOpen()
+export async function editUser(
+  server: http.Server | https.Server,
+  jwt: string,
+  user: Record<string, unknown>
+): Promise<ChaiHttp.Response> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .put(`${Constants.USERS_PATH}/${user.id}`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
@@ -88,12 +107,14 @@ export async function enableMfa(
   jwt: string,
   user: Record<string, unknown>,
   totp?: string
-): Promise<{secret: string, url: string, backupCodes: string[]}> {
-  const res1 = await chai.request(server).keepOpen()
+): Promise<{ secret: string; url: string; backupCodes: string[] }> {
+  const res1 = await chai
+    .request(server)
+    .keepOpen()
     .post(`${Constants.USERS_PATH}/${user.id}/mfa`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
-    .send({enable: true});
+    .send({ enable: true });
   if (res1.status !== 200) {
     throw res1;
   }
@@ -105,11 +126,13 @@ export async function enableMfa(
     });
   }
 
-  const res2 = await chai.request(server).keepOpen()
+  const res2 = await chai
+    .request(server)
+    .keepOpen()
     .post(`${Constants.USERS_PATH}/${user.id}/mfa`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
-    .send({enable: true, mfa: {totp}});
+    .send({ enable: true, mfa: { totp } });
   if (res2.status !== 200) {
     throw res2;
   }
@@ -118,22 +141,32 @@ export async function enableMfa(
   return Object.assign({}, res1.body, res2.body);
 }
 
-export async function disableMfa(server: http.Server | https.Server, jwt: string,
-                                 user: Record<string, unknown>): Promise<ChaiHttp.Response> {
-  const res = await chai.request(server).keepOpen()
+export async function disableMfa(
+  server: http.Server | https.Server,
+  jwt: string,
+  user: Record<string, unknown>
+): Promise<ChaiHttp.Response> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .post(`${Constants.USERS_PATH}/${user.id}/mfa`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
-    .send({enable: false});
+    .send({ enable: false });
   if (res.status !== 204) {
     throw res;
   }
   return res;
 }
 
-export async function deleteUser(server: http.Server | https.Server, jwt: string, userId: number):
-Promise<ChaiHttp.Response> {
-  const res = await chai.request(server).keepOpen()
+export async function deleteUser(
+  server: http.Server | https.Server,
+  jwt: string,
+  userId: number
+): Promise<ChaiHttp.Response> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .delete(`${Constants.USERS_PATH}/${userId}`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
@@ -144,9 +177,13 @@ Promise<ChaiHttp.Response> {
   return res;
 }
 
-export async function userInfo(server: http.Server | https.Server, jwt: string):
-Promise<UserDescription | null> {
-  const res = await chai.request(server).keepOpen()
+export async function userInfo(
+  server: http.Server | https.Server,
+  jwt: string
+): Promise<UserDescription | null> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .get(`${Constants.USERS_PATH}/info`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
@@ -164,9 +201,14 @@ Promise<UserDescription | null> {
   return null;
 }
 
-export async function userInfoById(server: http.Server | https.Server, jwt: string, userId: number):
-Promise<UserDescription> {
-  const res = await chai.request(server).keepOpen()
+export async function userInfoById(
+  server: http.Server | https.Server,
+  jwt: string,
+  userId: number
+): Promise<UserDescription> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .get(`${Constants.USERS_PATH}/${userId}`)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')
@@ -178,8 +220,10 @@ Promise<UserDescription> {
   return res.body;
 }
 
-export async function userCount(server: http.Server | https.Server): Promise<{count: number}> {
-  const res = await chai.request(server).keepOpen()
+export async function userCount(server: http.Server | https.Server): Promise<{ count: number }> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .get(`${Constants.USERS_PATH}/count`)
     .set('Accept', 'application/json')
     .send();
@@ -190,9 +234,13 @@ export async function userCount(server: http.Server | https.Server): Promise<{co
   return res.body;
 }
 
-export async function logoutUser(server: http.Server | https.Server, jwt: string):
-Promise<ChaiHttp.Response> {
-  const res = await chai.request(server).keepOpen()
+export async function logoutUser(
+  server: http.Server | https.Server,
+  jwt: string
+): Promise<ChaiHttp.Response> {
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .post(Constants.LOG_OUT_PATH)
     .set(...headerAuth(jwt))
     .set('Accept', 'application/json')

@@ -103,16 +103,11 @@ class NumberProperty extends BaseComponent {
 `;
     super(template);
 
-    this._contents = this.shadowRoot.querySelector(
-      '.webthing-number-property-contents');
-    this._form = this.shadowRoot.querySelector(
-      '.webthing-number-property-form');
-    this._input = this.shadowRoot.querySelector(
-      '.webthing-number-property-input');
-    this._unit = this.shadowRoot.querySelector(
-      '.webthing-number-property-unit');
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-number-property-name');
+    this._contents = this.shadowRoot.querySelector('.webthing-number-property-contents');
+    this._form = this.shadowRoot.querySelector('.webthing-number-property-form');
+    this._input = this.shadowRoot.querySelector('.webthing-number-property-input');
+    this._unit = this.shadowRoot.querySelector('.webthing-number-property-unit');
+    this._name = this.shadowRoot.querySelector('.webthing-number-property-name');
 
     this._onClick = this.__onClick.bind(this);
     this._onSubmit = this.__onSubmit.bind(this);
@@ -124,14 +119,10 @@ class NumberProperty extends BaseComponent {
 
   connectedCallback() {
     this.name = this.dataset.name;
-    this.value =
-      typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
-    this.unit =
-      typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+    this.value = typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
+    this.unit = typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
     this.readOnly =
-      typeof this.dataset.readOnly !== 'undefined' ?
-        this.dataset.readOnly === 'true' :
-        false;
+      typeof this.dataset.readOnly !== 'undefined' ? this.dataset.readOnly === 'true' : false;
 
     this._upgradeProperty('min');
     this._upgradeProperty('max');
@@ -239,8 +230,14 @@ class NumberProperty extends BaseComponent {
     const min = parseInt(this.min, 10);
     const max = parseInt(this.max, 10);
 
-    if (isNaN(min) || min === null || isNaN(max) || max === null ||
-        this.step === '' || this.step === 'any') {
+    if (
+      isNaN(min) ||
+      min === null ||
+      isNaN(max) ||
+      max === null ||
+      this.step === '' ||
+      this.step === 'any'
+    ) {
       this._input.classList.add('hide-spinner');
 
       if (this._haveClickListener) {
@@ -300,12 +297,14 @@ class NumberProperty extends BaseComponent {
 
     this.value = value;
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        value: this.value,
-      },
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          value: this.value,
+        },
+        bubbles: true,
+      })
+    );
   }
 }
 

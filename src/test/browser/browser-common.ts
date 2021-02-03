@@ -1,8 +1,8 @@
-import {remote, BrowserObject} from 'webdriverio';
+import { remote, BrowserObject } from 'webdriverio';
 import * as selenium from 'selenium-standalone';
-import {server} from '../common';
-import {ChildProcess} from 'child_process';
-import {AddressInfo} from 'net';
+import { server } from '../common';
+import { ChildProcess } from 'child_process';
+import { AddressInfo } from 'net';
 
 const options: Record<string, unknown> = {
   logLevel: 'warn',
@@ -61,4 +61,4 @@ export function getBrowser(): BrowserObject {
   return browser!;
 }
 
-export {server} from '../common';
+export { server } from '../common';

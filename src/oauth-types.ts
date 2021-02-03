@@ -1,10 +1,10 @@
-import {URL} from 'url';
+import { URL } from 'url';
 import * as Constants from './constants';
 
 type Read = 'read';
 type ReadWrite = 'readwrite';
 export type ScopeAccess = Read | ReadWrite;
-export type Scope = {[path: string]: ScopeAccess};
+export type Scope = { [path: string]: ScopeAccess };
 
 export type ScopeRaw = string;
 export type ClientId = string;
@@ -28,7 +28,7 @@ export class ClientRegistry {
     this.scope = scope;
   }
 
-  getDescription(): {id: ClientId, name: string, redirect_uri: URL, scope: ScopeRaw} {
+  getDescription(): { id: ClientId; name: string; redirect_uri: URL; scope: ScopeRaw } {
     return {
       id: this.id,
       name: this.name,

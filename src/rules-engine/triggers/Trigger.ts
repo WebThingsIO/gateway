@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 
 export interface TriggerDescription {
   type: string;

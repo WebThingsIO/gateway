@@ -6,7 +6,7 @@
 
 import assert from 'assert';
 import * as Events from '../Events';
-import PropertyTrigger, {PropertyTriggerDescription} from './PropertyTrigger';
+import PropertyTrigger, { PropertyTriggerDescription } from './PropertyTrigger';
 
 export interface LevelTriggerDescription extends PropertyTriggerDescription {
   value: number;
@@ -48,13 +48,10 @@ export default class LevelTrigger extends PropertyTrigger {
    * @return {TriggerDescription}
    */
   toDescription(): LevelTriggerDescription {
-    return Object.assign(
-      super.toDescription(),
-      {
-        value: this.value,
-        levelType: this.levelType,
-      }
-    );
+    return Object.assign(super.toDescription(), {
+      value: this.value,
+      levelType: this.levelType,
+    });
   }
 
   /**
@@ -82,6 +79,6 @@ export default class LevelTrigger extends PropertyTrigger {
         break;
     }
 
-    this.emit(Events.STATE_CHANGED, {on: on, value: propValue});
+    this.emit(Events.STATE_CHANGED, { on: on, value: propValue });
   }
 }

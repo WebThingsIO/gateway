@@ -16,8 +16,7 @@ const fluent = require('../../fluent');
 
 class PushedDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('pushed'));
+    super(thing, name, !!property.readOnly, property.title || fluent.getMessage('pushed'));
     this.id = `pushed-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -36,9 +35,7 @@ class PushedDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ?
-      fluent.getMessage('pushed') :
-      fluent.getMessage('not-pushed');
+    this.labelElement.value = value ? fluent.getMessage('pushed') : fluent.getMessage('not-pushed');
     this.labelElement.inverted = value;
   }
 }

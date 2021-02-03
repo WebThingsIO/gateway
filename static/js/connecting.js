@@ -13,22 +13,13 @@ window.addEventListener('load', function app_onLoad() {
 
     if (window.skipped) {
       title.innerText = fluent.getMessage('connecting-header-skipped');
-      content.innerHTML = fluent.getMessage(
-        'connecting-skipped',
-        {'gateway-link': gatewayLink}
-      );
+      content.innerHTML = fluent.getMessage('connecting-skipped', { 'gateway-link': gatewayLink });
     } else {
       title.innerText = fluent.getMessage('connecting-header');
-      content.innerHTML = fluent.getMessage(
-        'connecting-connect',
-        {'gateway-link': gatewayLink}
-      );
+      content.innerHTML = fluent.getMessage('connecting-connect', { 'gateway-link': gatewayLink });
     }
 
     const warning = document.querySelector('#warning');
-    warning.innerHTML = fluent.getMessage(
-      'connecting-warning',
-      {domain: window.domain}
-    );
+    warning.innerHTML = fluent.getMessage('connecting-warning', { domain: window.domain });
   });
 });

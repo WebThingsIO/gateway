@@ -129,48 +129,41 @@ function build(): express.Router {
     }
   });
 
-  const missingPropertyPath =
-    `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}`;
-  const singlePropertyPath =
-    `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}/:propertyName`;
+  const missingPropertyPath = `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}`;
+  // eslint-disable-next-line max-len
+  const singlePropertyPath = `${Constants.THINGS_PATH}/:thingId${Constants.PROPERTIES_PATH}/:propertyName`;
 
   /**
    * Get a historical list of the values of a Thing's property
    */
-  controller.get(
-    [missingPropertyPath, singlePropertyPath],
-    async (request, response) => {
-      const thingId = request.params.thingId;
-      const propertyName = request.params.propertyName || '';
-      const start = 'start' in request.query ? parseInt(`${request.query.start}`, 10) : null;
-      const end = 'end' in request.query ? parseInt(`${request.query.end}`, 10) : null;
-      try {
-        const values = await Logs.getProperty(thingId, propertyName, start, end);
-        response.status(200).json(values || []);
-      } catch (err) {
-        response.status(404).send(err);
-      }
+  controller.get([missingPropertyPath, singlePropertyPath], async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName || '';
+    const start = 'start' in request.query ? parseInt(`${request.query.start}`, 10) : null;
+    const end = 'end' in request.query ? parseInt(`${request.query.end}`, 10) : null;
+    try {
+      const values = await Logs.getProperty(thingId, propertyName, start, end);
+      response.status(200).json(values || []);
+    } catch (err) {
+      response.status(404).send(err);
     }
-  );
+  });
 
-  controller.delete(
-    [missingPropertyPath, singlePropertyPath],
-    async (request, response) => {
-      const thingId = request.params.thingId;
-      const propertyName = request.params.propertyName || '';
-      const normalizedDescr = Logs.propertyDescr(thingId, propertyName);
+  controller.delete([missingPropertyPath, singlePropertyPath], async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName || '';
+    const normalizedDescr = Logs.propertyDescr(thingId, propertyName);
 
-      try {
-        await Logs.unregisterMetric(normalizedDescr);
-        response.status(200).send({
-          descr: normalizedDescr,
-        });
-      } catch (e) {
-        console.error('Failed to delete log:', e);
-        response.status(500).send(`Internal error: ${e}`);
-      }
+    try {
+      await Logs.unregisterMetric(normalizedDescr);
+      response.status(200).send({
+        descr: normalizedDescr,
+      });
+    } catch (e) {
+      console.error('Failed to delete log:', e);
+      response.status(500).send(`Internal error: ${e}`);
     }
-  );
+  });
 
   controller.ws('/', (websocket: WebSocket) => {
     if (websocket.readyState !== WebSocket.OPEN) {

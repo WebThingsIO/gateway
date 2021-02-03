@@ -4,11 +4,11 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#75AACF">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#75AACF" />
     <title data-l10n-id="signup-title">Create User - WebThings Gateway</title>
-    <link rel="manifest" href="/app.webmanifest">
+    <link rel="manifest" href="/app.webmanifest" />
     <link rel="icon" href="/images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
@@ -18,15 +18,40 @@
     <form id="create-user-form" class="user-form">
       <h1 data-l10n-id="signup-welcome"></h1>
       <p data-l10n-id="signup-create-account"></p>
-      <input type="text" name="name" data-l10n-id="user-settings-input-name" id="name" required autofocus>
-      <input type="email" name="email" data-l10n-id="user-settings-input-email" id="email" required>
-      <input id="password" type="password" name="password"
-        data-l10n-id="user-settings-input-password" required>
-      <input id="confirm-password" type="password" name="confirm-password"
-        data-l10n-id="user-settings-input-confirm-password" required>
-      <div id="error-password-mismatch" class="error hidden"
-        data-l10n-id="signup-password-mismatch">
-      </div>
+      <input
+        type="text"
+        name="name"
+        data-l10n-id="user-settings-input-name"
+        id="name"
+        required
+        autofocus
+      />
+      <input
+        type="email"
+        name="email"
+        data-l10n-id="user-settings-input-email"
+        id="email"
+        required
+      />
+      <input
+        id="password"
+        type="password"
+        name="password"
+        data-l10n-id="user-settings-input-password"
+        required
+      />
+      <input
+        id="confirm-password"
+        type="password"
+        name="confirm-password"
+        data-l10n-id="user-settings-input-confirm-password"
+        required
+      />
+      <div
+        id="error-password-mismatch"
+        class="error hidden"
+        data-l10n-id="signup-password-mismatch"
+      ></div>
       <div id="error-submission" class="error hidden"></div>
       <button id="create-user-button" data-l10n-id="signup-next" type="submit"></button>
     </form>

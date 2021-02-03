@@ -41,8 +41,7 @@ class RulePartBlock {
     this.onUp = this.onUp.bind(this);
 
     this.ruleArea.appendChild(this.elt);
-    this.draggable =
-      new Draggable(this.elt, this.onDown, this.onMove, this.onUp);
+    this.draggable = new Draggable(this.elt, this.onDown, this.onMove, this.onUp);
 
     const dragHint = document.getElementById('drag-hint');
     this.flexDir = window.getComputedStyle(dragHint).flexDirection;
@@ -195,13 +194,12 @@ class RulePartBlock {
     }
     const ratio = (index + 1) / (length + 1);
 
-
     if (flexDir === 'row') {
       const centerY = areaRect.height * ratio - rect.height / 2;
 
       let roleX = areaRect.width / 4 - rect.width / 2;
       if (this.role === 'effect') {
-        roleX = areaRect.width * 3 / 4 - rect.width / 2;
+        roleX = (areaRect.width * 3) / 4 - rect.width / 2;
       }
 
       this.snapToGrid(roleX, centerY);
@@ -210,7 +208,7 @@ class RulePartBlock {
 
       let roleY = areaRect.height / 4 - rect.height / 2;
       if (this.role === 'effect') {
-        roleY = areaRect.height * 3 / 4 - rect.height / 2;
+        roleY = (areaRect.height * 3) / 4 - rect.height / 2;
       }
 
       this.snapToGrid(centerX, roleY);

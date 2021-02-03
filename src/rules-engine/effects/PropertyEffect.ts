@@ -4,8 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Property, {PropertyDescription} from '../Property';
-import Effect, {EffectDescription} from './Effect';
+import Property, { PropertyDescription } from '../Property';
+import Effect, { EffectDescription } from './Effect';
 
 export interface PropertyEffectDescription extends EffectDescription {
   property: PropertyDescription;

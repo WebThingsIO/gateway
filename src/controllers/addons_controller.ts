@@ -23,8 +23,7 @@ function build(): express.Router {
       }
 
       const licenses = files.filter((f) => {
-        return /^LICENSE(\..*)?$/.test(f) &&
-          fs.lstatSync(path.join(addonDir, f)).isFile();
+        return /^LICENSE(\..*)?$/.test(f) && fs.lstatSync(path.join(addonDir, f)).isFile();
       });
 
       if (licenses.length === 0) {
@@ -32,18 +31,14 @@ function build(): express.Router {
         return;
       }
 
-      fs.readFile(
-        path.join(addonDir, licenses[0]),
-        {encoding: 'utf8'},
-        (err, data) => {
-          if (err) {
-            response.status(404).send(err);
-            return;
-          }
-
-          response.status(200).type('text/plain').send(data);
+      fs.readFile(path.join(addonDir, licenses[0]), { encoding: 'utf8' }, (err, data) => {
+        if (err) {
+          response.status(404).send(err);
+          return;
         }
-      );
+
+        response.status(200).type('text/plain').send(data);
+      });
     });
   });
 
@@ -64,7 +59,7 @@ function build(): express.Router {
         await AddonManager.disableAddon(addonId, true);
       }
 
-      response.status(200).json({enabled});
+      response.status(200).json({ enabled });
     } catch (e) {
       console.error(`Failed to toggle add-on ${addonId}`);
       console.error(e);
@@ -113,7 +108,7 @@ function build(): express.Router {
         await AddonManager.loadAddon(addonId);
       }
 
-      response.status(200).json({config});
+      response.status(200).json({ config });
     } catch (e) {
       console.error(`Failed to restart add-on ${addonId}`);
       console.error(e);
@@ -122,10 +117,12 @@ function build(): express.Router {
   });
 
   controller.post('/', async (request, response) => {
-    if (!request.body ||
-        !request.body.hasOwnProperty('id') ||
-        !request.body.hasOwnProperty('url') ||
-        !request.body.hasOwnProperty('checksum')) {
+    if (
+      !request.body ||
+      !request.body.hasOwnProperty('id') ||
+      !request.body.hasOwnProperty('url') ||
+      !request.body.hasOwnProperty('checksum')
+    ) {
       response.status(400).send('Missing required parameter(s).');
       return;
     }
@@ -147,9 +144,11 @@ function build(): express.Router {
   controller.patch('/:addonId', async (request, response) => {
     const id = request.params.addonId;
 
-    if (!request.body ||
-        !request.body.hasOwnProperty('url') ||
-        !request.body.hasOwnProperty('checksum')) {
+    if (
+      !request.body ||
+      !request.body.hasOwnProperty('url') ||
+      !request.body.hasOwnProperty('checksum')
+    ) {
       response.status(400).send('Missing required parameter(s).');
       return;
     }

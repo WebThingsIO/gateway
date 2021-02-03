@@ -19,7 +19,7 @@ import * as jwtMiddleware from '../jwt-middleware';
 import UserProfile from '../user-profile';
 import * as Utils from '../utils';
 import AddonManager from '../addon-manager';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 
 function build(): express.Router {
   const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
@@ -28,9 +28,9 @@ function build(): express.Router {
    * Generate an index of log files.
    */
   controller.get('/', async (request, response) => {
-    const jwt = jwtMiddleware.extractJWTHeader(request) ||
-      jwtMiddleware.extractJWTQS(request);
-    const files = fs.readdirSync(UserProfile.logDir)
+    const jwt = jwtMiddleware.extractJWTHeader(request) || jwtMiddleware.extractJWTQS(request);
+    const files = fs
+      .readdirSync(UserProfile.logDir)
       .filter((f) => !f.startsWith('.') && f !== 'logs.sqlite3');
     files.sort();
 
@@ -46,18 +46,14 @@ function build(): express.Router {
 
     for (const name of files) {
       if (fs.lstatSync(path.join(UserProfile.logDir, name)).isFile()) {
-        content +=
-          `${'<li>' +
+        content += `${
+          '<li>' +
           `<a href="${Constants.INTERNAL_LOGS_PATH}/files/${encodeURIComponent(name)}?jwt=${jwt}">`
-          }${Utils.escapeHtml(name)}</a>` +
-          `</li>`;
+        }${Utils.escapeHtml(name)}</a></li>`;
       }
     }
 
-    content +=
-      '</ul>' +
-      '</body>' +
-      '</html>';
+    content += '</ul></body></html>';
 
     response.send(content);
   });
@@ -67,17 +63,14 @@ function build(): express.Router {
    */
   controller.use(
     '/files',
-    express.static(
-      UserProfile.logDir,
-      {
-        setHeaders: (res, filepath) => {
-          const base = path.basename(filepath);
-          if (base.startsWith('run-app.log')) {
-            res.set('Content-Type', 'text/plain');
-          }
-        },
-      }
-    )
+    express.static(UserProfile.logDir, {
+      setHeaders: (res, filepath) => {
+        const base = path.basename(filepath);
+        if (base.startsWith('run-app.log')) {
+          res.set('Content-Type', 'text/plain');
+        }
+      },
+    })
   );
 
   /**
@@ -93,13 +86,10 @@ function build(): express.Router {
     response.attachment('logs.zip');
 
     archive.pipe(response);
-    fs.readdirSync(
-      UserProfile.logDir
-    ).map((f) => {
+    fs.readdirSync(UserProfile.logDir).map((f) => {
       const fullPath = path.join(UserProfile.logDir, f);
-      if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile() &&
-          f !== 'logs.sqlite3') {
-        archive.file(fullPath, {name: path.join('logs', f)});
+      if (!f.startsWith('.') && fs.lstatSync(fullPath).isFile() && f !== 'logs.sqlite3') {
+        archive.file(fullPath, { name: path.join('logs', f) });
       }
     });
     archive.finalize();

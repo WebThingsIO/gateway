@@ -16,8 +16,7 @@ const fluent = require('../../fluent');
 
 class LockedDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('locked'));
+    super(thing, name, !!property.readOnly, property.title || fluent.getMessage('locked'));
     this.id = `locked-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

@@ -71,8 +71,7 @@ class MotionSensorCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.motion =
-      typeof this.dataset.motion !== 'undefined' ? this.dataset.motion : null;
+    this.motion = typeof this.dataset.motion !== 'undefined' ? this.dataset.motion : null;
   }
 
   get motion() {
@@ -95,6 +94,5 @@ class MotionSensorCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-motion-sensor-capability',
-                             MotionSensorCapability);
+window.customElements.define('webthing-motion-sensor-capability', MotionSensorCapability);
 module.exports = MotionSensorCapability;

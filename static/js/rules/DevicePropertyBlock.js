@@ -14,8 +14,7 @@ const RuleUtils = require('./RuleUtils');
  */
 class DevicePropertyBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleChange, thing) {
-    super(ruleArea, onPresentationChange, onRuleChange, thing.title,
-          RuleUtils.icon(thing));
+    super(ruleArea, onPresentationChange, onRuleChange, thing.title, RuleUtils.icon(thing));
     this.thing = thing;
 
     const propertyInfo = this.elt.querySelector('.rule-part-info');

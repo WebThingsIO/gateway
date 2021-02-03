@@ -71,10 +71,8 @@ class SliderProperty extends BaseComponent {
 `;
     super(template);
 
-    this._input = this.shadowRoot.querySelector(
-      '.webthing-slider-property-slider');
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-slider-property-name');
+    this._input = this.shadowRoot.querySelector('.webthing-slider-property-slider');
+    this._name = this.shadowRoot.querySelector('.webthing-slider-property-name');
 
     this._onChange = this.__onChange.bind(this);
   }
@@ -85,9 +83,7 @@ class SliderProperty extends BaseComponent {
     }
 
     this.readOnly =
-      typeof this.dataset.readOnly !== 'undefined' ?
-        this.dataset.readOnly === 'true' :
-        false;
+      typeof this.dataset.readOnly !== 'undefined' ? this.dataset.readOnly === 'true' : false;
 
     this._upgradeProperty('min');
     this._upgradeProperty('max');
@@ -160,12 +156,14 @@ class SliderProperty extends BaseComponent {
     e.preventDefault();
     this.value = e.target.value;
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        value: this.value,
-      },
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          value: this.value,
+        },
+        bubbles: true,
+      })
+    );
   }
 }
 

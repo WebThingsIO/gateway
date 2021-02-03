@@ -1,5 +1,5 @@
 import '../jsdom-common';
-import {makeUndefined, fireEvent, createSchemaForm} from './test-utils';
+import { makeUndefined, fireEvent, createSchemaForm } from './test-utils';
 
 describe('Validation', () => {
   describe('Required fields', () => {
@@ -7,13 +7,13 @@ describe('Validation', () => {
       type: 'object',
       required: ['foo'],
       properties: {
-        foo: {type: 'string'},
-        bar: {type: 'string'},
+        foo: { type: 'string' },
+        bar: { type: 'string' },
       },
     };
 
     it('should render errors', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: {
           foo: makeUndefined(),
@@ -23,8 +23,10 @@ describe('Validation', () => {
       fireEvent(node.querySelector('#root_foo')!, 'change');
 
       expect(node.querySelectorAll('.errors-list li')).toHaveLength(1);
-      expect(node.querySelector('.errors-list li')!.textContent!.trim())
-        .toEqual('should have required property \'foo\'');
+      expect(node.querySelector('.errors-list li')!.textContent!.trim()).toEqual(
+        // eslint-disable-next-line @typescript-eslint/quotes
+        "should have required property 'foo'"
+      );
     });
   });
 
@@ -41,7 +43,7 @@ describe('Validation', () => {
     };
 
     it('should render errors', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: {
           foo: '123456789',
@@ -51,8 +53,9 @@ describe('Validation', () => {
       fireEvent(node.querySelector('#root_foo')!, 'change');
 
       expect(node.querySelectorAll('.error-item')).toHaveLength(1);
-      expect(node.querySelector('.error-item')!.textContent!.trim())
-        .toEqual('/foo should NOT have fewer than 10 characters');
+      expect(node.querySelector('.error-item')!.textContent!.trim()).toEqual(
+        '/foo should NOT have fewer than 10 characters'
+      );
     });
   });
 });

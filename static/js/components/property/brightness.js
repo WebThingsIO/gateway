@@ -11,9 +11,7 @@
 
 const SliderProperty = require('./slider');
 
-class BrightnessProperty extends SliderProperty {
-}
+class BrightnessProperty extends SliderProperty {}
 
-window.customElements.define('webthing-brightness-property',
-                             BrightnessProperty);
+window.customElements.define('webthing-brightness-property', BrightnessProperty);
 module.exports = BrightnessProperty;

@@ -1,5 +1,5 @@
-import {server, chai, mockAdapter} from '../common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai, mockAdapter } from '../common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import * as Constants from '../../constants';
 
 describe('adapters/', () => {
@@ -9,7 +9,8 @@ describe('adapters/', () => {
   });
 
   it('gets all adapters', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(Constants.ADAPTERS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -25,7 +26,8 @@ describe('adapters/', () => {
   it('gets specifically mockAdapter', async () => {
     const mockAdapterId = mockAdapter().getId();
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.ADAPTERS_PATH}/${mockAdapterId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -39,7 +41,8 @@ describe('adapters/', () => {
   it('fails to get a nonexistent adapter', async () => {
     const mockAdapterId = 'nonexistent-adapter';
 
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .get(`${Constants.ADAPTERS_PATH}/${mockAdapterId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));

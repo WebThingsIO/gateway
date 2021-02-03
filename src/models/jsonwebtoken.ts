@@ -11,7 +11,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import * as jwt from 'jsonwebtoken';
 
 import * as ec from '../ec-crypto';
@@ -80,9 +80,9 @@ export default class JSONWebToken {
       return null;
     }
 
-    const {kid} = decoded.header;
+    const { kid } = decoded.header;
 
-    const tokenData = <TokenData><unknown>(await Database.getJSONWebTokenByKeyId(kid));
+    const tokenData = <TokenData>(<unknown>await Database.getJSONWebTokenByKeyId(kid));
     if (!tokenData) {
       return null;
     }
@@ -103,7 +103,7 @@ export default class JSONWebToken {
    * @return {string} the JWT token signature.
    */
   static async issueToken(user: number): Promise<string> {
-    const {sig, token} = await this.create(user);
+    const { sig, token } = await this.create(user);
     await Database.createJSONWebToken(token);
     return sig;
   }
@@ -117,11 +117,20 @@ export default class JSONWebToken {
    * @param {Payload} payload of token
    * @return {string} the JWT token signature.
    */
-  static async issueOAuthToken(client: {id: string}, user: number, payload: Payload):
-  Promise<string> {
-    const {sig, token} = await this.create(user, Object.assign({
-      client_id: client.id,
-    }, payload));
+  static async issueOAuthToken(
+    client: { id: string },
+    user: number,
+    payload: Payload
+  ): Promise<string> {
+    const { sig, token } = await this.create(
+      user,
+      Object.assign(
+        {
+          client_id: client.id,
+        },
+        payload
+      )
+    );
     await Database.createJSONWebToken(token);
     return sig;
   }
@@ -141,8 +150,10 @@ export default class JSONWebToken {
    * @return {Object} containing .sig (the jwt signature) and .token
    *  for storage in the database.
    */
-  static async create(user: number, payload = {role: ROLE_USER_TOKEN}):
-  Promise<{sig: string, token: TokenData}> {
+  static async create(
+    user: number,
+    payload = { role: ROLE_USER_TOKEN }
+  ): Promise<{ sig: string; token: TokenData }> {
     const pair = ec.generateKeyPair();
 
     const keyId = uuidv4();
@@ -165,11 +176,11 @@ export default class JSONWebToken {
       payload,
     };
 
-    return {sig, token};
+    return { sig, token };
   }
 
   constructor(obj: TokenData) {
-    const {user, issuedAt, publicKey, keyId} = obj;
+    const { user, issuedAt, publicKey, keyId } = obj;
     this.user = user;
     this.issuedAt = issuedAt;
     this.publicKey = publicKey;

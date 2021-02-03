@@ -18,7 +18,7 @@ import e2p from 'event-to-promise';
 import fs from 'fs';
 import path from 'path';
 import _chai from './chai';
-import {MockAdapter} from '../addons-test/mock-adapter/index';
+import { MockAdapter } from '../addons-test/mock-adapter/index';
 import https from 'https';
 
 interface TestGlobals {
@@ -40,7 +40,7 @@ expect.extend({
   },
 });
 
-import {servers, serverStartup} from '../app';
+import { servers, serverStartup } from '../app';
 (<NodeJS.Global & typeof globalThis & TestGlobals>global).server = servers.https!;
 
 import addonManager from '../addon-manager';
@@ -48,13 +48,16 @@ import addonManager from '../addon-manager';
 export function mockAdapter(): MockAdapter {
   const adapter = addonManager.getAdapter('mock-adapter');
   expect(adapter).not.toBeUndefined();
-  return <MockAdapter><unknown>adapter!;
+  return <MockAdapter>(<unknown>adapter!);
 }
 (<NodeJS.Global & typeof globalThis & TestGlobals>global).mockAdapter = mockAdapter;
 
 function removeTestManifest(): void {
-  const testManifestJsonFilename =
-    path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
+  const testManifestJsonFilename = path.join(
+    UserProfile.addonsDir,
+    'test-adapter',
+    'manifest.json'
+  );
   if (fs.existsSync(testManifestJsonFilename)) {
     console.log('Removing', testManifestJsonFilename);
     fs.unlinkSync(testManifestJsonFilename);
@@ -79,7 +82,7 @@ afterEach(async () => {
   // This is all potentially brittle.
   const adapter = addonManager.getAdapter('mock-adapter');
   if (adapter) {
-    await (<MockAdapter><unknown>adapter!).clearState();
+    await (<MockAdapter>(<unknown>adapter!)).clearState();
   }
   Actions.clearState();
   Events.clearState();

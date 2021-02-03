@@ -33,15 +33,17 @@ export default class ArrayField {
 
   private readOnly: boolean;
 
-  constructor(schema: Record<string, unknown>,
-              formData: unknown[],
-              idSchema: Record<string, unknown>,
-              name: string,
-              definitions: Record<string, unknown>,
-              onChange: ((value: unknown) => void) | null = null,
-              _required = false,
-              disabled = false,
-              readOnly = false) {
+  constructor(
+    schema: Record<string, unknown>,
+    formData: unknown[],
+    idSchema: Record<string, unknown>,
+    name: string,
+    definitions: Record<string, unknown>,
+    onChange: ((value: unknown) => void) | null = null,
+    _required = false,
+    disabled = false,
+    readOnly = false
+  ) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = Array.isArray(formData) ? formData : [];
     this.idSchema = idSchema;
@@ -53,10 +55,7 @@ export default class ArrayField {
   }
 
   require(name: string): boolean {
-    return (
-      Array.isArray(this.schema.required) &&
-      this.schema.required.includes(name)
-    );
+    return Array.isArray(this.schema.required) && this.schema.required.includes(name);
   }
 
   onChangeForIndex(index: number): (value: unknown) => void {
@@ -123,7 +122,7 @@ export default class ArrayField {
   }
 
   itemFieldId(index: number): string {
-    return `array_${Utils.escapeHtmlForIdClass(<string> this.idSchema.$id)}_${index}`;
+    return `array_${Utils.escapeHtmlForIdClass(<string>this.idSchema.$id)}_${index}`;
   }
 
   onDropIndexClick(field: HTMLElement, index: number): (event: Event) => void {
@@ -147,12 +146,7 @@ export default class ArrayField {
       }
 
       for (let i = index + 1; i < this.formData.length; i++) {
-        const newItem = this.renderArrayFieldItem(
-          field,
-          this.formData[i],
-          i - 1,
-          itemSchema,
-          true);
+        const newItem = this.renderArrayFieldItem(field, this.formData[i], i - 1, itemSchema, true);
 
         newItemsField.appendChild(newItem);
       }
@@ -199,12 +193,7 @@ export default class ArrayField {
 
       this.formData.push(value);
 
-      const itemField = this.renderArrayFieldItem(
-        field,
-        value,
-        index,
-        itemSchema,
-        true);
+      const itemField = this.renderArrayFieldItem(field, value, index, itemSchema, true);
 
       itemsField.appendChild(itemField);
 
@@ -280,21 +269,21 @@ export default class ArrayField {
   }
 
   renderArrayFieldset(): HTMLFieldSetElement {
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
-    const description = <string> this.schema.description;
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
+    const description = <string>this.schema.description;
 
-    let title = this.schema.title ? <string> this.schema.title : this.name;
+    let title = this.schema.title ? <string>this.schema.title : this.name;
     title = Utils.escapeHtml(title);
 
     const field = document.createElement('fieldset');
 
-    field.innerHTML =
-      `${(title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
-      (description ?
-        `<p id="${id}__description" class="field-description">
-        ${Utils.escapeHtml(description)}</p>` :
-        '')
-      }<div class="array-items"></div>`;
+    field.innerHTML = `${
+      (title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
+      (description
+        ? `<p id="${id}__description" class="field-description">
+        ${Utils.escapeHtml(description)}</p>`
+        : '')
+    }<div class="array-items"></div>`;
 
     return field;
   }
@@ -312,12 +301,7 @@ export default class ArrayField {
     const itemsField = field.querySelector('div.array-items')!;
 
     items.forEach((item, index) => {
-      const itemField = this.renderArrayFieldItem(
-        field,
-        item,
-        index,
-        itemSchema,
-        true);
+      const itemField = this.renderArrayFieldItem(field, item, index, itemSchema, true);
       itemsField.appendChild(itemField);
     });
 
@@ -348,16 +332,11 @@ export default class ArrayField {
     items.forEach((item, index) => {
       const additional = index >= itemSchemas.length;
       const canRemove = additional;
-      const itemSchema = additional ?
-        SchemaUtils.retrieveSchema(<Record<string, unknown>>schema.additionalItems, definitions) :
-        itemSchemas[index];
+      const itemSchema = additional
+        ? SchemaUtils.retrieveSchema(<Record<string, unknown>>schema.additionalItems, definitions)
+        : itemSchemas[index];
 
-      const itemField = this.renderArrayFieldItem(
-        field,
-        item,
-        index,
-        itemSchema,
-        canRemove);
+      const itemField = this.renderArrayFieldItem(field, item, index, itemSchema, canRemove);
       itemsField.appendChild(itemField);
     });
 
@@ -370,7 +349,7 @@ export default class ArrayField {
   }
 
   renderMultiSelect(): HTMLFieldSetElement {
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
     const items = this.formData;
     const schema = this.schema;
     const definitions = this.definitions;
@@ -380,14 +359,14 @@ export default class ArrayField {
       items
     );
     const enumOptions = SchemaUtils.optionsList(itemsSchema);
-    const all = enumOptions.map(({value}) => value);
+    const all = enumOptions.map(({ value }) => value);
 
     const field = document.createElement('fieldset');
     field.className = 'checkboxes';
 
     enumOptions.forEach((option, index) => {
       const checked = items.includes(option.value);
-      const disabledCls = (this.disabled || this.readOnly) ? 'disabled' : '';
+      const disabledCls = this.disabled || this.readOnly ? 'disabled' : '';
 
       const div = document.createElement('div');
 
@@ -398,7 +377,7 @@ export default class ArrayField {
         type="checkbox"
         id="${id}_${index}"
         ${checked ? 'checked' : ''}
-        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
       />
       <span class="checkbox-title">${Utils.escapeHtml(<string>option.label)}</span>
       `;

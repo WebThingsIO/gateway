@@ -9,25 +9,19 @@
  */
 
 import config from 'config';
-import {verbose, Database as SQLiteDatabase, RunResult} from 'sqlite3';
+import { verbose, Database as SQLiteDatabase, RunResult } from 'sqlite3';
 import fs from 'fs';
 import path from 'path';
-import {TokenData} from './models/jsonwebtoken';
+import { TokenData } from './models/jsonwebtoken';
 import User from './models/user';
 import UserProfile from './user-profile';
-import {PushSubscription} from 'web-push';
+import { PushSubscription } from 'web-push';
 
 const sqlite3 = verbose();
 
-const TABLES = [
-  'users',
-  'jsonwebtokens',
-  'things',
-  'settings',
-  'pushSubscriptions',
-];
+const TABLES = ['users', 'jsonwebtokens', 'things', 'settings', 'pushSubscriptions'];
 
-const DEBUG = false || (process.env.NODE_ENV === 'test');
+const DEBUG = false || process.env.NODE_ENV === 'test';
 
 class Database {
   /**
@@ -72,21 +66,20 @@ class Database {
 
   createTables(): void {
     // Create Things table
-    this.db!.run('CREATE TABLE IF NOT EXISTS things (' +
-      'id TEXT PRIMARY KEY,' +
-      'description TEXT' +
-    ');');
+    this.db!.run('CREATE TABLE IF NOT EXISTS things (id TEXT PRIMARY KEY, description TEXT);');
 
     // Create Users table
-    this.db!.run('CREATE TABLE IF NOT EXISTS users (' +
-      'id INTEGER PRIMARY KEY ASC,' +
-      'email TEXT UNIQUE,' +
-      'password TEXT,' +
-      'name TEXT,' +
-      'mfaSharedSecret TEXT,' +
-      'mfaEnrolled BOOLEAN DEFAULT 0,' +
-      'mfaBackupCodes TEXT' +
-    ');');
+    this.db!.run(
+      'CREATE TABLE IF NOT EXISTS users (' +
+        'id INTEGER PRIMARY KEY ASC,' +
+        'email TEXT UNIQUE,' +
+        'password TEXT,' +
+        'name TEXT,' +
+        'mfaSharedSecret TEXT,' +
+        'mfaEnrolled BOOLEAN DEFAULT 0,' +
+        'mfaBackupCodes TEXT' +
+        ');'
+    );
 
     /**
      * This really should have a foreign key constraint but it does not work
@@ -96,20 +89,19 @@ class Database {
      *
      * Instead, the INTEGER user is either the id of the user or -1 if NULL
      */
-    this.db!.run('CREATE TABLE IF NOT EXISTS jsonwebtokens (' +
-      'id INTEGER PRIMARY KEY ASC,' +
-      'keyId TEXT UNIQUE,' + // public id (kid in JWT terms).
-      'user INTEGER,' +
-      'issuedAt DATE,' +
-      'publicKey TEXT,' +
-      'payload TEXT' +
-    ');');
+    this.db!.run(
+      'CREATE TABLE IF NOT EXISTS jsonwebtokens (' +
+        'id INTEGER PRIMARY KEY ASC,' +
+        'keyId TEXT UNIQUE,' + // public id (kid in JWT terms).
+        'user INTEGER,' +
+        'issuedAt DATE,' +
+        'publicKey TEXT,' +
+        'payload TEXT' +
+        ');'
+    );
 
     // Create Settings table
-    this.db!.run('CREATE TABLE IF NOT EXISTS settings (' +
-      'key TEXT PRIMARY KEY,' +
-      'value TEXT' +
-    ');');
+    this.db!.run('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT);');
 
     this.db!.run(`CREATE TABLE IF NOT EXISTS pushSubscriptions (
       id INTEGER PRIMARY KEY,
@@ -165,7 +157,8 @@ class Database {
           } else {
             resolve(description);
           }
-        });
+        }
+      );
     });
   }
 
@@ -187,7 +180,8 @@ class Database {
           } else {
             resolve(description);
           }
-        });
+        }
+      );
     });
   }
 
@@ -215,16 +209,13 @@ class Database {
   getUser(email: string): Promise<Record<string, unknown>> {
     return new Promise((resolve, reject) => {
       const db = this.db!;
-      db.get(
-        'SELECT * FROM users WHERE email = ?',
-        email,
-        (error, row) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(row);
-          }
-        });
+      db.get('SELECT * FROM users WHERE email = ?', email, (error, row) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(row);
+        }
+      });
     });
   }
 
@@ -232,10 +223,7 @@ class Database {
    * Get a user by it's primary key (id).
    */
   async getUserById(id: number): Promise<Record<string, unknown>> {
-    return await this.get(
-      'SELECT * FROM users WHERE id = ?',
-      id
-    );
+    return await this.get('SELECT * FROM users WHERE id = ?', id);
   }
 
   /**
@@ -248,7 +236,7 @@ class Database {
   }
 
   async getUserCount(): Promise<number> {
-    const {count} = <{count: number}>(await this.get('SELECT count(*) as count FROM users'));
+    const { count } = <{ count: number }>await this.get('SELECT count(*) as count FROM users');
     return count;
   }
 
@@ -267,7 +255,7 @@ class Database {
       return;
     }
 
-    const {value} = <{value?: string}>res;
+    const { value } = <{ value?: string }>res;
     if (typeof value === 'undefined') {
       return value;
     } else {
@@ -312,14 +300,14 @@ class Database {
   async createUser(user: User): Promise<number> {
     const result = await this.run(
       'INSERT INTO users ' +
-      '(email, password, name, mfaSharedSecret, mfaEnrolled, mfaBackupCodes) ' +
-      'VALUES (?, ?, ?, ?, ?, ?)',
+        '(email, password, name, mfaSharedSecret, mfaEnrolled, mfaBackupCodes) ' +
+        'VALUES (?, ?, ?, ?, ?, ?)',
       user.getEmail(),
       user.getPassword(),
       user.getName(),
       user.getMfaSharedSecret(),
       user.getMfaEnrolled(),
-      JSON.stringify(user.getMfaBackupCodes() || '[]'),
+      JSON.stringify(user.getMfaBackupCodes() || '[]')
     );
     return result.lastID;
   }
@@ -332,15 +320,15 @@ class Database {
   async editUser(user: User): Promise<RunResult> {
     return this.run(
       'UPDATE users SET ' +
-      'email=?, password=?, name=?, mfaSharedSecret=?, mfaEnrolled=?, ' +
-      'mfaBackupCodes=? WHERE id=?',
+        'email=?, password=?, name=?, mfaSharedSecret=?, mfaEnrolled=?, ' +
+        'mfaBackupCodes=? WHERE id=?',
       user.getEmail(),
       user.getPassword(),
       user.getName(),
       user.getMfaSharedSecret(),
       user.getMfaEnrolled(),
       JSON.stringify(user.getMfaBackupCodes() || '[]'),
-      user.getId(),
+      user.getId()
     );
   }
 
@@ -374,12 +362,12 @@ class Database {
   async createJSONWebToken(token: TokenData): Promise<number> {
     const result = await this.run(
       'INSERT INTO jsonwebtokens (keyId, user, issuedAt, publicKey, payload) ' +
-      'VALUES (?, ?, ?, ?, ?)',
+        'VALUES (?, ?, ?, ?, ?)',
       token.keyId,
       token.user,
       token.issuedAt,
       token.publicKey,
-      JSON.stringify(token.payload),
+      JSON.stringify(token.payload)
     );
     return result.lastID;
   }
@@ -390,10 +378,7 @@ class Database {
    * @return {Promise<Object>} jwt data
    */
   getJSONWebTokenByKeyId(keyId: string): Promise<Record<string, unknown>> {
-    return this.get(
-      'SELECT * FROM jsonwebtokens WHERE keyId = ?',
-      keyId
-    );
+    return this.get('SELECT * FROM jsonwebtokens WHERE keyId = ?', keyId);
   }
 
   /**
@@ -403,16 +388,13 @@ class Database {
    */
   getJSONWebTokensByUser(userId: number): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
-      this.db!.all(
-        'SELECT * FROM jsonwebtokens WHERE user = ?',
-        [userId],
-        (err, rows) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(rows);
-          }
-        });
+      this.db!.all('SELECT * FROM jsonwebtokens WHERE user = ?', [userId], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
     });
   }
 
@@ -435,26 +417,24 @@ class Database {
     const description = JSON.stringify(desc);
 
     const insert = (): Promise<number> => {
-      return this.run(
-        'INSERT INTO pushSubscriptions (subscription) VALUES (?)',
-        description
-      ).then((res) => {
-        return res.lastID;
-      });
+      return this.run('INSERT INTO pushSubscriptions (subscription) VALUES (?)', description).then(
+        (res) => {
+          return res.lastID;
+        }
+      );
     };
 
-    return this.get(
-      'SELECT id FROM pushSubscriptions WHERE subscription = ?',
-      description
-    ).then((res) => {
-      if (typeof res === 'undefined') {
-        return insert();
-      }
+    return this.get('SELECT id FROM pushSubscriptions WHERE subscription = ?', description)
+      .then((res) => {
+        if (typeof res === 'undefined') {
+          return insert();
+        }
 
-      return <number>res.id;
-    }).catch(() => {
-      return insert();
-    });
+        return <number>res.id;
+      })
+      .catch(() => {
+        return insert();
+      });
   }
 
   /**
@@ -463,25 +443,21 @@ class Database {
    */
   getPushSubscriptions(): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
-      this.db!.all(
-        'SELECT id, subscription FROM pushSubscriptions',
-        [],
-        (err, rows) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          const subs = [];
-          for (const row of rows) {
-            const sub = JSON.parse(row.subscription);
-            sub.id = row.id;
-            subs.push(sub);
-          }
-
-          resolve(subs);
+      this.db!.all('SELECT id, subscription FROM pushSubscriptions', [], (err, rows) => {
+        if (err) {
+          reject(err);
+          return;
         }
-      );
+
+        const subs = [];
+        for (const row of rows) {
+          const sub = JSON.parse(row.subscription);
+          sub.id = row.id;
+          subs.push(sub);
+        }
+
+        resolve(subs);
+      });
     });
   }
 
@@ -497,9 +473,11 @@ class Database {
    * ONLY for tests (clears all tables).
    */
   async deleteEverything(): Promise<RunResult[]> {
-    return Promise.all(TABLES.map((t) => {
-      return this.run(`DELETE FROM ${t}`);
-    }));
+    return Promise.all(
+      TABLES.map((t) => {
+        return this.run(`DELETE FROM ${t}`);
+      })
+    );
   }
 
   get(sql: string, ...values: any[]): Promise<Record<string, unknown>> {
@@ -528,7 +506,7 @@ class Database {
   run(sql: string, ...values: any[]): Promise<RunResult> {
     return new Promise((resolve, reject) => {
       try {
-        this.db!.run(sql, values, function(err: unknown) {
+        this.db!.run(sql, values, function (err: unknown) {
           if (err) {
             reject(err);
             return;
@@ -546,7 +524,7 @@ class Database {
   all(sql: string, ...values: any[]): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
       try {
-        this.db!.all(sql, values, function(err: unknown, rows: Record<string, unknown>[]) {
+        this.db!.all(sql, values, function (err: unknown, rows: Record<string, unknown>[]) {
           if (err) {
             reject(err);
             return;

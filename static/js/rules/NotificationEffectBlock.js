@@ -11,9 +11,13 @@ const fluent = require('../fluent');
  */
 class NotificationEffectBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate) {
-    super(ruleArea, onPresentationChange, onRuleUpdate,
-          fluent.getMessage('rule-notification'),
-          '/images/thing-icons/notification.svg');
+    super(
+      ruleArea,
+      onPresentationChange,
+      onRuleUpdate,
+      fluent.getMessage('rule-notification'),
+      '/images/thing-icons/notification.svg'
+    );
 
     const rulePartInfo = this.elt.querySelector('.rule-part-info');
 
@@ -39,10 +43,12 @@ class NotificationEffectBlock extends RulePartBlock {
     });
 
     this.messageInput.addEventListener('change', () => {
-      this.rulePart = {effect: {
-        type: 'NotificationEffect',
-        message: this.messageInput.value,
-      }};
+      this.rulePart = {
+        effect: {
+          type: 'NotificationEffect',
+          message: this.messageInput.value,
+        },
+      };
       this.onRuleChange();
     });
 
@@ -73,10 +79,12 @@ class NotificationEffectBlock extends RulePartBlock {
       this.remove();
     }
     if (this.role === 'effect') {
-      this.rulePart = {effect: {
-        type: 'NotificationEffect',
-        message: this.messageInput.value,
-      }};
+      this.rulePart = {
+        effect: {
+          type: 'NotificationEffect',
+          message: this.messageInput.value,
+        },
+      };
       this.onRuleChange();
     }
   }

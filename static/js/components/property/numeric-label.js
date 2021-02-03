@@ -64,12 +64,9 @@ class NumericLabelProperty extends BaseComponent {
 `;
     super(template);
 
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-numeric-label-property-name');
-    this._value = this.shadowRoot.querySelector(
-      '.webthing-numeric-label-property-value');
-    this._unit = this.shadowRoot.querySelector(
-      '.webthing-numeric-label-property-unit');
+    this._name = this.shadowRoot.querySelector('.webthing-numeric-label-property-name');
+    this._value = this.shadowRoot.querySelector('.webthing-numeric-label-property-value');
+    this._unit = this.shadowRoot.querySelector('.webthing-numeric-label-property-unit');
     this._precision = 0;
   }
 
@@ -79,19 +76,15 @@ class NumericLabelProperty extends BaseComponent {
     }
 
     if (!this.value) {
-      this.value =
-        typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
+      this.value = typeof this.dataset.value !== 'undefined' ? this.dataset.value : '';
     }
 
     if (!this.unit) {
-      this.unit =
-        typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+      this.unit = typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
     }
 
     if (!this.precision) {
-      this.precision = typeof this.dataset.precision !== 'undefined' ?
-        this.dataset.precision :
-        0;
+      this.precision = typeof this.dataset.precision !== 'undefined' ? this.dataset.precision : 0;
     }
   }
 
@@ -129,6 +122,5 @@ class NumericLabelProperty extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-numeric-label-property',
-                             NumericLabelProperty);
+window.customElements.define('webthing-numeric-label-property', NumericLabelProperty);
 module.exports = NumericLabelProperty;

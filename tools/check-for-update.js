@@ -1,7 +1,7 @@
 process.env.ALLOW_CONFIG_MUTATIONS = 'true';
 
 const config = require('config');
-const {exec} = require('child_process');
+const { exec } = require('child_process');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
@@ -10,9 +10,7 @@ const semver = require('semver');
 const Utils = require('../build/utils');
 
 // Load in the local.json file, if it exists
-const baseDir = path.resolve(
-  process.env.WEBTHINGS_HOME || config.get('profileDir')
-);
+const baseDir = path.resolve(process.env.WEBTHINGS_HOME || config.get('profileDir'));
 const userConfigPath = path.join(baseDir, 'config', 'local.json');
 if (fs.existsSync(userConfigPath)) {
   const localConfig = config.util.parseFile(userConfigPath);
@@ -21,8 +19,7 @@ if (fs.existsSync(userConfigPath)) {
   }
 }
 
-fetch(config.get('updates.url'),
-      {headers: {'User-Agent': Utils.getGatewayUserAgent()}})
+fetch(config.get('updates.url'), { headers: { 'User-Agent': Utils.getGatewayUserAgent() } })
   .then((res) => {
     return res.json();
   })
@@ -52,8 +49,7 @@ fetch(config.get('updates.url'),
       // download latestRelease.assets[:].browser_download_url
       let gatewayUrl = null;
       let nodeModulesUrl = null;
-      const validAssetRe = new RegExp(
-        `/download/${releaseVer}/[a-z0-9_-]+.tar.gz$`);
+      const validAssetRe = new RegExp(`/download/${releaseVer}/[a-z0-9_-]+.tar.gz$`);
       for (const asset of latestRelease.assets) {
         if (!asset.browser_download_url.match(validAssetRe)) {
           continue;
@@ -67,18 +63,19 @@ fetch(config.get('updates.url'),
       }
 
       if (nodeModulesUrl && gatewayUrl) {
-        exec(`./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`,
-             {cwd: '..'},
-             (err, stdout, stderr) => {
-               if (err) {
-                 console.error('Upgrade failed', err, stdout, stderr);
-               } else {
-                 console.log('Upgrade succeeded');
-               }
-             });
+        exec(
+          `./gateway/tools/upgrade.sh ${gatewayUrl} ${nodeModulesUrl}`,
+          { cwd: '..' },
+          (err, stdout, stderr) => {
+            if (err) {
+              console.error('Upgrade failed', err, stdout, stderr);
+            } else {
+              console.log('Upgrade succeeded');
+            }
+          }
+        );
       } else {
-        console.warn(`Release ${releaseVer} does not include archives`,
-                     latestRelease.assets);
+        console.warn(`Release ${releaseVer} does not include archives`, latestRelease.assets);
       }
     } else {
       console.log(`Our version ${currentVer} >= ${releaseVer}, exiting`);

@@ -29,15 +29,17 @@ export default class StringField {
 
   private readOnly: boolean;
 
-  constructor(schema: Record<string, unknown>,
-              formData: string | undefined,
-              idSchema: Record<string, unknown>,
-              _name: string,
-              definitions: Record<string, unknown>,
-              onChange: ((value?: string) => void) | null = null,
-              required = false,
-              disabled = false,
-              readOnly = false) {
+  constructor(
+    schema: Record<string, unknown>,
+    formData: string | undefined,
+    idSchema: Record<string, unknown>,
+    _name: string,
+    definitions: Record<string, unknown>,
+    onChange: ((value?: string) => void) | null = null,
+    required = false,
+    disabled = false,
+    readOnly = false
+  ) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
@@ -65,7 +67,7 @@ export default class StringField {
   }
 
   render(): HTMLDivElement {
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
 
@@ -77,10 +79,10 @@ export default class StringField {
 
       // User can select undefiend value on field not required.
       if (!this.required) {
-        enumOptions.unshift({value: '', label: ''});
+        enumOptions.unshift({ value: '', label: '' });
       }
 
-      const selects = enumOptions.map(({value, label}, i) => {
+      const selects = enumOptions.map(({ value, label }, i) => {
         const selected = selectedValue === this.toFormData(value);
         selectedAny = selectedAny || selected;
 
@@ -98,7 +100,7 @@ export default class StringField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         >
         ${selects.join(' ')}
         </select>`;
@@ -114,7 +116,7 @@ export default class StringField {
         type="text"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         value="${value == null ? '' : Utils.escapeHtml(value)}"
         />`;
     }

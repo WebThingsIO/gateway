@@ -71,8 +71,7 @@ class LeakSensorCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.leak =
-      typeof this.dataset.leak !== 'undefined' ? this.dataset.leak : null;
+    this.leak = typeof this.dataset.leak !== 'undefined' ? this.dataset.leak : null;
   }
 
   get leak() {
@@ -95,6 +94,5 @@ class LeakSensorCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-leak-sensor-capability',
-                             LeakSensorCapability);
+window.customElements.define('webthing-leak-sensor-capability', LeakSensorCapability);
 module.exports = LeakSensorCapability;

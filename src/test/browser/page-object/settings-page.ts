@@ -1,5 +1,5 @@
-import {Page, Section} from './elements';
-import {AddonSettingsPage} from './addon-settings-pages';
+import { Page, Section } from './elements';
+import { AddonSettingsPage } from './addon-settings-pages';
 import webdriverio from 'webdriverio';
 
 class SettingSection extends Section {
@@ -38,12 +38,8 @@ export class SettingsPage extends Page {
     this.defineSection('addon', '#addon-settings-link', SettingSection);
     this.defineSection('adapter', '#adapter-settings-link', SettingSection);
     this.defineSection('update', '#update-settings-link', SettingSection);
-    this.defineSection('authorization',
-                       '#authorization-settings-link',
-                       SettingSection);
-    this.defineSection('experiment',
-                       '#experiment-settings-link',
-                       SettingSection);
+    this.defineSection('authorization', '#authorization-settings-link', SettingSection);
+    this.defineSection('experiment', '#experiment-settings-link', SettingSection);
     this.defineSection('developer', '#developer-settings-link', SettingSection);
   }
 

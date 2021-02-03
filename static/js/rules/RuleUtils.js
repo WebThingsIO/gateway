@@ -13,8 +13,7 @@ const Icons = require('../icons');
 const RuleUtils = {
   icon: (description) => {
     if (description.selectedCapability) {
-      if (Icons.capabilityHasIcon(description.selectedCapability) ||
-          !description.iconHref) {
+      if (Icons.capabilityHasIcon(description.selectedCapability) || !description.iconHref) {
         return Icons.capabilityToIcon(description.selectedCapability);
       } else {
         return description.iconHref;
@@ -31,13 +30,16 @@ const RuleUtils = {
       console.warn('byProperty property undefined', new Error().stack);
       return false;
     }
-    const propHref =
-      `/things/${encodeURIComponent(property.thing)}/properties/${
-        encodeURIComponent(property.id)}`;
+    const propHref = `/things/${encodeURIComponent(property.thing)}/properties/${encodeURIComponent(
+      property.id
+    )}`;
     const optProp = option.properties[property.id];
-    return optProp && optProp.links.filter((l) => {
-      return (!l.rel || l.rel === 'property') && l.href === propHref;
-    }).length > 0;
+    return (
+      optProp &&
+      optProp.links.filter((l) => {
+        return (!l.rel || l.rel === 'property') && l.href === propHref;
+      }).length > 0
+    );
   },
   // Helper function for selecting the thing corresponding to an href
   byThing: (thing) => (otherThing) => {
@@ -46,13 +48,9 @@ const RuleUtils = {
   thingFromPart: (gateway, part) => {
     let thing = null;
     if (part.type === 'EventTrigger' || part.type === 'ActionEffect') {
-      thing = gateway.things.filter(
-        RuleUtils.byThing(part.thing)
-      )[0];
+      thing = gateway.things.filter(RuleUtils.byThing(part.thing))[0];
     } else if (part.property) {
-      thing = gateway.things.filter(
-        RuleUtils.byProperty(part.property)
-      )[0];
+      thing = gateway.things.filter(RuleUtils.byProperty(part.property))[0];
     }
     return thing;
   },

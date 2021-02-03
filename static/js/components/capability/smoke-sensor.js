@@ -72,8 +72,7 @@ class SmokeSensorCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.smoke =
-      typeof this.dataset.smoke !== 'undefined' ? this.dataset.smoke : null;
+    this.smoke = typeof this.dataset.smoke !== 'undefined' ? this.dataset.smoke : null;
   }
 
   get smoke() {
@@ -96,6 +95,5 @@ class SmokeSensorCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-smoke-sensor-capability',
-                             SmokeSensorCapability);
+window.customElements.define('webthing-smoke-sensor-capability', SmokeSensorCapability);
 module.exports = SmokeSensorCapability;

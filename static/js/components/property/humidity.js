@@ -11,9 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class HumidityProperty extends NumericLabelProperty {
-}
+class HumidityProperty extends NumericLabelProperty {}
 
-window.customElements.define('webthing-humidity-property',
-                             HumidityProperty);
+window.customElements.define('webthing-humidity-property', HumidityProperty);
 module.exports = HumidityProperty;

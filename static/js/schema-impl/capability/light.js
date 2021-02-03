@@ -20,14 +20,9 @@ class Light extends OnOffSwitch {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/light.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/light.svg',
+    });
   }
 
   /**
@@ -49,33 +44,30 @@ class Light extends OnOffSwitch {
         this.brightnessProperty = name;
       } else if (this.colorProperty === null && type === 'ColorProperty') {
         this.colorProperty = name;
-      } else if (this.colorTemperatureProperty === null &&
-                 type === 'ColorTemperatureProperty') {
+      } else if (this.colorTemperatureProperty === null && type === 'ColorTemperatureProperty') {
         this.colorTemperatureProperty = name;
-      } else if (this.colorModeProperty === null &&
-                 type === 'ColorModeProperty') {
+      } else if (this.colorModeProperty === null && type === 'ColorModeProperty') {
         this.colorModeProperty = name;
       }
     }
 
     // If necessary, match on name.
-    if (this.brightnessProperty === null &&
-        this.displayedProperties.hasOwnProperty('level')) {
+    if (this.brightnessProperty === null && this.displayedProperties.hasOwnProperty('level')) {
       this.brightnessProperty = 'level';
     }
 
-    if (this.colorProperty === null &&
-        this.displayedProperties.hasOwnProperty('color')) {
+    if (this.colorProperty === null && this.displayedProperties.hasOwnProperty('color')) {
       this.colorProperty = 'color';
     }
 
-    if (this.colorTemperatureProperty === null &&
-        this.displayedProperties.hasOwnProperty('colorTemperature')) {
+    if (
+      this.colorTemperatureProperty === null &&
+      this.displayedProperties.hasOwnProperty('colorTemperature')
+    ) {
       this.colorTemperatureProperty = 'colorTemperature';
     }
 
-    if (this.colorModeProperty === null &&
-        this.displayedProperties.hasOwnProperty('colorMode')) {
+    if (this.colorModeProperty === null && this.displayedProperties.hasOwnProperty('colorMode')) {
       this.colorModeProperty = 'colorMode';
     }
   }

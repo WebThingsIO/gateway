@@ -10,8 +10,8 @@
 
 import express from 'express';
 import OAuthClients from '../models/oauthclients';
-import {ClientRegistry} from '../oauth-types';
-import {WithJWT} from '../jwt-middleware';
+import { ClientRegistry } from '../oauth-types';
+import { WithJWT } from '../jwt-middleware';
 
 function build(): express.Router {
   const controller = express.Router();
@@ -24,9 +24,11 @@ function build(): express.Router {
     const user = request.jwt.getUser();
     const clients = await OAuthClients.getAuthorized(user);
 
-    response.json(clients.map((client: ClientRegistry) => {
-      return client.getDescription();
-    }));
+    response.json(
+      clients.map((client: ClientRegistry) => {
+        return client.getDescription();
+      })
+    );
   });
 
   controller.delete('/:clientId', async (req: express.Request, response: express.Response) => {

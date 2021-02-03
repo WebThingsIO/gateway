@@ -1,5 +1,5 @@
-import {server, chai} from '../common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai } from '../common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import AddonManager from '../../addon-manager';
 import config from 'config';
 import * as Constants from '../../constants';
@@ -12,13 +12,11 @@ import pkg from '../../package.json';
 import semver from 'semver';
 import sleep from '../../sleep';
 import UserProfile from '../../user-profile';
-import {URLSearchParams} from 'url';
+import { URLSearchParams } from 'url';
 
-const testManifestJsonFilename =
-  path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
+const testManifestJsonFilename = path.join(UserProfile.addonsDir, 'test-adapter', 'manifest.json');
 const sourceLicense = path.join(__dirname, '..', '..', '..', 'LICENSE');
-const destLicense =
-  path.join(UserProfile.addonsDir, 'settings-adapter', 'LICENSE');
+const destLicense = path.join(UserProfile.addonsDir, 'settings-adapter', 'LICENSE');
 
 const testManifestJson = {
   author: 'WebThingsIO',
@@ -54,15 +52,16 @@ function copyManifest<T>(manifest: T): T {
   return JSON.parse(JSON.stringify(manifest));
 }
 
-async function loadSettingsAdapterWithManifestJson(manifest: Record<string, unknown>):
-Promise<void> {
+async function loadSettingsAdapterWithManifestJson(
+  manifest: Record<string, unknown>
+): Promise<void> {
   // If the adapter is already loaded, then unload it.
   if (AddonManager.getAdapter('test-adapter')) {
     await AddonManager.unloadAdapter('test-adapter');
   }
 
   // Create the manifest.json file for the test-adapter
-  jsonfile.writeFileSync(testManifestJsonFilename, manifest, {spaces: 2});
+  jsonfile.writeFileSync(testManifestJsonFilename, manifest, { spaces: 2 });
 
   try {
     await AddonManager.loadAddon('test-adapter');
@@ -90,7 +89,8 @@ describe('addons', () => {
       // pass intentionally
     }
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -102,11 +102,12 @@ describe('addons', () => {
   });
 
   it('Toggle a non-existent add-on', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .put(`${Constants.ADDONS_PATH}/nonexistent-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true});
+      .send({ enabled: true });
 
     expect(err.status).toEqual(400);
   });
@@ -120,16 +121,18 @@ describe('addons', () => {
     }
 
     // Toggle on
-    const res1 = await chai.request(server)
+    const res1 = await chai
+      .request(server)
       .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true});
+      .send({ enabled: true });
 
     expect(res1.status).toEqual(200);
 
     // Get status
-    const res2 = await chai.request(server)
+    const res2 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -150,16 +153,18 @@ describe('addons', () => {
     await sleep(3000);
 
     // Toggle off
-    const res3 = await chai.request(server)
+    const res3 = await chai
+      .request(server)
       .put(`${Constants.ADDONS_PATH}/settings-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: false});
+      .send({ enabled: false });
 
     expect(res3.status).toEqual(200);
 
     // Get status
-    const res4 = await chai.request(server)
+    const res4 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -178,7 +183,8 @@ describe('addons', () => {
   });
 
   it('Fail to get license for non-existent add-on', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .get(`${Constants.ADDONS_PATH}/fake-adapter/license`)
       .set(...headerAuth(jwt));
 
@@ -193,7 +199,8 @@ describe('addons', () => {
       // pass intentionally
     }
 
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .get(`${Constants.ADDONS_PATH}/settings-adapter/license`)
       .set(...headerAuth(jwt));
 
@@ -210,7 +217,8 @@ describe('addons', () => {
       // pass intentionally
     }
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.ADDONS_PATH}/settings-adapter/license`)
       .set(...headerAuth(jwt));
 
@@ -219,16 +227,18 @@ describe('addons', () => {
   });
 
   it('Install an invalid add-on', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({id: 'nonexistent-adapter'});
+      .send({ id: 'nonexistent-adapter' });
     expect(err.status).toEqual(400);
   });
 
   it('Install an add-on with an invalid checksum', async () => {
-    const res1 = await chai.request(server)
+    const res1 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -239,7 +249,7 @@ describe('addons', () => {
       res1.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(0);
 
-    const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
+    const res2 = await fetch(addonUrl, { headers: { Accept: 'application/json' } });
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
 
@@ -253,18 +263,18 @@ describe('addons', () => {
     expect(addon).toHaveProperty('version');
     expect(addon).toHaveProperty('checksum');
 
-    const res3 = await chai.request(server)
+    const res3 = await chai
+      .request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({id: addon.id,
-             url: addon.url,
-             checksum: 'invalid'});
+      .send({ id: addon.id, url: addon.url, checksum: 'invalid' });
     expect(res3.status).toEqual(400);
   });
 
   it('Install an add-on', async () => {
-    const res1 = await chai.request(server)
+    const res1 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -275,7 +285,7 @@ describe('addons', () => {
       res1.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(0);
 
-    const res2 = await fetch(addonUrl, {headers: {Accept: 'application/json'}});
+    const res2 = await fetch(addonUrl, { headers: { Accept: 'application/json' } });
     const list = await res2.json();
     expect(Array.isArray(list)).toBe(true);
 
@@ -289,16 +299,16 @@ describe('addons', () => {
     expect(addon).toHaveProperty('version');
     expect(addon).toHaveProperty('checksum');
 
-    const res3 = await chai.request(server)
+    const res3 = await chai
+      .request(server)
       .post(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({id: addon.id,
-             url: addon.url,
-             checksum: addon.checksum});
+      .send({ id: addon.id, url: addon.url, checksum: addon.checksum });
     expect(res3.status).toEqual(200);
 
-    const res4 = await chai.request(server)
+    const res4 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -318,7 +328,8 @@ describe('addons', () => {
       // pass intentionally
     }
 
-    const res1 = await chai.request(server)
+    const res1 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -329,13 +340,15 @@ describe('addons', () => {
       res1.body.filter((a: Record<string, unknown>) => a.id === 'example-adapter').length
     ).toEqual(1);
 
-    const res2 = await chai.request(server)
+    const res2 = await chai
+      .request(server)
       .delete(`${Constants.ADDONS_PATH}/example-adapter`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res2.status).toEqual(204);
 
-    const res3 = await chai.request(server)
+    const res3 = await chai
+      .request(server)
       .get(Constants.ADDONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -364,14 +377,11 @@ describe('addons', () => {
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
-  it(
-    'Fail manifest.json with missing gateway_specific_settings key',
-    async () => {
-      const manifest: Record<string, unknown> = copyManifest(testManifestJson);
-      delete manifest.gateway_specific_settings;
-      expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
-    }
-  );
+  it('Fail manifest.json with missing gateway_specific_settings key', async () => {
+    const manifest: Record<string, unknown> = copyManifest(testManifestJson);
+    delete manifest.gateway_specific_settings;
+    expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
+  });
 
   it('Fail manifest.json with missing webthings key', async () => {
     const manifest: Record<string, unknown> = copyManifest(testManifestJson);
@@ -381,24 +391,25 @@ describe('addons', () => {
 
   it('Fail manifest.json with missing primary_type key', async () => {
     const manifest: Record<string, unknown> = copyManifest(testManifestJson);
-    delete (<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings)
-      .webthings).primary_type;
+    delete (<Record<string, unknown>>(
+      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
+    )).primary_type;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with wrong gateway min version', async () => {
     const manifest: Record<string, unknown> = copyManifest(testManifestJson);
-    (<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings)
-      .webthings).strict_min_version =
-      semver.inc(pkg.version, 'minor')!;
+    (<Record<string, unknown>>(
+      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
+    )).strict_min_version = semver.inc(pkg.version, 'minor')!;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
   it('Fail manifest.json with wrong gateway max version', async () => {
     const manifest: Record<string, unknown> = copyManifest(testManifestJson);
-    (<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings)
-      .webthings).strict_max_version =
-      `0.${pkg.version}`;
+    (<Record<string, unknown>>(
+      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
+    )).strict_max_version = `0.${pkg.version}`;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 

@@ -16,8 +16,7 @@ const fluent = require('../../fluent');
 
 class OpenDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('open'));
+    super(thing, name, !!property.readOnly, property.title || fluent.getMessage('open'));
     this.id = `open-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -36,9 +35,7 @@ class OpenDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ?
-      fluent.getMessage('open') :
-      fluent.getMessage('closed');
+    this.labelElement.value = value ? fluent.getMessage('open') : fluent.getMessage('closed');
     this.labelElement.inverted = value;
   }
 }

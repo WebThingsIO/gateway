@@ -9,19 +9,18 @@
  */
 
 import Ajv from 'ajv';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import AddonManager from '../addon-manager';
 import Database from '../db';
-import Thing, {Router, ThingDescription} from './thing';
+import Thing, { Router, ThingDescription } from './thing';
 import * as Constants from '../constants';
-import {Device, Device as DeviceSchema, PropertyValue} from 'gateway-addon/lib/schema';
+import { Device, Device as DeviceSchema, PropertyValue } from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
-import {HttpErrorWithCode} from '../errors';
+import { HttpErrorWithCode } from '../errors';
 
-const ajv = new Ajv({strict: false});
+const ajv = new Ajv({ strict: false });
 
 class Things {
-
   /**
    * A Map of Things in the Things database.
    */
@@ -81,7 +80,7 @@ class Things {
 
         this.things.set(
           <string>thing.id,
-          new Thing(<string>thing.id, <ThingDescription><unknown>thing, this.router!)
+          new Thing(<string>thing.id, <ThingDescription>(<unknown>thing), this.router!)
         );
       });
 
@@ -148,8 +147,11 @@ class Things {
    * @param {Boolean} reqSecure whether or not the request is secure, i.e. TLS.
    * @return {Promise} which resolves with a list of Thing Descriptions.
    */
-  getListThingDescriptions(hrefs: string[], reqHost?: string, reqSecure?: boolean):
-  Promise<ThingDescription[]> {
+  getListThingDescriptions(
+    hrefs: string[],
+    reqHost?: string,
+    reqSecure?: boolean
+  ): Promise<ThingDescription[]> {
     return this.getListThings(hrefs).then((listThings) => {
       const descriptions = [];
       for (const thing of listThings) {
@@ -173,15 +175,13 @@ class Things {
       const newThings: DeviceSchema[] = [];
       connectedThings.forEach((connectedThing) => {
         if (!storedThings.has(connectedThing.id)) {
-          connectedThing.href =
-           `${Constants.THINGS_PATH}/${encodeURIComponent(connectedThing.id)}`;
+          connectedThing.href = `${Constants.THINGS_PATH}/${encodeURIComponent(connectedThing.id)}`;
           if (connectedThing.properties) {
             for (const propertyName in connectedThing.properties) {
               const property = connectedThing.properties[propertyName];
-              property.href = `${Constants.THINGS_PATH}/${
-                encodeURIComponent(connectedThing.id)}${
-                Constants.PROPERTIES_PATH}/${
-                encodeURIComponent(propertyName)}`;
+              property.href = `${Constants.THINGS_PATH}/${encodeURIComponent(connectedThing.id)}${
+                Constants.PROPERTIES_PATH
+              }/${encodeURIComponent(propertyName)}`;
             }
           }
           newThings.push(connectedThing);
@@ -202,12 +202,11 @@ class Things {
     thing.setConnected(true);
     thing.setLayoutIndex(this.things.size);
 
-    return Database.createThing(thing.getId(), thing.getDescription())
-      .then((thingDesc) => {
-        this.things.set(thing.getId(), thing);
-        this.emitter.emit(Constants.THING_ADDED, thing);
-        return thingDesc;
-      });
+    return Database.createThing(thing.getId(), thing.getDescription()).then((thingDesc) => {
+      this.things.set(thing.getId(), thing);
+      this.emitter.emit(Constants.THING_ADDED, thing);
+      return thingDesc;
+    });
   }
 
   /**
@@ -216,15 +215,17 @@ class Things {
    * @param {Object} newThing - New Thing description
    */
   handleNewThing(newThing: ThingDescription): void {
-    this.getThing(newThing.id).then((thing) => {
-      thing?.setConnected(true);
-      return thing?.updateFromDescription(newThing, this.router!);
-    }).catch(() => {
-      // If we don't already know about this thing, notify each open websocket
-      this.websockets.forEach((socket) => {
-        socket.send(JSON.stringify(newThing));
+    this.getThing(newThing.id)
+      .then((thing) => {
+        thing?.setConnected(true);
+        return thing?.updateFromDescription(newThing, this.router!);
+      })
+      .catch(() => {
+        // If we don't already know about this thing, notify each open websocket
+        this.websockets.forEach((socket) => {
+          socket.send(JSON.stringify(newThing));
+        });
       });
-    });
   }
 
   /**
@@ -233,10 +234,12 @@ class Things {
    * @param {Object} thing - Thing which was removed
    */
   handleThingRemoved(thing: DeviceSchema): void {
-    this.getThing(thing.id).then((thing) => {
-      thing?.setConnected(false);
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    }).catch(() => {});
+    this.getThing(thing.id)
+      .then((thing) => {
+        thing?.setConnected(false);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .catch(() => {});
   }
 
   /**
@@ -246,10 +249,12 @@ class Things {
    * @param {boolean} connected - New connectivity state
    */
   handleConnected(thingId: string, connected: boolean): void {
-    this.getThing(thingId).then((thing) => {
-      thing?.setConnected(connected);
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    }).catch(() => {});
+    this.getThing(thingId)
+      .then((thing) => {
+        thing?.setConnected(connected);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .catch(() => {});
   }
 
   /**
@@ -291,18 +296,20 @@ class Things {
   getThingByTitle(title: string): Promise<Thing | null> {
     title = title.toLowerCase();
 
-    return this.getThings().then((things) => {
-      for (const thing of things.values()) {
-        if (thing.getTitle().toLowerCase() === title) {
-          return thing;
+    return this.getThings()
+      .then((things) => {
+        for (const thing of things.values()) {
+          if (thing.getTitle().toLowerCase() === title) {
+            return thing;
+          }
         }
-      }
 
-      throw new Error(`Unable to find thing with title = ${title}`);
-    }).catch((e) => {
-      console.warn('Unexpected thing retrieval error', e);
-      return null;
-    });
+        throw new Error(`Unable to find thing with title = ${title}`);
+      })
+      .catch((e) => {
+        console.warn('Unexpected thing retrieval error', e);
+        return null;
+      });
   }
 
   /**
@@ -314,7 +321,10 @@ class Things {
    * @return {Promise<ThingDescription>} A Thing description object.
    */
   getThingDescription(
-    id: string, reqHost?: string, reqSecure?: boolean): Promise<ThingDescription> {
+    id: string,
+    reqHost?: string,
+    reqSecure?: boolean
+  ): Promise<ThingDescription> {
     return this.getThing(id).then((thing) => {
       return thing?.getDescription(reqHost, reqSecure);
     });
@@ -368,8 +378,11 @@ class Things {
    * @param {PropertyValue} value
    * @return {Promise<PropertyValue>} resolves to new value
    */
-  async setThingProperty(thingId: string, propertyName: string, value: PropertyValue):
-  Promise<PropertyValue> {
+  async setThingProperty(
+    thingId: string,
+    propertyName: string,
+    value: PropertyValue
+  ): Promise<PropertyValue> {
     let thing: ThingDescription;
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
@@ -395,9 +408,14 @@ class Things {
       // Note: it's possible that updatedValue doesn't match value.
       return updatedValue;
     } catch (e) {
-      console.error('Error setting value for thingId:', thingId,
-                    'property:', propertyName,
-                    'value:', value);
+      console.error(
+        'Error setting value for thingId:',
+        thingId,
+        'property:',
+        propertyName,
+        'value:',
+        value
+      );
 
       throw new HttpErrorWithCode(e, 500);
     }
@@ -429,7 +447,8 @@ AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
 });
 
 AddonManager.on(
-  Constants.CONNECTED, ({device, connected}: {device: Device, connected: boolean}) => {
+  Constants.CONNECTED,
+  ({ device, connected }: { device: Device; connected: boolean }) => {
     instance.handleConnected(device.id, connected);
   }
 );

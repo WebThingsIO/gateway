@@ -13,7 +13,7 @@ import * as AddonUtils from './addon-utils';
 import config from 'config';
 import * as Constants from './constants';
 import Deferred from './deferred';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import * as Platform from './platform';
 import * as Settings from './models/settings';
 import UserProfile from './user-profile';
@@ -27,14 +27,14 @@ import os from 'os';
 import promisePipe from 'promisepipe';
 import fetch from 'node-fetch';
 import find from 'find';
-import {URLSearchParams} from 'url';
-import {ncp} from 'ncp';
+import { URLSearchParams } from 'url';
+import { ncp } from 'ncp';
 
 import pkg from './package.json';
-import {Level, PropertyValue, Device as DeviceSchema, Input} from 'gateway-addon/lib/schema';
+import { Level, PropertyValue, Device as DeviceSchema, Input } from 'gateway-addon/lib/schema';
 import PluginServer from './plugin/plugin-server';
 import Plugin from './plugin/plugin';
-import {Adapter, APIHandler, Device, Notifier, Outlet} from 'gateway-addon';
+import { Adapter, APIHandler, Device, Notifier, Outlet } from 'gateway-addon';
 
 interface Extension {
   extensions: {
@@ -64,8 +64,7 @@ export class AddonManager extends EventEmitter {
 
   private deferredAdd: Deferred<void, unknown> | null = null;
 
-  private deferredRemovals =
-  new Map<string, Deferred<string, unknown> & {adapter?: Adapter} >();
+  private deferredRemovals = new Map<string, Deferred<string, unknown> & { adapter?: Adapter }>();
 
   private removalTimeouts = new Map<string, NodeJS.Timeout>();
 
@@ -425,7 +424,7 @@ export class AddonManager extends EventEmitter {
   setPin(thingId: string, pin: string): Promise<DeviceSchema> {
     const device = this.getDevice(thingId);
     if (device) {
-      return <Promise<DeviceSchema>><unknown>(device.getAdapter().setPin(thingId, pin));
+      return <Promise<DeviceSchema>>(<unknown>device.getAdapter().setPin(thingId, pin));
     }
 
     return Promise.reject(`setPin: device ${thingId} not found.`);
@@ -438,8 +437,8 @@ export class AddonManager extends EventEmitter {
   setCredentials(thingId: string, username: string, password: string): Promise<DeviceSchema> {
     const device = this.getDevice(thingId);
     if (device) {
-      return <Promise<DeviceSchema>><unknown>(
-        device.getAdapter().setCredentials(thingId, username, password)
+      return <Promise<DeviceSchema>>(
+        (<unknown>device.getAdapter().setCredentials(thingId, username, password))
       );
     }
 
@@ -575,7 +574,7 @@ export class AddonManager extends EventEmitter {
    */
   async addonEnabled(packageId: string): Promise<boolean> {
     if (this.installedAddons.has(packageId)) {
-      return <boolean>(this.installedAddons.get(packageId)!.enabled);
+      return <boolean>this.installedAddons.get(packageId)!.enabled;
     }
 
     return false;
@@ -621,19 +620,23 @@ export class AddonManager extends EventEmitter {
     const key = `addons.${packageId}`;
     const configKey = `addons.config.${packageId}`;
     try {
-      const savedSettings = <Record<string, unknown>>(await Settings.getSetting(key));
+      const savedSettings = <Record<string, unknown>>await Settings.getSetting(key);
 
       // If the old-style data is stored in the database, we need to transition
       // to the new format.
-      if (savedSettings.hasOwnProperty('moziot') &&
-          (<Record<string, unknown>>savedSettings.moziot).hasOwnProperty('enabled')) {
+      if (
+        savedSettings.hasOwnProperty('moziot') &&
+        (<Record<string, unknown>>savedSettings.moziot).hasOwnProperty('enabled')
+      ) {
         manifest.enabled = <boolean>(<Record<string, unknown>>savedSettings.moziot).enabled;
       } else if (savedSettings.hasOwnProperty('enabled')) {
         manifest.enabled = <boolean>savedSettings.enabled;
       }
 
-      if (savedSettings.hasOwnProperty('moziot') &&
-          (<Record<string, unknown>>savedSettings.moziot).hasOwnProperty('config')) {
+      if (
+        savedSettings.hasOwnProperty('moziot') &&
+        (<Record<string, unknown>>savedSettings.moziot).hasOwnProperty('config')
+      ) {
         await Settings.setSetting(
           configKey,
           (<Record<string, unknown>>savedSettings.moziot).config
@@ -661,7 +664,7 @@ export class AddonManager extends EventEmitter {
 
     if (manifest.content_scripts && manifest.web_accessible_resources) {
       this.extensions[<string>manifest.id] = {
-        extensions: <{css?: string[], js?: string[]}[]>manifest.content_scripts,
+        extensions: <{ css?: string[]; js?: string[] }[]>manifest.content_scripts,
         resources: <string[]>manifest.web_accessible_resources,
       };
     }
@@ -698,7 +701,7 @@ export class AddonManager extends EventEmitter {
     this.addonsLoaded = true;
 
     // Load the Plugin Server
-    this.pluginServer = new PluginServer(this, {verbose: false});
+    this.pluginServer = new PluginServer(this, { verbose: false });
 
     // Load the add-ons
 
@@ -747,8 +750,12 @@ export class AddonManager extends EventEmitter {
    * @returns A promise that resolves to the device which was actually removed.
    */
   removeThing(thingId: string): Promise<string> {
-    const deferredRemove: Deferred<string, unknown>& {adapter?: Adapter} =
-    new Deferred<string, unknown>();
+    /* eslint-disable @typescript-eslint/indent */
+    const deferredRemove: Deferred<string, unknown> & { adapter?: Adapter } = new Deferred<
+      string,
+      unknown
+    >();
+    /* eslint-enable @typescript-eslint/indent */
 
     if (this.deferredRemovals.has(thingId)) {
       deferredRemove.reject('Remove already in progress');
@@ -757,9 +764,12 @@ export class AddonManager extends EventEmitter {
       if (device) {
         deferredRemove.adapter = device.getAdapter();
         this.deferredRemovals.set(thingId, deferredRemove);
-        this.removalTimeouts.set(thingId, setTimeout(() => {
-          this.cancelRemoveThing(thingId);
-        }, Constants.DEVICE_REMOVAL_TIMEOUT));
+        this.removalTimeouts.set(
+          thingId,
+          setTimeout(() => {
+            this.cancelRemoveThing(thingId);
+          }, Constants.DEVICE_REMOVAL_TIMEOUT)
+        );
         device.getAdapter().removeThing(device);
       } else {
         deferredRemove.resolve(thingId);
@@ -933,7 +943,10 @@ export class AddonManager extends EventEmitter {
       }, Constants.UNLOAD_PLUGIN_KILL_DELAY);
     };
 
-    const all = unloadPromise.then(() => cleanup(), () => cleanup());
+    const all = unloadPromise.then(
+      () => cleanup(),
+      () => cleanup()
+    );
 
     if (wait) {
       // If wait was set, wait 3 seconds + a little for the process to die.
@@ -970,7 +983,12 @@ export class AddonManager extends EventEmitter {
    * @returns A Promise that resolves when the add-on is installed.
    */
   async installAddonFromUrl(
-    id: string, url: string, checksum: string, enable: boolean, options = {}): Promise<void> {
+    id: string,
+    url: string,
+    checksum: string,
+    enable: boolean,
+    options = {}
+  ): Promise<void> {
     const tempPath = fs.mkdtempSync(`${os.tmpdir()}${path.sep}`);
     const destPath = path.join(tempPath, `${id}.tar.gz`);
 
@@ -985,7 +1003,7 @@ export class AddonManager extends EventEmitter {
       const dest = fs.createWriteStream(destPath);
       await promisePipe(res.body, dest);
     } catch (e) {
-      rimraf(tempPath, {glob: false}, (e) => {
+      rimraf(tempPath, { glob: false }, (e) => {
         if (e) {
           console.error(`Error removing temp directory: ${tempPath}\n${e}`);
         }
@@ -994,7 +1012,7 @@ export class AddonManager extends EventEmitter {
     }
 
     if (Utils.hashFile(destPath) !== checksum.toLowerCase()) {
-      rimraf(tempPath, {glob: false}, (e) => {
+      rimraf(tempPath, { glob: false }, (e) => {
         if (e) {
           console.error(`Error removing temp directory: ${tempPath}\n${e}`);
         }
@@ -1002,7 +1020,8 @@ export class AddonManager extends EventEmitter {
       throw new Error(`Checksum did not match for add-on: ${id}`);
     }
 
-    let success = false, err;
+    let success = false,
+      err;
     try {
       await this.installAddon(id, destPath, enable, options);
       success = true;
@@ -1010,7 +1029,7 @@ export class AddonManager extends EventEmitter {
       err = e;
     }
 
-    rimraf(tempPath, {glob: false}, (e) => {
+    rimraf(tempPath, { glob: false }, (e) => {
       if (e) {
         console.error(`Error removing temp directory: ${tempPath}\n${e}`);
       }
@@ -1031,12 +1050,13 @@ export class AddonManager extends EventEmitter {
    * @returns A promise that resolves when the package is installed.
    */
   async installAddon(
-    packageId: string, packagePath: string, enable: boolean,
-    options: {skipLoad?: boolean} = {}): Promise<void> {
+    packageId: string,
+    packagePath: string,
+    enable: boolean,
+    options: { skipLoad?: boolean } = {}
+  ): Promise<void> {
     if (!this.addonsLoaded && !options.skipLoad) {
-      throw new Error(
-        'Cannot install add-on before other add-ons have been loaded.'
-      );
+      throw new Error('Cannot install add-on before other add-ons have been loaded.');
     }
 
     if (!fs.lstatSync(packagePath).isFile()) {
@@ -1047,10 +1067,13 @@ export class AddonManager extends EventEmitter {
 
     try {
       // Try to extract the tarball
-      await tar.x({
-        file: packagePath,
-        cwd: path.dirname(packagePath),
-      }, ['package']);
+      await tar.x(
+        {
+          file: packagePath,
+          cwd: path.dirname(packagePath),
+        },
+        ['package']
+      );
     } catch (e) {
       throw new Error(`Failed to extract package: ${e}`);
     }
@@ -1065,7 +1088,7 @@ export class AddonManager extends EventEmitter {
       ncp(
         path.join(path.dirname(packagePath), 'package'),
         addonPath,
-        {stopOnErr: true},
+        { stopOnErr: true },
         (err) => {
           if (err) {
             reject(`Failed to move package: ${err}`);
@@ -1078,7 +1101,7 @@ export class AddonManager extends EventEmitter {
 
     // Update the saved settings (if any) and enable the add-on
     const key = `addons.${packageId}`;
-    let obj = <Record<string, unknown>>(await Settings.getSetting(key));
+    let obj = <Record<string, unknown>>await Settings.getSetting(key);
     if (obj) {
       // Only enable if we're supposed to. Otherwise, keep whatever the current
       // setting is.
@@ -1133,7 +1156,7 @@ export class AddonManager extends EventEmitter {
     // Remove the package from the file system
     if (fs.existsSync(addonPath) && fs.lstatSync(addonPath).isDirectory()) {
       await new Promise<void>((resolve, reject) => {
-        rimraf(addonPath, {glob: false}, (e) => {
+        rimraf(addonPath, { glob: false }, (e) => {
           if (e) {
             reject(`Error removing ${packageId}: ${e}`);
           } else {
@@ -1146,7 +1169,7 @@ export class AddonManager extends EventEmitter {
     // Update the saved settings and disable the add-on
     if (disable) {
       const key = `addons.${packageId}`;
-      const obj = <Record<string, unknown>>(await Settings.getSetting(key));
+      const obj = <Record<string, unknown>>await Settings.getSetting(key);
       if (obj) {
         obj.enabled = false;
         await Settings.setSetting(key, obj);
@@ -1190,18 +1213,23 @@ export class AddonManager extends EventEmitter {
    * @param {object} options Set of options, primarily used by external scripts
    * @returns A promise which is resolved when updating is complete.
    */
-  async updateAddons(options: {forceUpdateBinary?: boolean} = {}): Promise<void> {
+  async updateAddons(options: { forceUpdateBinary?: boolean } = {}): Promise<void> {
     const urls: string[] = config.get('addonManager.listUrls');
     const architecture = Platform.getArchitecture();
     const version = pkg.version;
     const nodeVersion = Platform.getNodeVersion();
     const pythonVersions = Platform.getPythonVersions();
     const addonPath = UserProfile.addonsDir;
-    const available: Record<string, {
-      version: string;
-      url: string;
-      checksum: string;
-    }> = {};
+    /* eslint-disable @typescript-eslint/indent */
+    const available: Record<
+      string,
+      {
+        version: string;
+        url: string;
+        checksum: string;
+      }
+    > = {};
+    /* eslint-enable @typescript-eslint/indent */
 
     console.log('Checking for add-on updates...');
 
@@ -1228,8 +1256,7 @@ export class AddonManager extends EventEmitter {
         const addons: Record<string, unknown>[] = await response.json();
         for (const addon of addons) {
           // Check for duplicates, keep newest.
-          if (map.has(addon.id) &&
-              semver.gte(map.get(addon.id).version, `${addon.version}`)) {
+          if (map.has(addon.id) && semver.gte(map.get(addon.id).version, `${addon.version}`)) {
             continue;
           }
 
@@ -1267,8 +1294,7 @@ export class AddonManager extends EventEmitter {
 
         // Skip if .git directory is present.
         if (fs.existsSync(path.join(addonPath, addonId, '.git'))) {
-          console.log(
-            `Not updating ${addonId} since a .git directory was detected`);
+          console.log(`Not updating ${addonId} since a .git directory was detected`);
           continue;
         }
 
@@ -1310,9 +1336,7 @@ export class AddonManager extends EventEmitter {
             const data = fs.readFileSync(manifestJson);
             manifest = JSON.parse(data.toString());
           } catch (e) {
-            console.error(
-              `Failed to read manifest.json: ${manifestJson}\n${e}`
-            );
+            console.error(`Failed to read manifest.json: ${manifestJson}\n${e}`);
             continue;
           }
         } else {
@@ -1320,8 +1344,10 @@ export class AddonManager extends EventEmitter {
         }
 
         // Check if an update is available.
-        if (available.hasOwnProperty(addonId) &&
-            semver.lt(manifest.version, available[addonId].version)) {
+        if (
+          available.hasOwnProperty(addonId) &&
+          semver.lt(manifest.version, available[addonId].version)
+        ) {
           try {
             await this.installAddonFromUrl(
               addonId,

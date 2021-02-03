@@ -1,7 +1,7 @@
 import e2p from 'event-to-promise';
 import WebSocket from 'ws';
-import {server} from './common';
-import {AddressInfo} from 'net';
+import { server } from './common';
+import { AddressInfo } from 'net';
 
 interface WithUnreadMessages {
   unreadMessages?: string[];
@@ -13,14 +13,15 @@ interface WithUnreadMessages {
  * @param {String} jwt
  * @return {WebSocket}
  */
-export async function webSocketOpen(path: string, jwt: string):
-Promise<WebSocket & WithUnreadMessages> {
+export async function webSocketOpen(
+  path: string,
+  jwt: string
+): Promise<WebSocket & WithUnreadMessages> {
   if (!server.address()) {
     server.listen(0);
   }
   const addr = <AddressInfo>server.address()!;
-  const socketPath =
-    `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
+  const socketPath = `wss://127.0.0.1:${addr.port}${path}?jwt=${jwt}`;
 
   const ws: WebSocket & WithUnreadMessages = new WebSocket(socketPath);
   ws.unreadMessages = [];
@@ -47,8 +48,11 @@ Promise<WebSocket & WithUnreadMessages> {
  *                   messages
  * @return {Array<Object>} read messages
  */
-export async function webSocketRead(ws: WebSocket & WithUnreadMessages, expectedMessages: number,
-                                    ignoreConnected = true): Promise<Record<string, unknown>[]> {
+export async function webSocketRead(
+  ws: WebSocket & WithUnreadMessages,
+  expectedMessages: number,
+  ignoreConnected = true
+): Promise<Record<string, unknown>[]> {
   const messages = [];
   while (messages.length < expectedMessages) {
     if (ws.unreadMessages!.length > 0) {

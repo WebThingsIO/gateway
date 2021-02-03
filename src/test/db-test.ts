@@ -1,4 +1,4 @@
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Database from '../db';
 import User from '../models/user';
 import JSONWebToken from '../models/jsonwebtoken';
@@ -19,7 +19,7 @@ describe('db', () => {
     });
 
     it('should be able to insert and fetch a JWT', async () => {
-      const {token} = await JSONWebToken.create(user.getId()!);
+      const { token } = await JSONWebToken.create(user.getId()!);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb.publicKey).toEqual(token.publicKey);
@@ -29,7 +29,7 @@ describe('db', () => {
     });
 
     it('should be unreachable after deleting user', async () => {
-      const {token} = await JSONWebToken.create(user.getId()!);
+      const { token } = await JSONWebToken.create(user.getId()!);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
       expect(fromDb).toBeTruthy();
@@ -41,12 +41,14 @@ describe('db', () => {
     });
 
     it('should be able to cleanup single keys', async () => {
-      const {token} = await JSONWebToken.create(user.getId()!);
+      const { token } = await JSONWebToken.create(user.getId()!);
       await Database.createJSONWebToken(token);
       const fromDb = await Database.getJSONWebTokenByKeyId(token.keyId);
-      expect(fromDb).toEqual(expect.objectContaining({
-        keyId: token.keyId,
-      }));
+      expect(fromDb).toEqual(
+        expect.objectContaining({
+          keyId: token.keyId,
+        })
+      );
 
       await Database.deleteJSONWebTokenByKeyId(token.keyId);
       const fromDbAfterDelete = await Database.getJSONWebTokenByKeyId(token.keyId);

@@ -123,22 +123,14 @@ class LevelProperty extends BaseComponent {
 `;
     super(template);
 
-    this._text = this.shadowRoot.querySelector(
-      '.webthing-level-property-text');
-    this._barContainer = this.shadowRoot.querySelector(
-      '.webthing-level-property-bar-container');
-    this._bar = this.shadowRoot.querySelector(
-      '.webthing-level-property-bar');
-    this._form = this.shadowRoot.querySelector(
-      '.webthing-level-property-form');
-    this._number = this.shadowRoot.querySelector(
-      '.webthing-level-property-number');
-    this._slider = this.shadowRoot.querySelector(
-      '.webthing-level-property-slider');
-    this._unit = this.shadowRoot.querySelector(
-      '.webthing-level-property-unit');
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-level-property-name');
+    this._text = this.shadowRoot.querySelector('.webthing-level-property-text');
+    this._barContainer = this.shadowRoot.querySelector('.webthing-level-property-bar-container');
+    this._bar = this.shadowRoot.querySelector('.webthing-level-property-bar');
+    this._form = this.shadowRoot.querySelector('.webthing-level-property-form');
+    this._number = this.shadowRoot.querySelector('.webthing-level-property-number');
+    this._slider = this.shadowRoot.querySelector('.webthing-level-property-slider');
+    this._unit = this.shadowRoot.querySelector('.webthing-level-property-unit');
+    this._name = this.shadowRoot.querySelector('.webthing-level-property-name');
 
     this._onChange = this.__onChange.bind(this);
     this._onClick = this.__onClick.bind(this);
@@ -152,8 +144,7 @@ class LevelProperty extends BaseComponent {
     }
 
     if (!this.unit) {
-      this.unit =
-        typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
+      this.unit = typeof this.dataset.unit !== 'undefined' ? this.dataset.unit : '';
     }
 
     this._precision = null;
@@ -162,9 +153,7 @@ class LevelProperty extends BaseComponent {
     }
 
     this.readOnly =
-      typeof this.dataset.readOnly !== 'undefined' ?
-        this.dataset.readOnly === 'true' :
-        false;
+      typeof this.dataset.readOnly !== 'undefined' ? this.dataset.readOnly === 'true' : false;
 
     this._upgradeProperty('min');
     this._upgradeProperty('max');
@@ -223,7 +212,7 @@ class LevelProperty extends BaseComponent {
 
     const min = parseInt(this.min, 10);
     const max = parseInt(this.max, 10) - min;
-    const percent = Math.max(0, value - min) / max * 100;
+    const percent = (Math.max(0, value - min) / max) * 100;
 
     if (this.precision !== null) {
       value = value.toFixed(this.precision);
@@ -324,12 +313,14 @@ class LevelProperty extends BaseComponent {
 
     this.value = value;
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        value: this.value,
-      },
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          value: this.value,
+        },
+        bubbles: true,
+      })
+    );
   }
 
   __onBlur(e) {

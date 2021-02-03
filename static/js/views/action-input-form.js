@@ -39,17 +39,16 @@ class ActionInputForm {
     const inputs = [];
     let requiredFields = [];
     if (this.schema.type === 'object') {
-      if (this.schema.hasOwnProperty('required') &&
-          Array.isArray(this.schema.required)) {
+      if (this.schema.hasOwnProperty('required') && Array.isArray(this.schema.required)) {
         requiredFields = this.schema.required;
       }
 
       const props = Array.from(Object.keys(this.schema.properties)).sort();
       for (const name of props) {
-        inputs.push(Object.assign({}, this.schema.properties[name], {name}));
+        inputs.push(Object.assign({}, this.schema.properties[name], { name }));
       }
     } else {
-      inputs.push(Object.assign({}, this.schema, {name: '__default__'}));
+      inputs.push(Object.assign({}, this.schema, { name: '__default__' }));
       requiredFields.push('__default__');
     }
 
@@ -70,17 +69,15 @@ class ActionInputForm {
 
       let unit = '<span class="action-input-unit">';
       if (input.hasOwnProperty('unit')) {
-        unit += Utils.escapeHtml(
-          Units.nameToAbbreviation(Units.convert(0, input.unit).unit)
-        );
+        unit += Utils.escapeHtml(Units.nameToAbbreviation(Units.convert(0, input.unit).unit));
       }
       unit += '</span>';
 
       // list item
-      if (Array.isArray(input.enum) &&
-          (input.type === 'number' ||
-           input.type === 'integer' ||
-           input.type === 'string')) {
+      if (
+        Array.isArray(input.enum) &&
+        (input.type === 'number' || input.type === 'integer' || input.type === 'string')
+      ) {
         const selects = input.enum.map((value) => {
           value = Units.convert(value, input.unit).value;
           return `<option value="${Utils.escapeHtml(value)}">
@@ -195,11 +192,7 @@ class ActionInputForm {
       }
 
       // convert value back
-      value = Units.convert(
-        value,
-        Units.convert(0, schema.unit).unit,
-        schema.unit
-      ).value;
+      value = Units.convert(value, Units.convert(0, schema.unit).unit, schema.unit).value;
 
       // Adjust the value to match limits
       value = Utils.adjustInputValue(value, schema);
@@ -236,11 +229,7 @@ class ActionInputForm {
       }
 
       // convert value back
-      value = Units.convert(
-        value,
-        Units.convert(0, schema.unit).unit,
-        schema.unit
-      ).value;
+      value = Units.convert(value, Units.convert(0, schema.unit).unit, schema.unit).value;
 
       // Adjust the value to match limits
       value = Utils.adjustInputValue(value, schema);
@@ -255,16 +244,18 @@ class ActionInputForm {
 
     let body;
     if (input) {
-      body = {[this.name]: {input}};
+      body = { [this.name]: { input } };
     } else {
-      body = {[this.name]: {input: {}}};
+      body = { [this.name]: { input: {} } };
     }
 
-    API.postJson(this.href, body).then(() => {
-      window.history.back();
-    }).catch((e) => {
-      console.error(`Error performing action "${this.name}": ${e}`);
-    });
+    API.postJson(this.href, body)
+      .then(() => {
+        window.history.back();
+      })
+      .catch((e) => {
+        console.error(`Error performing action "${this.name}": ${e}`);
+      });
   }
 }
 

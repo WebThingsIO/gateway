@@ -17,7 +17,7 @@ export function capitalize(str: string): string {
 }
 
 export function escapeHtml(text: string): string {
-  if (typeof (text) !== 'string') {
+  if (typeof text !== 'string') {
     text = `${text}`;
   }
 
@@ -32,7 +32,7 @@ export function escapeHtml(text: string): string {
 }
 
 export function unescapeHtml(text: string): string {
-  if (typeof (text) !== 'string') {
+  if (typeof text !== 'string') {
     text = `${text}`;
   }
 
@@ -47,7 +47,7 @@ export function unescapeHtml(text: string): string {
 }
 
 export function escapeHtmlForIdClass(text: string): string {
-  if (typeof (text) !== 'string') {
+  if (typeof text !== 'string') {
     text = `${text}`;
   }
 
@@ -74,40 +74,19 @@ export function fuzzyTime(date: number): string {
   if (delta < 5) {
     fuzzy = Fluent.getMessage('utils-now');
   } else if (delta < minute) {
-    fuzzy = Fluent.getMessage(
-      'utils-seconds-ago',
-      {value: delta}
-    );
+    fuzzy = Fluent.getMessage('utils-seconds-ago', { value: delta });
   } else if (delta < hour) {
-    fuzzy = Fluent.getMessage(
-      'utils-minutes-ago',
-      {value: Math.floor(delta / minute)}
-    );
+    fuzzy = Fluent.getMessage('utils-minutes-ago', { value: Math.floor(delta / minute) });
   } else if (delta < day) {
-    fuzzy = Fluent.getMessage(
-      'utils-hours-ago',
-      {value: Math.floor(delta / hour)}
-    );
+    fuzzy = Fluent.getMessage('utils-hours-ago', { value: Math.floor(delta / hour) });
   } else if (delta < week) {
-    fuzzy = Fluent.getMessage(
-      'utils-days-ago',
-      {value: Math.floor(delta / day)}
-    );
+    fuzzy = Fluent.getMessage('utils-days-ago', { value: Math.floor(delta / day) });
   } else if (delta < month) {
-    fuzzy = Fluent.getMessage(
-      'utils-weeks-ago',
-      {value: Math.floor(delta / week)}
-    );
+    fuzzy = Fluent.getMessage('utils-weeks-ago', { value: Math.floor(delta / week) });
   } else if (delta < year) {
-    fuzzy = Fluent.getMessage(
-      'utils-months-ago',
-      {value: Math.floor(delta / month)}
-    );
+    fuzzy = Fluent.getMessage('utils-months-ago', { value: Math.floor(delta / month) });
   } else {
-    fuzzy = Fluent.getMessage(
-      'utils-years-ago',
-      {value: Math.floor(delta / year)}
-    );
+    fuzzy = Fluent.getMessage('utils-years-ago', { value: Math.floor(delta / year) });
   }
 
   return fuzzy;
@@ -116,7 +95,7 @@ export function fuzzyTime(date: number): string {
 export function debounce(
   delay: number,
   callback: (...args: any[]) => void
-): ((...args: any[]) => void) {
+): (...args: any[]) => void {
   return throttle(delay, callback, true);
 }
 
@@ -124,7 +103,7 @@ export function throttle(
   delay: number,
   callback: (...args: any[]) => void,
   debounceMode = false
-): ((...args: any[]) => void) {
+): (...args: any[]) => void {
   let timeout: NodeJS.Timeout | number | null = null;
   let lastExec = 0;
   const throttleMode = !debounceMode;
@@ -280,9 +259,7 @@ export function adjustInputValue(value: number, schema: Record<string, unknown>)
 
   // If there is an enum, match the closest enum value
   if (schema.hasOwnProperty('enum')) {
-    value = (<number[]>schema.enum).sort(
-      (a, b) => Math.abs(a - value) - Math.abs(b - value)
-    )[0];
+    value = (<number[]>schema.enum).sort((a, b) => Math.abs(a - value) - Math.abs(b - value))[0];
   }
 
   return value;

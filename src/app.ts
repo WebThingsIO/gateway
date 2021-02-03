@@ -46,8 +46,8 @@ import RulesController from './controllers/rules_controller';
 import sleep from './sleep';
 import Things from './models/things';
 import TunnelService from './tunnel-service';
-import {WiFiSetupApp, isWiFiConfigured} from './wifi-setup';
-import {AddressInfo} from 'net';
+import { WiFiSetupApp, isWiFiConfigured } from './wifi-setup';
+import { AddressInfo } from 'net';
 
 SegfaultHandler.registerHandler(path.join(UserProfile.logDir, 'crash.log'));
 
@@ -115,30 +115,39 @@ function startHttpsGateway(): Promise<https.Server | null> {
   const promises = [];
 
   // Start the HTTPS server
-  promises.push(new Promise<void>((resolve) => {
-    servers.https!.listen(port, () => {
-      migration.then(() => {
-        // load existing things from the database
-        return Things.getThings();
-      }).then(() => {
-        AddonManager.loadAddons();
+  promises.push(
+    new Promise<void>((resolve) => {
+      servers.https!.listen(port, () => {
+        migration
+          .then(() => {
+            // load existing things from the database
+            return Things.getThings();
+          })
+          .then(() => {
+            AddonManager.loadAddons();
+          });
+        RulesController.configure();
+        console.log(
+          'HTTPS server listening on port',
+          (<AddressInfo>servers.https!.address()!).port
+        );
+        resolve();
       });
-      RulesController.configure();
-      console.log('HTTPS server listening on port', (<AddressInfo>servers.https!.address()!).port);
-      resolve();
-    });
-  }));
+    })
+  );
 
   // Redirect HTTP to HTTPS
   servers.http.on('request', httpsApp);
   const httpPort = config.get('ports.http');
 
-  promises.push(new Promise<void>((resolve) => {
-    servers.http.listen(httpPort, () => {
-      console.log('Redirector listening on port', (<AddressInfo>servers.http.address()!).port);
-      resolve();
-    });
-  }));
+  promises.push(
+    new Promise<void>((resolve) => {
+      servers.http.listen(httpPort, () => {
+        console.log('Redirector listening on port', (<AddressInfo>servers.http.address()!).port);
+        resolve();
+      });
+    })
+  );
 
   return Promise.all(promises).then(() => servers.https);
 }
@@ -150,12 +159,14 @@ function startHttpGateway(): Promise<void> {
 
   return new Promise<void>((resolve) => {
     servers.http.listen(port, () => {
-      migration.then(() => {
-        // load existing things from the database
-        return Things.getThings();
-      }).then(() => {
-        AddonManager.loadAddons();
-      });
+      migration
+        .then(() => {
+          // load existing things from the database
+          return Things.getThings();
+        })
+        .then(() => {
+          AddonManager.loadAddons();
+        });
       RulesController.configure();
       console.log('HTTP server listening on port', (<AddressInfo>servers.http.address()!).port);
       resolve();
@@ -226,9 +237,11 @@ function createApp(isSecure: boolean): express.Application {
 
     // If the request is for a bare hostname, a .local address, or an IP
     // address, allow it.
-    if (request.hostname.indexOf('.') < 0 ||
-        request.hostname.endsWith('.local') ||
-        ipRegex({exact: true}).test(request.hostname)) {
+    if (
+      request.hostname.indexOf('.') < 0 ||
+      request.hostname.endsWith('.local') ||
+      ipRegex({ exact: true }).test(request.hostname)
+    ) {
       next();
       return;
     }
@@ -255,10 +268,12 @@ function createApp(isSecure: boolean): express.Application {
   });
 
   // Use bodyParser to access the body of requests
-  app.use(bodyParser.urlencoded({
-    extended: false,
-  }));
-  app.use(bodyParser.json({limit: '1mb'}));
+  app.use(
+    bodyParser.urlencoded({
+      extended: false,
+    })
+  );
+  app.use(bodyParser.json({ limit: '1mb' }));
 
   // Use fileUpload to handle multi-part uploads
   app.use(fileUpload());
@@ -270,8 +285,10 @@ function createApp(isSecure: boolean): express.Application {
  * @param {http.Server|https.Server} server
  * @return {express.Router}
  */
-function createGatewayApp(server: http.Server | https.Server, isSecure: boolean):
-express.Application {
+function createGatewayApp(
+  server: http.Server | https.Server,
+  isSecure: boolean
+): express.Application {
   const app = createApp(isSecure);
 
   // Inject WebSocket support
@@ -291,19 +308,21 @@ export const serverStartup: {
 
 switch (Platform.getOS()) {
   case 'linux-raspbian':
-    migration.then(() => {
-      return isWiFiConfigured();
-    }).then((configured) => {
-      if (!configured) {
-        WiFiSetupApp.onConnection = () => {
-          stopWiFiSetup();
+    migration
+      .then(() => {
+        return isWiFiConfigured();
+      })
+      .then((configured) => {
+        if (!configured) {
+          WiFiSetupApp.onConnection = () => {
+            stopWiFiSetup();
+            startGateway();
+          };
+          startWiFiSetup();
+        } else {
           startGateway();
-        };
-        startWiFiSetup();
-      } else {
-        startGateway();
-      }
-    });
+        }
+      });
     break;
   default:
     startGateway();
@@ -313,30 +332,32 @@ switch (Platform.getOS()) {
 function startGateway(): void {
   // if we have the certificates installed, we start https
   if (TunnelService.hasCertificates()) {
-    serverStartup.promise = TunnelService.userSkipped().then((skipped): Promise<unknown> => {
-      const promise = startHttpsGateway();
+    serverStartup.promise = TunnelService.userSkipped().then(
+      (skipped): Promise<unknown> => {
+        const promise = startHttpsGateway();
 
-      // if the user opted to skip the tunnel, but still has certificates, go
-      // ahead and start up the https server.
-      if (skipped) {
-        return promise;
-      }
-
-      // if they did not opt to skip, check if they have a tunnel token. if so,
-      // start the tunnel.
-      return promise.then((server) => {
-        if (!server) {
-          console.error('Failed to start HTTPS gateway');
-        } else {
-          TunnelService.hasTunnelToken().then((result) => {
-            if (result) {
-              TunnelService.setServerHandle(server!);
-              TunnelService.start();
-            }
-          });
+        // if the user opted to skip the tunnel, but still has certificates, go
+        // ahead and start up the https server.
+        if (skipped) {
+          return promise;
         }
-      });
-    });
+
+        // if they did not opt to skip, check if they have a tunnel token. if so,
+        // start the tunnel.
+        return promise.then((server) => {
+          if (!server) {
+            console.error('Failed to start HTTPS gateway');
+          } else {
+            TunnelService.hasTunnelToken().then((result) => {
+              if (result) {
+                TunnelService.setServerHandle(server!);
+                TunnelService.start();
+              }
+            });
+          }
+        });
+      }
+    );
   } else {
     serverStartup.promise = startHttpGateway();
   }

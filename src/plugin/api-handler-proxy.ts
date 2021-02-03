@@ -10,8 +10,8 @@
  */
 
 import Deferred from '../deferred';
-import {AddonManagerProxy, APIHandler, APIRequest, APIResponse, Constants} from 'gateway-addon';
-import {AddonManager} from '../addon-manager';
+import { AddonManagerProxy, APIHandler, APIRequest, APIResponse, Constants } from 'gateway-addon';
+import { AddonManager } from '../addon-manager';
 import Plugin from './plugin';
 const MessageType = Constants.MessageType;
 
@@ -22,7 +22,7 @@ export default class APIHandlerProxy extends APIHandler {
   public unloadCompletedPromise: Deferred<void, void> | null = null;
 
   constructor(addonManager: AddonManager, packageName: string, private plugin: Plugin) {
-    super(<AddonManagerProxy><unknown>addonManager, packageName);
+    super(<AddonManagerProxy>(<unknown>addonManager), packageName);
   }
 
   sendMsg(
@@ -37,11 +37,14 @@ export default class APIHandlerProxy extends APIHandler {
   handleRequest(request: APIRequest): Promise<APIResponse> {
     return new Promise((resolve, reject) => {
       const deferred = new Deferred<APIResponse, unknown>();
-      deferred.getPromise().then((response) => {
-        resolve(response);
-      }).catch(() => {
-        reject();
-      });
+      deferred
+        .getPromise()
+        .then((response) => {
+          resolve(response);
+        })
+        .catch(() => {
+          reject();
+        });
 
       this.sendMsg(
         MessageType.API_HANDLER_API_REQUEST,

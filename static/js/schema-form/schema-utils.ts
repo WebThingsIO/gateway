@@ -51,9 +51,9 @@ export function retrieveSchema(
     const $refSchema = findSchemaDefinition(<string>schema.$ref, definitions);
     // Drop the $ref property of the source schema.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {$ref, ...localSchema} = schema;
+    const { $ref, ...localSchema } = schema;
     // Update referenced schema definition with local schema properties.
-    return retrieveSchema({...$refSchema, ...localSchema}, definitions, formData);
+    return retrieveSchema({ ...$refSchema, ...localSchema }, definitions, formData);
   } else if (schema.hasOwnProperty('dependencies')) {
     const resolvedSchema = resolveDependencies(
       schema,
@@ -72,7 +72,7 @@ export function resolveDependencies(
   formData: Record<string, unknown>
 ): Record<string, unknown> {
   // Drop the dependencies from the source schema.
-  const {dependencies = {}, ...localSchema} = schema;
+  const { dependencies = {}, ...localSchema } = schema;
   let resolvedSchema = localSchema;
   // Process dependencies updating the local schema properties as
   // appropriate.
@@ -104,10 +104,10 @@ export function withDependentProperties(
   if (!additionallyRequired) {
     return schema;
   }
-  const required = Array.isArray(schema.required) ?
-    Array.from(new Set([...schema.required, ...additionallyRequired])) :
-    additionallyRequired;
-  return {...schema, required};
+  const required = Array.isArray(schema.required)
+    ? Array.from(new Set([...schema.required, ...additionallyRequired]))
+    : additionallyRequired;
+  return { ...schema, required };
 }
 
 export function withDependentSchema(
@@ -117,11 +117,11 @@ export function withDependentSchema(
   dependencyKey: string,
   dependencyValue: Record<string, unknown>
 ): Record<string, unknown> {
-  const {oneOf, ...dependentSchema} = retrieveSchema(dependencyValue, definitions, formData);
+  const { oneOf, ...dependentSchema } = retrieveSchema(dependencyValue, definitions, formData);
   schema = mergeSchemas(schema, dependentSchema);
-  return typeof oneOf === 'undefined' ?
-    schema :
-    withExactlyOneSubschema(schema, definitions, formData, dependencyKey, <unknown[]>oneOf);
+  return typeof oneOf === 'undefined'
+    ? schema
+    : withExactlyOneSubschema(schema, definitions, formData, dependencyKey, <unknown[]>oneOf);
 }
 
 export function withExactlyOneSubschema(
@@ -132,15 +132,13 @@ export function withExactlyOneSubschema(
   oneOf: unknown[]
 ): Record<string, unknown> {
   if (!Array.isArray(oneOf)) {
-    throw new Error(
-      `invalid oneOf: it is some ${typeof oneOf} instead of an array`
-    );
+    throw new Error(`invalid oneOf: it is some ${typeof oneOf} instead of an array`);
   }
   const validSubschemas = oneOf.filter((subschema) => {
     if (!subschema.properties) {
       return false;
     }
-    const {[dependencyKey]: conditionPropertySchema} = subschema.properties;
+    const { [dependencyKey]: conditionPropertySchema } = subschema.properties;
     if (conditionPropertySchema) {
       const conditionSchema = {
         type: 'object',
@@ -148,7 +146,7 @@ export function withExactlyOneSubschema(
           [dependencyKey]: conditionPropertySchema,
         },
       };
-      const {errors} = Validator.validateFormData(formData, conditionSchema);
+      const { errors } = Validator.validateFormData(formData, conditionSchema);
       return errors.length === 0;
     }
 
@@ -156,8 +154,8 @@ export function withExactlyOneSubschema(
   });
   if (validSubschemas.length !== 1) {
     console.warn(
-      'ignoring oneOf in dependencies because there isn\'t ' +
-      'exactly one subschema that is valid'
+      // eslint-disable-next-line @typescript-eslint/quotes
+      "ignoring oneOf in dependencies because there isn't exactly one subschema that is valid"
     );
     return schema;
   }
@@ -168,7 +166,7 @@ export function withExactlyOneSubschema(
     [dependencyKey]: conditionPropertySchema,
     ...dependentSubschema
   } = subschema.properties;
-  const dependentSchema = {...subschema, properties: dependentSubschema};
+  const dependentSchema = { ...subschema, properties: dependentSubschema };
   return mergeSchemas(schema, retrieveSchema(dependentSchema, definitions, formData));
 }
 
@@ -184,9 +182,11 @@ export function isConstant(schema: Record<string, unknown>): boolean {
 }
 
 export function isFixedItems(schema: Record<string, unknown>): boolean {
-  return Array.isArray(schema.items) &&
+  return (
+    Array.isArray(schema.items) &&
     schema.items.length > 0 &&
-    schema.items.every((item) => isObject(item));
+    schema.items.every((item) => isObject(item))
+  );
 }
 
 export function isObject(thing: unknown): boolean {
@@ -202,8 +202,7 @@ export function isSelect(
   if (Array.isArray(schema.enum)) {
     return true;
   } else if (Array.isArray(altSchemas)) {
-    return altSchemas.every(
-      (altSchemas) => isConstant(altSchemas));
+    return altSchemas.every((altSchemas) => isConstant(altSchemas));
   }
   return false;
 }
@@ -289,14 +288,14 @@ export function optionsList(schema: Record<string, unknown>): Record<string, unk
   if (schema.enum) {
     return (<unknown[]>schema.enum).map((value, i) => {
       const label = (schema.enumNames && (<string[]>schema.enumNames)[i]) || String(value);
-      return {label, value};
+      return { label, value };
     });
   } else {
     const altSchemas = <Record<string, unknown>[]>(schema.oneOf || schema.anyOf);
     return altSchemas.map((schema) => {
       const value = toConstant(schema);
       const label = <string>schema.title || String(value);
-      return {label, value};
+      return { label, value };
     });
   }
 }
@@ -337,17 +336,18 @@ export function computeDefaults(
   switch (schema.type) {
     // We need to recur for object schema inner default values.
     case 'object':
-      return Object.keys(<Record<string, unknown>>schema.properties || <Record<string, unknown>>{})
-        .reduce((acc, key) => {
-          // Compute the defaults for this node, with the parent defaults
-          // we might have from a previous run: defaults[key].
-          acc[key] = computeDefaults(
-            <Record<string, unknown>>(<Record<string, unknown>>schema.properties)[key],
-            (<Record<string, unknown>>(defaults || {}))[key],
-            definitions
-          );
-          return acc;
-        }, <Record<string, unknown>>{});
+      return Object.keys(
+        <Record<string, unknown>>schema.properties || <Record<string, unknown>>{}
+      ).reduce((acc, key) => {
+        // Compute the defaults for this node, with the parent defaults
+        // we might have from a previous run: defaults[key].
+        acc[key] = computeDefaults(
+          <Record<string, unknown>>(<Record<string, unknown>>schema.properties)[key],
+          (<Record<string, unknown>>(defaults || {}))[key],
+          definitions
+        );
+        return acc;
+      }, <Record<string, unknown>>{});
 
     case 'array':
       if (schema.minItems) {
@@ -378,8 +378,7 @@ export function computeDefaults(
     case 'number':
     case 'integer':
       if (typeof defaults === 'undefined') {
-        if (schema.hasOwnProperty('minimum') &&
-          schema.hasOwnProperty('maximum')) {
+        if (schema.hasOwnProperty('minimum') && schema.hasOwnProperty('maximum')) {
           defaults = schema.minimum;
         } else {
           defaults = 0;
@@ -418,20 +417,18 @@ export function getDefaultFormState(
   return formData || defaults;
 }
 
-export function getOptionsList(
-  schema: Record<string, unknown>
-): Record<string, unknown>[] {
+export function getOptionsList(schema: Record<string, unknown>): Record<string, unknown>[] {
   if (schema.enum) {
     return (<unknown[]>schema.enum).map((value, i) => {
       const label = (schema.enumNames && (<string[]>schema.enumNames)[i]) || String(value);
-      return {label, value};
+      return { label, value };
     });
   } else {
     const altSchemas = <Record<string, unknown>[]>(schema.oneOf || schema.anyOf);
     return altSchemas.map((schema) => {
       const value = toConstant(schema);
       const label = schema.title || String(value);
-      return {label, value};
+      return { label, value };
     });
   }
 }

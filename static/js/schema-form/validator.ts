@@ -11,7 +11,7 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-import Ajv, {ErrorObject} from 'ajv';
+import Ajv, { ErrorObject } from 'ajv';
 
 class Validator {
   private _ajv: Ajv;
@@ -30,16 +30,17 @@ class Validator {
     this._rePropName = RegExp(
       // Match anything that isn't a dot or bracket.
       '[^.[\\]]+|' +
-      // Or match property names within brackets.
-      '\\[(?:' +
-      // Match a non-string expression.
-      '([^"\'].*)|' +
-      // Or match strings (supports escaping characters).
-      '(["\'])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2' +
-      ')\\]|' +
-      // Or match "" as the space between consecutive dots or empty brackets.
-      '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))'
-      , 'g');
+        // Or match property names within brackets.
+        '\\[(?:' +
+        // Match a non-string expression.
+        '([^"\'].*)|' +
+        // Or match strings (supports escaping characters).
+        '(["\'])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2' +
+        ')\\]|' +
+        // Or match "" as the space between consecutive dots or empty brackets.
+        '(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))',
+      'g'
+    );
   }
 
   _toPath(s: string): string[] {
@@ -80,7 +81,7 @@ class Validator {
       return {};
     }
     return errors.reduce((errorSchema: Record<string, unknown>, error: ErrorObject) => {
-      const {dataPath, message} = error;
+      const { dataPath, message } = error;
       const path = this._toPath(dataPath);
       let parent = errorSchema;
 
@@ -102,14 +103,16 @@ class Validator {
     }, {});
   }
 
-  validateFormData(formData: unknown, schema: Record<string, unknown>):
-  {errors: ErrorObject[], errorSchema: Record<string, unknown>} {
+  validateFormData(
+    formData: unknown,
+    schema: Record<string, unknown>
+  ): { errors: ErrorObject[]; errorSchema: Record<string, unknown> } {
     this._ajv.validate(schema, formData);
     let errors = this._ajv.errors;
     errors = errors ?? [];
     const errorSchema = this._toErrorSchema(errors);
 
-    return {errors, errorSchema};
+    return { errors, errorSchema };
   }
 }
 

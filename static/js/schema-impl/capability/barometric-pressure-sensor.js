@@ -22,14 +22,9 @@ class BarometricPressureSensor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/multi_level_sensor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/multi_level_sensor.svg',
+    });
   }
 
   /**
@@ -52,12 +47,9 @@ class BarometricPressureSensor extends Thing {
     this.unit = '';
 
     if (this.barometricPressureProperty) {
-      const property =
-        // eslint-disable-next-line max-len
-        this.displayedProperties[this.barometricPressureProperty].convertedProperty;
+      const property = this.displayedProperties[this.barometricPressureProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-        `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 
@@ -68,7 +60,6 @@ class BarometricPressureSensor extends Thing {
   }
 
   get icon() {
-    // eslint-disable-next-line max-len
     return this.element.querySelector('webthing-barometric-pressure-sensor-capability');
   }
 

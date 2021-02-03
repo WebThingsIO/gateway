@@ -11,8 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class VoltageProperty extends NumericLabelProperty {
-}
+class VoltageProperty extends NumericLabelProperty {}
 
 window.customElements.define('webthing-voltage-property', VoltageProperty);
 module.exports = VoltageProperty;

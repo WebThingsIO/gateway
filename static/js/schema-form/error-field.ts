@@ -11,7 +11,7 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-import {ErrorObject} from 'ajv';
+import { ErrorObject } from 'ajv';
 
 export default class ErrorField {
   private field: HTMLDivElement;
@@ -38,7 +38,7 @@ export default class ErrorField {
       const errorHtml = errors.map((error) => {
         return `
             <li class="error-item">
-              ${(`${error.dataPath} ${error.message}`).trim()}
+              ${`${error.dataPath} ${error.message}`.trim()}
             </li>`;
       });
 
