@@ -25,15 +25,7 @@ const pluginsWeb = [
         },
       },
       {
-        from: 'src/views/connecting.handlebars',
-        to: path.join(__dirname, 'build', 'views'),
-      },
-      {
         from: 'src/views/hotspot.handlebars',
-        to: path.join(__dirname, 'build', 'views'),
-      },
-      {
-        from: 'src/views/wifi-setup.handlebars',
         to: path.join(__dirname, 'build', 'views'),
       },
     ],
@@ -48,17 +40,12 @@ const pluginsWeb = [
     filename: '[file].map',
   }),
   new MiniCssExtractPlugin({
-    filename: 'bundle/[hash]-[name].css',
+    filename: 'bundle/[contenthash]-[name].css',
   }),
   new HtmlWebpackPlugin({
     inject: 'head',
     template: 'static/index.html',
-    chunks: ['style', 'app.js'],
-  }),
-  new HtmlWebpackPlugin({
-    template: 'src/views/connecting.handlebars',
-    filename: '../views/connecting.handlebars',
-    chunks: ['connecting.js'],
+    chunks: ['buildCss', 'app.js'],
   }),
   new HtmlWebpackPlugin({
     template: 'static/signup/index.html',
@@ -75,6 +62,11 @@ const pluginsWeb = [
     template: 'src/views/authorize.handlebars',
     filename: '../views/authorize.handlebars',
     chunks: ['authorize.js'],
+  }),
+  new HtmlWebpackPlugin({
+    template: 'src/views/connecting.handlebars',
+    filename: '../views/connecting.handlebars',
+    chunks: ['connecting.js'],
   }),
   new HtmlWebpackPlugin({
     template: 'src/views/local-token-service.handlebars',
@@ -137,7 +129,7 @@ const webpackWeb = {
   },
   output: {
     path: path.join(__dirname, 'build', 'static'),
-    filename: 'bundle/[hash]-[name]',
+    filename: 'bundle/[contenthash]-[name]',
     publicPath: '/',
   },
   module: {
@@ -151,36 +143,35 @@ const webpackWeb = {
         },
       },
       {
-        test: /.\/static\/js\/.*\.js$/,
-        include: path.resolve(__dirname, 'static'),
-        use: [
-          {
-            loader: 'babel-loader',
-            query: {
-              babelrc: false,
-              sourceType: 'script',
-              presets: [
-                [
-                  '@babel/preset-env',
-                  {
-                    modules: 'commonjs',
-                    targets: {
-                      chrome: '43',
-                      opera: '29',
-                      edge: '14',
-                      firefox: '52',
-                      safari: '10.1',
-                      ios: '10',
-                    },
-                    useBuiltIns: 'usage',
-                    corejs: 3,
-                  },
-                ],
-              ],
-              plugins: ['@babel/plugin-proposal-object-rest-spread'],
-            },
-          },
+        test: [/.\/node_modules\/@fluent\/.*\.js$/, /.\/static\/js\/.*\.js$/],
+        include: [
+          path.resolve(__dirname, 'node_modules', '@fluent'),
+          path.resolve(__dirname, 'static'),
         ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  modules: 'commonjs',
+                  targets: {
+                    chrome: '43',
+                    opera: '29',
+                    edge: '14',
+                    firefox: '52',
+                    safari: '10.1',
+                    ios: '10',
+                  },
+                  useBuiltIns: 'usage',
+                  corejs: 3,
+                },
+              ],
+            ],
+            plugins: ['@babel/plugin-proposal-object-rest-spread'],
+          },
+        },
       },
       {
         test: /\.css$/,
@@ -217,41 +208,19 @@ const webpackWeb = {
         ],
       },
       {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              attrs: ['img:src'],
-              root: path.join(__dirname, 'static'),
-              minimize: true,
-            },
-          },
-        ],
-      },
-      {
-        test: /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        test: /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|woff|woff2)$/,
         include: path.resolve(__dirname, 'static'),
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              fallback: 'file-loader',
-              esModule: false,
-            },
-          },
-        ],
+        type: 'asset',
       },
     ],
-  },
-  node: {
-    fs: 'empty',
   },
   plugins: pluginsWeb,
   devtool: 'source-map',
   resolve: {
     extensions: ['.ts', '.js'],
+    fallback: {
+      fs: false,
+    },
   },
 };
 
@@ -277,34 +246,30 @@ const webpackSW = {
       {
         test: /\.js$/,
         include: path.resolve(__dirname, 'static'),
-        use: [
-          {
-            loader: 'babel-loader',
-            query: {
-              babelrc: false,
-              sourceType: 'script',
-              presets: [
-                [
-                  '@babel/preset-env',
-                  {
-                    modules: 'commonjs',
-                    targets: {
-                      chrome: '43',
-                      opera: '29',
-                      edge: '14',
-                      firefox: '52',
-                      safari: '10.1',
-                      ios: '10',
-                    },
-                    useBuiltIns: 'usage',
-                    corejs: 3,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  modules: 'commonjs',
+                  targets: {
+                    chrome: '43',
+                    opera: '29',
+                    edge: '14',
+                    firefox: '52',
+                    safari: '10.1',
+                    ios: '10',
                   },
-                ],
+                  useBuiltIns: 'usage',
+                  corejs: 3,
+                },
               ],
-              plugins: ['@babel/plugin-proposal-object-rest-spread'],
-            },
+            ],
+            plugins: ['@babel/plugin-proposal-object-rest-spread'],
           },
-        ],
+        },
       },
     ],
   },
