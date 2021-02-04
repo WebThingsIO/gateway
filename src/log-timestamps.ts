@@ -10,18 +10,12 @@
  */
 
 import callsites from 'callsites';
-import {
-  BufferedConsole,
-  ConsoleBuffer,
-  CustomConsole,
-  LogMessage,
-  LogType,
-} from '@jest/console';
-import {TransformableInfo} from 'logform';
+import { BufferedConsole, ConsoleBuffer, CustomConsole, LogMessage, LogType } from '@jest/console';
+import { TransformableInfo } from 'logform';
 import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import UserProfile from './user-profile';
-import {format} from 'util';
+import { format } from 'util';
 
 class CustomFormatter {
   transform(info: TransformableInfo): TransformableInfo {
@@ -74,13 +68,13 @@ const logger = winston.createLogger({
 
 function logPrefix(): string {
   const currTime = new Date();
-  return `${currTime.getFullYear()}-${
-    (`0${currTime.getMonth() + 1}`).slice(-2)}-${
-    (`0${currTime.getDate()}`).slice(-2)} ${
-    (`0${currTime.getHours()}`).slice(-2)}:${
-    (`0${currTime.getMinutes()}`).slice(-2)}:${
-    (`0${currTime.getSeconds()}`).slice(-2)}.${
-    (`00${currTime.getMilliseconds()}`).slice(-3)} `;
+  return `${currTime.getFullYear()}-${`0${currTime.getMonth() + 1}`.slice(
+    -2
+  )}-${`0${currTime.getDate()}`.slice(-2)} ${`0${currTime.getHours()}`.slice(
+    -2
+  )}:${`0${currTime.getMinutes()}`.slice(-2)}:${`0${currTime.getSeconds()}`.slice(
+    -2
+  )}.${`00${currTime.getMilliseconds()}`.slice(-3)} `;
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -95,31 +89,35 @@ if (!(console.constructor as any).hooked) {
     //   https://github.com/facebook/jest/blob/master/packages/jest-console/src/BufferedConsole.ts
     const bufferedConsole = <BufferedConsole>console;
 
-    BufferedConsole.write =
-      function(buffer: ConsoleBuffer, type: LogType, message: LogMessage, level?: number | null) {
-        const call = callsites()[level ?? 2];
-        const origin = `${call.getFileName()}:${call.getLineNumber()}`;
-        buffer.push({message: logPrefix() + message, origin, type});
-        return buffer;
-      };
+    BufferedConsole.write = function (
+      buffer: ConsoleBuffer,
+      type: LogType,
+      message: LogMessage,
+      level?: number | null
+    ) {
+      const call = callsites()[level ?? 2];
+      const origin = `${call.getFileName()}:${call.getLineNumber()}`;
+      buffer.push({ message: logPrefix() + message, origin, type });
+      return buffer;
+    };
 
-    bufferedConsole.log = function(message: any, ...args: any[]) {
+    bufferedConsole.log = function (message: any, ...args: any[]) {
       BufferedConsole.write((this as any)._buffer, 'log', format.apply(null, [message, ...args]));
     };
 
-    bufferedConsole.info = function(message: any, ...args: any[]) {
+    bufferedConsole.info = function (message: any, ...args: any[]) {
       BufferedConsole.write((this as any)._buffer, 'info', format.apply(null, [message, ...args]));
     };
 
-    bufferedConsole.warn = function(message: any, ...args: any[]) {
+    bufferedConsole.warn = function (message: any, ...args: any[]) {
       BufferedConsole.write((this as any)._buffer, 'warn', format.apply(null, [message, ...args]));
     };
 
-    bufferedConsole.error = function(message: any, ...args: any[]) {
+    bufferedConsole.error = function (message: any, ...args: any[]) {
       BufferedConsole.write((this as any)._buffer, 'error', format.apply(null, [message, ...args]));
     };
 
-    bufferedConsole.debug = function(message: any, ...args: any[]) {
+    bufferedConsole.debug = function (message: any, ...args: any[]) {
       BufferedConsole.write((this as any)._buffer, 'debug', format.apply(null, [message, ...args]));
     };
   } else if (console.constructor.name === 'CustomConsole') {
@@ -127,40 +125,40 @@ if (!(console.constructor as any).hooked) {
     //   https://github.com/facebook/jest/blob/master/packages/jest-console/src/CustomConsole.ts
     const customConsole = <CustomConsole>console;
 
-    customConsole.log = function(message: any, ...args: any[]) {
+    customConsole.log = function (message: any, ...args: any[]) {
       (customConsole as any)._log('log', logPrefix() + format.apply(null, [message, ...args]));
     };
 
-    customConsole.info = function(message: any, ...args: any[]) {
+    customConsole.info = function (message: any, ...args: any[]) {
       (customConsole as any)._log('info', logPrefix() + format.apply(null, [message, ...args]));
     };
 
-    customConsole.warn = function(message: any, ...args: any[]) {
+    customConsole.warn = function (message: any, ...args: any[]) {
       (customConsole as any)._log('warn', logPrefix() + format.apply(null, [message, ...args]));
     };
 
-    customConsole.error = function(message: any, ...args: any[]) {
+    customConsole.error = function (message: any, ...args: any[]) {
       (customConsole as any)._log('error', logPrefix() + format.apply(null, [message, ...args]));
     };
 
-    customConsole.debug = function(message: any, ...args: any[]) {
+    customConsole.debug = function (message: any, ...args: any[]) {
       (customConsole as any)._log('debug', logPrefix() + format.apply(null, [message, ...args]));
     };
   } else {
     // This path is for the normal non-jest output
-    console.info = function(message: any, ...args: any[]) {
+    console.info = function (message: any, ...args: any[]) {
       logger.info(format.apply(null, [message, ...args]));
     };
 
-    console.debug = function(message: any, ...args: any[]) {
+    console.debug = function (message: any, ...args: any[]) {
       logger.debug(format.apply(null, [message, ...args]));
     };
 
-    console.error = function(message: any, ...args: any[]) {
+    console.error = function (message: any, ...args: any[]) {
       logger.error(format.apply(null, [message, ...args]));
     };
 
-    console.warn = function(message: any, ...args: any[]) {
+    console.warn = function (message: any, ...args: any[]) {
       logger.warn(format.apply(null, [message, ...args]));
     };
 

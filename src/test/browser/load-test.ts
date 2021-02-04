@@ -1,5 +1,5 @@
-import {waitForExpect} from '../expect-utils';
-import {getBrowser} from './browser-common';
+import { waitForExpect } from '../expect-utils';
+import { getBrowser } from './browser-common';
 import AddonManager from '../../addon-manager';
 
 describe('basic browser tests', () => {
@@ -10,7 +10,6 @@ describe('basic browser tests', () => {
       console.warn('Unable to cleanup virtual-thing-adapter', e);
     }
   });
-
 
   it('creates a user', async () => {
     const browser = getBrowser();
@@ -78,14 +77,14 @@ describe('basic browser tests', () => {
     const discoverAddonsButton = await browser.$('#discover-addons-button');
     await discoverAddonsButton.click();
 
-    const addonInstallVirtualThingsAdapter =
-      await browser.$('#addon-install-virtual-things-adapter');
+    const addonInstallVirtualThingsAdapter = await browser.$(
+      '#addon-install-virtual-things-adapter'
+    );
     await addonInstallVirtualThingsAdapter.waitForExist(5000);
     await addonInstallVirtualThingsAdapter.click();
 
     // virtual-things-adapter is ~10MB, so it might take some time to install
-    const addonDiscoverySettingsAdded =
-      await browser.$('.addon-discovery-settings-added');
+    const addonDiscoverySettingsAdded = await browser.$('.addon-discovery-settings-added');
     await addonDiscoverySettingsAdded.waitForExist(30000);
 
     const settingsBackButton = await browser.$('#settings-back-button');
@@ -115,10 +114,12 @@ describe('basic browser tests', () => {
     await addButton.waitForDisplayed(5000);
     await addButton.click();
 
-    const newThingVirtualThings2SaveButton =
-      await browser.$('#new-thing-virtual-things-2 > .new-thing-save-button');
-    const newThingVirtualThings9SaveButton =
-      await browser.$('#new-thing-virtual-things-9 > .new-thing-save-button');
+    const newThingVirtualThings2SaveButton = await browser.$(
+      '#new-thing-virtual-things-2 > .new-thing-save-button'
+    );
+    const newThingVirtualThings9SaveButton = await browser.$(
+      '#new-thing-virtual-things-9 > .new-thing-save-button'
+    );
     await newThingVirtualThings2SaveButton.click();
     await newThingVirtualThings9SaveButton.click();
 
@@ -137,8 +138,7 @@ describe('basic browser tests', () => {
     const backButton = await browser.$('#back-button');
     await backButton.click();
 
-    const webthingCustomCapability =
-      await browser.$('webthing-custom-capability');
+    const webthingCustomCapability = await browser.$('webthing-custom-capability');
     webthingCustomCapability.waitForExist(2000);
 
     things = await browser.$$('.thing');

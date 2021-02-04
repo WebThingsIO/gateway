@@ -18,6 +18,5 @@ class HeatingCoolingProperty extends StringLabelProperty {
   }
 }
 
-window.customElements.define('webthing-heating-cooling-property',
-                             HeatingCoolingProperty);
+window.customElements.define('webthing-heating-cooling-property', HeatingCoolingProperty);
 module.exports = HeatingCoolingProperty;

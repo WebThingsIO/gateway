@@ -101,12 +101,13 @@ class OnOffSwitchCapability extends BaseComponent {
     e.preventDefault();
     e.stopPropagation();
 
-    this.dispatchEvent(new CustomEvent('click', {
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('click', {
+        bubbles: true,
+      })
+    );
   }
 }
 
-window.customElements.define('webthing-on-off-switch-capability',
-                             OnOffSwitchCapability);
+window.customElements.define('webthing-on-off-switch-capability', OnOffSwitchCapability);
 module.exports = OnOffSwitchCapability;

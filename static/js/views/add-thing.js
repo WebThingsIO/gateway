@@ -17,7 +17,6 @@ const NewWebThing = require('./new-web-thing');
 const SettingsScreen = require('./settings');
 
 const AddThingScreen = {
-
   /**
    * URL of curent pair action request.
    */
@@ -26,15 +25,14 @@ const AddThingScreen = {
   /**
    * Initialise Add Thing Screen.
    */
-  init: function() {
+  init: function () {
     this.element = document.getElementById('add-thing-screen');
     this.backButton = document.getElementById('add-thing-back-button');
     this.cancelButton = document.getElementById('add-thing-cancel-button');
     this.newThingsElement = document.getElementById('new-things');
     this.scanStatus = document.getElementById('add-thing-status');
     this.addonsHint = document.getElementById('add-adapters-hint');
-    this.addonsHintAnchor =
-      document.getElementById('add-adapters-hint-anchor');
+    this.addonsHintAnchor = document.getElementById('add-adapters-hint-anchor');
     this.addByUrlAnchor = document.getElementById('add-by-url-anchor');
     this.pairingTimeout = null;
     this.visibleThings = new Set();
@@ -42,15 +40,14 @@ const AddThingScreen = {
     this.backButton.addEventListener('click', this.hide.bind(this));
     this.cancelButton.addEventListener('click', this.hide.bind(this));
     this.addonsHintAnchor.addEventListener('click', this.hide.bind(this));
-    this.addByUrlAnchor.addEventListener('click',
-                                         this.showNewWebThing.bind(this));
+    this.addByUrlAnchor.addEventListener('click', this.showNewWebThing.bind(this));
     this.closing = false;
   },
 
   /**
    * Create a new "pair" action on the gateway.
    */
-  requestPairing: function() {
+  requestPairing: function () {
     if (this.closing) {
       return;
     }
@@ -74,8 +71,10 @@ const AddThingScreen = {
         return;
       }
 
-      if (this.socket.readyState === WebSocket.OPEN ||
-          this.socket.readyState === WebSocket.CONNECTING) {
+      if (
+        this.socket.readyState === WebSocket.OPEN ||
+        this.socket.readyState === WebSocket.CONNECTING
+      ) {
         this.socket.close();
       }
     };
@@ -88,28 +87,30 @@ const AddThingScreen = {
     // Timeout, in seconds.
     const timeout = 60;
 
-    API.startPairing(timeout).then((json) => {
-      this.actionUrl = json.pair.href;
+    API.startPairing(timeout)
+      .then((json) => {
+        this.actionUrl = json.pair.href;
 
-      this.pairingTimeout = setTimeout(() => {
-        this.scanStatus.classList.add('hidden');
+        this.pairingTimeout = setTimeout(() => {
+          this.scanStatus.classList.add('hidden');
 
-        if (this.visibleThings.size === 0) {
-          this.addonsHint.classList.remove('hidden');
-        }
+          if (this.visibleThings.size === 0) {
+            this.addonsHint.classList.remove('hidden');
+          }
 
-        this.pairingTimeout = null;
-        this.requestCancelPairing();
-      }, timeout * 1000);
-    }).catch((error) => {
-      console.error(`Pairing request failed: ${error}`);
-    });
+          this.pairingTimeout = null;
+          this.requestCancelPairing();
+        }, timeout * 1000);
+      })
+      .catch((error) => {
+        console.error(`Pairing request failed: ${error}`);
+      });
   },
 
   /**
    * Cancel a pairing request.
    */
-  requestCancelPairing: function() {
+  requestCancelPairing: function () {
     if (this.pairingTimeout !== null) {
       clearTimeout(this.pairingTimeout);
       this.pairingTimeout = null;
@@ -126,17 +127,19 @@ const AddThingScreen = {
       return;
     }
 
-    API.cancelPairing(url).then(() => {
-      this.actionUrl = null;
-    }).catch((error) => {
-      console.error(`Error cancelling pairing request ${error}`);
-    });
+    API.cancelPairing(url)
+      .then(() => {
+        this.actionUrl = null;
+      })
+      .catch((error) => {
+        console.error(`Error cancelling pairing request ${error}`);
+      });
   },
 
   /**
    * Show Add Thing Screen.
    */
-  show: function() {
+  show: function () {
     this.addByUrlAnchor.classList.add('hidden');
     SettingsScreen.fetchInstalledAddonList(true).then(() => {
       if (SettingsScreen.installedAddons.has('thing-url-adapter')) {
@@ -158,13 +161,13 @@ const AddThingScreen = {
   /**
    * Hide Add Thing Screen.
    */
-  hide: function() {
+  hide: function () {
     this.element.classList.add('hidden');
     this.requestCancelPairing();
     App.gatewayModel.refreshThings();
   },
 
-  showNewThing: function(thing) {
+  showNewThing: function (thing) {
     if (!this.visibleThings.has(thing.id)) {
       this.visibleThings.add(thing.id);
       new NewThing(thing.id, thing);

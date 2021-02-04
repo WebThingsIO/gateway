@@ -1,4 +1,4 @@
-import {Page, Section} from './elements';
+import { Page, Section } from './elements';
 import webdriverio from 'webdriverio';
 
 class AddonSection extends Section {
@@ -60,7 +60,7 @@ export class AddonSettingsPage extends Page {
   }
 
   async openDiscoverAddonPage(): Promise<AddonDiscoverPage | null> {
-    if (!await this.hasDiscover()) {
+    if (!(await this.hasDiscover())) {
       return null;
     }
 
@@ -95,9 +95,7 @@ class DiscoveredAddonSection extends Section {
 export class AddonDiscoverPage extends Page {
   constructor(browser: webdriverio.BrowserObject, url: string) {
     super(browser, url);
-    this.defineSections('addons',
-                        '.discovered-addon-item',
-                        DiscoveredAddonSection);
+    this.defineSections('addons', '.discovered-addon-item', DiscoveredAddonSection);
     this.defineElement('backButton', '#settings-back-button');
   }
 
@@ -114,7 +112,7 @@ export class AddonDiscoverPage extends Page {
   }
 
   async back(): Promise<AddonSettingsPage | null> {
-    if (!await this.hasBackButton()) {
+    if (!(await this.hasBackButton())) {
       return null;
     }
 

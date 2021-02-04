@@ -18,6 +18,5 @@ class ThermostatModeProperty extends EnumProperty {
   }
 }
 
-window.customElements.define('webthing-thermostat-mode-property',
-                             ThermostatModeProperty);
+window.customElements.define('webthing-thermostat-mode-property', ThermostatModeProperty);
 module.exports = ThermostatModeProperty;

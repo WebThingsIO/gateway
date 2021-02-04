@@ -4,9 +4,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {fromDescription} from './index';
-import Effect, {EffectDescription} from './Effect';
-import {State} from '../State';
+import { fromDescription } from './index';
+import Effect, { EffectDescription } from './Effect';
+import { State } from '../State';
 
 export interface MultiEffectDescription extends EffectDescription {
   effects: EffectDescription[];
@@ -24,7 +24,7 @@ export default class MultiEffect extends Effect {
   constructor(desc: MultiEffectDescription) {
     super(desc);
 
-    this.effects = desc.effects.map(function(effect) {
+    this.effects = desc.effects.map(function (effect) {
       return fromDescription(effect);
     });
   }

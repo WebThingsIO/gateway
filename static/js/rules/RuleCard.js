@@ -102,8 +102,7 @@ class RuleCard {
     this.deleteConfirm.addEventListener('click', this.onDeleteConfirmClick);
 
     this.enabledCheckbox = this.elt.querySelector('.switch-checkbox');
-    this.enabledCheckbox.addEventListener('change',
-                                          this.onEnabledCheckboxChange);
+    this.enabledCheckbox.addEventListener('change', this.onEnabledCheckboxChange);
 
     this.editOverlay = this.elt.querySelector('.rule-edit-overlay');
   }

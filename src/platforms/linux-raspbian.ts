@@ -26,10 +26,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating whether or not DHCP is enabled.
    */
   getDhcpServerStatus(): boolean {
-    const proc = child_process.spawnSync(
-      'systemctl',
-      ['is-active', 'dnsmasq.service']
-    );
+    const proc = child_process.spawnSync('systemctl', ['is-active', 'dnsmasq.service']);
     return proc.status === 0;
   }
 
@@ -40,18 +37,20 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   setDhcpServerStatus(enabled: boolean): boolean {
-    let proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', enabled ? 'start' : 'stop', 'dnsmasq.service']
-    );
+    let proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      enabled ? 'start' : 'stop',
+      'dnsmasq.service',
+    ]);
     if (proc.status !== 0) {
       return false;
     }
 
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', enabled ? 'enable' : 'disable', 'dnsmasq.service']
-    );
+    proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      enabled ? 'enable' : 'disable',
+      'dnsmasq.service',
+    ]);
     return proc.status === 0;
   }
 
@@ -66,12 +65,15 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     if (!fs.existsSync('/etc/network/interfaces.d/eth0')) {
       mode = 'dhcp';
-      return {mode, options};
+      return { mode, options };
     }
 
     const data = fs.readFileSync('/etc/network/interfaces.d/eth0', 'utf8');
     for (const line of data.trim().split('\n')) {
-      const parts = line.trim().split(' ').filter((s) => s.length > 0);
+      const parts = line
+        .trim()
+        .split(' ')
+        .filter((s) => s.length > 0);
 
       switch (parts[0]) {
         case 'iface':
@@ -92,7 +94,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       }
     }
 
-    return {mode, options};
+    return { mode, options };
   }
 
   /**
@@ -108,11 +110,13 @@ class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
 
-    const regex = ipRegex({exact: true});
-    if ((options.ipaddr && !regex.test(<string>options.ipaddr)) ||
-        (options.netmask && !regex.test(<string>options.netmask)) ||
-        (options.gateway && !regex.test(<string>options.gateway)) ||
-        (options.dns && (<string[]>options.dns).filter((d: string) => !regex.test(d)).length > 0)) {
+    const regex = ipRegex({ exact: true });
+    if (
+      (options.ipaddr && !regex.test(<string>options.ipaddr)) ||
+      (options.netmask && !regex.test(<string>options.netmask)) ||
+      (options.gateway && !regex.test(<string>options.gateway)) ||
+      (options.dns && (<string[]>options.dns).filter((d: string) => !regex.test(d)).length > 0)
+    ) {
       return false;
     }
 
@@ -132,19 +136,13 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     fs.writeFileSync('/tmp/eth0', entry);
 
-    let proc = child_process.spawnSync(
-      'sudo',
-      ['mv', '/tmp/eth0', '/etc/network/interfaces.d/']
-    );
+    let proc = child_process.spawnSync('sudo', ['mv', '/tmp/eth0', '/etc/network/interfaces.d/']);
 
     if (proc.status !== 0) {
       return false;
     }
 
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', 'restart', 'networking.service']
-    );
+    proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'networking.service']);
     return proc.status === 0;
   }
 
@@ -154,13 +152,13 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {Object} {enabled: true|false, mode: 'ap|sta|...', options: {...}}
    */
   getWirelessMode(): WirelessMode {
-    let enabled = false, mode = '', cipher = '', mgmt = '';
+    let enabled = false,
+      mode = '',
+      cipher = '',
+      mgmt = '';
     const options: Record<string, unknown> = {};
 
-    let proc = child_process.spawnSync(
-      'systemctl',
-      ['is-active', 'hostapd.service']
-    );
+    let proc = child_process.spawnSync('systemctl', ['is-active', 'hostapd.service']);
     if (proc.status === 0) {
       mode = 'ap';
       enabled = true;
@@ -214,14 +212,10 @@ class LinuxRaspbianPlatform extends BasePlatform {
       }
     } else {
       mode = 'sta';
-      proc = child_process.spawnSync(
-        'wpa_cli',
-        ['-i', 'wlan0', 'status'],
-        {encoding: 'utf8'}
-      );
+      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'status'], { encoding: 'utf8' });
 
       if (proc.status !== 0) {
-        return {enabled, mode, options};
+        return { enabled, mode, options };
       }
 
       for (const line of proc.stdout.split('\n')) {
@@ -254,13 +248,11 @@ class LinuxRaspbianPlatform extends BasePlatform {
         }
       }
 
-      proc = child_process.spawnSync(
-        'wpa_cli',
-        ['-i', 'wlan0', 'list_networks'],
-        {encoding: 'utf8'}
-      );
+      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
+        encoding: 'utf8',
+      });
       if (proc.status !== 0) {
-        return {enabled, mode, options};
+        return { enabled, mode, options };
       }
 
       options.networks = [];
@@ -284,7 +276,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       }
     }
 
-    return {enabled, mode, options};
+    return { enabled, mode, options };
   }
 
   /**
@@ -301,28 +293,24 @@ class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
 
-    const regex = ipRegex({exact: true});
+    const regex = ipRegex({ exact: true });
     if (options.ipaddr && !regex.test(<string>options.ipaddr)) {
       return false;
     }
 
     // First, remove existing networks
-    let proc = child_process.spawnSync(
-      'wpa_cli',
-      ['-i', 'wlan0', 'list_networks'],
-      {encoding: 'utf8'}
-    );
+    let proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
+      encoding: 'utf8',
+    });
     if (proc.status === 0) {
-      const networks = proc.stdout.split('\n')
+      const networks = proc.stdout
+        .split('\n')
         .filter((l) => !l.startsWith('network'))
         .map((l) => l.split(' ')[0])
         .reverse();
 
       for (const id of networks) {
-        proc = child_process.spawnSync(
-          'wpa_cli',
-          ['-i', 'wlan0', 'remove_network', id]
-        );
+        proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'remove_network', id]);
         if (proc.status !== 0) {
           console.log('Failed to remove network with id:', id);
         }
@@ -331,43 +319,29 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     // Then, stop hostapd. It will either need to be off or reconfigured, so
     // this is valid in both modes.
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', 'stop', 'hostapd.service']
-    );
+    proc = child_process.spawnSync('sudo', ['systemctl', 'stop', 'hostapd.service']);
     if (proc.status !== 0) {
       return false;
     }
 
     if (!enabled) {
-      proc = child_process.spawnSync(
-        'sudo',
-        ['systemctl', 'disable', 'hostapd.service']
-      );
+      proc = child_process.spawnSync('sudo', ['systemctl', 'disable', 'hostapd.service']);
       return proc.status === 0;
     }
 
     // Make sure Wi-Fi isn't blocked by rfkill
-    child_process.spawnSync(
-      'sudo',
-      ['rfkill', 'unblock', 'wifi']
-    );
+    child_process.spawnSync('sudo', ['rfkill', 'unblock', 'wifi']);
 
     // Now, set the IP address back to a sane state
-    proc = child_process.spawnSync(
-      'sudo',
-      ['ifconfig', 'wlan0', '0.0.0.0']
-    );
+    proc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', '0.0.0.0']);
     if (proc.status !== 0) {
       return false;
     }
 
     if (mode === 'sta') {
-      proc = child_process.spawnSync(
-        'wpa_cli',
-        ['-i', 'wlan0', 'add_network'],
-        {encoding: 'utf8'}
-      );
+      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'add_network'], {
+        encoding: 'utf8',
+      });
       if (proc.status !== 0) {
         return false;
       }
@@ -392,36 +366,31 @@ class LinuxRaspbianPlatform extends BasePlatform {
           ['-i', 'wlan0', 'set_network', id, 'psk', `"${options.key}"`]
         );
       } else {
-        proc = child_process.spawnSync(
-          'wpa_cli',
-          ['-i', 'wlan0', 'set_network', id, 'key_mgmt', 'NONE']
-        );
+        proc = child_process.spawnSync('wpa_cli', [
+          '-i',
+          'wlan0',
+          'set_network',
+          id,
+          'key_mgmt',
+          'NONE',
+        ]);
       }
 
       if (proc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync(
-        'wpa_cli',
-        ['-i', 'wlan0', 'enable_network', id]
-      );
+      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'enable_network', id]);
       if (proc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync(
-        'wpa_cli',
-        ['-i', 'wlan0', 'save_config']
-      );
+      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'save_config']);
       if (proc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync(
-        'sudo',
-        ['systemctl', 'disable', 'hostapd.service']
-      );
+      proc = child_process.spawnSync('sudo', ['systemctl', 'disable', 'hostapd.service']);
       if (proc.status !== 0) {
         return false;
       }
@@ -440,37 +409,29 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
       fs.writeFileSync('/tmp/hostapd.conf', config);
 
-      proc = child_process.spawnSync(
-        'sudo',
-        ['mv', '/tmp/hostapd.conf', '/etc/hostapd/hostapd.conf']
-      );
+      proc = child_process.spawnSync('sudo', [
+        'mv',
+        '/tmp/hostapd.conf',
+        '/etc/hostapd/hostapd.conf',
+      ]);
 
       if (proc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync(
-        'sudo',
-        ['systemctl', 'start', 'hostapd.service']
-      );
+      proc = child_process.spawnSync('sudo', ['systemctl', 'start', 'hostapd.service']);
       if (proc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync(
-        'sudo',
-        ['systemctl', 'enable', 'hostapd.service']
-      );
+      proc = child_process.spawnSync('sudo', ['systemctl', 'enable', 'hostapd.service']);
       if (proc.status !== 0) {
         return false;
       }
     }
 
     if (options.ipaddr) {
-      proc = child_process.spawnSync(
-        'sudo',
-        ['ifconfig', 'wlan0', <string>options.ipaddr]
-      );
+      proc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', <string>options.ipaddr]);
       if (proc.status !== 0) {
         return false;
       }
@@ -478,10 +439,16 @@ class LinuxRaspbianPlatform extends BasePlatform {
       if (mode === 'ap') {
         // set up a default route when running in AP mode. ignore errors here and
         // just try to move on.
-        child_process.spawnSync(
-          'sudo',
-          ['ip', 'route', 'add', 'default', 'via', <string>options.ipaddr, 'dev', 'wlan0']
-        );
+        child_process.spawnSync('sudo', [
+          'ip',
+          'route',
+          'add',
+          'default',
+          'via',
+          <string>options.ipaddr,
+          'dev',
+          'wlan0',
+        ]);
       }
     }
 
@@ -494,11 +461,9 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating whether or not SSH is enabled.
    */
   getSshServerStatus(): boolean {
-    const proc = child_process.spawnSync(
-      'raspi-config',
-      ['nonint', 'get_ssh'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync('raspi-config', ['nonint', 'get_ssh'], {
+      encoding: 'utf8',
+    });
 
     if (proc.status !== 0) {
       return false;
@@ -515,10 +480,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    */
   setSshServerStatus(enabled: boolean): boolean {
     const arg = enabled ? '0' : '1';
-    const proc = child_process.spawnSync(
-      'sudo',
-      ['raspi-config', 'nonint', 'do_ssh', arg]
-    );
+    const proc = child_process.spawnSync('sudo', ['raspi-config', 'nonint', 'do_ssh', arg]);
     return proc.status === 0;
   }
 
@@ -528,10 +490,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating whether or not mDNS is enabled.
    */
   getMdnsServerStatus(): boolean {
-    const proc = child_process.spawnSync(
-      'systemctl',
-      ['is-active', 'avahi-daemon.service']
-    );
+    const proc = child_process.spawnSync('systemctl', ['is-active', 'avahi-daemon.service']);
     return proc.status === 0;
   }
 
@@ -542,18 +501,20 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   setMdnsServerStatus(enabled: boolean): boolean {
-    let proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', enabled ? 'start' : 'stop', 'avahi-daemon.service']
-    );
+    let proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      enabled ? 'start' : 'stop',
+      'avahi-daemon.service',
+    ]);
     if (proc.status !== 0) {
       return false;
     }
 
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', enabled ? 'enable' : 'disable', 'avahi-daemon.service']
-    );
+    proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      enabled ? 'enable' : 'disable',
+      'avahi-daemon.service',
+    ]);
     return proc.status === 0;
   }
 
@@ -587,10 +548,13 @@ class LinuxRaspbianPlatform extends BasePlatform {
     }
 
     // Do this with sed, as it's the easiest way to write the file as root.
-    let proc = child_process.spawnSync(
-      'sudo',
-      ['sed', '-i', '-e', `s/^.*$/${hostname}/`, '/etc/hostname']
-    );
+    let proc = child_process.spawnSync('sudo', [
+      'sed',
+      '-i',
+      '-e',
+      `s/^.*$/${hostname}/`,
+      '/etc/hostname',
+    ]);
     if (proc.status !== 0) {
       return false;
     }
@@ -598,40 +562,28 @@ class LinuxRaspbianPlatform extends BasePlatform {
     proc = child_process.spawnSync('sudo', ['hostname', hostname]);
     if (proc.status !== 0) {
       // Set the original hostname back
-      child_process.spawnSync(
-        'sudo',
-        ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']
-      );
+      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
 
       return false;
     }
 
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', 'restart', 'avahi-daemon.service']
-    );
+    proc = child_process.spawnSync('sudo', ['systemctl', 'restart', 'avahi-daemon.service']);
     if (proc.status !== 0) {
       // Set the original hostname back
-      child_process.spawnSync(
-        'sudo',
-        ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']
-      );
+      child_process.spawnSync('sudo', ['sed', '-i', '-e', `s/^.*$/${original}/`, '/etc/hostname']);
       child_process.spawnSync('sudo', ['hostname', original]);
 
       return false;
     }
 
-    proc = child_process.spawnSync(
-      'sudo',
-      [
-        'sed',
-        '-i',
-        '-E',
-        '-e',
-        `s/(127\\.0\\.1\\.1[ \\t]+)${original}/\\1${hostname}/g`,
-        '/etc/hosts',
-      ]
-    );
+    proc = child_process.spawnSync('sudo', [
+      'sed',
+      '-i',
+      '-E',
+      '-e',
+      `s/(127\\.0\\.1\\.1[ \\t]+)${original}/\\1${hostname}/g`,
+      '/etc/hosts',
+    ]);
     return proc.status === 0;
   }
 
@@ -641,10 +593,11 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   restartGateway(): boolean {
-    const proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', 'restart', 'webthings-gateway.service']
-    );
+    const proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      'restart',
+      'webthings-gateway.service',
+    ]);
 
     // This will probably not fire, but just in case.
     return proc.status === 0;
@@ -693,11 +646,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
   scanWirelessNetworks(): WirelessNetwork[] {
     const status = this.getWirelessMode();
 
-    const proc = child_process.spawnSync(
-      'sudo',
-      ['iwlist', 'scanning'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync('sudo', ['iwlist', 'scanning'], { encoding: 'utf8' });
 
     if (proc.status !== 0) {
       return [];
@@ -717,12 +666,17 @@ class LinuxRaspbianPlatform extends BasePlatform {
     for (const line of lines) {
       // New cell, start over
       if (line.startsWith('Cell ') || line.length === 0) {
-        if (cell.hasOwnProperty('ssid') &&
-            cell.hasOwnProperty('quality') &&
-            cell.hasOwnProperty('encryption') &&
-            (<string>cell.ssid).length > 0) {
-          if (status.mode === 'sta' && status.options.networks &&
-              (<string[]>status.options.networks).includes(<string>cell.ssid)) {
+        if (
+          cell.hasOwnProperty('ssid') &&
+          cell.hasOwnProperty('quality') &&
+          cell.hasOwnProperty('encryption') &&
+          (<string>cell.ssid).length > 0
+        ) {
+          if (
+            status.mode === 'sta' &&
+            status.options.networks &&
+            (<string[]>status.options.networks).includes(<string>cell.ssid)
+          ) {
             cell.configured = true;
             cell.connected = status.enabled;
           } else {
@@ -817,10 +771,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
   getSelfUpdateStatus(): SelfUpdateStatus {
     const timer = 'webthings-gateway.check-for-update.timer';
     const timerExists = fs.existsSync(`/etc/systemd/system/${timer}`);
-    const proc = child_process.spawnSync(
-      'systemctl',
-      ['is-active', timer]
-    );
+    const proc = child_process.spawnSync('systemctl', ['is-active', timer]);
 
     return {
       available: timerExists,
@@ -837,18 +788,12 @@ class LinuxRaspbianPlatform extends BasePlatform {
   setSelfUpdateStatus(enabled: boolean): boolean {
     const timer = 'webthings-gateway.check-for-update.timer';
 
-    let proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', enabled ? 'start' : 'stop', timer]
-    );
+    let proc = child_process.spawnSync('sudo', ['systemctl', enabled ? 'start' : 'stop', timer]);
     if (proc.status !== 0) {
       return false;
     }
 
-    proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', enabled ? 'enable' : 'disable', timer]
-    );
+    proc = child_process.spawnSync('sudo', ['systemctl', enabled ? 'enable' : 'disable', timer]);
     return proc.status === 0;
   }
 
@@ -865,7 +810,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     try {
       const data = fs.readFileSync(tzdata, 'utf8');
-      const zones = data.split('\n')
+      const zones = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split(/\s+/g)[2])
         .sort();
@@ -906,10 +852,12 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   setTimezone(zone: string): boolean {
-    const proc = child_process.spawnSync(
-      'sudo',
-      ['raspi-config', 'nonint', 'do_change_timezone', zone]
-    );
+    const proc = child_process.spawnSync('sudo', [
+      'raspi-config',
+      'nonint',
+      'do_change_timezone',
+      zone,
+    ]);
     return proc.status === 0;
   }
 
@@ -926,7 +874,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     try {
       const data = fs.readFileSync(fname, 'utf8');
-      const zones = data.split('\n')
+      const zones = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split('\t')[1])
         .sort();
@@ -945,11 +894,9 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {string} Country.
    */
   getWirelessCountry(): string {
-    const proc = child_process.spawnSync(
-      'raspi-config',
-      ['nonint', 'get_wifi_country'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync('raspi-config', ['nonint', 'get_wifi_country'], {
+      encoding: 'utf8',
+    });
 
     if (proc.status !== 0) {
       return '';
@@ -965,7 +912,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
     let countries;
     try {
       const data = fs.readFileSync(fname, 'utf8');
-      countries = data.split('\n')
+      countries = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split('\t'));
     } catch (e) {
@@ -996,7 +944,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
     let countries;
     try {
       const data = fs.readFileSync(fname, 'utf8');
-      countries = data.split('\n')
+      countries = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split('\t'));
     } catch (e) {
@@ -1009,10 +958,12 @@ class LinuxRaspbianPlatform extends BasePlatform {
       return false;
     }
 
-    const proc = child_process.spawnSync(
-      'sudo',
-      ['raspi-config', 'nonint', 'do_wifi_country', data[0]]
-    );
+    const proc = child_process.spawnSync('sudo', [
+      'raspi-config',
+      'nonint',
+      'do_wifi_country',
+      data[0],
+    ]);
     return proc.status === 0;
   }
 
@@ -1023,11 +974,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
    *                    synchronized.
    */
   getNtpStatus(): boolean {
-    const proc = child_process.spawnSync(
-      'timedatectl',
-      ['status'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync('timedatectl', ['status'], { encoding: 'utf8' });
 
     if (proc.status !== 0) {
       return false;
@@ -1049,10 +996,11 @@ class LinuxRaspbianPlatform extends BasePlatform {
    * @returns {boolean} Boolean indicating success of the command.
    */
   restartNtpSync(): boolean {
-    const proc = child_process.spawnSync(
-      'sudo',
-      ['systemctl', 'restart', 'systemd-timesyncd.service']
-    );
+    const proc = child_process.spawnSync('sudo', [
+      'systemctl',
+      'restart',
+      'systemd-timesyncd.service',
+    ]);
     return proc.status === 0;
   }
 }

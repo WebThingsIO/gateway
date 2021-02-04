@@ -11,9 +11,13 @@ const fluent = require('../fluent');
  */
 class TimeTriggerBlock extends RulePartBlock {
   constructor(ruleArea, onPresentationChange, onRuleUpdate) {
-    super(ruleArea, onPresentationChange, onRuleUpdate,
-          fluent.getMessage('rule-time-title'),
-          '/images/thing-icons/clock.svg');
+    super(
+      ruleArea,
+      onPresentationChange,
+      onRuleUpdate,
+      fluent.getMessage('rule-time-title'),
+      '/images/thing-icons/clock.svg'
+    );
 
     const rulePartInfo = this.elt.querySelector('.rule-part-info');
 
@@ -34,11 +38,13 @@ class TimeTriggerBlock extends RulePartBlock {
     });
 
     this.timeInput.addEventListener('change', () => {
-      this.rulePart = {trigger: {
-        type: 'TimeTrigger',
-        time: this.timeInput.value,
-        localized: true,
-      }};
+      this.rulePart = {
+        trigger: {
+          type: 'TimeTrigger',
+          time: this.timeInput.value,
+          localized: true,
+        },
+      };
       this.onRuleChange();
     });
 
@@ -71,11 +77,13 @@ class TimeTriggerBlock extends RulePartBlock {
       this.remove();
     }
     if (this.role === 'trigger') {
-      this.rulePart = {trigger: {
-        type: 'TimeTrigger',
-        time: this.timeInput.value,
-        localized: true,
-      }};
+      this.rulePart = {
+        trigger: {
+          type: 'TimeTrigger',
+          time: this.timeInput.value,
+          localized: true,
+        },
+      };
       this.onRuleChange();
     }
   }

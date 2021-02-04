@@ -10,7 +10,7 @@
 
 import express from 'express';
 import JSONWebToken from '../models/jsonwebtoken';
-import {WithJWT} from '../jwt-middleware';
+import { WithJWT } from '../jwt-middleware';
 
 function build(): express.Router {
   const controller = express.Router();

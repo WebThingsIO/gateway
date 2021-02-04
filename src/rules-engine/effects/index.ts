@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Effect, {EffectDescription} from './Effect';
+import Effect, { EffectDescription } from './Effect';
 import ActionEffect from './ActionEffect';
 import MultiEffect from './MultiEffect';
 import NotificationEffect from './NotificationEffect';
@@ -13,7 +13,7 @@ import SetEffect from './SetEffect';
 import PulseEffect from './PulseEffect';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type EffectClass = { new(desc: any): Effect };
+type EffectClass = { new (desc: any): Effect };
 
 export const effects: Record<string, EffectClass> = {
   Effect,

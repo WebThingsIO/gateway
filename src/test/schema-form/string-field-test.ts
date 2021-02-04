@@ -1,46 +1,42 @@
 import '../jsdom-common';
-import {fireEvent, createSchemaForm} from './test-utils';
+import { fireEvent, createSchemaForm } from './test-utils';
 
 describe('StringField', () => {
   describe('text input', () => {
     it('should render a string field', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
         },
       });
 
-      expect(
-        node.querySelectorAll('.field input')
-      ).toHaveLength(1);
+      expect(node.querySelectorAll('.field input')).toHaveLength(1);
     });
 
     it('should render a string field with a label', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           title: 'foo',
         },
       });
 
-      expect(node.querySelector('.field .control-label')!.textContent!.trim())
-        .toEqual('foo');
+      expect(node.querySelector('.field .control-label')!.textContent!.trim()).toEqual('foo');
     });
 
     it('should render a string field with a description', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           description: 'bar',
         },
       });
 
-      expect(node.querySelector('.field-description')!.textContent!.trim())
-        .toEqual('bar');
+      expect(node.querySelector('.field-description')!.textContent!.trim()).toEqual('bar');
     });
 
     it('should assign a default value', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           default: 'plop',
@@ -51,13 +47,13 @@ describe('StringField', () => {
     });
 
     it('should default state value to undefined', () => {
-      const {schemaForm} = createSchemaForm({schema: {type: 'string'}});
+      const { schemaForm } = createSchemaForm({ schema: { type: 'string' } });
 
       expect(typeof schemaForm.formData).toEqual('undefined');
     });
 
     it('should handle a change event', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: {
           type: 'string',
         },
@@ -71,8 +67,8 @@ describe('StringField', () => {
     });
 
     it('should handle an empty string change event', () => {
-      const {schemaForm, node} = createSchemaForm({
-        schema: {type: 'string'},
+      const { schemaForm, node } = createSchemaForm({
+        schema: { type: 'string' },
         formData: 'x',
       });
 
@@ -84,7 +80,7 @@ describe('StringField', () => {
     });
 
     it('should fill field with data', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
         },
@@ -95,7 +91,7 @@ describe('StringField', () => {
     });
 
     it('should render the input with the expected id', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
         },
@@ -107,7 +103,7 @@ describe('StringField', () => {
 
   describe('select input', () => {
     it('should render a string field', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -118,7 +114,7 @@ describe('StringField', () => {
     });
 
     it('should render a string field with a label', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -126,12 +122,11 @@ describe('StringField', () => {
         },
       });
 
-      expect(node.querySelector('.field .control-label')!.textContent!.trim())
-        .toEqual('foo');
+      expect(node.querySelector('.field .control-label')!.textContent!.trim()).toEqual('foo');
     });
 
     it('should render empty option', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -142,7 +137,7 @@ describe('StringField', () => {
     });
 
     it('should assign a default value', () => {
-      const {schemaForm} = createSchemaForm({
+      const { schemaForm } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -154,7 +149,7 @@ describe('StringField', () => {
     });
 
     it('should reflect the change into the form state', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -168,24 +163,23 @@ describe('StringField', () => {
       expect(schemaForm.formData).toEqual('foo');
     });
 
-    it('should reflect undefined into form state if empty option selected',
-       () => {
-         const {schemaForm, node} = createSchemaForm({
-           schema: {
-             type: 'string',
-             enum: ['foo', 'bar'],
-           },
-         });
+    it('should reflect undefined into form state if empty option selected', () => {
+      const { schemaForm, node } = createSchemaForm({
+        schema: {
+          type: 'string',
+          enum: ['foo', 'bar'],
+        },
+      });
 
-         const select = node.querySelector('select')!;
-         select.value = '';
-         fireEvent(select, 'change');
+      const select = node.querySelector('select')!;
+      select.value = '';
+      fireEvent(select, 'change');
 
-         expect(typeof schemaForm.formData).toEqual('undefined');
-       });
+      expect(typeof schemaForm.formData).toEqual('undefined');
+    });
 
     it('should reflect the change into the dom', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -200,7 +194,7 @@ describe('StringField', () => {
     });
 
     it('should reflect undefined value into the dom as empty option', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -215,7 +209,7 @@ describe('StringField', () => {
     });
 
     it('should fill field with data', () => {
-      const {schemaForm} = createSchemaForm({
+      const { schemaForm } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['foo', 'bar'],
@@ -227,7 +221,7 @@ describe('StringField', () => {
     });
 
     it('should render the select with the expected id', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'string',
           enum: ['a', 'b'],

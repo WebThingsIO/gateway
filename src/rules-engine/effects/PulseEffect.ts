@@ -6,9 +6,9 @@
 
 import assert from 'assert';
 import PropertyEffect from './PropertyEffect';
-import {SetEffectDescription} from './SetEffect';
-import {PropertyValue} from 'gateway-addon/lib/schema';
-import {State} from '../State';
+import { SetEffectDescription } from './SetEffect';
+import { PropertyValue } from 'gateway-addon/lib/schema';
+import { State } from '../State';
 
 export type PulseEffectDescription = SetEffectDescription;
 
@@ -30,12 +30,15 @@ export default class PulseEffect extends PropertyEffect {
     super(desc);
     this.value = desc.value;
     if (typeof this.value === 'number') {
-      assert(this.property.getType() === 'number' ||
-             this.property.getType() === 'integer',
-             'setpoint and property must be compatible types');
+      assert(
+        this.property.getType() === 'number' || this.property.getType() === 'integer',
+        'setpoint and property must be compatible types'
+      );
     } else {
-      assert(typeof this.value === this.property.getType(),
-             'setpoint and property must be same type');
+      assert(
+        typeof this.value === this.property.getType(),
+        'setpoint and property must be same type'
+      );
     }
 
     this.on = false;
@@ -46,10 +49,7 @@ export default class PulseEffect extends PropertyEffect {
    * @return {EffectDescription}
    */
   toDescription(): PulseEffectDescription {
-    return Object.assign(
-      super.toDescription(),
-      {value: this.value}
-    );
+    return Object.assign(super.toDescription(), { value: this.value });
   }
 
   /**

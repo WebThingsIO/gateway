@@ -74,8 +74,7 @@ class Log {
       this.yMargin = 30;
       this.scrollHeight = 30;
       this.yPadding = 30;
-      this.height = window.innerHeight - 96 - this.yMargin * 2 -
-        this.scrollHeight - this.yPadding;
+      this.height = window.innerHeight - 96 - this.yMargin * 2 - this.scrollHeight - this.yPadding;
     } else {
       this.yMargin = 20;
       this.height = 200;
@@ -104,11 +103,10 @@ class Log {
       this.infoContainer = document.createElement('a');
       // double-encode slashes to make page.js happy
       this.infoContainer.classList.add('logs-log-info');
-      const detailUrl =
-        `/logs/things/${
-          encodeURIComponent(this.thingId).replace(/%2F/g, '%252F')
-        }/properties/${
-          encodeURIComponent(this.propertyId).replace(/%2F/g, '%252F')}`;
+      const detailUrl = `/logs/things/${encodeURIComponent(this.thingId).replace(
+        /%2F/g,
+        '%252F'
+      )}/properties/${encodeURIComponent(this.propertyId).replace(/%2F/g, '%252F')}`;
       this.infoContainer.setAttribute('href', detailUrl);
 
       this.infoContainer.appendChild(this.icon);
@@ -132,20 +130,18 @@ class Log {
     this.graph.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const axesPath = this.makePath([
-      {x: this.xStart, y: this.yMargin},
-      {x: this.xStart, y: this.height - this.yMargin},
-      {x: this.width - this.xMargin, y: this.height - this.yMargin},
+      { x: this.xStart, y: this.yMargin },
+      { x: this.xStart, y: this.height - this.yMargin },
+      { x: this.width - this.xMargin, y: this.height - this.yMargin },
     ]);
     axesPath.classList.add('logs-graph-axes');
     this.graph.appendChild(axesPath);
 
-    this.yAxisLabel = this.makeText('', this.xStart - 5,
-                                    this.height / 2, 'end', 'middle');
+    this.yAxisLabel = this.makeText('', this.xStart - 5, this.height / 2, 'end', 'middle');
     this.yAxisLabel.classList.add('logs-graph-label');
     this.graph.appendChild(this.yAxisLabel);
 
-    this.progress = document.createElementNS('http://www.w3.org/2000/svg',
-                                             'rect');
+    this.progress = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.progress.classList.add('logs-graph-progress');
     this.progress.setAttribute('x', this.xStart);
     this.progress.setAttribute('y', this.yMargin);
@@ -155,9 +151,7 @@ class Log {
 
     this.graph.appendChild(this.progress);
 
-    this.selectionHighlight =
-      document.createElementNS('http://www.w3.org/2000/svg',
-                               'rect');
+    this.selectionHighlight = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.selectionHighlight.classList.add('logs-graph-selection-highlight');
     this.selectionHighlight.setAttribute('x', this.xStart);
     this.selectionHighlight.setAttribute('y', this.yMargin);
@@ -190,10 +184,10 @@ class Log {
     const oneDayMs = 24 * oneHourMs;
     const oneWeekMs = 7 * oneDayMs;
     const options = [
-      {name: fluent.getMessage('minute'), value: oneMinuteMs},
-      {name: fluent.getMessage('hour'), value: oneHourMs},
-      {name: fluent.getMessage('day'), value: oneDayMs},
-      {name: fluent.getMessage('week'), value: oneWeekMs},
+      { name: fluent.getMessage('minute'), value: oneMinuteMs },
+      { name: fluent.getMessage('hour'), value: oneHourMs },
+      { name: fluent.getMessage('day'), value: oneDayMs },
+      { name: fluent.getMessage('week'), value: oneWeekMs },
     ];
     const currentValue = this.end.getTime() - this.start.getTime();
     let anySelected = false;
@@ -227,13 +221,9 @@ class Log {
 
   makePath(points, close) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    const text = [
-      'M', points[0].x.toFixed(1),
-      points[0].y.toFixed(1),
-    ];
+    const text = ['M', points[0].x.toFixed(1), points[0].y.toFixed(1)];
     for (let i = 1; i < points.length; i++) {
-      text.push('L', points[i].x.toFixed(1),
-                points[i].y.toFixed(1));
+      text.push('L', points[i].x.toFixed(1), points[i].y.toFixed(1));
     }
     if (close) {
       text.push('Z');
@@ -261,8 +251,10 @@ class Log {
     }
     const thingName = thing.title;
     this.property = this.thingModel.propertyDescriptions[this.propertyId];
-    const propertyName = (this.property && this.property.title) ||
-      (this.propertyId && Utils.capitalize(this.propertyId)) || '';
+    const propertyName =
+      (this.property && this.property.title) ||
+      (this.propertyId && Utils.capitalize(this.propertyId)) ||
+      '';
     const formattedName = `${thingName} ${propertyName}`;
     if (this.soloView) {
       document.querySelector('.logs-header').textContent = formattedName;
@@ -280,8 +272,7 @@ class Log {
       this.icon.style.backgroundImage = `url(${iconUrl})`;
     }
 
-    const propertyUnit =
-      Units.convert(0, (this.property && this.property.unit) || '').unit;
+    const propertyUnit = Units.convert(0, (this.property && this.property.unit) || '').unit;
     this.yAxisLabel.textContent = Units.nameToAbbreviation(propertyUnit);
 
     this.thingModel.subscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);
@@ -304,8 +295,8 @@ class Log {
     // update progress bar
     if (this.loading && this.rawPoints.length > 2) {
       const lastPoint = this.rawPoints[this.rawPoints.length - 1];
-      let fractionDone = (lastPoint.time - this.start.getTime()) /
-        (this.end.getTime() - this.start.getTime());
+      let fractionDone =
+        (lastPoint.time - this.start.getTime()) / (this.end.getTime() - this.start.getTime());
       fractionDone = Math.min(fractionDone, 1);
       const width = Math.floor((fractionDone * 0.95 + 0.05) * this.graphWidth);
       if (width > this.progressWidth) {
@@ -330,8 +321,7 @@ class Log {
     }
 
     if (this.rawPoints.length === 0) {
-      if (this.property.hasOwnProperty('minimum') &&
-          this.property.hasOwnProperty('maximum')) {
+      if (this.property.hasOwnProperty('minimum') && this.property.hasOwnProperty('maximum')) {
         return {
           min: Units.convert(this.property.minimum, this.property.unit).value,
           max: Units.convert(this.property.maximum, this.property.unit).value,
@@ -356,17 +346,12 @@ class Log {
       }
     }
 
-    if (this.property.hasOwnProperty('minimum') &&
-        this.property.hasOwnProperty('maximum')) {
-      const propMin =
-        Units.convert(this.property.minimum, this.property.unit).value;
-      const propMax =
-        Units.convert(this.property.maximum, this.property.unit).value;
+    if (this.property.hasOwnProperty('minimum') && this.property.hasOwnProperty('maximum')) {
+      const propMin = Units.convert(this.property.minimum, this.property.unit).value;
+      const propMax = Units.convert(this.property.maximum, this.property.unit).value;
       // If the description's min and max aren't ridiculously out of proportion
       // use them since they likely have good properties
-      if ((propMax - propMin) / (max - min + 0.001) < 3 &&
-          min >= propMin &&
-          max <= propMax) {
+      if ((propMax - propMin) / (max - min + 0.001) < 3 && min >= propMin && max <= propMax) {
         return {
           min: propMin,
           max: propMax,
@@ -392,21 +377,21 @@ class Log {
   timeToX(time, customStartTime, customEndTime) {
     const startTime = customStartTime || this.start.getTime();
     const endTime = customEndTime || this.end.getTime();
-    return (time - startTime) / (endTime - startTime) * this.graphWidth +
-      this.xStart;
+    return ((time - startTime) / (endTime - startTime)) * this.graphWidth + this.xStart;
   }
 
   xToTime(x, customStartTime, customEndTime) {
     const startTime = customStartTime || this.start.getTime();
     const endTime = customEndTime || this.end.getTime();
-    return (x - this.xStart) / this.graphWidth * (endTime - startTime) +
-      startTime;
+    return ((x - this.xStart) / this.graphWidth) * (endTime - startTime) + startTime;
   }
 
   valueToY(value) {
-    return this.height - this.yMargin -
-      (value - this.valueMin) /
-      (this.valueMax - this.valueMin) * this.graphHeight;
+    return (
+      this.height -
+      this.yMargin -
+      ((value - this.valueMin) / (this.valueMax - this.valueMin)) * this.graphHeight
+    );
   }
 
   interpolate(pointA, pointB, x) {
@@ -434,11 +419,12 @@ class Log {
     // scientific notation)
     const lowestPowerOf10ToPreserve = Math.pow(
       10,
-      Math.ceil(Math.log(this.valueMax - this.valueMin) / Math.LN10) - 3);
-    this.valueMax = Math.ceil(this.valueMax / lowestPowerOf10ToPreserve) *
-      lowestPowerOf10ToPreserve;
-    this.valueMin = Math.floor(this.valueMin / lowestPowerOf10ToPreserve) *
-      lowestPowerOf10ToPreserve;
+      Math.ceil(Math.log(this.valueMax - this.valueMin) / Math.LN10) - 3
+    );
+    this.valueMax =
+      Math.ceil(this.valueMax / lowestPowerOf10ToPreserve) * lowestPowerOf10ToPreserve;
+    this.valueMin =
+      Math.floor(this.valueMin / lowestPowerOf10ToPreserve) * lowestPowerOf10ToPreserve;
   }
 
   redraw() {
@@ -494,8 +480,7 @@ class Log {
       if (points.length > 0) {
         // Add a point so that the value steps down instead of gradually
         // decreasing
-        if (this.property.type === 'boolean' ||
-            this.property.type === 'integer') {
+        if (this.property.type === 'boolean' || this.property.type === 'integer') {
           points.push({
             x,
             y: points[points.length - 1].y,
@@ -503,7 +488,7 @@ class Log {
         }
       }
 
-      points.push({x, y});
+      points.push({ x, y });
     }
 
     // Extend to left
@@ -512,20 +497,21 @@ class Log {
       y: this.valueToY(this.rawPoints[leftIndex].value),
     };
 
-    if (this.property.type === 'boolean' ||
-        this.property.type === 'integer') {
+    if (this.property.type === 'boolean' || this.property.type === 'integer') {
       // Add a point so that the value steps down instead of gradually
       // decreasing
-      points.unshift({
-        x: this.xStart,
-        y: leftPoint.y,
-      }, {
-        x: points.length > 0 ? points[0].x : this.xStart + this.graphWidth,
-        y: leftPoint.y,
-      });
+      points.unshift(
+        {
+          x: this.xStart,
+          y: leftPoint.y,
+        },
+        {
+          x: points.length > 0 ? points[0].x : this.xStart + this.graphWidth,
+          y: leftPoint.y,
+        }
+      );
     } else if (points.length > 0) {
-      const borderPoint = this.interpolate(leftPoint, points[0],
-                                           this.xStart);
+      const borderPoint = this.interpolate(leftPoint, points[0], this.xStart);
       points.unshift(borderPoint);
     }
 
@@ -536,30 +522,34 @@ class Log {
       y: this.valueToY(this.rawPoints[rightIndex].value),
     };
 
-    if (this.property.type === 'boolean' ||
-        this.property.type === 'integer') {
+    if (this.property.type === 'boolean' || this.property.type === 'integer') {
       // Add a point so that the value steps down instead of gradually
       // decreasing
       const lastPoint = points[points.length - 1];
-      points.push({
-        x: lastPoint.x,
-        y: lastPoint.y,
-      }, {
-        x: this.xStart + this.graphWidth,
-        y: lastPoint.y,
-      });
+      points.push(
+        {
+          x: lastPoint.x,
+          y: lastPoint.y,
+        },
+        {
+          x: this.xStart + this.graphWidth,
+          y: lastPoint.y,
+        }
+      );
     } else if (points.length > 0) {
-      const borderPoint = this.interpolate(points[points.length - 1],
-                                           rightPoint,
-                                           this.xStart + this.graphWidth);
+      const borderPoint = this.interpolate(
+        points[points.length - 1],
+        rightPoint,
+        this.xStart + this.graphWidth
+      );
       points.push(borderPoint);
     } else {
-      const borderLeftPoint = this.interpolate(leftPoint,
-                                               rightPoint,
-                                               this.xStart);
-      const borderRightPoint = this.interpolate(leftPoint,
-                                                rightPoint,
-                                                this.xStart + this.graphWidth);
+      const borderLeftPoint = this.interpolate(leftPoint, rightPoint, this.xStart);
+      const borderRightPoint = this.interpolate(
+        leftPoint,
+        rightPoint,
+        this.xStart + this.graphWidth
+      );
       points.push(borderLeftPoint, borderRightPoint);
     }
 
@@ -582,8 +572,7 @@ class Log {
     this.graph.appendChild(graphLine);
 
     if (!this.liveScrollFrameRequest) {
-      this.liveScrollFrameRequest =
-        window.requestAnimationFrame(this.liveScrollUpdate);
+      this.liveScrollFrameRequest = window.requestAnimationFrame(this.liveScrollUpdate);
     }
   }
 
@@ -610,7 +599,8 @@ class Log {
     } else {
       const places = Math.max(
         0,
-        2 + bonusPlaces - Math.log(this.valueMax - this.valueMin) / Math.LN10);
+        2 + bonusPlaces - Math.log(this.valueMax - this.valueMin) / Math.LN10
+      );
       labelText = value.toFixed(places);
     }
     return labelText;
@@ -626,9 +616,10 @@ class Log {
     this.graph.appendChild(this.yAxisLabel);
 
     if (this.property.type !== 'boolean') {
-      const incForTenTicks =
-        Math.pow(10, Math.floor(Math.log(this.valueMax - this.valueMin) /
-                                Math.LN10) - 1);
+      const incForTenTicks = Math.pow(
+        10,
+        Math.floor(Math.log(this.valueMax - this.valueMin) / Math.LN10) - 1
+      );
       let value = this.valueMin + incForTenTicks;
       let i = 1;
       while (value < this.valueMax) {
@@ -639,8 +630,8 @@ class Log {
         }
         // Make a tick
         const tick = this.makePath([
-          {x: this.xStart, y},
-          {x: this.xStart + tickLength, y},
+          { x: this.xStart, y },
+          { x: this.xStart + tickLength, y },
         ]);
         tick.classList.add('logs-graph-tick');
         this.graph.appendChild(tick);
@@ -652,21 +643,29 @@ class Log {
 
     // Make a final tick at valueMax, nudge it by 1 due to 2px width
     const tick = this.makePath([
-      {x: this.xStart - 1, y: this.valueToY(this.valueMax) - 1},
-      {x: this.xStart + 10, y: this.valueToY(this.valueMax) - 1},
+      { x: this.xStart - 1, y: this.valueToY(this.valueMax) - 1 },
+      { x: this.xStart + 10, y: this.valueToY(this.valueMax) - 1 },
     ]);
     tick.classList.add('logs-graph-tick', 'logs-graph-tick-big');
     this.graph.appendChild(tick);
 
-    let label = this.makeText(this.valueToLabel(this.valueMin),
-                              this.xStart - 5,
-                              this.valueToY(this.valueMin), 'end', 'middle');
+    let label = this.makeText(
+      this.valueToLabel(this.valueMin),
+      this.xStart - 5,
+      this.valueToY(this.valueMin),
+      'end',
+      'middle'
+    );
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
 
-    label = this.makeText(this.valueToLabel(this.valueMax),
-                          this.xStart - 5,
-                          this.valueToY(this.valueMax), 'end', 'middle');
+    label = this.makeText(
+      this.valueToLabel(this.valueMax),
+      this.xStart - 5,
+      this.valueToY(this.valueMax),
+      'end',
+      'middle'
+    );
     label.classList.add('logs-graph-label');
     this.graph.appendChild(label);
   }
@@ -678,8 +677,14 @@ class Log {
     const oneDayMs = 24 * oneHourMs;
 
     const reasonableTicks = [
-      oneDayMs, 12 * oneHourMs, oneHourMs, 15 * oneMinuteMs, 5 * oneMinuteMs,
-      oneMinuteMs, 10 * oneSecondMs, oneSecondMs,
+      oneDayMs,
+      12 * oneHourMs,
+      oneHourMs,
+      15 * oneMinuteMs,
+      5 * oneMinuteMs,
+      oneMinuteMs,
+      10 * oneSecondMs,
+      oneSecondMs,
     ];
 
     let i;
@@ -696,8 +701,7 @@ class Log {
 
     const tickWidth = this.timeToX(tickIncrement) - this.timeToX(0);
 
-    const flooredStart = this.floorDate(
-      new Date(this.start.getTime())).getTime();
+    const flooredStart = this.floorDate(new Date(this.start.getTime())).getTime();
     let time = flooredStart;
     while (time < this.end.getTime()) {
       if (time > this.start.getTime()) {
@@ -706,23 +710,21 @@ class Log {
         if ((time - flooredStart) % bigTickIncrement === 0) {
           // Big label of date
           const text = this.timeToLabel(time);
-          const label = this.makeText(text, x, this.height - this.yMargin + 2,
-                                      'middle', 'hanging');
+          const label = this.makeText(text, x, this.height - this.yMargin + 2, 'middle', 'hanging');
           label.classList.add('logs-graph-label');
           this.graph.appendChild(label);
           tickHeight *= 2;
         } else if (tickWidth > 48) {
           // Big label if the small ticks are wider than expected
           const text = this.timeToLabel(time);
-          const label = this.makeText(text, x, this.height - this.yMargin + 2,
-                                      'middle', 'hanging');
+          const label = this.makeText(text, x, this.height - this.yMargin + 2, 'middle', 'hanging');
           label.classList.add('logs-graph-label');
           this.graph.appendChild(label);
         }
         // Make a tick
         const tick = this.makePath([
-          {x, y: this.height - this.yMargin},
-          {x, y: this.height - this.yMargin - tickHeight},
+          { x, y: this.height - this.yMargin },
+          { x, y: this.height - this.yMargin - tickHeight },
         ]);
         tick.classList.add('logs-graph-tick');
         this.graph.appendChild(tick);
@@ -736,8 +738,7 @@ class Log {
     const barHeight = 16;
     const barY = this.height + this.scrollHeight / 2 - barHeight / 2;
 
-    this.scrollBar = document.createElementNS('http://www.w3.org/2000/svg',
-                                              'rect');
+    this.scrollBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.scrollBar.classList.add('logs-scroll-bar');
     this.scrollBar.setAttribute('x', this.xStart);
     this.scrollBar.setAttribute('y', barY);
@@ -745,8 +746,7 @@ class Log {
     this.scrollBar.setAttribute('height', barHeight);
     this.graph.appendChild(this.scrollBar);
 
-    this.scrollControl =
-      document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    this.scrollControl = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     this.scrollControl.classList.add('logs-scroll-control');
     this.scrollControl.setAttribute('y', barY);
     this.scrollControl.setAttribute('height', barHeight);
@@ -757,32 +757,43 @@ class Log {
     const margin = 8;
     const barCenter = barY + barHeight / 2;
 
-    this.scrollButtonLeft = this.makePath([
-      {x: this.xStart - buttonScale - margin, y: barCenter},
-      {x: this.xStart - margin, y: barCenter - buttonScale * equiTri},
-      {x: this.xStart - margin, y: barCenter + buttonScale * equiTri},
-    ], true);
+    this.scrollButtonLeft = this.makePath(
+      [
+        { x: this.xStart - buttonScale - margin, y: barCenter },
+        { x: this.xStart - margin, y: barCenter - buttonScale * equiTri },
+        { x: this.xStart - margin, y: barCenter + buttonScale * equiTri },
+      ],
+      true
+    );
     this.scrollButtonLeft.classList.add('logs-scroll-button');
     this.scrollButtonLeft.addEventListener('click', this.scrollLeft);
     this.graph.appendChild(this.scrollButtonLeft);
 
     const barEnd = this.xStart + this.graphWidth + margin;
-    this.scrollButtonRight = this.makePath([
-      {x: barEnd + buttonScale, y: barCenter},
-      {x: barEnd, y: barCenter - buttonScale * equiTri},
-      {x: barEnd, y: barCenter + buttonScale * equiTri},
-    ], true);
+    this.scrollButtonRight = this.makePath(
+      [
+        { x: barEnd + buttonScale, y: barCenter },
+        { x: barEnd, y: barCenter - buttonScale * equiTri },
+        { x: barEnd, y: barCenter + buttonScale * equiTri },
+      ],
+      true
+    );
     this.scrollButtonRight.classList.add('logs-scroll-button');
     this.scrollButtonRight.addEventListener('click', this.scrollRight);
     this.graph.appendChild(this.scrollButtonRight);
   }
 
   updateScrollBar() {
-    let controlStart = this.timeToX(this.start.getTime(),
-                                    this.logStart.getTime(),
-                                    this.logEnd.getTime());
-    let controlEnd = this.timeToX(this.end.getTime(), this.logStart.getTime(),
-                                  this.logEnd.getTime());
+    let controlStart = this.timeToX(
+      this.start.getTime(),
+      this.logStart.getTime(),
+      this.logEnd.getTime()
+    );
+    let controlEnd = this.timeToX(
+      this.end.getTime(),
+      this.logStart.getTime(),
+      this.logEnd.getTime()
+    );
 
     // Make sure control is wide enough to tap
     const minWidth = 16;
@@ -837,34 +848,20 @@ class Log {
     if (this.property.type === 'boolean') {
       switch (this.property['@type']) {
         case 'OnOffProperty':
-          return value ?
-            fluent.getMessage('on') :
-            fluent.getMessage('off');
+          return value ? fluent.getMessage('on') : fluent.getMessage('off');
         case 'MotionProperty':
-          return value ?
-            fluent.getMessage('motion') :
-            fluent.getMessage('no-motion');
+          return value ? fluent.getMessage('motion') : fluent.getMessage('no-motion');
         case 'OpenProperty':
-          return value ?
-            fluent.getMessage('open') :
-            fluent.getMessage('closed');
+          return value ? fluent.getMessage('open') : fluent.getMessage('closed');
         case 'LeakProperty':
-          return value ?
-            fluent.getMessage('leak') :
-            fluent.getMessage('dry');
+          return value ? fluent.getMessage('leak') : fluent.getMessage('dry');
         case 'SmokeProperty':
-          return value ?
-            fluent.getMessage('smoke') :
-            fluent.getMessage('ok');
+          return value ? fluent.getMessage('smoke') : fluent.getMessage('ok');
         case 'PushedProperty':
-          return value ?
-            fluent.getMessage('pushed') :
-            fluent.getMessage('not-pushed');
+          return value ? fluent.getMessage('pushed') : fluent.getMessage('not-pushed');
         case 'BooleanProperty':
         default:
-          return value ?
-            fluent.getMessage('true') :
-            fluent.getMessage('false');
+          return value ? fluent.getMessage('true') : fluent.getMessage('false');
       }
     }
     return `${value}`;
@@ -916,8 +913,10 @@ class Log {
       if (i < 0 || i > this.rawPoints.length - 1) {
         continue;
       }
-      if (this.rawPoints[i].time < this.start.getTime() ||
-          this.rawPoints[i].time > this.end.getTime()) {
+      if (
+        this.rawPoints[i].time < this.start.getTime() ||
+        this.rawPoints[i].time > this.end.getTime()
+      ) {
         continue;
       }
       const pointX = this.timeToX(this.rawPoints[i].time);
@@ -1002,17 +1001,18 @@ class Log {
     this.convertTouchEvent(event);
 
     // Restore a drag interrupted by the pointer leaving
-    if (event.buttons === LEFT_MOUSE_BUTTON &&
-        this.prevPointerState.action &&
-        !this.pointerState.action) {
+    if (
+      event.buttons === LEFT_MOUSE_BUTTON &&
+      this.prevPointerState.action &&
+      !this.pointerState.action
+    ) {
       this.setPointerState(this.prevPointerState);
     }
     if (this.pointerState.action === DRAGGING) {
       this.drawHighlight(event.clientX);
     } else if (this.pointerState.action === SCROLLING) {
       let newX = event.clientX - this.pointerState.scrollOffset;
-      const scrollControlWidth =
-        parseFloat(this.scrollControl.getAttribute('width'));
+      const scrollControlWidth = parseFloat(this.scrollControl.getAttribute('width'));
       const maxX = this.xStart + this.graphWidth - scrollControlWidth;
       if (newX < this.xStart) {
         newX = this.xStart;
@@ -1059,9 +1059,7 @@ class Log {
     this.tooltip.style.transform = `translate(${x}px,${y}px)`;
     const valueLabel = this.valueToLabel(point.value, 2);
 
-    const unit = Units.nameToAbbreviation(
-      Units.convert(0, this.property.unit || '').unit
-    );
+    const unit = Units.nameToAbbreviation(Units.convert(0, this.property.unit || '').unit);
     this.tooltipValue.textContent = `${valueLabel} ${unit}`;
 
     // const dateParts = new Date(point.time).toDateString().split(' ');
@@ -1070,8 +1068,7 @@ class Log {
     this.tooltipDate.textContent = `${dateParts[0]}`;
 
     if (!this.pointHighlight) {
-      this.pointHighlight =
-        document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      this.pointHighlight = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       this.pointHighlight.classList.add('logs-graph-point-highlight');
       this.pointHighlight.setAttribute('r', 3);
       this.graph.appendChild(this.pointHighlight);
@@ -1138,8 +1135,9 @@ class Log {
     const windowWidth = this.end.getTime() - this.start.getTime();
     const logMidStart = this.logStart.getTime() + windowWidth / 2;
     const logMidEnd = this.logEnd.getTime() - windowWidth / 2;
-    const controlTime = (controlCenter - controlXStart) / controlGraphWidth *
-      (logMidEnd - logMidStart) + logMidStart;
+    const controlTime =
+      ((controlCenter - controlXStart) / controlGraphWidth) * (logMidEnd - logMidStart) +
+      logMidStart;
 
     const centerTime = this.start.getTime() + windowWidth / 2;
     const delta = controlTime - centerTime;
@@ -1155,8 +1153,7 @@ class Log {
   }
 
   onPropertyStatus(properties) {
-    if (this.loading || !this.property ||
-        !properties.hasOwnProperty(this.propertyId)) {
+    if (this.loading || !this.property || !properties.hasOwnProperty(this.propertyId)) {
       return;
     }
     const lastPoint = this.rawPoints[this.rawPoints.length - 1];
@@ -1190,8 +1187,7 @@ class Log {
     const logEndX = this.timeToX(this.logEnd.getTime());
     if (nowX - logEndX < 1) {
       // Must move window forwards by one pixel
-      this.liveScrollFrameRequest =
-        window.requestAnimationFrame(this.liveScrollUpdate);
+      this.liveScrollFrameRequest = window.requestAnimationFrame(this.liveScrollUpdate);
       return;
     }
     const closeToWindow = (this.end.getTime() - this.start.getTime()) / 10;
@@ -1204,8 +1200,7 @@ class Log {
     }
     this.logEnd.setTime(now);
 
-    this.liveScrollFrameRequest =
-      window.requestAnimationFrame(this.liveScrollUpdate);
+    this.liveScrollFrameRequest = window.requestAnimationFrame(this.liveScrollUpdate);
 
     if (redraw) {
       this.redraw();
@@ -1219,8 +1214,7 @@ class Log {
 
     // this model can get in a weird state if the thing is removed
     if (this.thingModel) {
-      this.thingModel.unsubscribe(Constants.PROPERTY_STATUS,
-                                  this.onPropertyStatus);
+      this.thingModel.unsubscribe(Constants.PROPERTY_STATUS, this.onPropertyStatus);
     }
 
     if (this.liveScrollFrameRequest) {

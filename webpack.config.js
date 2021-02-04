@@ -2,14 +2,14 @@
  * Wepback configuration for the node server.
  */
 
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ImageminPlugin = require('imagemin-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
-const {v1: uuidv1} = require('uuid');
+const { v1: uuidv1 } = require('uuid');
 const webpack = require('webpack');
 
 const pluginsWeb = [
@@ -43,12 +43,7 @@ const pluginsWeb = [
     test: /\.(jpe?g|png|gif|svg)$/i,
     name: '[path][name].[ext]',
     imageminOptions: {
-      plugins: [
-        'gifsicle',
-        'jpegtran',
-        'optipng',
-        'svgo',
-      ],
+      plugins: ['gifsicle', 'jpegtran', 'optipng', 'svgo'],
     },
   }),
   new webpack.SourceMapDevToolPlugin({
@@ -108,10 +103,7 @@ const webpackWeb = {
     'create-user.js': ['./static/js/create-user.js'],
     'login.js': ['./static/js/check-user.js', './static/js/login.js'],
     'authorize.js': ['./static/js/check-user.js', './static/js/authorize.js'],
-    'local-token.js': [
-      './static/js/check-user.js',
-      './static/js/local-token.js',
-    ],
+    'local-token.js': ['./static/js/check-user.js', './static/js/local-token.js'],
     'setup-subdomain.js': ['./static/js/setup-subdomain.js'],
     'wifi-setup.js': ['./static/js/wifi-setup.js'],
     buildCss: [
@@ -171,19 +163,22 @@ const webpackWeb = {
               babelrc: false,
               sourceType: 'script',
               presets: [
-                ['@babel/preset-env', {
-                  modules: 'commonjs',
-                  targets: {
-                    chrome: '43',
-                    opera: '29',
-                    edge: '14',
-                    firefox: '52',
-                    safari: '10.1',
-                    ios: '10',
+                [
+                  '@babel/preset-env',
+                  {
+                    modules: 'commonjs',
+                    targets: {
+                      chrome: '43',
+                      opera: '29',
+                      edge: '14',
+                      firefox: '52',
+                      safari: '10.1',
+                      ios: '10',
+                    },
+                    useBuiltIns: 'usage',
+                    corejs: 3,
                   },
-                  useBuiltIns: 'usage',
-                  corejs: 3,
-                }],
+                ],
               ],
               plugins: ['@babel/plugin-proposal-object-rest-spread'],
             },
@@ -234,8 +229,7 @@ const webpackWeb = {
         ],
       },
       {
-        test:
-          /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        test: /(?!\/uploads\/floorplan)\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         include: path.resolve(__dirname, 'static'),
         use: [
           {
@@ -267,10 +261,10 @@ const pluginsSW = [
     banner: `const VERSION = '${uuidv1()}';`,
     raw: true,
   }),
-  new ExtractTextPlugin(
-    {filename: 'service-worker.js',
-     allChunks: true}
-  ),
+  new ExtractTextPlugin({
+    filename: 'service-worker.js',
+    allChunks: true,
+  }),
 ];
 
 const webpackSW = {
@@ -303,7 +297,4 @@ const webpackSW = {
   devtool: false,
 };
 
-module.exports = [
-  webpackWeb,
-  webpackSW,
-];
+module.exports = [webpackWeb, webpackSW];

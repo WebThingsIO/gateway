@@ -59,12 +59,10 @@ class User {
   render() {
     this.container.insertAdjacentHTML('beforeend', this.view());
 
-    const removeButton = document.getElementById(
-      `user-remove-${Utils.escapeHtml(this.id)}`);
+    const removeButton = document.getElementById(`user-remove-${Utils.escapeHtml(this.id)}`);
     removeButton.addEventListener('click', this.handleRemove.bind(this));
 
-    const editButton = document.getElementById(
-      `user-edit-${Utils.escapeHtml(this.id)}`);
+    const editButton = document.getElementById(`user-edit-${Utils.escapeHtml(this.id)}`);
     editButton.addEventListener('click', this.handleEdit.bind(this));
   }
 
@@ -77,8 +75,7 @@ class User {
 
     API.deleteUser(this.id)
       .then(() => {
-        const el = document.getElementById(
-          `user-item-${Utils.escapeHtml(this.id)}`);
+        const el = document.getElementById(`user-item-${Utils.escapeHtml(this.id)}`);
         el.parentNode.removeChild(el);
 
         if (this.loggedIn) {

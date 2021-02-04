@@ -22,7 +22,7 @@ import * as Utils from '../utils';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type FieldClass = {
-  new(
+  new (
     schema: Record<string, unknown>,
     formData: any,
     idSchema: Record<string, unknown>,
@@ -57,18 +57,18 @@ export default class SchemaField {
 
   private retrievedSchema: Record<string, unknown>;
 
-  constructor(schema: Record<string, unknown>,
-              formData: unknown,
-              idSchema: Record<string, unknown>,
-              name: string | null,
-              definitions: Record<string, unknown>,
-              onChange: ((value: unknown) => void) | null = null,
-              required = false,
-              disabled = false,
-              readOnly = false) {
-    this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
-                                                      definitions,
-                                                      formData);
+  constructor(
+    schema: Record<string, unknown>,
+    formData: unknown,
+    idSchema: Record<string, unknown>,
+    name: string | null,
+    definitions: Record<string, unknown>,
+    onChange: ((value: unknown) => void) | null = null,
+    required = false,
+    disabled = false,
+    readOnly = false
+  ) {
+    this.retrievedSchema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.schema = schema;
     this.formData = formData;
     this.idSchema = idSchema;
@@ -90,23 +90,17 @@ export default class SchemaField {
       string: StringField,
     };
 
-    const field = FIELD_TYPES[<string> this.retrievedSchema.type];
+    const field = FIELD_TYPES[<string>this.retrievedSchema.type];
     return field ?? UnsupportedField;
   }
 
   render(): HTMLDivElement {
     const fieldType = this.getFieldType();
     const type = this.retrievedSchema.type;
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
-    const description = <string> this.retrievedSchema.description;
-    const classNames = [
-      'form-group',
-      'field',
-      `field-${type}`,
-    ]
-      .join(' ')
-      .trim();
-    let label = <string> this.retrievedSchema.title || this.name;
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
+    const descr = <string>this.retrievedSchema.description;
+    const classNames = ['form-group', 'field', `field-${type}`].join(' ').trim();
+    let label = <string>this.retrievedSchema.title || this.name;
     if (typeof label !== 'undefined' && label !== null) {
       label = Utils.escapeHtml(label);
       label = this.required ? label + SchemaUtils.REQUIRED_FIELD_SYMBOL : label;
@@ -115,8 +109,7 @@ export default class SchemaField {
     let displayLabel = true;
     let displayDescription = true;
     if (type === 'array') {
-      displayLabel = displayDescription =
-        SchemaUtils.isMultiSelect(this.schema, this.definitions);
+      displayLabel = displayDescription = SchemaUtils.isMultiSelect(this.schema, this.definitions);
     }
     if (type === 'object') {
       displayLabel = displayDescription = false;
@@ -125,14 +118,10 @@ export default class SchemaField {
     const field = document.createElement('div');
     field.className = classNames;
     field.innerHTML =
-      (displayLabel && label ?
-        `<div id="${id}__label" class="control-label">${
-          label}</div>` :
-        '') +
-      (displayDescription && description ?
-        `<p id="${id}__description" class="field-description">${
-          Utils.escapeHtml(description)}</p>` :
-        '');
+      (displayLabel && label ? `<div id="${id}__label" class="control-label">${label}</div>` : '') +
+      (displayDescription && descr
+        ? `<p id="${id}__description" class="field-description">${Utils.escapeHtml(descr)}</p>`
+        : '');
 
     const child = new fieldType(
       this.schema,

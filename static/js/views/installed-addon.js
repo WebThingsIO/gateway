@@ -30,8 +30,7 @@ class InstalledAddon {
     this.description = metadata.description;
     this.author = metadata.author;
     this.homepageUrl = metadata.homepage_url;
-    this.licenseUrl =
-      `/addons/${encodeURIComponent(this.id)}/license?jwt=${API.jwt}`;
+    this.licenseUrl = `/addons/${encodeURIComponent(this.id)}/license?jwt=${API.jwt}`;
     this.version = metadata.version;
     this.primaryType = metadata.primary_type;
     this.enabled = metadata.enabled;
@@ -115,23 +114,28 @@ class InstalledAddon {
     this.container.insertAdjacentHTML('beforeend', this.view());
 
     const configButton = document.getElementById(
-      `addon-config-${Utils.escapeHtmlForIdClass(this.id)}`);
+      `addon-config-${Utils.escapeHtmlForIdClass(this.id)}`
+    );
     configButton.addEventListener('click', this.handleConfig.bind(this));
 
     const updateButton = document.getElementById(
-      `addon-update-${Utils.escapeHtmlForIdClass(this.id)}`);
+      `addon-update-${Utils.escapeHtmlForIdClass(this.id)}`
+    );
     updateButton.addEventListener('click', this.handleUpdate.bind(this));
 
     const removeButton = document.getElementById(
-      `addon-remove-${Utils.escapeHtmlForIdClass(this.id)}`);
+      `addon-remove-${Utils.escapeHtmlForIdClass(this.id)}`
+    );
     removeButton.addEventListener('click', this.handleRemove.bind(this));
 
     const toggleButton = document.getElementById(
-      `addon-toggle-${Utils.escapeHtmlForIdClass(this.id)}`);
+      `addon-toggle-${Utils.escapeHtmlForIdClass(this.id)}`
+    );
     toggleButton.addEventListener('click', this.handleToggle.bind(this));
 
     const licenseButton = document.getElementById(
-      `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`);
+      `addon-license-${Utils.escapeHtmlForIdClass(this.id)}`
+    );
     licenseButton.addEventListener('click', this.handleLicense.bind(this));
   }
 
@@ -147,8 +151,7 @@ class InstalledAddon {
     this.updateVersion = version;
     this.updateChecksum = checksum;
 
-    const button = document.getElementById(
-      `addon-update-${Utils.escapeHtmlForIdClass(this.id)}`);
+    const button = document.getElementById(`addon-update-${Utils.escapeHtmlForIdClass(this.id)}`);
     button.classList.remove('hidden');
   }
 
@@ -165,8 +168,8 @@ class InstalledAddon {
   handleUpdate(e) {
     const controlDiv = e.target.parentNode;
     const versionDiv = document.querySelector(
-      `#addon-item-${Utils.escapeHtmlForIdClass(this.id)} ` +
-      '.addon-settings-version');
+      `#addon-item-${Utils.escapeHtmlForIdClass(this.id)} .addon-settings-version`
+    );
     const updating = document.createElement('span');
     updating.classList.add('addon-updating');
     updating.innerText = fluent.getMessage('addon-updating');
@@ -182,8 +185,7 @@ class InstalledAddon {
 
         // If this add-on is a UI extension, reload the page to pick up the
         // changes
-        if (settings.content_scripts && settings.content_scripts.length > 0 &&
-            settings.enabled) {
+        if (settings.content_scripts && settings.content_scripts.length > 0 && settings.enabled) {
           window.location.reload();
         }
       })
@@ -202,8 +204,7 @@ class InstalledAddon {
 
     API.uninstallAddon(this.id)
       .then(() => {
-        const el = document.getElementById(
-          `addon-item-${Utils.escapeHtmlForIdClass(this.id)}`);
+        const el = document.getElementById(`addon-item-${Utils.escapeHtmlForIdClass(this.id)}`);
         el.parentNode.removeChild(el);
         this.installedAddonsMap.delete(this.id);
         const addon = this.availableAddonsMap.get(this.id);
@@ -213,9 +214,11 @@ class InstalledAddon {
 
         // If this add-on is a UI extension, reload the page to pick up the
         // changes
-        if (this.metadata.content_scripts &&
-            this.metadata.content_scripts.length > 0 &&
-            this.enabled) {
+        if (
+          this.metadata.content_scripts &&
+          this.metadata.content_scripts.length > 0 &&
+          this.enabled
+        ) {
           window.location.reload();
         }
       })
@@ -279,13 +282,10 @@ class InstalledAddon {
           modalContainer.appendChild(modalFrame);
           document.body.appendChild(modalContainer);
           const modalCloseBtn = document.getElementById('modal-close-button');
-          modalCloseBtn.addEventListener(
-            'click',
-            () => {
-              modal = document.getElementById('media-modal');
-              modal.parentNode.removeChild(modal);
-            }
-          );
+          modalCloseBtn.addEventListener('click', () => {
+            modal = document.getElementById('media-modal');
+            modal.parentNode.removeChild(modal);
+          });
           fetch(licenseUrl)
             .then((response) => {
               return response.text();
@@ -294,14 +294,14 @@ class InstalledAddon {
               document.getElementById('media-modal-text').innerText = data;
             })
             .catch(() => {
-              document.getElementById('media-modal-text').innerText =
-                fluent.getMessage('failed-read-file');
+              document.getElementById('media-modal-text').innerText = fluent.getMessage(
+                'failed-read-file'
+              );
             });
         }
       });
     }
   }
-
 }
 
 module.exports = InstalledAddon;

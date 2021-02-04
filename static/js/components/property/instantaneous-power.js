@@ -11,9 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class InstantaneousPowerProperty extends NumericLabelProperty {
-}
+class InstantaneousPowerProperty extends NumericLabelProperty {}
 
-window.customElements.define('webthing-instantaneous-power-property',
-                             InstantaneousPowerProperty);
+window.customElements.define('webthing-instantaneous-power-property', InstantaneousPowerProperty);
 module.exports = InstantaneousPowerProperty;

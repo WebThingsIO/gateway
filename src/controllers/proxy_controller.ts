@@ -27,13 +27,10 @@ function build(): express.Router & WithProxyMethods {
     proxies.delete(thingId);
   }
 
-  const controller = Object.assign(
-    express.Router(),
-    {
-      addProxyServer,
-      removeProxyServer,
-    }
-  );
+  const controller = Object.assign(express.Router(), {
+    addProxyServer,
+    removeProxyServer,
+  });
 
   const proxy = Server.createProxyServer({
     changeOrigin: true,
@@ -55,7 +52,7 @@ function build(): express.Router & WithProxyMethods {
     }
 
     request.url = request.url.substring(thingId.length + 1);
-    proxy.web(request, response, {target: proxies.get(thingId)});
+    proxy.web(request, response, { target: proxies.get(thingId) });
   });
 
   return controller;

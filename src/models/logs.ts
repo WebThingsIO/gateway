@@ -1,12 +1,12 @@
 import config from 'config';
 import fs from 'fs';
 import path from 'path';
-import {verbose, Database as SQLiteDatabase, RunResult} from 'sqlite3';
+import { verbose, Database as SQLiteDatabase, RunResult } from 'sqlite3';
 import * as Constants from '../constants';
 import UserProfile from '../user-profile';
 import AddonManager from '../addon-manager';
-import {Property} from 'gateway-addon';
-import {PropertyValue} from 'gateway-addon/lib/schema';
+import { Property } from 'gateway-addon';
+import { PropertyValue } from 'gateway-addon/lib/schema';
 
 const sqlite3 = verbose();
 
@@ -43,14 +43,11 @@ class Logs {
   clear(): Promise<RunResult[]> {
     this.idToDescr = {};
     this.descrToId = {};
-    return Promise.all([
-      METRICS_NUMBER,
-      METRICS_BOOLEAN,
-      METRICS_OTHER,
-      'metricIds',
-    ].map((table) => {
-      return this.run(`DELETE FROM ${table}`);
-    }));
+    return Promise.all(
+      [METRICS_NUMBER, METRICS_BOOLEAN, METRICS_OTHER, 'metricIds'].map((table) => {
+        return this.run(`DELETE FROM ${table}`);
+      })
+    );
   }
 
   close(): void {
@@ -59,8 +56,7 @@ class Logs {
       this.db = null;
     }
 
-    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
-                                this._onPropertyChanged);
+    AddonManager.removeListener(Constants.PROPERTY_CHANGED, this._onPropertyChanged);
     clearInterval(this.clearOldMetricsInterval);
   }
 
@@ -141,7 +137,10 @@ class Logs {
     }
   }
 
-  propertyDescr(thingId: string, propId: string): {type: string, thing: string, property: string} {
+  propertyDescr(
+    thingId: string,
+    propId: string
+  ): { type: string; thing: string; property: string } {
     return {
       type: 'property',
       thing: thingId,
@@ -149,7 +148,7 @@ class Logs {
     };
   }
 
-  actionDescr(thingId: string, actionId: string): {type: string, thing: string, action: string} {
+  actionDescr(thingId: string, actionId: string): { type: string; thing: string; action: string } {
     return {
       type: 'action',
       thing: thingId,
@@ -157,7 +156,7 @@ class Logs {
     };
   }
 
-  eventDescr(thingId: string, eventId: string): {type: string, thing: string, event: string} {
+  eventDescr(thingId: string, eventId: string): { type: string; thing: string; event: string } {
     return {
       type: 'event',
       thing: thingId,
@@ -180,7 +179,7 @@ class Logs {
       maxAge
     );
     const id = result.lastID;
-    this.idToDescr[id] = Object.assign({maxAge}, rawDescr);
+    this.idToDescr[id] = Object.assign({ maxAge }, rawDescr);
     this.descrToId[descr] = id;
     return id;
   }
@@ -190,8 +189,11 @@ class Logs {
    * @param {unknown} rawValue
    * @param {Date} date
    */
-  async insertMetric(rawDescr: Record<string, unknown>, rawValue: unknown, date: Date):
-  Promise<void> {
+  async insertMetric(
+    rawDescr: Record<string, unknown>,
+    rawValue: unknown,
+    date: Date
+  ): Promise<void> {
     const descr = JSON.stringify(rawDescr);
     if (!this.descrToId.hasOwnProperty(descr)) {
       return;
@@ -213,12 +215,7 @@ class Logs {
         break;
     }
 
-    await this.run(
-      `INSERT INTO ${table} (id, date, value) VALUES (?, ?, ?)`,
-      id,
-      date,
-      value
-    );
+    await this.run(`INSERT INTO ${table} (id, date, value) VALUES (?, ?, ?)`, id, date, value);
   }
 
   /**
@@ -228,14 +225,11 @@ class Logs {
   async unregisterMetric(rawDescr: Record<string, unknown>): Promise<void> {
     const descr = JSON.stringify(rawDescr);
     const id = this.descrToId[descr];
-    await Promise.all([
-      'metricIds',
-      METRICS_NUMBER,
-      METRICS_BOOLEAN,
-      METRICS_OTHER,
-    ].map((table) => {
-      return this.run(`DELETE FROM ${table} WHERE id = ?`, id);
-    }));
+    await Promise.all(
+      ['metricIds', METRICS_NUMBER, METRICS_BOOLEAN, METRICS_OTHER].map((table) => {
+        return this.run(`DELETE FROM ${table} WHERE id = ?`, id);
+      })
+    );
     delete this.descrToId[descr];
     delete this.idToDescr[id];
   }
@@ -248,8 +242,13 @@ class Logs {
     });
   }
 
-  buildQuery(table: string, id: number | null, start: number | null, end: number | null,
-             limit: number | null): {query: string, params: number[]} {
+  buildQuery(
+    table: string,
+    id: number | null,
+    start: number | null,
+    end: number | null,
+    limit: number | null
+  ): { query: string; params: number[] } {
     const conditions = [];
     const params = [];
     if (typeof id === 'number') {
@@ -279,10 +278,15 @@ class Logs {
     };
   }
 
-  async loadMetrics(out: Record<string, unknown>, table: string,
-                    transformer: ((arg: unknown) => unknown) | null, id: number | null,
-                    start: number | null, end: number | null): Promise<void> {
-    const {query, params} = this.buildQuery(table, id, start, end, null);
+  async loadMetrics(
+    out: Record<string, unknown>,
+    table: string,
+    transformer: ((arg: unknown) => unknown) | null,
+    id: number | null,
+    start: number | null,
+    end: number | null
+  ): Promise<void> {
+    const { query, params } = this.buildQuery(table, id, start, end, null);
     const rows = await this.all(query, ...params);
 
     for (const row of rows) {
@@ -294,13 +298,15 @@ class Logs {
       if (!out.hasOwnProperty(<string>descr.thing)) {
         out[<string>descr.thing] = {};
       }
-      // eslint-disable-next-line max-len
-      if (!(<Record<string, unknown>>out[<string>descr.thing]).hasOwnProperty(<string>descr.property)) {
+      if (
+        !(<Record<string, unknown>>out[<string>descr.thing]).hasOwnProperty(<string>descr.property)
+      ) {
         (<Record<string, unknown>>out[<string>descr.thing])[<string>descr.property] = [];
       }
       const value = transformer ? transformer(row.value) : row.value;
-      // eslint-disable-next-line max-len
-      (<Record<string, unknown>[]>(<Record<string, unknown>>out[<string>descr.thing])[<string>descr.property]).push({
+      (<Record<string, unknown>[]>(
+        (<Record<string, unknown>>out[<string>descr.thing])[<string>descr.property]
+      )).push({
         value: value,
         date: row.date,
       });
@@ -310,30 +316,47 @@ class Logs {
   async getAll(start: number | null, end: number | null): Promise<Record<string, unknown>> {
     const out = {};
     await this.loadMetrics(out, METRICS_NUMBER, null, null, start, end);
-    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, null,
-                           start, end);
-    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(<string>value),
-                           null, start, end);
+    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, null, start, end);
+    await this.loadMetrics(
+      out,
+      METRICS_OTHER,
+      (value) => JSON.parse(<string>value),
+      null,
+      start,
+      end
+    );
     return out;
   }
 
-  async get(thingId: string, start: number | null, end: number | null):
-  Promise<Record<string, unknown>> {
+  async get(
+    thingId: string,
+    start: number | null,
+    end: number | null
+  ): Promise<Record<string, unknown>> {
     const all = await this.getAll(start, end);
     return <Record<string, unknown>>all[thingId];
   }
 
-  async getProperty(thingId: string, propertyName: string, start: number | null,
-                    end: number | null): Promise<unknown[]> {
+  async getProperty(
+    thingId: string,
+    propertyName: string,
+    start: number | null,
+    end: number | null
+  ): Promise<unknown[]> {
     const descr = JSON.stringify(this.propertyDescr(thingId, propertyName));
     const out: Record<string, unknown> = {};
     const id = this.descrToId[descr];
     // TODO: determine property type to only do one of these
     await this.loadMetrics(out, METRICS_NUMBER, null, id, start, end);
-    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id, start,
-                           end);
-    await this.loadMetrics(out, METRICS_OTHER, (value) => JSON.parse(<string>value),
-                           id, start, end);
+    await this.loadMetrics(out, METRICS_BOOLEAN, (value) => !!value, id, start, end);
+    await this.loadMetrics(
+      out,
+      METRICS_OTHER,
+      (value) => JSON.parse(<string>value),
+      id,
+      start,
+      end
+    );
     return <unknown[]>(<Record<string, unknown>>out[thingId])[propertyName];
   }
 
@@ -351,28 +374,35 @@ class Logs {
     return schema;
   }
 
-  async streamMetrics(callback: (metrics: unknown[]) => void, table: string,
-                      transformer: ((arg: unknown) => unknown) | null, id: number | null,
-                      start: number | null, end: number | null): Promise<void> {
+  async streamMetrics(
+    callback: (metrics: unknown[]) => void,
+    table: string,
+    transformer: ((arg: unknown) => unknown) | null,
+    id: number | null,
+    start: number | null,
+    end: number | null
+  ): Promise<void> {
     const MAX_ROWS = 10000;
     start = start ?? 0;
     end = end ?? Date.now();
 
     let queryCompleted = false;
     while (!queryCompleted) {
-      const {query, params} = this.buildQuery(table, id, start, end, MAX_ROWS);
+      const { query, params } = this.buildQuery(table, id, start, end, MAX_ROWS);
       const rows = await this.all(query, ...params);
       if (rows.length < MAX_ROWS) {
         queryCompleted = true;
       }
-      callback(rows.map((row: Record<string, unknown>) => {
-        const value = transformer ? transformer(row.value) : row.value;
-        return {
-          id: row.id,
-          value: value,
-          date: row.date,
-        };
-      }));
+      callback(
+        rows.map((row: Record<string, unknown>) => {
+          const value = transformer ? transformer(row.value) : row.value;
+          return {
+            id: row.id,
+            value: value,
+            date: row.date,
+          };
+        })
+      );
       if (!queryCompleted) {
         const lastRow = rows[rows.length - 1];
         start = <number>lastRow.date;
@@ -383,15 +413,23 @@ class Logs {
     }
   }
 
-  async streamAll(callback: (metrics: unknown[]) => void, start: number | null, end: number | null):
-  Promise<void> {
+  async streamAll(
+    callback: (metrics: unknown[]) => void,
+    start: number | null,
+    end: number | null
+  ): Promise<void> {
     // Stream all three in parallel, which should look cool
     await Promise.all([
       this.streamMetrics(callback, METRICS_NUMBER, null, null, start, end),
-      this.streamMetrics(callback, METRICS_BOOLEAN,
-                         (value: unknown) => !!value, null, start, end),
-      this.streamMetrics(callback, METRICS_OTHER,
-                         (value: unknown) => JSON.parse(<string>value), null, start, end),
+      this.streamMetrics(callback, METRICS_BOOLEAN, (value: unknown) => !!value, null, start, end),
+      this.streamMetrics(
+        callback,
+        METRICS_OTHER,
+        (value: unknown) => JSON.parse(<string>value),
+        null,
+        start,
+        end
+      ),
     ]);
   }
 
@@ -403,20 +441,18 @@ class Logs {
         continue;
       }
       const date = new Date(Date.now() - <number>descr.maxAge);
-      await Promise.all([
-        METRICS_NUMBER,
-        METRICS_BOOLEAN,
-        METRICS_OTHER,
-      ].map((table) => {
-        return this.run(`DELETE FROM ${table} WHERE id = ? AND date < ?`, id, date);
-      }));
+      await Promise.all(
+        [METRICS_NUMBER, METRICS_BOOLEAN, METRICS_OTHER].map((table) => {
+          return this.run(`DELETE FROM ${table} WHERE id = ? AND date < ?`, id, date);
+        })
+      );
     }
   }
 
   all(sql: string, ...values: any[]): Promise<Record<string, unknown>[]> {
     return new Promise((resolve, reject) => {
       try {
-        this.db!.all(sql, values, function(err: unknown, rows: Record<string, unknown>[]) {
+        this.db!.all(sql, values, function (err: unknown, rows: Record<string, unknown>[]) {
           if (err) {
             reject(err);
             return;
@@ -439,7 +475,7 @@ class Logs {
   run(sql: string, ...values: any[]): Promise<RunResult> {
     return new Promise((resolve, reject) => {
       try {
-        this.db!.run(sql, values, function(err: unknown) {
+        this.db!.run(sql, values, function (err: unknown) {
           if (err) {
             reject(err);
             return;

@@ -46,6 +46,5 @@ class VideoCameraCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-video-camera-capability',
-                             VideoCameraCapability);
+window.customElements.define('webthing-video-camera-capability', VideoCameraCapability);
 module.exports = VideoCameraCapability;

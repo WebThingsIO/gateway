@@ -87,6 +87,5 @@ class BinarySensorCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-binary-sensor-capability',
-                             BinarySensorCapability);
+window.customElements.define('webthing-binary-sensor-capability', BinarySensorCapability);
 module.exports = BinarySensorCapability;

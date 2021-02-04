@@ -1,6 +1,6 @@
 import * as Effects from '../../rules-engine/effects/index';
-import {EffectDescription} from '../../rules-engine/effects/Effect';
-import {PropertyEffectDescription} from '../../rules-engine/effects/PropertyEffect';
+import { EffectDescription } from '../../rules-engine/effects/Effect';
+import { PropertyEffectDescription } from '../../rules-engine/effects/PropertyEffect';
 
 const pulseEffect = {
   property: {
@@ -25,10 +25,7 @@ const setEffect = {
 };
 
 const bothEffect = {
-  effects: [
-    pulseEffect,
-    setEffect,
-  ],
+  effects: [pulseEffect, setEffect],
   type: 'MultiEffect',
 };
 
@@ -51,7 +48,7 @@ describe('effects', () => {
   it('should reject an unknown effect type', () => {
     let err = null;
     try {
-      Effects.fromDescription({type: 'LimaEffect'});
+      Effects.fromDescription({ type: 'LimaEffect' });
     } catch (e) {
       err = e;
     }
@@ -61,11 +58,7 @@ describe('effects', () => {
   it('should reject a value type disagreeing with property type', () => {
     let err = null;
     try {
-      Effects.fromDescription(Object.assign(
-        {},
-        pulseEffect,
-        {value: 12}
-      ));
+      Effects.fromDescription(Object.assign({}, pulseEffect, { value: 12 }));
     } catch (e) {
       err = e;
     }
@@ -75,10 +68,7 @@ describe('effects', () => {
   it('should reject an effect without a property', () => {
     let err = null;
     try {
-      const brokenEffect: Partial<PropertyEffectDescription> = Object.assign(
-        {},
-        setEffect
-      );
+      const brokenEffect: Partial<PropertyEffectDescription> = Object.assign({}, setEffect);
       delete brokenEffect.property;
 
       Effects.fromDescription(<EffectDescription>brokenEffect);

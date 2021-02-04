@@ -93,10 +93,8 @@ class Action extends BaseComponent {
     super(template);
     this.opts = opts || {};
 
-    this._button = this.shadowRoot.querySelector(
-      '.webthing-action-button');
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-action-name');
+    this._button = this.shadowRoot.querySelector('.webthing-action-button');
+    this._name = this.shadowRoot.querySelector('.webthing-action-name');
     this._href = null;
 
     this._onClick = this.__onClick.bind(this);
@@ -145,9 +143,11 @@ class Action extends BaseComponent {
     } else {
       this.value = e.target.value;
 
-      this.dispatchEvent(new CustomEvent('click', {
-        bubbles: true,
-      }));
+      this.dispatchEvent(
+        new CustomEvent('click', {
+          bubbles: true,
+        })
+      );
     }
   }
 }

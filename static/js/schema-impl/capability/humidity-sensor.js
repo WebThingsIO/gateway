@@ -22,14 +22,9 @@ class HumiditySensor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/multi_level_sensor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/multi_level_sensor.svg',
+    });
   }
 
   /**
@@ -52,11 +47,9 @@ class HumiditySensor extends Thing {
     this.unit = '';
 
     if (this.humidityProperty) {
-      const property =
-        this.displayedProperties[this.humidityProperty].convertedProperty;
+      const property = this.displayedProperties[this.humidityProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-        `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 

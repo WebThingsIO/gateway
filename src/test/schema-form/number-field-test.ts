@@ -1,52 +1,48 @@
 import '../jsdom-common';
-import {fireEvent, createSchemaForm} from './test-utils';
+import { fireEvent, createSchemaForm } from './test-utils';
 
 describe('NumberField', () => {
   describe('text input', () => {
     it('should render a string field', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
         },
       });
 
-      expect(
-        node.querySelectorAll('.field input')
-      ).toHaveLength(1);
+      expect(node.querySelectorAll('.field input')).toHaveLength(1);
     });
 
     it('should render a string field with a label', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
           title: 'foo',
         },
       });
 
-      expect(node.querySelector('.field .control-label')!.textContent!.trim())
-        .toEqual('foo');
+      expect(node.querySelector('.field .control-label')!.textContent!.trim()).toEqual('foo');
     });
 
     it('should render a string field with a description', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
           description: 'bar',
         },
       });
 
-      expect(node.querySelector('.field-description')!.textContent!.trim())
-        .toEqual('bar');
+      expect(node.querySelector('.field-description')!.textContent!.trim()).toEqual('bar');
     });
 
     it('should default state value to number', () => {
-      const {schemaForm} = createSchemaForm({schema: {type: 'number'}});
+      const { schemaForm } = createSchemaForm({ schema: { type: 'number' } });
 
       expect(typeof schemaForm.formData).toEqual('number');
     });
 
     it('should assign a default value', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
           default: 2,
@@ -57,7 +53,7 @@ describe('NumberField', () => {
     });
 
     it('should handle a change event', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: {
           type: 'number',
         },
@@ -71,7 +67,7 @@ describe('NumberField', () => {
     });
 
     it('should fill field with data', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
         },
@@ -82,7 +78,7 @@ describe('NumberField', () => {
     });
 
     it('should cast the input as a float number if it ends with a dot', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: {
           type: 'number',
         },
@@ -96,7 +92,7 @@ describe('NumberField', () => {
     });
 
     it('should render with the expected id', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
         },
@@ -106,7 +102,7 @@ describe('NumberField', () => {
     });
 
     it('should render with trailing zeroes', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: {
           type: 'number',
         },
@@ -142,7 +138,7 @@ describe('NumberField', () => {
 
   describe('slection input', () => {
     it('should render a number field', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
           enum: [1, 2],
@@ -153,7 +149,7 @@ describe('NumberField', () => {
     });
 
     it('should render a string field with a label', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
           enum: [1, 2],
@@ -161,12 +157,11 @@ describe('NumberField', () => {
         },
       });
 
-      expect(node.querySelector('.field .control-label')!.textContent!.trim())
-        .toEqual('foo');
+      expect(node.querySelector('.field .control-label')!.textContent!.trim()).toEqual('foo');
     });
 
     it('should assign a default value', () => {
-      const {schemaForm} = createSchemaForm({
+      const { schemaForm } = createSchemaForm({
         schema: {
           type: 'number',
           enum: [1, 2],
@@ -178,7 +173,7 @@ describe('NumberField', () => {
     });
 
     it('should handle a change event', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: {
           type: 'number',
           enum: [1, 2],
@@ -193,7 +188,7 @@ describe('NumberField', () => {
     });
 
     it('should fill field with data', () => {
-      const {schemaForm} = createSchemaForm({
+      const { schemaForm } = createSchemaForm({
         schema: {
           type: 'number',
           enum: [1, 2],
@@ -205,7 +200,7 @@ describe('NumberField', () => {
     });
 
     it('should render the select with the expected id', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: {
           type: 'number',
           enum: [1, 2],
@@ -225,19 +220,17 @@ describe('NumberField', () => {
     };
 
     it('should support formData', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: 3.14,
       });
 
-      expect((<HTMLInputElement>node.querySelector('[type=range]')!).value)
-        .toEqual('3.14');
-      expect(node.querySelector('.range-view')!.textContent!.trim())
-        .toEqual('3.14');
+      expect((<HTMLInputElement>node.querySelector('[type=range]')!).value).toEqual('3.14');
+      expect(node.querySelector('.range-view')!.textContent!.trim()).toEqual('3.14');
     });
 
     it('should update state when value is updated', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema,
         formData: 3.14,
       });
@@ -247,15 +240,14 @@ describe('NumberField', () => {
       fireEvent(input, 'change');
 
       expect(schemaForm.formData).toEqual(6.28);
-      expect(node.querySelector('.range-view')!.textContent!.trim())
-        .toEqual('6.28');
+      expect(node.querySelector('.range-view')!.textContent!.trim()).toEqual('6.28');
     });
 
     describe('Constraint attributes', () => {
       let input: Element;
 
       beforeEach(() => {
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
         input = node.querySelector('[type=range]')!;
       });
 
@@ -267,14 +259,15 @@ describe('NumberField', () => {
         expect(input.getAttribute('max')).toEqual('100');
       });
 
-      it('should support \'0\' as minimum and maximum constraints', () => {
+      // eslint-disable-next-line @typescript-eslint/quotes
+      it("should support '0' as minimum and maximum constraints", () => {
         const schema = {
           type: 'number',
           minimum: 0,
           maximum: 0,
         };
 
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
         input = node.querySelector('[type=range]')!;
 
         expect(input.getAttribute('min')).toEqual('0');

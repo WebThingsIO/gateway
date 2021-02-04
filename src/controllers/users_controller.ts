@@ -26,7 +26,7 @@ function build(): express.Router {
    */
   controller.get('/count', async (_request, response) => {
     const count = await Users.getCount();
-    return response.status(200).send({count});
+    return response.status(200).send({ count });
   });
 
   /**
@@ -37,7 +37,7 @@ function build(): express.Router {
     const users = await Users.getUsers();
     const descriptions = users.map((user) => {
       const loggedIn = user.getId() === request.jwt.getUser();
-      return Object.assign(user.getDescription(), {loggedIn});
+      return Object.assign(user.getDescription(), { loggedIn });
     });
     return response.status(200).send(descriptions);
   });
@@ -113,7 +113,7 @@ function build(): express.Router {
         user.setMfaEnrolled(true);
         const backupCodes = await user.generateMfaBackupCodes();
         await Users.editUser(user);
-        response.status(200).json({backupCodes});
+        response.status(200).json({ backupCodes });
       } else {
         response.sendStatus(401);
       }
@@ -137,7 +137,7 @@ function build(): express.Router {
     if (body.generate) {
       const backupCodes = await user.generateMfaBackupCodes();
       await Users.editUser(user);
-      response.status(200).json({backupCodes});
+      response.status(200).json({ backupCodes });
       return;
     }
 

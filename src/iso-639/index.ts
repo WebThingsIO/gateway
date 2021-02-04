@@ -3,7 +3,7 @@
  */
 
 import fs from 'fs';
-import {getName} from 'country-list';
+import { getName } from 'country-list';
 import parse from 'csv-parse/lib/sync';
 import path from 'path';
 
@@ -44,7 +44,7 @@ function readFile(): boolean {
     return false;
   }
 
-  const records = parse(data, {delimiter: '\t', columns: true, trim: true});
+  const records = parse(data, { delimiter: '\t', columns: true, trim: true });
   if (records.length === 0) {
     return false;
   }

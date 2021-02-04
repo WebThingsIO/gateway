@@ -6,7 +6,7 @@
 
 import assert from 'assert';
 import * as Events from '../Events';
-import Trigger, {TriggerDescription} from './Trigger';
+import Trigger, { TriggerDescription } from './Trigger';
 import Things from '../../models/things';
 import Event from '../../models/event';
 
@@ -40,13 +40,10 @@ export default class EventTrigger extends Trigger {
    * @return {TriggerDescription}
    */
   toDescription(): EventTriggerDescription {
-    return Object.assign(
-      super.toDescription(),
-      {
-        thing: this.thing,
-        event: this.event,
-      }
-    );
+    return Object.assign(super.toDescription(), {
+      thing: this.thing,
+      event: this.event,
+    });
   }
 
   async start(): Promise<void> {
@@ -63,8 +60,8 @@ export default class EventTrigger extends Trigger {
       return;
     }
 
-    this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
-    this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
+    this.emit(Events.STATE_CHANGED, { on: true, value: Date.now() });
+    this.emit(Events.STATE_CHANGED, { on: false, value: Date.now() });
   }
 
   stop(): void {

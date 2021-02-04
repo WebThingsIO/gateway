@@ -18,6 +18,5 @@ class TargetTemperatureProperty extends NumberProperty {
   }
 }
 
-window.customElements.define('webthing-target-temperature-property',
-                             TargetTemperatureProperty);
+window.customElements.define('webthing-target-temperature-property', TargetTemperatureProperty);
 module.exports = TargetTemperatureProperty;

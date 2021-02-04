@@ -16,8 +16,7 @@ const fluent = require('../../fluent');
 
 class MotionDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('motion'));
+    super(thing, name, !!property.readOnly, property.title || fluent.getMessage('motion'));
     this.id = `motion-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -36,9 +35,7 @@ class MotionDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ?
-      fluent.getMessage('motion') :
-      fluent.getMessage('no-motion');
+    this.labelElement.value = value ? fluent.getMessage('motion') : fluent.getMessage('no-motion');
     this.labelElement.inverted = value;
   }
 }

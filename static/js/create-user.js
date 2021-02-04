@@ -18,8 +18,7 @@ function setupForm() {
   const password = document.getElementById('password');
   const name = document.getElementById('name');
   const confirmPassword = document.getElementById('confirm-password');
-  const errorPasswordMismatch =
-    document.getElementById('error-password-mismatch');
+  const errorPasswordMismatch = document.getElementById('error-password-mismatch');
   const errorSubmission = document.getElementById('error-submission');
 
   form.addEventListener('submit', (e) => {
@@ -36,11 +35,11 @@ function setupForm() {
     const passwordValue = password.value;
     const nameValue = name.value;
 
-    API.createUser(nameValue, emailValue, passwordValue).
-      then(() => {
+    API.createUser(nameValue, emailValue, passwordValue)
+      .then(() => {
         window.location.href = '/';
-      }).
-      catch((err) => {
+      })
+      .catch((err) => {
         errorSubmission.classList.remove('hidden');
         errorSubmission.textContent = err.message;
         console.error(err);

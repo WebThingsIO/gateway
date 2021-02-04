@@ -18,17 +18,19 @@ rl.question('Please enter your email (mandatory): ', (email) => {
       rl.question('Please enter your password: ', (password) => {
         rl.question('Please enter a name : ', (name) => {
           rl.close();
-          User.generate(email, password, name).then((newuser) => {
-            user = newuser;
-            return Database.createUser(newuser);
-          }).then((id) => {
-            user.id = id;
-            console.log(user);
-            const sig = JSONWebToken.issueToken(user.id);
-            sig.then((result) => {
-              console.log('JWT token signature is:', result);
+          User.generate(email, password, name)
+            .then((newuser) => {
+              user = newuser;
+              return Database.createUser(newuser);
+            })
+            .then((id) => {
+              user.id = id;
+              console.log(user);
+              const sig = JSONWebToken.issueToken(user.id);
+              sig.then((result) => {
+                console.log('JWT token signature is:', result);
+              });
             });
-          });
         });
       });
     } else {

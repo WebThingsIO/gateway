@@ -70,8 +70,7 @@ class AlarmCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.alarm =
-      typeof this.dataset.alarm !== 'undefined' ? this.dataset.alarm : null;
+    this.alarm = typeof this.dataset.alarm !== 'undefined' ? this.dataset.alarm : null;
   }
 
   get alarm() {

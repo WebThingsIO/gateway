@@ -8,10 +8,10 @@ import assert from 'assert';
 import AddonManager from '../addon-manager';
 import * as Constants from '../constants';
 import Things from '../models/things';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import * as Events from './Events';
-import {Property as AddonProperty} from 'gateway-addon';
-import {PropertyValue} from 'gateway-addon/lib/schema';
+import { Property as AddonProperty } from 'gateway-addon';
+import { PropertyValue } from 'gateway-addon/lib/schema';
 
 export interface PropertyDescription {
   id: string;
@@ -102,13 +102,15 @@ export default class Property extends EventEmitter {
    * @return {Promise} resolves when set is done
    */
   set(value: PropertyValue): Promise<PropertyValue> {
-    return Things.setThingProperty(this.thing, this.id, value).catch((e: unknown) => {
-      console.warn('Rule set failed, retrying once', e);
-      return Things.setThingProperty(this.thing, this.id, value);
-    }).catch((e: unknown) => {
-      console.warn('Rule set failed completely', e);
-      return null;
-    });
+    return Things.setThingProperty(this.thing, this.id, value)
+      .catch((e: unknown) => {
+        console.warn('Rule set failed, retrying once', e);
+        return Things.setThingProperty(this.thing, this.id, value);
+      })
+      .catch((e: unknown) => {
+        console.warn('Rule set failed completely', e);
+        return null;
+      });
   }
 
   async start(): Promise<void> {
@@ -155,9 +157,7 @@ export default class Property extends EventEmitter {
   }
 
   stop(): void {
-    AddonManager.removeListener(Constants.PROPERTY_CHANGED,
-                                this.onPropertyChanged);
-    AddonManager.removeListener(Constants.THING_ADDED,
-                                this.onThingAdded);
+    AddonManager.removeListener(Constants.PROPERTY_CHANGED, this.onPropertyChanged);
+    AddonManager.removeListener(Constants.THING_ADDED, this.onThingAdded);
   }
 }

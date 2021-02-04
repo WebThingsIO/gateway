@@ -2,8 +2,8 @@
 import 'intl-pluralrules';
 
 import API from './api';
-import {DOMLocalization} from '@fluent/dom';
-import {FluentBundle, FluentResource, FluentVariable} from '@fluent/bundle';
+import { DOMLocalization } from '@fluent/dom';
+import { FluentBundle, FluentResource, FluentVariable } from '@fluent/bundle';
 
 const availableLanguages: Record<string, string[]> = {
   bn: ['/fluent/bn/main.ftl'],
@@ -51,7 +51,7 @@ let bundle: FluentBundle;
 export async function load(): Promise<void> {
   let response: Record<string, string> = {};
   try {
-    response = <Record<string, string>>(await API.getLanguage());
+    response = <Record<string, string>>await API.getLanguage();
   } catch (_) {
     // keep going
   }
@@ -101,14 +101,14 @@ export async function load(): Promise<void> {
   }
 }
 
-async function *generateBundles(
+async function* generateBundles(
   _resourceIds: string[]
-// eslint-disable-next-line no-undefined
+  // eslint-disable-next-line no-undefined
 ): AsyncGenerator<FluentBundle, void, undefined> {
   if (!bundle) {
     await load();
   }
-  yield *[bundle, englishBundle];
+  yield* [bundle, englishBundle];
 }
 
 export const l10n = new DOMLocalization([], generateBundles);

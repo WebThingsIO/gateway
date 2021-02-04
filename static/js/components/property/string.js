@@ -72,12 +72,9 @@ class StringProperty extends BaseComponent {
 `;
     super(template);
 
-    this._form = this.shadowRoot.querySelector(
-      '.webthing-string-property-form');
-    this._input = this.shadowRoot.querySelector(
-      '.webthing-string-property-input');
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-string-property-name');
+    this._form = this.shadowRoot.querySelector('.webthing-string-property-form');
+    this._input = this.shadowRoot.querySelector('.webthing-string-property-input');
+    this._name = this.shadowRoot.querySelector('.webthing-string-property-name');
 
     this._onSubmit = this.__onSubmit.bind(this);
     this._onBlur = this.__onBlur.bind(this);
@@ -87,9 +84,7 @@ class StringProperty extends BaseComponent {
     this.name = this.dataset.name;
 
     this.readOnly =
-      typeof this.dataset.readOnly !== 'undefined' ?
-        this.dataset.readOnly === 'true' :
-        false;
+      typeof this.dataset.readOnly !== 'undefined' ? this.dataset.readOnly === 'true' : false;
 
     this._upgradeProperty('value');
 
@@ -143,12 +138,14 @@ class StringProperty extends BaseComponent {
     e.preventDefault();
     this.value = e.target.value;
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        value: this.value,
-      },
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          value: this.value,
+        },
+        bubbles: true,
+      })
+    );
   }
 }
 

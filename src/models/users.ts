@@ -89,10 +89,12 @@ export async function getUsers(): Promise<User[]> {
  * @param {String?} name - optional name of user
  * @return {User} user object.
  */
-export async function createUser(email: string, password: string, name: string | null):
-Promise<User> {
-  const user =
-    new User(null, email.toLowerCase(), password, name, '', false, '');
+export async function createUser(
+  email: string,
+  password: string,
+  name: string | null
+): Promise<User> {
+  const user = new User(null, email.toLowerCase(), password, name, '', false, '');
   user.setId(await Database.createUser(user));
   return user;
 }

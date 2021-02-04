@@ -1,9 +1,9 @@
 import config from 'config';
 import nock from 'nock';
-import {URL} from 'url';
-import {server, chai} from '../common';
+import { URL } from 'url';
+import { server, chai } from '../common';
 import * as Constants from '../../constants';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { TEST_USER, createUser, headerAuth } from '../user';
 
 const releases = [
   {
@@ -37,11 +37,10 @@ describe('updates/', () => {
   });
 
   it('should get /latest with a normal response', async () => {
-    nock(updateUrl.origin)
-      .get(updateUrl.pathname)
-      .reply(200, releases);
+    nock(updateUrl.origin).get(updateUrl.pathname).reply(200, releases);
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.UPDATES_PATH}/latest`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -52,11 +51,10 @@ describe('updates/', () => {
   });
 
   it('should get /latest with no good releases', async () => {
-    nock(updateUrl.origin)
-      .get(updateUrl.pathname)
-      .reply(200, releases.slice(0, 2));
+    nock(updateUrl.origin).get(updateUrl.pathname).reply(200, releases.slice(0, 2));
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.UPDATES_PATH}/latest`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -66,11 +64,10 @@ describe('updates/', () => {
   });
 
   it('should get /latest with a strange error', async () => {
-    nock(updateUrl.origin)
-      .get(updateUrl.pathname)
-      .reply(200, {error: true});
+    nock(updateUrl.origin).get(updateUrl.pathname).reply(200, { error: true });
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.UPDATES_PATH}/latest`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -80,7 +77,8 @@ describe('updates/', () => {
   });
 
   it('GET /status', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.UPDATES_PATH}/status`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));

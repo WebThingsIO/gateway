@@ -12,7 +12,7 @@
 class BaseComponent extends HTMLElement {
   constructor(template) {
     super();
-    this.attachShadow({mode: 'open'});
+    this.attachShadow({ mode: 'open' });
     const templateClone = template.content.cloneNode(true);
     // Detect whether ShadowRoot has been polyfilled on this browser
     if (ShadowRoot.name !== 'ShadowRoot') {

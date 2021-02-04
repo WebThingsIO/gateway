@@ -7,7 +7,7 @@ import os from 'os';
 import * as Platform from './platform';
 import * as Settings from './models/settings';
 import sleep from './sleep';
-import {WirelessNetwork} from './platforms/types';
+import { WirelessNetwork } from './platforms/types';
 
 const hbs = expressHandlebars.create({
   helpers: {
@@ -24,7 +24,7 @@ app.set('view engine', 'handlebars');
 app.set('views', Constants.VIEWS_PATH);
 
 // When we get POSTs, handle the body like this
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Define the handler methods for the various URLs we handle
 app.get('/*', handleCaptive);
@@ -33,7 +33,7 @@ app.get('/wifi-setup', handleWiFiSetup);
 app.post('/connecting', handleConnecting);
 app.use(express.static(Constants.BUILD_STATIC_PATH));
 
-export const WiFiSetupApp: {onConnection: (() => void) | null, onRequest: express.Express} = {
+export const WiFiSetupApp: { onConnection: (() => void) | null; onRequest: express.Express } = {
   onConnection: null,
   onRequest: app,
 };
@@ -41,50 +41,45 @@ export const WiFiSetupApp: {onConnection: (() => void) | null, onRequest: expres
 /**
  * Handle captive portal requests.
  */
-function handleCaptive(request: express.Request, response: express.Response,
-                       next: express.NextFunction): void {
+function handleCaptive(
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+): void {
   console.log('wifi-setup: handleCaptive:', request.path);
 
   switch (request.path) {
     case '/hotspot.html': {
       // WISPr XML response
       const ssid = getHotspotSsid();
-      response.render(
-        'hotspot',
-        {
-          ap_ssid: ssid,
-          ap_ip: config.get('wifi.ap.ipaddr'),
-        }
-      );
+      response.render('hotspot', {
+        ap_ssid: ssid,
+        ap_ip: config.get('wifi.ap.ipaddr'),
+      });
       break;
     }
-    case '/hotspot-detect.html':        // iOS/macOS
-    case '/library/test/success.html':  // iOS/macOS
-    case '/connecttest.txt': {          // Windows
+    case '/hotspot-detect.html': // iOS/macOS
+    case '/library/test/success.html': // iOS/macOS
+    case '/connecttest.txt': {
+      // Windows
       const ua = request.get('User-Agent');
 
       // These 2 user-agents expect a WISPr XML response
       if (ua && (ua.includes('CaptiveNetworkSupport') || ua.includes('Microsoft NCSI'))) {
-        response.redirect(
-          302,
-          `http://${config.get('wifi.ap.ipaddr')}/hotspot.html`
-        );
+        response.redirect(302, `http://${config.get('wifi.ap.ipaddr')}/hotspot.html`);
         break;
       }
 
       // otherwise, fall through
     }
     // eslint-disable-next-line no-fallthrough
-    case '/kindle-wifi/wifistub.html':  // Kindle
-    case '/generate_204':               // Android, Chrome
-    case '/fwlink/':                    // Windows
-    case '/redirect':                   // Windows
-    case '/success.txt':                // Firefox
+    case '/kindle-wifi/wifistub.html': // Kindle
+    case '/generate_204': // Android, Chrome
+    case '/fwlink/': // Windows
+    case '/redirect': // Windows
+    case '/success.txt': // Firefox
       // Redirect to the wifi setup page
-      response.redirect(
-        302,
-        `http://${config.get('wifi.ap.ipaddr')}/wifi-setup`
-      );
+      response.redirect(302, `http://${config.get('wifi.ap.ipaddr')}/wifi-setup`);
       break;
     default:
       console.log('wifi-setup: handleCaptive: unknown path, skipping.');
@@ -102,15 +97,11 @@ function handleRoot(_request: express.Request, response: express.Response): void
 
   if (!(status.enabled && status.mode === 'sta')) {
     // If we don't have a wifi connection yet, display the wifi setup page
-    console.log(
-      'wifi-setup: handleRoot: no wifi connection; redirecting to wifiSetup'
-    );
+    console.log('wifi-setup: handleRoot: no wifi connection; redirecting to wifiSetup');
     response.redirect('/wifi-setup');
   } else {
     // Otherwise, look to see if we have an oauth token yet
-    console.log(
-      'wifi-setup: handleRoot: wifi setup complete; redirecting to /status'
-    );
+    console.log('wifi-setup: handleRoot: wifi setup complete; redirecting to /status');
     response.redirect('/status');
   }
 }
@@ -129,7 +120,7 @@ function handleWiFiSetup(_request: express.Request, response: express.Response):
     // to do the right thing if there are two entries for the same ssid.
     // If not, we could modify defineNetwork() to overwrite rather than
     // just adding.
-    let networks: {icon: string, pwdRequired: boolean, ssid: string}[] = [];
+    let networks: { icon: string; pwdRequired: boolean; ssid: string }[] = [];
     if (results) {
       networks = results.map((result) => {
         const icon = result.encryption ? 'wifi-secure.svg' : 'wifi.svg';
@@ -141,7 +132,7 @@ function handleWiFiSetup(_request: express.Request, response: express.Response):
       });
     }
 
-    response.render('wifi-setup', {networks});
+    response.render('wifi-setup', { networks });
   });
 }
 
@@ -154,25 +145,20 @@ function handleConnecting(request: express.Request, response: express.Response):
   const skip = request.body.skip === '1';
 
   if (skip) {
-    console.log(
-      'wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.'
-    );
+    console.log('wifi-setup: handleConnecting: wifi setup skipped, stopping the AP.');
 
-    Settings.setSetting('wifiskip', true).catch((e) => {
-      console.error(
-        'wifi-setup: handleConnecting: failed to store wifiskip:', e
-      );
-    }).then(() => {
-      response.render(
-        'connecting',
-        {
+    Settings.setSetting('wifiskip', true)
+      .catch((e) => {
+        console.error('wifi-setup: handleConnecting: failed to store wifiskip:', e);
+      })
+      .then(() => {
+        response.render('connecting', {
           skip: `${skip}`,
           domain,
-        }
-      );
-      stopAP();
-      WiFiSetupApp.onConnection!();
-    });
+        });
+        stopAP();
+        WiFiSetupApp.onConnection!();
+      });
     return;
   }
 
@@ -186,13 +172,10 @@ function handleConnecting(request: express.Request, response: express.Response):
   //
   // Also, if we're not in AP mode, then we should just redirect to
   // /status instead of sending the connecting template.
-  response.render(
-    'connecting',
-    {
-      skip: `${skip}`,
-      domain,
-    }
-  );
+  response.render('connecting', {
+    skip: `${skip}`,
+    domain,
+  });
 
   // Wait before switching networks to make sure the response gets through.
   // And also wait to be sure that the access point is fully down before
@@ -206,9 +189,7 @@ function handleConnecting(request: express.Request, response: express.Response):
     })
     .then(() => {
       if (!defineNetwork(ssid, password)) {
-        console.error(
-          'wifi-setup: handleConnecting: failed to define network'
-        );
+        console.error('wifi-setup: handleConnecting: failed to define network');
         throw new Error('failed to define network');
       } else {
         return waitForWiFi(20, 3000).then(() => {
@@ -257,7 +238,7 @@ function getHotspotSsid(): string {
 function scan(): Promise<WirelessNetwork[]> {
   const maxAttempts = 5;
 
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     let attempts = 0;
 
     function tryScan(): void {
@@ -270,9 +251,7 @@ function scan(): Promise<WirelessNetwork[]> {
         console.log('wifi-setup: scan: Scan attempt', attempts, 'failed');
 
         if (attempts >= maxAttempts) {
-          console.error(
-            'wifi-setup: scan: Giving up. No scan results available.'
-          );
+          console.error('wifi-setup: scan: Giving up. No scan results available.');
           resolve([]);
         } else {
           console.log('wifi-setup: scan: Will try again in 3 seconds.');
@@ -300,7 +279,7 @@ function scan(): Promise<WirelessNetwork[]> {
  */
 function startAP(ipaddr: string): boolean {
   const ssid = getHotspotSsid();
-  if (!Platform.setWirelessMode(true, 'ap', {ssid, ipaddr})) {
+  if (!Platform.setWirelessMode(true, 'ap', { ssid, ipaddr })) {
     return false;
   }
 
@@ -328,7 +307,7 @@ function stopAP(): boolean {
  * @returns {boolean} Boolean indicating success of the command.
  */
 function defineNetwork(ssid: string, password?: string): boolean {
-  return Platform.setWirelessMode(true, 'sta', {ssid, key: password});
+  return Platform.setWirelessMode(true, 'sta', { ssid, key: password });
 }
 
 /**
@@ -340,46 +319,47 @@ function defineNetwork(ssid: string, password?: string): boolean {
 export function isWiFiConfigured(): Promise<boolean> {
   const ensureAPStopped = (): void => {
     // If the host seems to be in AP mode (e.g. from a previous run), stop it
-    if (Platform.getDhcpServerStatus() ||
-        Platform.getWirelessMode().mode === 'ap') {
+    if (Platform.getDhcpServerStatus() || Platform.getWirelessMode().mode === 'ap') {
       stopAP();
     }
   };
 
-  return Settings.getSetting('wifiskip').catch(() => false).then((skipped) => {
-    if (skipped) {
-      ensureAPStopped();
-      return Promise.resolve(true);
-    }
-
-    // If wifi wasn't skipped, but there is an ethernet connection, just move on
-    const addresses = Platform.getNetworkAddresses();
-    if (addresses.lan) {
-      ensureAPStopped();
-      return Promise.resolve(true);
-    }
-
-    // Wait until we have a working wifi connection. Retry every 3 seconds up
-    // to 20 times. If we never get a wifi connection, go into AP mode.
-    return waitForWiFi(20, 3000).then(() => {
-      ensureAPStopped();
-      return true;
-    }).catch((err) => {
-      if (err) {
-        console.error('wifi-setup: isWiFiConfigured: Error waiting:', err);
+  return Settings.getSetting('wifiskip')
+    .catch(() => false)
+    .then((skipped) => {
+      if (skipped) {
+        ensureAPStopped();
+        return Promise.resolve(true);
       }
 
-      console.log(
-        'wifi-setup: isWiFiConfigured: No wifi connection found, starting AP'
-      );
-
-      if (!startAP(config.get('wifi.ap.ipaddr'))) {
-        console.error('wifi-setup: isWiFiConfigured: failed to start AP');
+      // If wifi wasn't skipped, but there is an ethernet connection, just move on
+      const addresses = Platform.getNetworkAddresses();
+      if (addresses.lan) {
+        ensureAPStopped();
+        return Promise.resolve(true);
       }
 
-      return false;
+      // Wait until we have a working wifi connection. Retry every 3 seconds up
+      // to 20 times. If we never get a wifi connection, go into AP mode.
+      return waitForWiFi(20, 3000)
+        .then(() => {
+          ensureAPStopped();
+          return true;
+        })
+        .catch((err) => {
+          if (err) {
+            console.error('wifi-setup: isWiFiConfigured: Error waiting:', err);
+          }
+
+          console.log('wifi-setup: isWiFiConfigured: No wifi connection found, starting AP');
+
+          if (!startAP(config.get('wifi.ap.ipaddr'))) {
+            console.error('wifi-setup: isWiFiConfigured: failed to start AP');
+          }
+
+          return false;
+        });
     });
-  });
 }
 
 /**
@@ -392,19 +372,19 @@ export function isWiFiConfigured(): Promise<boolean> {
  *                    promise is rejected.
  */
 function waitForWiFi(maxAttempts: number, interval: number): Promise<void> {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     let attempts = 0;
 
     // first, see if any networks are already configured
     const status = Platform.getWirelessMode();
-    if (status.options && status.options.networks &&
-        (<string[]>status.options.networks).length > 0) {
+    if (
+      status.options &&
+      status.options.networks &&
+      (<string[]>status.options.networks).length > 0
+    ) {
       // there's at least one wifi network configured. Let's wait to see if it
       // will connect.
-      console.log(
-        'wifi-setup: waitForWiFi: networks exist:',
-        status.options.networks
-      );
+      console.log('wifi-setup: waitForWiFi: networks exist:', status.options.networks);
       check();
     } else {
       // No wifi network configured. Let's skip the wait and start the setup
@@ -419,9 +399,7 @@ function waitForWiFi(maxAttempts: number, interval: number): Promise<void> {
         console.log('wifi-setup: waitForWifi: connection found');
         checkForAddress();
       } else {
-        console.log(
-          'wifi-setup: waitForWifi: No wifi connection on attempt', attempts
-        );
+        console.log('wifi-setup: waitForWifi: No wifi connection on attempt', attempts);
         retryOrGiveUp();
       }
     }

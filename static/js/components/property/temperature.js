@@ -11,9 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class TemperatureProperty extends NumericLabelProperty {
-}
+class TemperatureProperty extends NumericLabelProperty {}
 
-window.customElements.define('webthing-temperature-property',
-                             TemperatureProperty);
+window.customElements.define('webthing-temperature-property', TemperatureProperty);
 module.exports = TemperatureProperty;

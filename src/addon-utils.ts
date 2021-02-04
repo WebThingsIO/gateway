@@ -40,8 +40,8 @@ function validateObject(
       const templateVal = template[key];
 
       if (typeof objectVal !== typeof templateVal) {
-        return `Expecting ${prefix}${key} to have type: ${
-          typeof templateVal}, found: ${typeof objectVal}`;
+        // eslint-disable-next-line max-len
+        return `Expecting ${prefix}${key} to have type: ${typeof templateVal}, found: ${typeof objectVal}`;
       }
 
       if (typeof objectVal === 'object') {
@@ -50,8 +50,7 @@ function validateObject(
             const expectedType = typeof (<unknown[]>templateVal)[0];
             for (const val of objectVal) {
               if (typeof val !== expectedType) {
-                return `Expecting all values in ${prefix}${key} to be of ` +
-                  `type ${expectedType}`;
+                return `Expecting all values in ${prefix}${key} to be of type ${expectedType}`;
               }
             }
           }
@@ -102,18 +101,26 @@ function validateManifestJson(manifest: Record<string, unknown>): string | null 
 
   // Since we're trying to use a field before full validation, make sure it
   // exists first.
-  if (typeof manifest.gateway_specific_settings !== 'object' ||
-      !manifest.gateway_specific_settings ||
-      typeof (<Record<string, unknown>>manifest.gateway_specific_settings).webthings !== 'object' ||
-      !(<Record<string, unknown>>manifest.gateway_specific_settings).webthings ||
-      // eslint-disable-next-line max-len
-      !(<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings).webthings).primary_type) {
-    return 'Expecting manifest.gateway_specific_settings.webthings.primary_type to have type: ' +
-      'string, found: undefined';
+  if (
+    typeof manifest.gateway_specific_settings !== 'object' ||
+    !manifest.gateway_specific_settings ||
+    typeof (<Record<string, unknown>>manifest.gateway_specific_settings).webthings !== 'object' ||
+    !(<Record<string, unknown>>manifest.gateway_specific_settings).webthings ||
+    !(<Record<string, unknown>>(
+      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
+    )).primary_type
+  ) {
+    return (
+      'Expecting manifest.gateway_specific_settings.webthings.primary_type to have type: ' +
+      'string, found: undefined'
+    );
   }
 
-  // eslint-disable-next-line max-len
-  if ((<Record<string, unknown>>(<Record<string, unknown>>manifest.gateway_specific_settings).webthings).primary_type !== 'extension') {
+  if (
+    (<Record<string, unknown>>(
+      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
+    )).primary_type !== 'extension'
+  ) {
     // If we're not using in-process plugins, and this is not an extension,
     // then we also need the exec keyword to exist.
     manifestTemplate.gateway_specific_settings.webthings.exec = '';
@@ -138,9 +145,7 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
   try {
     data = fs.readFileSync(path.join(addonPath, 'manifest.json'), 'utf8');
   } catch (e) {
-    throw new Error(
-      `Failed to read manifest.json for add-on ${packageId}: ${e}`
-    );
+    throw new Error(`Failed to read manifest.json for add-on ${packageId}: ${e}`);
   }
 
   // Parse as JSON
@@ -148,23 +153,22 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
   try {
     manifest = JSON.parse(data);
   } catch (e) {
-    throw new Error(
-      `Failed to parse manifest.json for add-on: ${packageId}: ${e}`
-    );
+    throw new Error(`Failed to parse manifest.json for add-on: ${packageId}: ${e}`);
   }
 
   // First, verify manifest version.
   if (manifest.manifest_version !== MANIFEST_VERSION) {
     throw new Error(
-      `Manifest version ${manifest.manifest_version} for add-on ${packageId
-      } does not match expected version ${MANIFEST_VERSION}`
+      `Manifest version ${manifest.manifest_version} for add-on ${packageId} does not match ` +
+        `expected version ${MANIFEST_VERSION}`
     );
   }
 
   // Verify that the id in the package matches the packageId
   if (manifest.id != packageId) {
-    const err = `ID from manifest .json "${manifest.id}" doesn't ` +
-                `match the ID from list.json "${packageId}"`;
+    const err =
+      `ID from manifest .json "${manifest.id}" doesn't ` +
+      `match the ID from list.json "${packageId}"`;
     throw new Error(err);
   }
 
@@ -188,17 +192,13 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
 
           filename = path.resolve(path.join(addonPath, filename));
           if (!fs.existsSync(filename)) {
-            throw new Error(
-              `File ${filename} missing for add-on ${packageId}`
-            );
+            throw new Error(`File ${filename} missing for add-on ${packageId}`);
           }
 
           sums.set(filename, checksum);
         }
       } catch (e) {
-        throw new Error(
-          `Failed to read SHA256SUMS for add-on ${packageId}: ${e}`
-        );
+        throw new Error(`Failed to read SHA256SUMS for add-on ${packageId}: ${e}`);
       }
 
       find.fileSync(addonPath).forEach((fname) => {
@@ -210,18 +210,14 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
 
         if (!sums.has(fname)) {
           if (ENFORCE_STRICT_SHA_CHECK) {
-            throw new Error(
-              `No checksum found for file ${fname} in add-on ${packageId}`
-            );
+            throw new Error(`No checksum found for file ${fname} in add-on ${packageId}`);
           } else {
             return;
           }
         }
 
         if (Utils.hashFile(fname) !== sums.get(fname)) {
-          throw new Error(
-            `Checksum failed for file ${fname} in add-on ${packageId}`
-          );
+          throw new Error(`Checksum failed for file ${fname} in add-on ${packageId}`);
         }
       });
     } else if (process.env.NODE_ENV !== 'test') {
@@ -232,9 +228,7 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
   // Verify that important fields exist in the manifest
   const err = validateManifestJson(manifest);
   if (err) {
-    throw new Error(
-      `Error found in manifest for add-on ${packageId}: ${err}`
-    );
+    throw new Error(`Error found in manifest for add-on ${packageId}: ${err}`);
   }
 
   // Verify gateway version.
@@ -245,8 +239,8 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
     min = semver.coerce(min);
     if (semver.lt(pkg.version, min)) {
       throw new Error(
-        `Gateway version ${pkg.version} is lower than minimum version ${min
-        } supported by add-on ${packageId}`
+        // eslint-disable-next-line max-len
+        `Gateway version ${pkg.version} is lower than minimum version ${min} supported by add-on ${packageId}`
       );
     }
   }
@@ -254,8 +248,8 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
     max = semver.coerce(max);
     if (semver.gt(pkg.version, max)) {
       throw new Error(
-        `Gateway version ${pkg.version} is higher than maximum version ${max
-        } supported by add-on ${packageId}`
+        // eslint-disable-next-line max-len
+        `Gateway version ${pkg.version} is higher than maximum version ${max} supported by add-on ${packageId}`
       );
     }
   }
@@ -289,10 +283,7 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
     obj.enabled = true;
   }
 
-  return [
-    obj,
-    cfg,
-  ];
+  return [obj, cfg];
 }
 
 /**
@@ -303,8 +294,9 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
  * @returns {object[]} 2-value array containing a parsed manifest and a default
  *                     config object.
  */
-export function loadManifest(packageId: string):
-[Record<string, unknown>, Record<string, unknown>] {
+export function loadManifest(
+  packageId: string
+): [Record<string, unknown>, Record<string, unknown>] {
   const addonPath = path.join(UserProfile.addonsDir, packageId);
 
   if (fs.existsSync(path.join(addonPath, 'manifest.json'))) {

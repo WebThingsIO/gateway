@@ -8,12 +8,7 @@
 
 import BasePlatform from './base';
 import LinuxRaspbianPlatform from './linux-raspbian';
-import {
-  LanMode,
-  NetworkAddresses,
-  SelfUpdateStatus,
-  WirelessMode,
-} from './types';
+import { LanMode, NetworkAddresses, SelfUpdateStatus, WirelessMode } from './types';
 
 export class LinuxDebianPlatform extends BasePlatform {
   /**

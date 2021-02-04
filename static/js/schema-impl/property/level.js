@@ -20,8 +20,7 @@ class LevelDetail {
     this.name = name;
     this.readOnly = !!property.readOnly;
     this.label = property.title || fluent.getMessage('level');
-    this.unit =
-      property.unit ? Units.nameToAbbreviation(property.unit) : null;
+    this.unit = property.unit ? Units.nameToAbbreviation(property.unit) : null;
 
     if (property.hasOwnProperty('minimum')) {
       this.min = property.minimum;

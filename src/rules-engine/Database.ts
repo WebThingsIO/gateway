@@ -6,8 +6,8 @@
 
 import Database from '../db';
 import * as DatabaseMigrate from './DatabaseMigrate';
-import {RuleDescription} from './Rule';
-import {RunResult} from 'sqlite3';
+import { RuleDescription } from './Rule';
+import { RunResult } from 'sqlite3';
 
 class RulesDatabase {
   constructor() {
@@ -34,23 +34,25 @@ class RulesDatabase {
   getRules(): Promise<Record<number, RuleDescription>> {
     const rules: Record<number, RuleDescription> = {};
 
-    return Database.all('SELECT id, description FROM rules').then((rows) => {
-      const updatePromises = [];
-      for (const row of rows) {
-        let desc = JSON.parse(<string>row.description);
-        const updatedDesc = DatabaseMigrate.migrate(desc);
-        if (updatedDesc) {
-          desc = updatedDesc;
-          updatePromises.push(this.updateRule(<number>row.id, desc));
+    return Database.all('SELECT id, description FROM rules')
+      .then((rows) => {
+        const updatePromises = [];
+        for (const row of rows) {
+          let desc = JSON.parse(<string>row.description);
+          const updatedDesc = DatabaseMigrate.migrate(desc);
+          if (updatedDesc) {
+            desc = updatedDesc;
+            updatePromises.push(this.updateRule(<number>row.id, desc));
+          }
+
+          rules[<number>row.id] = desc;
         }
 
-        rules[<number>row.id] = desc;
-      }
-
-      return Promise.all(updatePromises);
-    }).then(() => {
-      return rules;
-    });
+        return Promise.all(updatePromises);
+      })
+      .then(() => {
+        return rules;
+      });
   }
 
   /**
@@ -59,12 +61,11 @@ class RulesDatabase {
    * @return {Promise<number>} resolves to rule id
    */
   createRule(desc: RuleDescription): Promise<number> {
-    return Database.run(
-      'INSERT INTO rules (description) VALUES (?)',
-      JSON.stringify(desc)
-    ).then((res) => {
-      return res.lastID;
-    });
+    return Database.run('INSERT INTO rules (description) VALUES (?)', JSON.stringify(desc)).then(
+      (res) => {
+        return res.lastID;
+      }
+    );
   }
 
   /**
@@ -74,11 +75,7 @@ class RulesDatabase {
    * @return {Promise}
    */
   updateRule(id: number, desc: RuleDescription): Promise<RunResult> {
-    return Database.run(
-      'UPDATE rules SET description = ? WHERE id = ?',
-      JSON.stringify(desc),
-      id
-    );
+    return Database.run('UPDATE rules SET description = ? WHERE id = ?', JSON.stringify(desc), id);
   }
 
   /**

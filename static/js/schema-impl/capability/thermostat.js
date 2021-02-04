@@ -22,14 +22,9 @@ class Thermostat extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/thermostat.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/thermostat.svg',
+    });
   }
 
   /**
@@ -51,13 +46,17 @@ class Thermostat extends Thing {
     }
 
     // If necessary, match on name.
-    if (this.temperatureProperty === null &&
-        this.displayedProperties.hasOwnProperty('temperature')) {
+    if (
+      this.temperatureProperty === null &&
+      this.displayedProperties.hasOwnProperty('temperature')
+    ) {
       this.temperatureProperty = 'temperature';
     }
 
-    if (this.heatingCoolingProperty === null &&
-        this.displayedProperties.hasOwnProperty('heatingCooling')) {
+    if (
+      this.heatingCoolingProperty === null &&
+      this.displayedProperties.hasOwnProperty('heatingCooling')
+    ) {
       this.heatingCoolingProperty = 'heatingCooling';
     }
 
@@ -65,11 +64,9 @@ class Thermostat extends Thing {
     this.unit = 'degree celsius';
 
     if (this.temperatureProperty) {
-      const property =
-        this.displayedProperties[this.temperatureProperty].convertedProperty;
+      const property = this.displayedProperties[this.temperatureProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-          `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 

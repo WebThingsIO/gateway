@@ -14,7 +14,7 @@ import expressWs from 'express-ws';
 import fetch from 'node-fetch';
 import WebSocket from 'ws';
 import Things from '../models/things';
-import {Device as DeviceSchema} from 'gateway-addon/lib/schema';
+import { Device as DeviceSchema } from 'gateway-addon/lib/schema';
 
 function build(): express.Router {
   const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
@@ -23,12 +23,14 @@ function build(): express.Router {
    * Handle GET requests to /new_things
    */
   controller.get('/', (_request, response) => {
-    Things.getNewThings().then((newThings: DeviceSchema[]) => {
-      response.json(newThings);
-    }).catch((error: unknown) => {
-      console.error(`Error getting a list of new things from adapters ${error}`);
-      response.status(500).send(error);
-    });
+    Things.getNewThings()
+      .then((newThings: DeviceSchema[]) => {
+        response.json(newThings);
+      })
+      .catch((error: unknown) => {
+        console.error(`Error getting a list of new things from adapters ${error}`);
+        response.status(500).send(error);
+      });
   });
 
   /**
@@ -45,13 +47,15 @@ function build(): express.Router {
     // to the client as they are added.
     Things.registerWebsocket(websocket);
     // Send a list of things the adapter manager already knows about
-    Things.getNewThings().then((newThings: DeviceSchema[]) => {
-      newThings.forEach((newThing: DeviceSchema) => {
-        websocket.send(JSON.stringify(newThing));
+    Things.getNewThings()
+      .then((newThings: DeviceSchema[]) => {
+        newThings.forEach((newThing: DeviceSchema) => {
+          websocket.send(JSON.stringify(newThing));
+        });
+      })
+      .catch((error: unknown) => {
+        console.error(`Error getting a list of new things from adapters ${error}`);
       });
-    }).catch((error: unknown) => {
-      console.error(`Error getting a list of new things from adapters ${error}`);
-    });
   });
 
   /**
@@ -65,7 +69,7 @@ function build(): express.Router {
 
     const url = request.body.url;
     try {
-      const res = await fetch(url, {headers: {Accept: 'application/json'}});
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
 
       if (!res.ok) {
         response.status(400).send('Web thing not found');
@@ -75,11 +79,12 @@ function build(): express.Router {
       const description = await res.json();
 
       // Verify some high level thing description properties.
-      if ((description.hasOwnProperty('title') ||
-           description.hasOwnProperty('name')) &&  // backwards compat
-          (description.hasOwnProperty('properties') ||
-           description.hasOwnProperty('actions') ||
-           description.hasOwnProperty('events'))) {
+      if (
+        (description.hasOwnProperty('title') || description.hasOwnProperty('name')) &&
+        (description.hasOwnProperty('properties') ||
+          description.hasOwnProperty('actions') ||
+          description.hasOwnProperty('events'))
+      ) {
         response.json(description);
       } else if (Array.isArray(description)) {
         response.status(400).send('Web things must be added individually');

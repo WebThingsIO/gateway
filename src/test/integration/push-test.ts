@@ -1,7 +1,7 @@
-import {server, chai} from '../common';
+import { server, chai } from '../common';
 import Database from '../../db';
 import PushService from '../../push-service';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import * as Constants from '../../constants';
 
 describe('push/', () => {
@@ -13,7 +13,8 @@ describe('push/', () => {
   });
 
   it('Fail to get a vapid key with PushService not initialized', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .get(`${Constants.PUSH_PATH}/vapid-public-key`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -23,7 +24,8 @@ describe('push/', () => {
 
   it('Get a vapid key with PushService initialized', async () => {
     await PushService.init('https://hogehoge.com');
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.PUSH_PATH}/vapid-public-key`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -35,11 +37,12 @@ describe('push/', () => {
   });
 
   it('Subscribe message', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .post(`${Constants.PUSH_PATH}/register`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({hoge: 'hoge'});
+      .send({ hoge: 'hoge' });
 
     expect(res.status).toEqual(200);
   });

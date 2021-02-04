@@ -8,15 +8,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {loadManifest} from './addon-utils';
+import { loadManifest } from './addon-utils';
 import config from 'config';
 import Getopt from 'node-getopt';
-import {AddonManagerProxy, Constants, PluginClient} from 'gateway-addon';
+import { AddonManagerProxy, Constants, PluginClient } from 'gateway-addon';
 import Database from './db';
 import * as Settings from './models/settings';
 import sleep from './sleep';
 import path from 'path';
-import {spawnSync} from 'child_process';
+import { spawnSync } from 'child_process';
 import fs from 'fs';
 
 // Open the database.
@@ -40,7 +40,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
   if (process.env.NODE_ENV === 'test') {
     [obj, savedConfig] = loadManifest(addonPath.split('/').pop()!);
   } else {
-    obj = <Record<string, unknown>>(await Settings.getSetting(key));
+    obj = <Record<string, unknown>>await Settings.getSetting(key);
   }
 
   const moziot: Record<string, unknown> = {
@@ -52,7 +52,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
   }
 
   if (process.env.NODE_ENV !== 'test') {
-    savedConfig = <Record<string, unknown>>(await Settings.getSetting(configKey));
+    savedConfig = <Record<string, unknown>>await Settings.getSetting(configKey);
   }
 
   if (savedConfig) {
@@ -63,37 +63,39 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
 
   const newSettings = {
     get name(): string {
-      console.warn('The `manifest` object is deprecated and will be removed soon.',
-                   'Instead of using `manifest.name`,',
-                   'please read the `id` field from your manifest.json instead.');
+      console.warn(
+        'The `manifest` object is deprecated and will be removed soon.',
+        'Instead of using `manifest.name`,',
+        'please read the `id` field from your manifest.json instead.'
+      );
       return <string>obj.id;
     },
 
     get display_name(): string {
-      console.warn('The `manifest` object is deprecated and will be removed soon.',
-                   'Instead of using `manifest.display_name`,',
-                   'please read the `name` field from your manifest.json instead.');
+      console.warn(
+        'The `manifest` object is deprecated and will be removed soon.',
+        'Instead of using `manifest.display_name`,',
+        'please read the `name` field from your manifest.json instead.'
+      );
       return <string>obj.name;
     },
 
     get moziot(): Record<string, unknown> {
-      console.warn('The `manifest` object is deprecated and will be removed soon.',
-                   'Instead of using `manifest.moziot`,',
-                   'please read the user configuration with the `Database` class instead.');
+      console.warn(
+        'The `manifest` object is deprecated and will be removed soon.',
+        'Instead of using `manifest.moziot`,',
+        'please read the user configuration with the `Database` class instead.'
+      );
       return moziot;
     },
   };
 
-  const pluginClient = new PluginClient(
-    packageName,
-    {verbose}
-  );
+  const pluginClient = new PluginClient(packageName, { verbose });
 
-  return pluginClient.register(config.get('ports.ipc'))
+  return pluginClient
+    .register(config.get('ports.ipc'))
     .catch((e) => {
-      throw new Error(
-        `Failed to register add-on ${packageName} with gateway: ${e}`
-      );
+      throw new Error(`Failed to register add-on ${packageName} with gateway: ${e}`);
     })
     .then((addonManagerProxy) => {
       if (!(addonManagerProxy instanceof AddonManagerProxy)) {
@@ -105,25 +107,18 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
       try {
         // we try to link to a global gateway-addon module, because in some
         // cases, NODE_PATH seems to not work
-        const modulePath = path.join(
-          addonPath,
-          'node_modules',
-          'gateway-addon'
-        );
+        const modulePath = path.join(addonPath, 'node_modules', 'gateway-addon');
         if (!fs.existsSync(modulePath) && process.env.NODE_ENV !== 'test') {
-          const link = spawnSync(
-            'npm',
-            ['link', 'gateway-addon'],
-            {
-              cwd: addonPath,
-            }
-          );
+          const link = spawnSync('npm', ['link', 'gateway-addon'], {
+            cwd: addonPath,
+          });
 
           if (link.error) {
             console.log(`Failed to npm-link the gateway-addon package: ${link.error}`);
           }
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         let addonLoader = require(addonPath);
         if (addonLoader.hasOwnProperty('default')) {
           addonLoader = addonLoader.default;
@@ -131,10 +126,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
 
         addonLoader(addonManagerProxy, newSettings, (packageName: string, err: unknown) => {
           console.error(`Failed to start add-on ${packageName}:`, err);
-          fail(
-            addonManagerProxy,
-            `Failed to start add-on ${obj.name}: ${err}`
-          );
+          fail(addonManagerProxy, `Failed to start add-on ${obj.name}: ${err}`);
         });
 
         pluginClient.on('unloaded', () => {
@@ -142,8 +134,9 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
         });
       } catch (e) {
         console.error(e);
-        const message = `Failed to start add-on ${obj.name}: ${
-          e.toString().replace(/^Error:\s+/, '')}`;
+        const message = `Failed to start add-on ${obj.name}: ${e
+          .toString()
+          .replace(/^Error:\s+/, '')}`;
         fail(addonManagerProxy, message);
       }
     });
@@ -166,7 +159,7 @@ process.on('unhandledRejection', (reason) => {
 
 // Command line arguments
 const getopt = new Getopt([
-  ['h', 'help', 'Display help' ],
+  ['h', 'help', 'Display help'],
   ['v', 'verbose', 'Show verbose output'],
 ]);
 

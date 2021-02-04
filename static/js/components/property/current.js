@@ -11,8 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class CurrentProperty extends NumericLabelProperty {
-}
+class CurrentProperty extends NumericLabelProperty {}
 
 window.customElements.define('webthing-current-property', CurrentProperty);
 module.exports = CurrentProperty;

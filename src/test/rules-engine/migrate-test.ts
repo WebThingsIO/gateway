@@ -5,25 +5,29 @@ const oldRule = {
   trigger: {
     type: 'MultiTrigger',
     op: 'AND',
-    triggers: [{
-      property: {
-        name: 'on',
-        type: 'boolean',
-        href: '/things/light1/properties/on',
+    triggers: [
+      {
+        property: {
+          name: 'on',
+          type: 'boolean',
+          href: '/things/light1/properties/on',
+        },
+        type: 'PulseEffect',
+        value: true,
       },
-      type: 'PulseEffect',
-      value: true,
-    }],
+    ],
   },
   effect: {
     type: 'MultiEffect',
-    effects: [{
-      type: 'ActionEffect',
-      thing: {
-        href: '/things/light1',
+    effects: [
+      {
+        type: 'ActionEffect',
+        thing: {
+          href: '/things/light1',
+        },
+        action: 'blink',
       },
-      action: 'blink',
-    }],
+    ],
   },
 };
 
@@ -32,23 +36,27 @@ const newRule = {
   trigger: {
     type: 'MultiTrigger',
     op: 'AND',
-    triggers: [{
-      property: {
-        type: 'boolean',
-        thing: 'light1',
-        id: 'on',
+    triggers: [
+      {
+        property: {
+          type: 'boolean',
+          thing: 'light1',
+          id: 'on',
+        },
+        type: 'PulseEffect',
+        value: true,
       },
-      type: 'PulseEffect',
-      value: true,
-    }],
+    ],
   },
   effect: {
     type: 'MultiEffect',
-    effects: [{
-      type: 'ActionEffect',
-      thing: 'light1',
-      action: 'blink',
-    }],
+    effects: [
+      {
+        type: 'ActionEffect',
+        thing: 'light1',
+        action: 'blink',
+      },
+    ],
   },
 };
 

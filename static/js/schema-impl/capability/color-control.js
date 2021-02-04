@@ -21,14 +21,9 @@ class ColorControl extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/color_control.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/color_control.svg',
+    });
   }
 
   /**
@@ -44,20 +39,20 @@ class ColorControl extends Thing {
 
       if (this.colorProperty === null && type === 'ColorProperty') {
         this.colorProperty = name;
-      } else if (this.colorTemperatureProperty === null &&
-                 type === 'ColorTemperatureProperty') {
+      } else if (this.colorTemperatureProperty === null && type === 'ColorTemperatureProperty') {
         this.colorTemperatureProperty = name;
       }
     }
 
     // If necessary, match on name.
-    if (this.colorProperty === null &&
-        this.displayedProperties.hasOwnProperty('color')) {
+    if (this.colorProperty === null && this.displayedProperties.hasOwnProperty('color')) {
       this.colorProperty = 'color';
     }
 
-    if (this.colorTemperatureProperty === null &&
-        this.displayedProperties.hasOwnProperty('colorTemperature')) {
+    if (
+      this.colorTemperatureProperty === null &&
+      this.displayedProperties.hasOwnProperty('colorTemperature')
+    ) {
       this.colorTemperatureProperty = 'colorTemperature';
     }
   }

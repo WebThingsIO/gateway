@@ -13,9 +13,7 @@
 import config from 'config';
 import path from 'path';
 
-const baseDir = path.resolve(
-  process.env.WEBTHINGS_HOME || config.get('profileDir')
-);
+const baseDir = path.resolve(process.env.WEBTHINGS_HOME || config.get('profileDir'));
 
 export default {
   baseDir,
@@ -26,7 +24,8 @@ export default {
   mediaDir: path.join(baseDir, 'media'),
   logDir: path.join(baseDir, 'log'),
   gatewayDir: path.resolve(path.join(__dirname, '..')),
-  addonsDir: process.env.NODE_ENV === 'test' ?
-    path.join(__dirname, 'addons-test') :
-    path.join(baseDir, 'addons'),
+  addonsDir:
+    process.env.NODE_ENV === 'test'
+      ? path.join(__dirname, 'addons-test')
+      : path.join(baseDir, 'addons'),
 };

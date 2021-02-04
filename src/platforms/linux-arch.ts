@@ -9,7 +9,7 @@
 import BasePlatform from './base';
 import child_process from 'child_process';
 import fs from 'fs';
-import {SelfUpdateStatus} from './types';
+import { SelfUpdateStatus } from './types';
 
 class LinuxArchPlatform extends BasePlatform {
   /**
@@ -61,7 +61,8 @@ class LinuxArchPlatform extends BasePlatform {
 
     try {
       const data = fs.readFileSync(tzdata, 'utf8');
-      const zones = data.split('\n')
+      const zones = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split(/\s+/g)[2])
         .sort();
@@ -80,11 +81,7 @@ class LinuxArchPlatform extends BasePlatform {
    * @returns {string} Name of timezone.
    */
   getTimezone(): string {
-    const proc = child_process.spawnSync(
-      'timedatectl',
-      ['status'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync('timedatectl', ['status'], { encoding: 'utf8' });
 
     if (proc.status !== 0) {
       return '';
@@ -113,7 +110,8 @@ class LinuxArchPlatform extends BasePlatform {
 
     try {
       const data = fs.readFileSync(fname, 'utf8');
-      const zones = data.split('\n')
+      const zones = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split('\t')[1])
         .sort();
@@ -133,11 +131,7 @@ class LinuxArchPlatform extends BasePlatform {
    *                    synchronized.
    */
   getNtpStatus(): boolean {
-    const proc = child_process.spawnSync(
-      'timedatectl',
-      ['status'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync('timedatectl', ['status'], { encoding: 'utf8' });
 
     if (proc.status !== 0) {
       return false;

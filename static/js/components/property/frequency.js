@@ -11,8 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class FrequencyProperty extends NumericLabelProperty {
-}
+class FrequencyProperty extends NumericLabelProperty {}
 
 window.customElements.define('webthing-frequency-property', FrequencyProperty);
 module.exports = FrequencyProperty;

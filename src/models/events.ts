@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Event, {EventDescription} from './event';
+import Event, { EventDescription } from './event';
 import Things from '../models/things';
 
 class Events {
@@ -29,36 +29,41 @@ class Events {
    * Get only the events which are not associated with a specific thing and
    * therefore belong to the root Gateway.
    */
-  getGatewayEvents(eventName?: string): {[name: string]: EventDescription}[] {
-    return this.events.filter((event) => {
-      return !event.getThingId();
-    }).filter((event) => {
-      if (eventName) {
-        return eventName === event.getName();
-      }
+  getGatewayEvents(eventName?: string): { [name: string]: EventDescription }[] {
+    return this.events
+      .filter((event) => {
+        return !event.getThingId();
+      })
+      .filter((event) => {
+        if (eventName) {
+          return eventName === event.getName();
+        }
 
-      return true;
-    }).map((event) => {
-      return {[event.getName()]: event.getDescription()};
-    });
+        return true;
+      })
+      .map((event) => {
+        return { [event.getName()]: event.getDescription() };
+      });
   }
-
 
   /**
    * Get only the events which are associated with a specific thing.
    */
-  getByThing(thingId: string, eventName?: string): {[name: string]: EventDescription}[] {
-    return this.events.filter((event) => {
-      return event.getThingId() === thingId;
-    }).filter((event) => {
-      if (eventName) {
-        return eventName === event.getName();
-      }
+  getByThing(thingId: string, eventName?: string): { [name: string]: EventDescription }[] {
+    return this.events
+      .filter((event) => {
+        return event.getThingId() === thingId;
+      })
+      .filter((event) => {
+        if (eventName) {
+          return eventName === event.getName();
+        }
 
-      return true;
-    }).map((event) => {
-      return {[event.getName()]: event.getDescription()};
-    });
+        return true;
+      })
+      .map((event) => {
+        return { [event.getName()]: event.getDescription() };
+      });
   }
 
   /**
@@ -71,11 +76,13 @@ class Events {
     this.events.push(event);
 
     if (event.getThingId()) {
-      return Things.getThing(event.getThingId()).then((thing) => {
-        thing.dispatchEvent(event);
-      }).catch(() => {
-        console.warn('Received event for unknown thing:', event.getThingId());
-      });
+      return Things.getThing(event.getThingId())
+        .then((thing) => {
+          thing.dispatchEvent(event);
+        })
+        .catch(() => {
+          console.warn('Received event for unknown thing:', event.getThingId());
+        });
     }
 
     return Promise.resolve();

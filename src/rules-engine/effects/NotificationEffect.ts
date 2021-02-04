@@ -5,9 +5,9 @@
  */
 
 import assert from 'assert';
-import Effect, {EffectDescription} from './Effect';
+import Effect, { EffectDescription } from './Effect';
 import PushService from '../../push-service';
-import {State} from '../State';
+import { State } from '../State';
 
 export interface NotificationEffectDescription extends EffectDescription {
   message: string;
@@ -34,12 +34,9 @@ export default class NotificationEffect extends Effect {
    * @return {EffectDescription}
    */
   toDescription(): NotificationEffectDescription {
-    return Object.assign(
-      super.toDescription(),
-      {
-        message: this.message,
-      }
-    );
+    return Object.assign(super.toDescription(), {
+      message: this.message,
+    });
   }
 
   /**

@@ -23,8 +23,7 @@ class ImageDetail {
 
     this.imageHref = null;
     for (const link of property.links) {
-      if (link.rel === 'alternate' && link.mediaType &&
-          link.mediaType.startsWith('image/')) {
+      if (link.rel === 'alternate' && link.mediaType && link.mediaType.startsWith('image/')) {
         this.imageHref = link.href;
         break;
       }
@@ -39,10 +38,7 @@ class ImageDetail {
    * Attach to the view.
    */
   attach() {
-    this.thing.element.querySelector(`#${this.id}`).addEventListener(
-      'click',
-      this.expandImage
-    );
+    this.thing.element.querySelector(`#${this.id}`).addEventListener('click', this.expandImage);
   }
 
   /**
@@ -71,24 +67,15 @@ class ImageDetail {
       </div>
       `;
 
-    element.querySelector('.media-modal-close').addEventListener(
-      'click',
-      () => {
-        document.body.removeChild(element);
-        document.querySelector('#things').style.display = 'block';
-        window.removeEventListener('resize', this.positionButtons);
-      }
-    );
+    element.querySelector('.media-modal-close').addEventListener('click', () => {
+      document.body.removeChild(element);
+      document.querySelector('#things').style.display = 'block';
+      window.removeEventListener('resize', this.positionButtons);
+    });
 
-    element.querySelector('.media-modal-refresh').addEventListener(
-      'click',
-      this.reloadImage
-    );
+    element.querySelector('.media-modal-refresh').addEventListener('click', this.reloadImage);
 
-    element.querySelector('.media-modal-image').addEventListener(
-      'load',
-      this.positionButtons
-    );
+    element.querySelector('.media-modal-image').addEventListener('load', this.positionButtons);
 
     window.addEventListener('resize', this.positionButtons);
 
@@ -108,11 +95,13 @@ class ImageDetail {
       return;
     }
 
-    API.loadImage(this.imageHref).then((data) => {
-      img.src = URL.createObjectURL(data);
-    }).catch((e) => {
-      console.error(`Failed to load image: ${e}`);
-    });
+    API.loadImage(this.imageHref)
+      .then((data) => {
+        img.src = URL.createObjectURL(data);
+      })
+      .catch((e) => {
+        console.error(`Failed to load image: ${e}`);
+      });
   }
 
   _positionButtons() {

@@ -108,8 +108,7 @@ class BlockConfigureDropdown {
         if (valueInput) {
           value = parseFloat(valueInput.value);
         } else {
-          value =
-            parseFloat(valueSelect.options[valueSelect.selectedIndex].value);
+          value = parseFloat(valueSelect.options[valueSelect.selectedIndex].value);
         }
 
         if (schema.hasOwnProperty('multipleOf')) {

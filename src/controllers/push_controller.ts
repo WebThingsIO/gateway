@@ -20,10 +20,10 @@ function build(): express.Router {
   controller.get('/vapid-public-key', async (_request, response) => {
     const vapid = await PushService.getVAPIDKeys();
     if (!vapid) {
-      response.status(500).json({error: 'vapid not configured'});
+      response.status(500).json({ error: 'vapid not configured' });
       return;
     }
-    response.status(200).json({publicKey: vapid.publicKey});
+    response.status(200).json({ publicKey: vapid.publicKey });
   });
 
   controller.post('/register', async (request, response) => {
@@ -32,7 +32,7 @@ function build(): express.Router {
       await PushService.createPushSubscription(subscription);
     } catch (err) {
       console.error(`controller: Failed to register ${subscription}`, err);
-      response.status(500).json({error: 'register failed'});
+      response.status(500).json({ error: 'register failed' });
       return;
     }
     response.status(200).json({});

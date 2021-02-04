@@ -48,11 +48,15 @@ class EventList {
     let events = model.events;
 
     // Get the list in a more friendly format.
-    events = events.map((e) => {
-      const name = Object.keys(e)[0];
-      const timestamp = new Date(e[name].timestamp);
-      return Object.assign(e[name], {name, timestamp});
-    }).sort((a, b) => b.timestamp - a.timestamp).slice(0, this.limit).reverse();
+    events = events
+      .map((e) => {
+        const name = Object.keys(e)[0];
+        const timestamp = new Date(e[name].timestamp);
+        return Object.assign(e[name], { name, timestamp });
+      })
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, this.limit)
+      .reverse();
 
     // Build the list in descending order by date.
     for (const event of events) {
@@ -67,10 +71,12 @@ class EventList {
   }
 
   onEvent(data) {
-    const events = Object.keys(data).map((name) => {
-      const timestamp = new Date(data[name].timestamp);
-      return Object.assign(data[name], {name, timestamp});
-    }).sort((a, b) => a.timestamp - b.timestamp);
+    const events = Object.keys(data)
+      .map((name) => {
+        const timestamp = new Date(data[name].timestamp);
+        return Object.assign(data[name], { name, timestamp });
+      })
+      .sort((a, b) => a.timestamp - b.timestamp);
 
     for (const event of events) {
       this.prependEvent(event);
@@ -99,7 +105,7 @@ class EventList {
     let data = event.data;
     if (data !== null) {
       if (typeof data !== 'object' || Array.isArray(data)) {
-        data = {data};
+        data = { data };
       }
 
       for (const name of Array.from(Object.keys(data)).sort()) {
@@ -108,7 +114,7 @@ class EventList {
         }
 
         // eslint-disable-next-line prefer-const
-        let {value, unit} = Units.convert(data[name], schema[name].unit);
+        let { value, unit } = Units.convert(data[name], schema[name].unit);
 
         switch (schema[name].type) {
           case 'number':
@@ -121,7 +127,7 @@ class EventList {
           case 'object':
           case 'array':
             value = JSON.stringify(value);
-            // eslint-ignore-next-line no-fallthrough
+          // eslint-ignore-next-line no-fallthrough
           case 'boolean':
           case 'string':
           default:

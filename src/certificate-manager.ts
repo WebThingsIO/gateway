@@ -13,11 +13,11 @@ import fs from 'fs';
 import path from 'path';
 import * as Settings from './models/settings';
 import sleep from './sleep';
-import {URLSearchParams} from 'url';
+import { URLSearchParams } from 'url';
 import UserProfile from './user-profile';
-import {Server} from 'https';
+import { Server } from 'https';
 
-const DEBUG = false || (process.env.NODE_ENV === 'test');
+const DEBUG = false || process.env.NODE_ENV === 'test';
 
 const DIRECTORY_URL = acme.directory.letsencrypt.production;
 
@@ -45,18 +45,9 @@ interface SSLContext {
  * @param {string} chain - The generated certificate chain
  */
 function writeCertificates(certificate: string, privateKey: string, chain: string): void {
-  fs.writeFileSync(
-    path.join(UserProfile.sslDir, 'certificate.pem'),
-    certificate
-  );
-  fs.writeFileSync(
-    path.join(UserProfile.sslDir, 'privatekey.pem'),
-    privateKey
-  );
-  fs.writeFileSync(
-    path.join(UserProfile.sslDir, 'chain.pem'),
-    chain
-  );
+  fs.writeFileSync(path.join(UserProfile.sslDir, 'certificate.pem'), certificate);
+  fs.writeFileSync(path.join(UserProfile.sslDir, 'privatekey.pem'), privateKey);
+  fs.writeFileSync(path.join(UserProfile.sslDir, 'chain.pem'), chain);
 }
 
 /**
@@ -69,12 +60,16 @@ function writeCertificates(certificate: string, privateKey: string, chain: strin
  * @param {boolean} optout - Whether or not the user opted out of emails
  * @param {function} callback - Callback function
  */
-export async function register(email: string, reclamationToken: string | null, subdomain: string,
-                               fulldomain: string, optout: boolean,
-                               callback: (err?: string) => void): Promise<void> {
+export async function register(
+  email: string,
+  reclamationToken: string | null,
+  subdomain: string,
+  fulldomain: string,
+  optout: boolean,
+  callback: (err?: string) => void
+): Promise<void> {
   if (DEBUG) {
-    console.debug('Starting registration:', email, reclamationToken, subdomain,
-                  fulldomain, optout);
+    console.debug('Starting registration:', email, reclamationToken, subdomain, fulldomain, optout);
   } else {
     console.log('Starting registration');
   }
@@ -144,26 +139,28 @@ export async function register(email: string, reclamationToken: string | null, s
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeCreateFn =
-    async (_authz: acme.Authorization, _challenge: unknown, keyAuthorization: string):
-    Promise<void> => {
-      const params = new URLSearchParams();
-      params.set('token', token);
-      params.set('challenge', keyAuthorization);
+  const challengeCreateFn = async (
+    _authz: acme.Authorization,
+    _challenge: unknown,
+    keyAuthorization: string
+  ): Promise<void> => {
+    const params = new URLSearchParams();
+    params.set('token', token);
+    params.set('challenge', keyAuthorization);
 
-      // Now that we have a challenge, we call our registration server to
-      // setup the TXT record
-      const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error(`Failed to set DNS token on server: ${response.status}`);
-      }
+    // Now that we have a challenge, we call our registration server to
+    // setup the TXT record
+    const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to set DNS token on server: ${response.status}`);
+    }
 
-      console.log('Set DNS token on registration server');
+    console.log('Set DNS token on registration server');
 
-      // Let's wait a few seconds for changes to propagate on the registration
-      // server and its database.
-      await sleep(2500);
-    };
+    // Let's wait a few seconds for changes to propagate on the registration
+    // server and its database.
+    await sleep(2500);
+  };
 
   /**
    * Function used to remove an ACME challenge response
@@ -205,7 +202,8 @@ export async function register(email: string, reclamationToken: string | null, s
       console.debug('CSR:', csr.toString());
       console.debug('Certificate(s):', cert.toString());
     } else {
-      console.log('Received certificate from Let\'s Encrypt');
+      // eslint-disable-next-line @typescript-eslint/quotes
+      console.log("Received certificate from Let's Encrypt");
     }
 
     const chain = cert
@@ -223,19 +221,16 @@ export async function register(email: string, reclamationToken: string | null, s
   }
 
   try {
-    await fetch(
-      `${endpoint}/newsletter/subscribe`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          subscribe: !optout,
-        }),
-      }
-    );
+    await fetch(`${endpoint}/newsletter/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        subscribe: !optout,
+      }),
+    });
   } catch (e) {
     console.error('Failed to subscribe to newsletter:', e);
   }
@@ -254,9 +249,7 @@ export async function renew(server: Server): Promise<void> {
 
   // Check if we need to renew yet
   try {
-    const oldCert = fs.readFileSync(
-      path.join(UserProfile.sslDir, 'certificate.pem')
-    );
+    const oldCert = fs.readFileSync(path.join(UserProfile.sslDir, 'certificate.pem'));
     const info = await acme.forge.readCertificateInfo(oldCert);
     const now = new Date().getTime();
 
@@ -271,7 +264,7 @@ export async function renew(server: Server): Promise<void> {
 
   let tunnelToken: TunnelToken;
   try {
-    tunnelToken = <TunnelToken>(await Settings.getSetting('tunneltoken'));
+    tunnelToken = <TunnelToken>await Settings.getSetting('tunneltoken');
   } catch (e) {
     console.error('Tunnel token not set!');
     return;
@@ -285,27 +278,29 @@ export async function renew(server: Server): Promise<void> {
    * @param {string} keyAuthorization Authorization key
    * @returns {Promise}
    */
-  const challengeCreateFn =
-    async (_authz: acme.Authorization, _challenge: unknown, keyAuthorization: string):
-    Promise<void> => {
-      const params = new URLSearchParams();
-      params.set('token', tunnelToken.token);
-      params.set('challenge', keyAuthorization);
+  const challengeCreateFn = async (
+    _authz: acme.Authorization,
+    _challenge: unknown,
+    keyAuthorization: string
+  ): Promise<void> => {
+    const params = new URLSearchParams();
+    params.set('token', tunnelToken.token);
+    params.set('challenge', keyAuthorization);
 
-      // Now that we have a challenge, we call our registration server to
-      // setup the TXT record
-      const endpoint = config.get('ssltunnel.registration_endpoint');
-      const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error(`Failed to set DNS token on server: ${response.status}`);
-      }
+    // Now that we have a challenge, we call our registration server to
+    // setup the TXT record
+    const endpoint = config.get('ssltunnel.registration_endpoint');
+    const response = await fetch(`${endpoint}/dnsconfig?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to set DNS token on server: ${response.status}`);
+    }
 
-      console.log('Set DNS token on registration server');
+    console.log('Set DNS token on registration server');
 
-      // Let's wait a few seconds for changes to propagate on the registration
-      // server and its database.
-      await sleep(2500);
-    };
+    // Let's wait a few seconds for changes to propagate on the registration
+    // server and its database.
+    await sleep(2500);
+  };
 
   /**
    * Function used to remove an ACME challenge response
@@ -349,7 +344,8 @@ export async function renew(server: Server): Promise<void> {
       console.debug('CSR:', csr.toString());
       console.debug('Certificate(s):', cert.toString());
     } else {
-      console.log('Received certificate from Let\'s Encrypt');
+      // eslint-disable-next-line @typescript-eslint/quotes
+      console.log("Received certificate from Let's Encrypt");
     }
 
     const chain = cert
@@ -362,8 +358,9 @@ export async function renew(server: Server): Promise<void> {
     console.log('Wrote certificates to file system');
 
     if (server) {
-      // eslint-disable-next-line max-len
-      const ctx = <SSLContext>(<Record<string, unknown>>(<Record<string, unknown>><unknown>server)._sharedCreds).context;
+      const ctx = <SSLContext>(
+        (<Record<string, unknown>>(<Record<string, unknown>>(<unknown>server))._sharedCreds).context
+      );
       ctx.setCert(chain[0]);
       ctx.setKey(key.toString());
       ctx.addCACert(chain.join('\n'));

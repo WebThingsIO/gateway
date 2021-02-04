@@ -9,11 +9,10 @@ const Gateway = require('../rules/Gateway');
 const RuleCard = require('../rules/RuleCard');
 const page = require('page');
 
-'use strict';
+('use strict');
 
-// eslint-disable-next-line no-unused-vars
 const RulesScreen = {
-  init: function() {
+  init: function () {
     this.createRuleButton = document.getElementById('create-rule-button');
     this.createRuleHint = document.getElementById('create-rule-hint');
     this.rulesList = document.getElementById('rules');
@@ -49,7 +48,7 @@ const RulesScreen = {
    * Add a rule, filling it with the data from a RuleDescription
    * @param {RuleDescription} desc
    */
-  addRuleCard: function(desc) {
+  addRuleCard: function (desc) {
     const ruleElt = document.createElement('div');
     ruleElt.classList.add('rule');
     try {
@@ -63,11 +62,8 @@ const RulesScreen = {
     this.rulesList.appendChild(ruleElt);
   },
 
-  show: function() {
-    Promise.all([
-      this.gateway.readThings(),
-      this.gateway.readNotifiers(),
-    ]).then(() => {
+  show: function () {
+    Promise.all([this.gateway.readThings(), this.gateway.readNotifiers()]).then(() => {
       return this.readRules();
     });
   },

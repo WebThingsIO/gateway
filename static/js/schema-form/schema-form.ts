@@ -11,7 +11,7 @@
  * Date on whitch referred: Thu, Mar 08, 2018  1:08:52 PM
  */
 
-import {ErrorObject} from 'ajv';
+import { ErrorObject } from 'ajv';
 import * as SchemaUtils from './schema-utils';
 import Validator from './validator';
 import SchemaField from './schema-field';
@@ -64,12 +64,11 @@ export default class SchemaForm {
       <Record<string, unknown>>formData
     );
     this.formData = SchemaUtils.getDefaultFormState(schema, formData, this.definitions);
-    this.submitText =
-      options.hasOwnProperty('submitText') ? <string>options.submitText : '';
-    this.noValidate =
-      options.hasOwnProperty('validate') ? !<boolean>options.validate : false;
-    this.liveValidate =
-      options.hasOwnProperty('liveValidate') ? <boolean>options.liveValidate : true;
+    this.submitText = options.hasOwnProperty('submitText') ? <string>options.submitText : '';
+    this.noValidate = options.hasOwnProperty('validate') ? !(<boolean>options.validate) : false;
+    this.liveValidate = options.hasOwnProperty('liveValidate')
+      ? <boolean>options.liveValidate
+      : true;
   }
 
   onChange(formData: unknown): void {
@@ -79,7 +78,7 @@ export default class SchemaForm {
     this.submitButton!.disabled = false;
 
     if (!this.noValidate && this.liveValidate) {
-      const {errors} = this.validate(formData);
+      const { errors } = this.validate(formData);
       error = errors;
     }
     if (!this.noValidate && error) {
@@ -89,12 +88,12 @@ export default class SchemaForm {
     }
   }
 
-  validate(formData: unknown): {errors: ErrorObject[], errorSchema: Record<string, unknown>} {
+  validate(formData: unknown): { errors: ErrorObject[]; errorSchema: Record<string, unknown> } {
     return Validator.validateFormData(formData, this.schema);
   }
 
   handleSubmit(e: MouseEvent): void {
-    const {errors} = this.validate(this.formData);
+    const { errors } = this.validate(this.formData);
     const button = <HTMLButtonElement>e.target!;
     button.disabled = true;
 
@@ -139,7 +138,8 @@ export default class SchemaForm {
       this.idSchema,
       this.name,
       this.definitions,
-      onChangeHandle).render();
+      onChangeHandle
+    ).render();
 
     this.errorField = new ErrorField();
 

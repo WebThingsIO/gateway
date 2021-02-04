@@ -11,9 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class ConcentrationProperty extends NumericLabelProperty {
-}
+class ConcentrationProperty extends NumericLabelProperty {}
 
-window.customElements.define('webthing-concentration-property',
-                             ConcentrationProperty);
+window.customElements.define('webthing-concentration-property', ConcentrationProperty);
 module.exports = ConcentrationProperty;

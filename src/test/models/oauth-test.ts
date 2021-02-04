@@ -1,4 +1,4 @@
-import {scopeValidSubset} from '../../oauth-types';
+import { scopeValidSubset } from '../../oauth-types';
 
 describe('OAuth types', () => {
   it('should verify scopes', () => {
@@ -7,15 +7,15 @@ describe('OAuth types', () => {
     expect(scopeValidSubset('/things:readwrite', '/things/potato:readwrite')).toBeTruthy();
 
     expect(
-      scopeValidSubset('/things/potato:readwrite /things/tomato:read',
-                       '/things/potato:readwrite')).toBeTruthy();
+      scopeValidSubset('/things/potato:readwrite /things/tomato:read', '/things/potato:readwrite')
+    ).toBeTruthy();
 
     expect(
-      scopeValidSubset('/things/potato:read /things/tomato:readwrite',
-                       '/things/potato:readwrite')).toBeFalsy();
+      scopeValidSubset('/things/potato:read /things/tomato:readwrite', '/things/potato:readwrite')
+    ).toBeFalsy();
 
     expect(
-      scopeValidSubset('/things/potato:read /things/tomato:readwrite',
-                       '/things:readwrite')).toBeFalsy();
+      scopeValidSubset('/things/potato:read /things/tomato:readwrite', '/things:readwrite')
+    ).toBeFalsy();
   });
 });

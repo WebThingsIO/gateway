@@ -48,8 +48,7 @@ function setupForm() {
 
   document.querySelector('#skip-button').addEventListener('click', skip);
   document.querySelector('#back-button').addEventListener('click', back);
-  document.querySelector('#showpassword').addEventListener('click',
-                                                           displayPassword);
+  document.querySelector('#showpassword').addEventListener('click', displayPassword);
 }
 
 window.addEventListener('load', function app_onLoad() {

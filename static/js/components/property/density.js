@@ -11,9 +11,7 @@
 
 const NumericLabelProperty = require('./numeric-label');
 
-class DensityProperty extends NumericLabelProperty {
-}
+class DensityProperty extends NumericLabelProperty {}
 
-window.customElements.define('webthing-density-property',
-                             DensityProperty);
+window.customElements.define('webthing-density-property', DensityProperty);
 module.exports = DensityProperty;

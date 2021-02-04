@@ -12,9 +12,9 @@ export default class Deferred<T, E> {
 
   private promise: Promise<T>;
 
-  private resolveFunc?: ((_value: T) => void);
+  private resolveFunc?: (_value: T) => void;
 
-  private rejectFunc?: ((_reason: E) => void);
+  private rejectFunc?: (_reason: E) => void;
 
   constructor() {
     this.promise = new Promise((resolve, reject) => {

@@ -8,11 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Action, {ActionDescription} from '../models/action';
+import Action, { ActionDescription } from '../models/action';
 import Actions from '../models/actions';
 import ActionsController from './actions_controller';
 import * as Constants from '../constants';
-import Event, {EventDescription} from '../models/event';
+import Event, { EventDescription } from '../models/event';
 import EventsController from './events_controller';
 import express from 'express';
 import expressWs from 'express-ws';
@@ -21,9 +21,9 @@ import WebSocket from 'ws';
 import Thing from '../models/thing';
 import Things from '../models/things';
 import AddonManager from '../addon-manager';
-import {WithJWT} from '../jwt-middleware';
-import {Input, PropertyValue} from 'gateway-addon/lib/schema';
-import {Property} from 'gateway-addon';
+import { WithJWT } from '../jwt-middleware';
+import { Input, PropertyValue } from 'gateway-addon/lib/schema';
+import { Property } from 'gateway-addon';
 
 interface SetPropertyMessage {
   messageType: 'setProperty';
@@ -34,7 +34,7 @@ interface SetPropertyMessage {
 interface RequestActionMessage {
   messageType: 'requestAction';
   id?: string;
-  data: Record<string, {input?: Input}>;
+  data: Record<string, { input?: Input }>;
 }
 
 interface AddEventSubscriptionMessage {
@@ -97,14 +97,14 @@ interface ErrorMessage {
 
 type IncomingMessage = SetPropertyMessage | RequestActionMessage | AddEventSubscriptionMessage;
 type OutgoingMessage =
-  PropertyStatusMessage |
-  ActionStatusMessage |
-  EventMessage |
-  ConnectedMessage |
-  ThingAddedMessage |
-  ThingModifiedMessage |
-  ThingRemovedMessage |
-  ErrorMessage;
+  | PropertyStatusMessage
+  | ActionStatusMessage
+  | EventMessage
+  | ConnectedMessage
+  | ThingAddedMessage
+  | ThingModifiedMessage
+  | ThingRemovedMessage
+  | ErrorMessage;
 
 function build(): express.Router {
   const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
@@ -127,9 +127,12 @@ function build(): express.Router {
         response.status(400).send('Token must contain scope');
       } else {
         const scope = request.jwt.getPayload()!.scope!;
-        if (!scope.includes(' ') && scope.indexOf('/') == 0 &&
+        if (
+          !scope.includes(' ') &&
+          scope.indexOf('/') == 0 &&
           scope.split('/').length == 2 &&
-          scope.split(':')[0] === Constants.THINGS_PATH) {
+          scope.split(':')[0] === Constants.THINGS_PATH
+        ) {
           Things.getThingDescriptions(request.get('Host'), request.secure).then((things) => {
             response.status(200).json(things);
           });
@@ -141,10 +144,11 @@ function build(): express.Router {
             const parts = path.split(':');
             hrefs.push(parts[0]);
           }
-          Things.getListThingDescriptions(hrefs, request.get('Host'), request.secure)
-            .then((things) => {
+          Things.getListThingDescriptions(hrefs, request.get('Host'), request.secure).then(
+            (things) => {
               response.status(200).json(things);
-            });
+            }
+          );
         }
       }
     } else {
@@ -155,17 +159,14 @@ function build(): express.Router {
   });
 
   controller.patch('/', async (request, response) => {
-    if (!request.body ||
-        !request.body.hasOwnProperty('thingId') ||
-        !request.body.thingId) {
+    if (!request.body || !request.body.hasOwnProperty('thingId') || !request.body.thingId) {
       response.status(400).send('Invalid request');
       return;
     }
 
     const thingId = request.body.thingId;
 
-    if (request.body.hasOwnProperty('pin') &&
-        request.body.pin.length > 0) {
+    if (request.body.hasOwnProperty('pin') && request.body.pin.length > 0) {
       const pin = request.body.pin;
 
       try {
@@ -175,19 +176,17 @@ function build(): express.Router {
         console.error(`Failed to set PIN for ${thingId}: ${e}`);
         response.status(400).send(e);
       }
-    } else if (request.body.hasOwnProperty('username') &&
-               request.body.username.length > 0 &&
-               request.body.hasOwnProperty('password') &&
-               request.body.password.length > 0) {
+    } else if (
+      request.body.hasOwnProperty('username') &&
+      request.body.username.length > 0 &&
+      request.body.hasOwnProperty('password') &&
+      request.body.password.length > 0
+    ) {
       const username = request.body.username;
       const password = request.body.password;
 
       try {
-        const device = await AddonManager.setCredentials(
-          thingId,
-          username,
-          password
-        );
+        const device = await AddonManager.setCredentials(thingId, username, password);
         response.status(200).json(device);
       } catch (e) {
         console.error(`Failed to set credentials for ${thingId}: ${e}`);
@@ -229,7 +228,7 @@ function build(): express.Router {
 
       const key = 'addons.config.thing-url-adapter';
       try {
-        const config = <Record<string, unknown>>(await Settings.getSetting(key));
+        const config = <Record<string, unknown>>await Settings.getSetting(key);
         if (typeof config === 'undefined') {
           throw new Error('Setting is undefined.');
         }
@@ -273,12 +272,14 @@ function build(): express.Router {
    */
   controller.get('/:thingId', (request, response) => {
     const id = request.params.thingId;
-    Things.getThingDescription(id, request.get('Host'), request.secure).then((thing) => {
-      response.status(200).json(thing);
-    }).catch((error: unknown) => {
-      console.error(`Error getting thing description for thing with id ${id}:`, error);
-      response.status(404).send(error);
-    });
+    Things.getThingDescription(id, request.get('Host'), request.secure)
+      .then((thing) => {
+        response.status(200).json(thing);
+      })
+      .catch((error: unknown) => {
+        console.error(`Error getting thing description for thing with id ${id}:`, error);
+        response.status(404).send(error);
+      });
   });
 
   /**
@@ -312,46 +313,41 @@ function build(): express.Router {
   /**
    * Get a property of a Thing.
    */
-  controller.get(
-    '/:thingId/properties/:propertyName',
-    async (request, response) => {
-      const thingId = request.params.thingId;
-      const propertyName = request.params.propertyName;
-      try {
-        const value = await Things.getThingProperty(thingId, propertyName);
-        const result: Record<string, unknown> = {};
-        result[propertyName] = value;
-        response.status(200).json(result);
-      } catch (err) {
-        response.status(err.code).send(err.message);
-      }
-    });
+  controller.get('/:thingId/properties/:propertyName', async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName;
+    try {
+      const value = await Things.getThingProperty(thingId, propertyName);
+      const result: Record<string, unknown> = {};
+      result[propertyName] = value;
+      response.status(200).json(result);
+    } catch (err) {
+      response.status(err.code).send(err.message);
+    }
+  });
 
   /**
    * Set a property of a Thing.
    */
-  controller.put(
-    '/:thingId/properties/:propertyName',
-    async (request, response) => {
-      const thingId = request.params.thingId;
-      const propertyName = request.params.propertyName;
-      if (!request.body || typeof request.body[propertyName] === 'undefined') {
-        response.status(400).send('Invalid property name');
-        return;
-      }
-      const value = request.body[propertyName];
-      try {
-        const updatedValue = await Things.setThingProperty(thingId, propertyName,
-                                                           value);
-        const result = {
-          [propertyName]: updatedValue,
-        };
-        response.status(200).json(result);
-      } catch (e) {
-        console.error('Error setting property:', e);
-        response.status(e.code || 500).send(e.message);
-      }
-    });
+  controller.put('/:thingId/properties/:propertyName', async (request, response) => {
+    const thingId = request.params.thingId;
+    const propertyName = request.params.propertyName;
+    if (!request.body || typeof request.body[propertyName] === 'undefined') {
+      response.status(400).send('Invalid property name');
+      return;
+    }
+    const value = request.body[propertyName];
+    try {
+      const updatedValue = await Things.setThingProperty(thingId, propertyName, value);
+      const result = {
+        [propertyName]: updatedValue,
+      };
+      response.status(200).json(result);
+    } catch (e) {
+      console.error('Error setting property:', e);
+      response.status(e.code || 500).send(e.message);
+    }
+  });
 
   /**
    * Use an ActionsController to handle each thing's actions.
@@ -383,12 +379,8 @@ function build(): express.Router {
 
     let description;
     try {
-      if (request.body.hasOwnProperty('floorplanX') &&
-          request.body.hasOwnProperty('floorplanY')) {
-        description = await thing.setCoordinates(
-          request.body.floorplanX,
-          request.body.floorplanY
-        );
+      if (request.body.hasOwnProperty('floorplanX') && request.body.hasOwnProperty('floorplanY')) {
+        description = await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
       } else if (request.body.hasOwnProperty('layoutIndex')) {
         description = await thing.setLayoutIndex(request.body.layoutIndex);
       } else {
@@ -462,12 +454,14 @@ function build(): express.Router {
     const thingId = request.params.thingId;
 
     const _finally = (): void => {
-      Things.removeThing(thingId).then(() => {
-        console.log(`Successfully deleted ${thingId} from database.`);
-        response.sendStatus(204);
-      }).catch((e: unknown) => {
-        response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
-      });
+      Things.removeThing(thingId)
+        .then(() => {
+          console.log(`Successfully deleted ${thingId} from database.`);
+          response.sendStatus(204);
+        })
+        .catch((e: unknown) => {
+          response.status(500).send(`Failed to remove thing ${thingId}: ${e}`);
+        });
     };
 
     AddonManager.removeThing(thingId).then(_finally, _finally);
@@ -483,8 +477,7 @@ function build(): express.Router {
     const thingId = request.params.thingId;
     const subscribedEventNames: Record<string, boolean> = {};
 
-    function sendMessage(message: OutgoingMessage):
-    void {
+    function sendMessage(message: OutgoingMessage): void {
       websocket.send(JSON.stringify(message), (err) => {
         if (err) {
           console.error(`WebSocket sendMessage failed: ${err}`);
@@ -509,9 +502,11 @@ function build(): express.Router {
     }
 
     function onActionStatus(action: Action): void {
-      if (action.hasOwnProperty('thingId') &&
-          action.getThingId() !== null &&
-          action.getThingId() !== thingId) {
+      if (
+        action.hasOwnProperty('thingId') &&
+        action.getThingId() !== null &&
+        action.getThingId() !== thingId
+      ) {
         return;
       }
 
@@ -566,9 +561,10 @@ function build(): express.Router {
           delete thingCleanups[thing.getId()];
         }
 
-        if (typeof thingId !== 'undefined' &&
-            (websocket.readyState === WebSocket.OPEN ||
-             websocket.readyState === WebSocket.CONNECTING)) {
+        if (
+          typeof thingId !== 'undefined' &&
+          (websocket.readyState === WebSocket.OPEN || websocket.readyState === WebSocket.CONNECTING)
+        ) {
           websocket.close();
         } else {
           sendMessage({
@@ -599,17 +595,19 @@ function build(): express.Router {
 
       // send initial property values
       for (const name in thing.getProperties()) {
-        AddonManager.getProperty(thing.getId(), name).then((value) => {
-          sendMessage({
-            id: thing.getId(),
-            messageType: Constants.PROPERTY_STATUS,
-            data: {
-              [name]: value,
-            },
+        AddonManager.getProperty(thing.getId(), name)
+          .then((value) => {
+            sendMessage({
+              id: thing.getId(),
+              messageType: Constants.PROPERTY_STATUS,
+              data: {
+                [name]: value,
+              },
+            });
+          })
+          .catch((e: unknown) => {
+            console.error(`Failed to get property ${name}:`, e);
           });
-        }).catch((e: unknown) => {
-          console.error(`Failed to get property ${name}:`, e);
-        });
       }
     }
 
@@ -624,20 +622,22 @@ function build(): express.Router {
     }
 
     if (typeof thingId !== 'undefined') {
-      Things.getThing(thingId).then((thing) => {
-        addThing(thing);
-      }).catch(() => {
-        console.error('WebSocket opened on nonexistent thing', thingId);
-        sendMessage({
-          messageType: Constants.ERROR,
-          data: {
-            code: 404,
-            status: '404 Not Found',
-            message: `Thing ${thingId} not found`,
-          },
+      Things.getThing(thingId)
+        .then((thing) => {
+          addThing(thing);
+        })
+        .catch(() => {
+          console.error('WebSocket opened on nonexistent thing', thingId);
+          sendMessage({
+            messageType: Constants.ERROR,
+            data: {
+              code: 404,
+              status: '404 Not Found',
+              message: `Thing ${thingId} not found`,
+            },
+          });
+          websocket.close();
         });
-        websocket.close();
-      });
     } else {
       Things.getThings().then((things: Map<string, Thing>) => {
         things.forEach(addThing);
@@ -717,11 +717,10 @@ function build(): express.Router {
 
       switch (request.messageType) {
         case Constants.SET_PROPERTY: {
-          const setRequests = Object.keys((<SetPropertyMessage>request).data)
-            .map((property) => {
-              const value = (<SetPropertyMessage>request).data[property];
-              return device.setProperty(property, value);
-            });
+          const setRequests = Object.keys((<SetPropertyMessage>request).data).map((property) => {
+            const value = (<SetPropertyMessage>request).data[property];
+            return device.setProperty(property, value);
+          });
           Promise.all(setRequests).catch((err) => {
             // If any set fails, send an error
             sendMessage({
@@ -747,27 +746,29 @@ function build(): express.Router {
         case Constants.REQUEST_ACTION: {
           for (const actionName in (<RequestActionMessage>request).data) {
             const actionParams = (<RequestActionMessage>request).data[actionName].input;
-            Things.getThing(<string>id).then((thing) => {
-              const action = new Action(actionName, actionParams, thing);
-              return Actions.add(action).then(() => {
-                return AddonManager.requestAction(
-                  <string>id,
-                  action.getId(),
-                  actionName,
-                  actionParams ?? null
-                );
+            Things.getThing(<string>id)
+              .then((thing) => {
+                const action = new Action(actionName, actionParams, thing);
+                return Actions.add(action).then(() => {
+                  return AddonManager.requestAction(
+                    <string>id,
+                    action.getId(),
+                    actionName,
+                    actionParams ?? null
+                  );
+                });
+              })
+              .catch((err: Error) => {
+                sendMessage({
+                  messageType: Constants.ERROR,
+                  data: {
+                    code: 400,
+                    status: '400 Bad Request',
+                    message: err.message,
+                    request,
+                  },
+                });
               });
-            }).catch((err: Error) => {
-              sendMessage({
-                messageType: Constants.ERROR,
-                data: {
-                  code: 400,
-                  status: '400 Bad Request',
-                  message: err.message,
-                  request,
-                },
-              });
-            });
           }
           break;
         }

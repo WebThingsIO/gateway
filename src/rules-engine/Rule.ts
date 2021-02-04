@@ -5,13 +5,13 @@
  */
 
 import * as Effects from './effects/index';
-import Effect, {EffectDescription} from './effects/Effect';
+import Effect, { EffectDescription } from './effects/Effect';
 import * as Triggers from './triggers/index';
 import * as Events from './Events';
-import Trigger, {TriggerDescription} from './triggers/Trigger';
-import {State} from './State';
+import Trigger, { TriggerDescription } from './triggers/Trigger';
+import { State } from './State';
 
-const DEBUG = false || (process.env.NODE_ENV === 'test');
+const DEBUG = false || process.env.NODE_ENV === 'test';
 
 export interface RuleDescription {
   enabled: boolean;
