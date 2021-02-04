@@ -4,9 +4,8 @@
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack');
+const ImageMinimizerWebpackPlugin = require('image-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const { v1: uuidv1 } = require('uuid');
@@ -39,10 +38,8 @@ const pluginsWeb = [
       },
     ],
   }),
-  new ImageminPlugin({
-    test: /\.(jpe?g|png|gif|svg)$/i,
-    name: '[path][name].[ext]',
-    imageminOptions: {
+  new ImageMinimizerWebpackPlugin({
+    minimizerOptions: {
       plugins: ['gifsicle', 'jpegtran', 'optipng', 'svgo'],
     },
   }),
@@ -195,7 +192,9 @@ const webpackWeb = {
           {
             loader: 'css-loader',
             options: {
+              url: false,
               sourceMap: true,
+              esModule: false,
             },
           },
         ],
@@ -210,7 +209,9 @@ const webpackWeb = {
           {
             loader: 'css-loader',
             options: {
+              url: false,
               sourceMap: true,
+              esModule: false,
             },
           },
         ],
@@ -235,10 +236,8 @@ const webpackWeb = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8000,
+              limit: 8192,
               fallback: 'file-loader',
-              publicPath: '/images',
-              outputPath: 'images',
               esModule: false,
             },
           },
@@ -261,10 +260,6 @@ const pluginsSW = [
     banner: `const VERSION = '${uuidv1()}';`,
     raw: true,
   }),
-  new ExtractTextPlugin({
-    filename: 'service-worker.js',
-    allChunks: true,
-  }),
 ];
 
 const webpackSW = {
@@ -275,21 +270,41 @@ const webpackSW = {
   target: 'webworker',
   output: {
     path: path.join(__dirname, 'build', 'static'),
-    filename: '[name]_',
+    filename: '[name]',
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         include: path.resolve(__dirname, 'static'),
-        use: ExtractTextPlugin.extract({
-          use: {
-            loader: 'raw-loader',
-            options: {
-              esModule: false,
+        use: [
+          {
+            loader: 'babel-loader',
+            query: {
+              babelrc: false,
+              sourceType: 'script',
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    modules: 'commonjs',
+                    targets: {
+                      chrome: '43',
+                      opera: '29',
+                      edge: '14',
+                      firefox: '52',
+                      safari: '10.1',
+                      ios: '10',
+                    },
+                    useBuiltIns: 'usage',
+                    corejs: 3,
+                  },
+                ],
+              ],
+              plugins: ['@babel/plugin-proposal-object-rest-spread'],
             },
           },
-        }),
+        ],
       },
     ],
   },
