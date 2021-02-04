@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {PropertyValue, Property as PropertySchema} from 'gateway-addon/lib/schema';
+import { PropertyValue, Property as PropertySchema } from 'gateway-addon/lib/schema';
 import Deferred from '../deferred';
-import {Property, Constants} from 'gateway-addon';
+import { Property, Constants } from 'gateway-addon';
 import DeviceProxy from './device-proxy';
 const MessageType = Constants.MessageType;
 
@@ -28,7 +28,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
   }
 
   getDevice(): DeviceProxy {
-    return <DeviceProxy>(super.getDevice());
+    return <DeviceProxy>super.getDevice();
   }
 
   asDict(): PropertySchema {
@@ -101,26 +101,30 @@ export default class PropertyProxy extends Property<PropertyValue> {
    */
   setValue(value: PropertyValue): Promise<PropertyValue> {
     return new Promise((resolve, reject) => {
-      this.getDevice().getAdapter().sendMsg(
-        MessageType.DEVICE_SET_PROPERTY_COMMAND,
-        {
-          deviceId: this.getDevice().getId(),
-          propertyName: this.getName(),
-          propertyValue: value,
-        }
-      );
+      this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
+        deviceId: this.getDevice().getId(),
+        propertyName: this.getName(),
+        propertyValue: value,
+      });
 
       // TODO: Add a timeout
 
-      this.onPropertyChanged().then((updatedValue) => {
-        resolve(updatedValue);
-      }).catch((error) => {
-        console.error('PropertyProxy: Failed to setProperty',
-                      this.getName(), 'to', value,
-                      'for device:', this.getDevice().getId());
-        console.error(error);
-        reject(error);
-      });
+      this.onPropertyChanged()
+        .then((updatedValue) => {
+          resolve(updatedValue);
+        })
+        .catch((error) => {
+          console.error(
+            'PropertyProxy: Failed to setProperty',
+            this.getName(),
+            'to',
+            value,
+            'for device:',
+            this.getDevice().getId()
+          );
+          console.error(error);
+          reject(error);
+        });
     });
   }
 }

@@ -97,8 +97,7 @@ export default class Engine {
    */
   deleteRule(ruleId: number): Promise<void> {
     if (!(ruleId in this.rules!)) {
-      return Promise.reject(
-        new Error(`Rule ${ruleId} does not exist`));
+      return Promise.reject(new Error(`Rule ${ruleId} does not exist`));
     }
 
     return Database.deleteRule(ruleId).then(() => {

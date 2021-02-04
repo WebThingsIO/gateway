@@ -84,10 +84,7 @@ class LockCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.state =
-      typeof this.dataset.state !== 'undefined' ?
-        this.dataset.state :
-        'unknown';
+    this.state = typeof this.dataset.state !== 'undefined' ? this.dataset.state : 'unknown';
   }
 
   get state() {

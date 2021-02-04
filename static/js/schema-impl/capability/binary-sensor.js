@@ -20,14 +20,9 @@ class BinarySensor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/binary_sensor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/binary_sensor.svg',
+    });
   }
 
   /**
@@ -47,8 +42,7 @@ class BinarySensor extends Thing {
     }
 
     // If necessary, match on name.
-    if (this.onProperty === null &&
-        this.displayedProperties.hasOwnProperty('on')) {
+    if (this.onProperty === null && this.displayedProperties.hasOwnProperty('on')) {
       this.onProperty = 'on';
     }
   }

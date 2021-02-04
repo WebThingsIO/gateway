@@ -75,7 +75,7 @@ const App = {
   /**
    * Start WebThings Gateway app.
    */
-  init: function() {
+  init: function () {
     fluent.init();
 
     // after loading fluent, we need to add a couple extra DOM elements
@@ -93,7 +93,6 @@ const App = {
     shaka.polyfill.installAll();
     MobileDragDrop.polyfill({
       holdToDrag: 500,
-      // eslint-disable-next-line max-len
       dragImageTranslateOverride: ScrollBehavior.scrollBehaviourDragImageTranslateOverride,
     });
 
@@ -122,8 +121,7 @@ const App = {
     this.menuButton.addEventListener('click', Menu.toggle.bind(Menu));
     this.extensionBackButton = document.getElementById('extension-back-button');
     this.overflowButton = document.getElementById('overflow-button');
-    this.overflowButton.addEventListener('click',
-                                         this.toggleOverflowMenu.bind(this));
+    this.overflowButton.addEventListener('click', this.toggleOverflowMenu.bind(this));
     this.overflowMenu = document.getElementById('overflow-menu');
     this.blockMessages = false;
     this.messageArea = document.getElementById('message-area');
@@ -174,86 +172,87 @@ const App = {
   initWebSocket() {
     const path = `${this.ORIGIN.replace(/^http/, 'ws')}/internal-logs?jwt=${API.jwt}`;
     this.ws = new ReopeningWebSocket(path);
-    this.ws.addEventListener(
-      'message',
-      (msg) => {
-        const message = JSON.parse(msg.data);
-        if (message && message.message) {
-          this.showMessage(message.message, 5000, message.url);
-        }
+    this.ws.addEventListener('message', (msg) => {
+      const message = JSON.parse(msg.data);
+      if (message && message.message) {
+        this.showMessage(message.message, 5000, message.url);
       }
-    );
+    });
   },
 
   startPinger() {
-    API.ping().then(() => {
-      if (this.pingerLastStatus === 'offline') {
-        window.location.reload();
-      } else {
-        this.failedPings = 0;
-        this.pingerLastStatus = 'online';
-        this.connectivityOverlay.classList.add('hidden');
-        this.messageArea.classList.remove('disconnected');
+    API.ping()
+      .then(() => {
+        if (this.pingerLastStatus === 'offline') {
+          window.location.reload();
+        } else {
+          this.failedPings = 0;
+          this.pingerLastStatus = 'online';
+          this.connectivityOverlay.classList.add('hidden');
+          this.messageArea.classList.remove('disconnected');
 
-        if (this.messageArea.innerText ===
-            fluent.getMessage('gateway-unreachable')) {
-          this.hidePersistentMessage();
+          if (this.messageArea.innerText === fluent.getMessage('gateway-unreachable')) {
+            this.hidePersistentMessage();
+          }
         }
-      }
-    }).catch((e) => {
-      console.error('Gateway unreachable:', e);
-      if (++this.failedPings >= this.MAX_PING_FAILURES) {
-        this.connectivityOverlay.classList.remove('hidden');
-        this.messageArea.classList.add('disconnected');
-        this.showPersistentMessage(fluent.getMessage('gateway-unreachable'));
-        this.pingerLastStatus = 'offline';
-      }
-    });
+      })
+      .catch((e) => {
+        console.error('Gateway unreachable:', e);
+        if (++this.failedPings >= this.MAX_PING_FAILURES) {
+          this.connectivityOverlay.classList.remove('hidden');
+          this.messageArea.classList.add('disconnected');
+          this.showPersistentMessage(fluent.getMessage('gateway-unreachable'));
+          this.pingerLastStatus = 'offline';
+        }
+      });
 
     if (!this.pingerInterval) {
-      this.pingerInterval =
-        setInterval(this.startPinger.bind(this), this.PING_INTERVAL);
+      this.pingerInterval = setInterval(this.startPinger.bind(this), this.PING_INTERVAL);
     }
   },
 
-  showThings: function(context) {
+  showThings: function (context) {
     this.hideExtensionBackButton();
     const events = context.pathname.split('/').pop() === 'events';
-    ThingsScreen.show(context.params.thingId || null,
-                      context.params.actionName || null,
-                      events,
-                      context.querystring);
+    ThingsScreen.show(
+      context.params.thingId || null,
+      context.params.actionName || null,
+      events,
+      context.querystring
+    );
     this.selectView('things');
   },
 
-  showSettings: function(context) {
+  showSettings: function (context) {
     this.addThingScreen.classList.add('hidden');
     this.hideExtensionBackButton();
-    SettingsScreen.show(context.params.section || null,
-                        context.params.subsection || null,
-                        context.params.id || null);
+    SettingsScreen.show(
+      context.params.section || null,
+      context.params.subsection || null,
+      context.params.id || null
+    );
     this.selectView('settings');
   },
 
-  showFloorplan: function() {
+  showFloorplan: function () {
     this.hideExtensionBackButton();
     FloorplanScreen.show();
     this.selectView('floorplan');
   },
 
-  showRules: function() {
+  showRules: function () {
     this.hideExtensionBackButton();
     RulesScreen.show();
     this.selectView('rules');
   },
 
-  showRule: function(context) {
+  showRule: function (context) {
     this.hideExtensionBackButton();
     RuleScreen.show(context.params.rule);
     this.selectView('rule');
   },
 
-  showLogs: function(context) {
+  showLogs: function (context) {
     this.hideExtensionBackButton();
     if (context.params.thingId) {
       const descr = {
@@ -268,7 +267,7 @@ const App = {
     this.selectView('logs');
   },
 
-  registerExtension: function(extension) {
+  registerExtension: function (extension) {
     this.extensions[extension.id] = extension;
 
     // Go ahead and draw a <section> for this extension to draw to, if it so
@@ -294,21 +293,18 @@ const App = {
     return newSection;
   },
 
-  showExtension: function(context) {
+  showExtension: function (context) {
     this.hideExtensionBackButton();
     const extensionId = context.params.extensionId;
 
     if (this.extensions.hasOwnProperty(extensionId)) {
       const extension = this.extensions[extensionId];
       // wait until the extensions is loaded before showing it
-      extension.load()
-        .then(() => {
-          extension.show(context);
-          this.selectView(
-            `extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`
-          );
-          this.displayedExtension = extensionId;
-        });
+      extension.load().then(() => {
+        extension.show(context);
+        this.selectView(`extension-${Utils.escapeHtmlForIdClass(extensionId)}-view`);
+        this.displayedExtension = extensionId;
+      });
     } else {
       // Check if it's a valid extension id
       API.getExtensions()
@@ -328,7 +324,7 @@ const App = {
     }
   },
 
-  selectView: function(view) {
+  selectView: function (view) {
     let el = null;
     if (view.startsWith('extension-')) {
       // load extensions at runtime
@@ -338,14 +334,17 @@ const App = {
     }
 
     if (!el) {
-      console.error('Tried to select view that didn\'t exist:', view);
+      // eslint-disable-next-line @typescript-eslint/quotes
+      console.error("Tried to select view that didn't exist:", view);
       return;
     }
 
     this.currentView.classList.add('hidden');
     this.currentView.classList.remove('selected');
-    if (this.displayedExtension !== null &&
-        this.extensions.hasOwnProperty(this.displayedExtension)) {
+    if (
+      this.displayedExtension !== null &&
+      this.extensions.hasOwnProperty(this.displayedExtension)
+    ) {
       this.extensions[this.displayedExtension].hide();
     }
 
@@ -360,29 +359,29 @@ const App = {
     }
   },
 
-  showMenuButton: function() {
+  showMenuButton: function () {
     this.menuButton.classList.remove('hidden');
   },
 
-  hideMenuButton: function() {
+  hideMenuButton: function () {
     this.menuButton.classList.add('hidden');
   },
 
-  showOverflowButton: function() {
+  showOverflowButton: function () {
     this.overflowButton.classList.remove('hidden');
   },
 
-  hideOverflowButton: function() {
+  hideOverflowButton: function () {
     this.overflowMenu.classList.add('hidden');
     this.overflowButton.classList.add('hidden');
   },
 
-  hideExtensionBackButton: function() {
+  hideExtensionBackButton: function () {
     this.extensionBackButton.classList.add('hidden');
     this.extensionBackButton.href = '/things';
   },
 
-  buildOverflowMenu: function(links) {
+  buildOverflowMenu: function (links) {
     this.overflowMenu.innerHTML = '';
 
     for (const link of links) {
@@ -414,7 +413,7 @@ const App = {
     }
   },
 
-  toggleOverflowMenu: function() {
+  toggleOverflowMenu: function () {
     if (this.overflowMenu.classList.contains('hidden')) {
       this.overflowMenu.classList.remove('hidden');
     } else {
@@ -422,27 +421,27 @@ const App = {
     }
   },
 
-  showPersistentMessage: function(message) {
+  showPersistentMessage: function (message) {
     this.showMessage(message);
     this.blockMessages = true;
   },
 
-  hidePersistentMessage: function() {
+  hidePersistentMessage: function () {
     if (this.blockMessages) {
       this.hideMessageArea();
       this.blockMessages = false;
     }
   },
 
-  showMessageArea: function() {
+  showMessageArea: function () {
     this.messageArea.classList.remove('hidden');
   },
 
-  hideMessageArea: function() {
+  hideMessageArea: function () {
     this.messageArea.classList.add('hidden');
   },
 
-  showMessage: function(message, duration, extraUrl = null) {
+  showMessage: function (message, duration, extraUrl = null) {
     if (this.messageTimeout !== null) {
       clearTimeout(this.messageTimeout);
       this.messageTimeout = null;
@@ -559,14 +558,12 @@ if (navigator.serviceWorker) {
   function notifyUpdateReady() {
     const updateMessageArea = document.getElementById('update-message-area');
 
-    const updateMessageAreaReload =
-      document.getElementById('update-message-area-reload');
+    const updateMessageAreaReload = document.getElementById('update-message-area-reload');
     updateMessageAreaReload.addEventListener('click', () => {
       window.location.reload(true);
     });
 
-    const updateMessageAreaClose =
-      document.getElementById('update-message-area-close');
+    const updateMessageAreaClose = document.getElementById('update-message-area-close');
     updateMessageAreaClose.addEventListener('click', () => {
       updateMessageArea.classList.add('hidden');
     });
@@ -574,56 +571,62 @@ if (navigator.serviceWorker) {
     updateMessageArea.classList.remove('hidden');
   }
 
-  navigator.serviceWorker.register('/service-worker.js', {
-    scope: '/',
-  }).then((reg) => {
-    if (reg.active === null) {
-      return;
-    }
+  navigator.serviceWorker
+    .register('/service-worker.js', {
+      scope: '/',
+    })
+    .then((reg) => {
+      if (reg.active === null) {
+        return;
+      }
 
-    // If there is already an active service worker, plus another waiting, that
-    // means an updated one has been loaded in the background but is not yet
-    // active.
-    if (reg.waiting !== null) {
-      notifyUpdateReady();
-      return;
-    }
-
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state !== 'installed') {
-          return;
-        }
-
+      // If there is already an active service worker, plus another waiting, that
+      // means an updated one has been loaded in the background but is not yet
+      // active.
+      if (reg.waiting !== null) {
         notifyUpdateReady();
-      });
-    });
+        return;
+      }
 
-    // Check for an updated service worker every hour. This is useful when
-    // running as a PWA. When an update is found, the updatefound handler
-    // above will be called to allow the user to refresh properly.
-    setInterval(() => {
-      reg.update();
-    }, 60 * 60 * 1000);
-  });
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state !== 'installed') {
+            return;
+          }
+
+          notifyUpdateReady();
+        });
+      });
+
+      // Check for an updated service worker every hour. This is useful when
+      // running as a PWA. When an update is found, the updatefound handler
+      // above will be called to allow the user to refresh properly.
+      setInterval(() => {
+        reg.update();
+      }, 60 * 60 * 1000);
+    });
   navigator.serviceWorker.ready.then(Notifications.onReady);
 }
 
 /**
-  * Start app on page load.
-  */
+ * Start app on page load.
+ */
 window.addEventListener('load', function app_onLoad() {
   window.removeEventListener('load', app_onLoad);
-  fluent.load().then(() => {
-    return API.getUnits();
-  }).then((response) => {
-    App.UNITS = response || App.UNITS;
-    return API.getTimezone();
-  }).then((response) => {
-    App.TIMEZONE = response.current || App.TIMEZONE;
-    App.LANGUAGE = fluent.getLanguage() || App.LANGUAGE;
-    App.init();
-  });
+  fluent
+    .load()
+    .then(() => {
+      return API.getUnits();
+    })
+    .then((response) => {
+      App.UNITS = response || App.UNITS;
+      return API.getTimezone();
+    })
+    .then((response) => {
+      App.TIMEZONE = response.current || App.TIMEZONE;
+      App.LANGUAGE = fluent.getLanguage() || App.LANGUAGE;
+      App.init();
+    });
 });

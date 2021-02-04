@@ -9,7 +9,7 @@
 import BasePlatform from './base';
 import child_process from 'child_process';
 import fs from 'fs';
-import {SelfUpdateStatus} from './types';
+import { SelfUpdateStatus } from './types';
 
 class DarwinPlatform extends BasePlatform {
   /**
@@ -43,7 +43,7 @@ class DarwinPlatform extends BasePlatform {
    * @returns {string} The hostname.
    */
   getHostname(): string {
-    const proc = child_process.spawnSync('hostname', {encoding: 'utf8'});
+    const proc = child_process.spawnSync('hostname', { encoding: 'utf8' });
     if (proc.status !== 0) {
       return '';
     }
@@ -76,7 +76,8 @@ class DarwinPlatform extends BasePlatform {
 
     try {
       const data = fs.readFileSync(tzdata, 'utf8');
-      const zones = data.split('\n')
+      const zones = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split(/\s+/g)[2])
         .sort();
@@ -123,7 +124,8 @@ class DarwinPlatform extends BasePlatform {
 
     try {
       const data = fs.readFileSync(fname, 'utf8');
-      const zones = data.split('\n')
+      const zones = data
+        .split('\n')
         .filter((l) => !l.startsWith('#') && l.length > 0)
         .map((l) => l.split('\t')[1])
         .sort();

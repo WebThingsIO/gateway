@@ -1,5 +1,5 @@
-import {server, chai} from '../common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai } from '../common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import * as Constants from '../../constants';
 
 describe('notifiers/', () => {
@@ -9,7 +9,8 @@ describe('notifiers/', () => {
   });
 
   it('gets a list of all notifiers', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(Constants.NOTIFIERS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -22,7 +23,8 @@ describe('notifiers/', () => {
   });
 
   it('fails to get a nonexistent notifier', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.NOTIFIERS_PATH}/fake-notifier`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -31,7 +33,8 @@ describe('notifiers/', () => {
   });
 
   it('fails to get outlets of a nonexistent notifier', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.NOTIFIERS_PATH}/fake-notifier/outlets`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -40,11 +43,12 @@ describe('notifiers/', () => {
   });
 
   it('fails to notify using a nonexistent notifier', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .post(`${Constants.NOTIFIERS_PATH}/fake-notifier/outlets/fake-outlet/notify`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({title: 'Hello', message: 'World', level: 0});
+      .send({ title: 'Hello', message: 'World', level: 0 });
 
     expect(res.status).toEqual(404);
   });

@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {Adapter, AddonManagerProxy} from 'gateway-addon';
+import { Adapter, AddonManagerProxy } from 'gateway-addon';
 import fs from 'fs';
 
 class TestAdapter extends Adapter {

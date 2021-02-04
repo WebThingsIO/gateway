@@ -104,8 +104,7 @@ class ReopeningWebSocket {
       this.ws.removeEventListener('message', this.onMessage);
       this.ws.removeEventListener('close', this.reopen);
       this.ws.removeEventListener('error', this.reopen);
-      if (this.ws.readyState === WebSocket.OPEN ||
-          this.ws.readyState === WebSocket.CONNECTING) {
+      if (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING) {
         this.ws.close();
       }
       this.ws = null;

@@ -1,7 +1,7 @@
-import {getBrowser} from '../browser-common';
-import {getAddons} from '../test-utils';
-import {SettingsPage} from '../page-object/settings-page';
-import {waitForExpect} from '../../expect-utils';
+import { getBrowser } from '../browser-common';
+import { getAddons } from '../test-utils';
+import { SettingsPage } from '../page-object/settings-page';
+import { waitForExpect } from '../../expect-utils';
 import AddonManager from '../../../addon-manager';
 
 afterEach(async () => {

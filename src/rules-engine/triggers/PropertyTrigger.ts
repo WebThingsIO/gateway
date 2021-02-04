@@ -5,8 +5,8 @@
  */
 
 import * as Events from '../Events';
-import Property, {PropertyDescription} from '../Property';
-import Trigger, {TriggerDescription} from './Trigger';
+import Property, { PropertyDescription } from '../Property';
+import Trigger, { TriggerDescription } from './Trigger';
 
 export interface PropertyTriggerDescription extends TriggerDescription {
   property: PropertyDescription;
@@ -30,10 +30,7 @@ export default class PropertyTrigger extends Trigger {
    * @return {TriggerDescription}
    */
   toDescription(): PropertyTriggerDescription {
-    return Object.assign(
-      super.toDescription(),
-      {property: this.property.toDescription()}
-    );
+    return Object.assign(super.toDescription(), { property: this.property.toDescription() });
   }
 
   async start(): Promise<void> {

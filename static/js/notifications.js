@@ -31,7 +31,7 @@ const Notifications = {
         applicationServerKey: convertedVapidKey,
       });
     }
-    await API.pushSubscribe({subscription});
+    await API.pushSubscribe({ subscription });
   },
 };
 
@@ -40,10 +40,8 @@ const Notifications = {
 // as value for applicationServerKey in pushManager.subscribe yet
 // https://bugs.chromium.org/p/chromium/issues/detail?id=802280
 function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -53,6 +51,5 @@ function urlBase64ToUint8Array(base64String) {
   }
   return outputArray;
 }
-
 
 module.exports = Notifications;

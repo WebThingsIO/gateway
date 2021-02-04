@@ -10,7 +10,7 @@
  */
 
 import PluginServer from './plugin-server';
-import {AddonManager} from '../addon-manager';
+import { AddonManager } from '../addon-manager';
 import AdapterProxy from './adapter-proxy';
 import APIHandlerProxy from './api-handler-proxy';
 import * as Constants from '../constants';
@@ -23,7 +23,7 @@ import PropertyProxy from './property-proxy';
 import path from 'path';
 import readline from 'readline';
 import * as Settings from '../models/settings';
-import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
+import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import Thing from '../models/thing';
 import Things from '../models/things';
 import UserProfile from '../user-profile';
@@ -76,7 +76,7 @@ export default class Plugin {
   // Make this a nested object such that if the Plugin object is reused,
   // i.e. the plugin is disabled and quickly re-enabled, the gateway process
   // can maintain a proper reference to the process object.
-  private process: {p: ChildProcessWithoutNullStreams | null} = {p: null};
+  private process: { p: ChildProcessWithoutNullStreams | null } = { p: null };
 
   private restart = true;
 
@@ -114,11 +114,12 @@ export default class Plugin {
     private pluginId: string,
     private addonManager: AddonManager,
     private pluginServer: PluginServer,
-    private forceEnable = false) {
+    private forceEnable = false
+  ) {
     this.logPrefix = pluginId;
   }
 
-  getProcess(): {p: ChildProcessWithoutNullStreams | null} {
+  getProcess(): { p: ChildProcessWithoutNullStreams | null } {
     return this.process;
   }
 
@@ -168,11 +169,15 @@ export default class Plugin {
       case MessageType.DEVICE_REQUEST_ACTION_RESPONSE: {
         const actionId = msg.data.actionId;
         const deferred = this.requestActionPromises.get(actionId);
-        if (typeof actionId === 'undefined' ||
-            typeof deferred === 'undefined') {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized action id:', actionId,
-                        'Ignoring msg:', msg);
+        if (typeof actionId === 'undefined' || typeof deferred === 'undefined') {
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized action id:',
+            actionId,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
 
@@ -188,11 +193,15 @@ export default class Plugin {
       case MessageType.DEVICE_REMOVE_ACTION_RESPONSE: {
         const messageId = msg.data.messageId;
         const deferred = this.removeActionPromises.get(messageId);
-        if (typeof messageId === 'undefined' ||
-            typeof deferred === 'undefined') {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized message id:', messageId,
-                        'Ignoring msg:', msg);
+        if (typeof messageId === 'undefined' || typeof deferred === 'undefined') {
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized message id:',
+            messageId,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
 
@@ -208,11 +217,15 @@ export default class Plugin {
       case MessageType.OUTLET_NOTIFY_RESPONSE: {
         const messageId = msg.data.messageId;
         const deferred = this.notifyPromises.get(messageId);
-        if (typeof messageId === 'undefined' ||
-            typeof deferred === 'undefined') {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized message id:', messageId,
-                        'Ignoring msg:', msg);
+        if (typeof messageId === 'undefined' || typeof deferred === 'undefined') {
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized message id:',
+            messageId,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
 
@@ -229,11 +242,15 @@ export default class Plugin {
         const data = msg.data as DeviceSetPINResponseMessageData;
         const messageId = data.messageId;
         const deferred = this.setPinPromises.get(messageId);
-        if (typeof messageId === 'undefined' ||
-            typeof deferred === 'undefined') {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized message id:', messageId,
-                        'Ignoring msg:', msg);
+        if (typeof messageId === 'undefined' || typeof deferred === 'undefined') {
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized message id:',
+            messageId,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
 
@@ -243,7 +260,7 @@ export default class Plugin {
           const deviceId = data.device.id;
           const device = new DeviceProxy(adapter, data.device);
           adapter.getDevices()[deviceId] = device;
-          (<AddonManager><unknown>adapter.getManager()).getDevices()[deviceId] = device;
+          (<AddonManager>(<unknown>adapter.getManager())).getDevices()[deviceId] = device;
           deferred.resolve(msg.data.device);
         } else {
           deferred.reject();
@@ -256,11 +273,15 @@ export default class Plugin {
         const data = msg.data as DeviceSetCredentialsResponseMessageData;
         const messageId = data.messageId;
         const deferred = this.setCredentialsPromises.get(messageId);
-        if (typeof messageId === 'undefined' ||
-            typeof deferred === 'undefined') {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized message id:', messageId,
-                        'Ignoring msg:', msg);
+        if (typeof messageId === 'undefined' || typeof deferred === 'undefined') {
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized message id:',
+            messageId,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
 
@@ -270,7 +291,7 @@ export default class Plugin {
           const deviceId = data.device.id;
           const device = new DeviceProxy(adapter, data.device);
           adapter.getDevices()[deviceId] = device;
-          (<AddonManager><unknown>adapter.getManager()).getDevices()[deviceId] = device;
+          (<AddonManager>(<unknown>adapter.getManager())).getDevices()[deviceId] = device;
           deferred.resolve(msg.data.device);
         } else {
           deferred.reject();
@@ -283,11 +304,15 @@ export default class Plugin {
         const data = msg.data as APIHandlerAPIResponseMessageData;
         const messageId = data.messageId;
         const deferred = this.apiRequestPromises.get(messageId);
-        if (typeof messageId === 'undefined' ||
-            typeof deferred === 'undefined') {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized message id:', messageId,
-                        'Ignoring msg:', msg);
+        if (typeof messageId === 'undefined' || typeof deferred === 'undefined') {
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized message id:',
+            messageId,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
         deferred.resolve(data.response);
@@ -300,23 +325,22 @@ export default class Plugin {
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
         const data = msg.data as AdapterAddedNotificationMessageData;
-        const adapter = new AdapterProxy(this.addonManager,
-                                         data.adapterId,
-                                         data.name,
-                                         data.packageName,
-                                         this);
+        const adapter = new AdapterProxy(
+          this.addonManager,
+          data.adapterId,
+          data.name,
+          data.packageName,
+          this
+        );
         this.adapters.set(data.adapterId, adapter);
         this.addonManager.addAdapter(adapter);
 
         // Tell the adapter about all saved things
         const send = (thing: Thing): void => {
-          adapter.sendMsg(
-            MessageType.DEVICE_SAVED_NOTIFICATION,
-            {
-              deviceId: thing.getId(),
-              device: thing.getDescription(),
-            }
-          );
+          adapter.sendMsg(MessageType.DEVICE_SAVED_NOTIFICATION, {
+            deviceId: thing.getId(),
+            device: thing.getDescription(),
+          });
         };
 
         adapter.getEventHandlers()[Constants.THING_ADDED] = send;
@@ -329,11 +353,13 @@ export default class Plugin {
       }
       case MessageType.NOTIFIER_ADDED_NOTIFICATION: {
         const data = msg.data as NotifierAddedNotificationMessageData;
-        const notifier = new NotifierProxy(this.addonManager,
-                                           data.notifierId,
-                                           data.name,
-                                           data.packageName,
-                                           this);
+        const notifier = new NotifierProxy(
+          this.addonManager,
+          data.notifierId,
+          data.name,
+          data.packageName,
+          this
+        );
         this.notifiers.set(data.notifierId, notifier);
         this.addonManager.addNotifier(notifier);
         return;
@@ -341,9 +367,7 @@ export default class Plugin {
 
       case MessageType.API_HANDLER_ADDED_NOTIFICATION: {
         const data = msg.data as APIHandlerAddedNotificationMessageData;
-        const apiHandler = new APIHandlerProxy(this.addonManager,
-                                               data.packageName,
-                                               this);
+        const apiHandler = new APIHandlerProxy(this.addonManager, data.packageName, this);
         this.apiHandlers.set(data.packageName, apiHandler);
         this.addonManager.addAPIHandler(apiHandler);
         return;
@@ -355,16 +379,19 @@ export default class Plugin {
         const handler = this.apiHandlers.get(packageName);
 
         if (!handler) {
-          console.error('Plugin:', this.pluginId,
-                        'Unrecognized API handler:', packageName,
-                        'Ignoring msg:', msg);
+          console.error(
+            'Plugin:',
+            this.pluginId,
+            'Unrecognized API handler:',
+            packageName,
+            'Ignoring msg:',
+            msg
+          );
           return;
         }
 
         this.apiHandlers.delete(packageName);
-        if (this.adapters.size === 0 &&
-            this.notifiers.size === 0 &&
-            this.apiHandlers.size === 0) {
+        if (this.adapters.size === 0 && this.notifiers.size === 0 && this.apiHandlers.size === 0) {
           // We've unloaded everything for the plugin, now unload the plugin.
           this.unload();
           this.unloadCompletedPromise = handler.unloadCompletedPromise;
@@ -400,18 +427,28 @@ export default class Plugin {
     const adapterId = msg.data.adapterId as string;
     const adapter = this.adapters.get(adapterId) as AdapterProxy;
     if (adapterId && !adapter) {
-      console.error('Plugin:', this.pluginId,
-                    'Unrecognized adapter:', adapterId,
-                    'Ignoring msg:', msg);
+      console.error(
+        'Plugin:',
+        this.pluginId,
+        'Unrecognized adapter:',
+        adapterId,
+        'Ignoring msg:',
+        msg
+      );
       return;
     }
 
     const notifierId = msg.data.notifierId as string;
     const notifier = this.notifiers.get(notifierId) as NotifierProxy;
     if (notifierId && !notifier) {
-      console.error('Plugin:', this.pluginId,
-                    'Unrecognized notifier:', notifierId,
-                    'Ignoring msg:', msg);
+      console.error(
+        'Plugin:',
+        this.pluginId,
+        'Unrecognized notifier:',
+        notifierId,
+        'Ignoring msg:',
+        msg
+      );
       return;
     }
 
@@ -421,7 +458,6 @@ export default class Plugin {
     let deferredMock;
 
     switch (msg.messageType) {
-
       case MessageType.ADAPTER_UNLOAD_RESPONSE: {
         const handler = adapter.getEventHandlers()[Constants.THING_ADDED];
         if (handler) {
@@ -429,9 +465,7 @@ export default class Plugin {
         }
 
         this.adapters.delete(adapterId);
-        if (this.adapters.size === 0 &&
-            this.notifiers.size === 0 &&
-            this.apiHandlers.size === 0) {
+        if (this.adapters.size === 0 && this.notifiers.size === 0 && this.apiHandlers.size === 0) {
           // We've unloaded everything for the plugin, now unload the plugin.
 
           // We may need to reevaluate this, and only auto-unload
@@ -449,9 +483,7 @@ export default class Plugin {
       }
       case MessageType.NOTIFIER_UNLOAD_RESPONSE:
         this.notifiers.delete(notifierId);
-        if (this.adapters.size === 0 &&
-            this.notifiers.size === 0 &&
-            this.apiHandlers.size === 0) {
+        if (this.adapters.size === 0 && this.notifiers.size === 0 && this.apiHandlers.size === 0) {
           // We've unloaded everything for the plugin, now unload the plugin.
           this.unload();
           this.unloadCompletedPromise = notifier.unloadCompletedPromise;
@@ -513,7 +545,7 @@ export default class Plugin {
         if (device) {
           // This is some inappropriate casting, but is necessary to work with the gateway-addon
           // bindings.
-          device.actionNotify(<AddonAction><unknown>data.action);
+          device.actionNotify(<AddonAction>(<unknown>data.action));
         }
         break;
       }
@@ -524,7 +556,7 @@ export default class Plugin {
         if (device) {
           // This is some inappropriate casting, but is necessary to work with the gateway-addon
           // bindings.
-          device.eventNotify(<AddonEvent><unknown>data.event);
+          device.eventNotify(<AddonEvent>(<unknown>data.event));
         }
         break;
       }
@@ -720,8 +752,10 @@ export default class Plugin {
     const key = `addons.${this.pluginId}`;
 
     this.startPromise = Settings.getSetting(key).then((savedSettings) => {
-      if (!this.forceEnable &&
-          (!savedSettings || !<boolean>(<Record<string, unknown>>savedSettings).enabled)) {
+      if (
+        !this.forceEnable &&
+        (!savedSettings || !(<boolean>(<Record<string, unknown>>savedSettings).enabled))
+      ) {
         console.error(`Plugin ${this.pluginId} not enabled, so not starting.`);
         this.restart = false;
         this.process.p = null;
@@ -729,9 +763,7 @@ export default class Plugin {
       }
 
       const execArgs = {
-        nodeLoader: `node ${path.join(UserProfile.gatewayDir,
-                                      'build',
-                                      'addon-loader.js')}`,
+        nodeLoader: `node ${path.join(UserProfile.gatewayDir, 'build', 'addon-loader.js')}`,
         name: this.pluginId,
         path: this.execPath,
       };
@@ -743,18 +775,12 @@ export default class Plugin {
       // module called splitargs
       this.restart = true;
       const args = execCmd.split(' ');
-      this.process.p = spawn(
-        args[0],
-        args.slice(1),
-        {
-          env: Object.assign(process.env,
-                             {
-                               WEBTHINGS_HOME: UserProfile.baseDir,
-                               NODE_PATH: path.join(UserProfile.gatewayDir,
-                                                    'node_modules'),
-                             }),
-        }
-      );
+      this.process.p = spawn(args[0], args.slice(1), {
+        env: Object.assign(process.env, {
+          WEBTHINGS_HOME: UserProfile.baseDir,
+          NODE_PATH: path.join(UserProfile.gatewayDir, 'node_modules'),
+        }),
+      });
 
       this.process.p.on('error', (err) => {
         // We failed to spawn the process. This most likely means that the
@@ -783,8 +809,7 @@ export default class Plugin {
       this.process.p.on('exit', (code) => {
         if (this.restart) {
           if (code == AddonConstants.DONT_RESTART_EXIT_CODE) {
-            console.log('Plugin:', this.pluginId, 'died, code =', code,
-                        'NOT restarting...');
+            console.log('Plugin:', this.pluginId, 'died, code =', code, 'NOT restarting...');
             this.restart = false;
             this.process.p = null;
           } else {
@@ -805,8 +830,14 @@ export default class Plugin {
               this.process.p = null;
               return;
             }
-            console.log('Plugin:', this.pluginId, 'died, code =', code,
-                        'restarting after', this.restartDelay);
+            console.log(
+              'Plugin:',
+              this.pluginId,
+              'died, code =',
+              code,
+              'restarting after',
+              this.restartDelay
+            );
             const doRestart = (): void => {
               if (this.restart) {
                 this.lastRestart = Date.now();

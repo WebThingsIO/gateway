@@ -21,7 +21,7 @@ import * as Settings from '../models/settings';
 import TunnelService from '../tunnel-service';
 import * as CertificateManager from '../certificate-manager';
 import pkg from '../package.json';
-import {HttpErrorWithCode} from '../errors';
+import { HttpErrorWithCode } from '../errors';
 
 function build(): express.Router {
   const auth = jwtMiddleware.middleware();
@@ -41,10 +41,8 @@ function build(): express.Router {
     const enabled = request.body.enabled;
 
     try {
-      const result =
-        await Settings.setSetting(`experiments.${experimentName}.enabled`,
-                                  enabled);
-      response.status(200).json({enabled: result});
+      const result = await Settings.setSetting(`experiments.${experimentName}.enabled`, enabled);
+      response.status(200).json({ enabled: result });
     } catch (e) {
       console.error(`Failed to set setting experiments.${experimentName}`);
       console.error(e);
@@ -59,12 +57,11 @@ function build(): express.Router {
     const experimentName = request.params.experimentName;
 
     try {
-      const result =
-        await Settings.getSetting(`experiments.${experimentName}.enabled`);
+      const result = await Settings.getSetting(`experiments.${experimentName}.enabled`);
       if (typeof result === 'undefined') {
         response.status(404).send('Setting not found');
       } else {
-        response.status(200).json({enabled: result});
+        response.status(200).json({ enabled: result });
       }
     } catch (e) {
       console.error(`Failed to get setting experiments.${experimentName}`);
@@ -83,8 +80,7 @@ function build(): express.Router {
     const subdomain = request.body.subdomain;
 
     try {
-      await fetch(`${config.get('ssltunnel.registration_endpoint')
-      }/reclaim?name=${subdomain}`);
+      await fetch(`${config.get('ssltunnel.registration_endpoint')}/reclaim?name=${subdomain}`);
       response.status(200).json({});
     } catch (e) {
       console.error(e);
@@ -94,10 +90,12 @@ function build(): express.Router {
   });
 
   controller.post('/subscribe', async (request, response, next) => {
-    if (!request.body ||
-        !request.body.hasOwnProperty('email') ||
-        !request.body.hasOwnProperty('subdomain') ||
-        !request.body.hasOwnProperty('optout')) {
+    if (
+      !request.body ||
+      !request.body.hasOwnProperty('email') ||
+      !request.body.hasOwnProperty('subdomain') ||
+      !request.body.hasOwnProperty('optout')
+    ) {
       response.statusMessage = 'Invalid request';
       response.status(400).end();
       return;
@@ -127,14 +125,7 @@ function build(): express.Router {
       }
     }
 
-    await CertificateManager.register(
-      email,
-      reclamationToken,
-      subdomain,
-      fulldomain,
-      optout,
-      cb
-    );
+    await CertificateManager.register(email, reclamationToken, subdomain, fulldomain, optout, cb);
   });
 
   controller.post('/skiptunnel', async (_request, response) => {
@@ -151,7 +142,7 @@ function build(): express.Router {
   controller.get('/tunnelinfo', auth, async (_request, response) => {
     try {
       const tunnelDomain = await Settings.getTunnelInfo();
-      response.status(200).json({tunnelDomain});
+      response.status(200).json({ tunnelDomain });
     } catch (e) {
       console.error('Failed to retrieve default settings for tunneltoken:', e);
       response.status(400).send(e);
@@ -170,7 +161,7 @@ function build(): express.Router {
         enabled = Platform.getMdnsServerStatus();
       }
 
-      response.status(200).json({hostname, enabled});
+      response.status(200).json({ hostname, enabled });
     } catch (e) {
       console.error('Failed to get domain settings:', e);
       response.status(400).end();
@@ -203,8 +194,10 @@ function build(): express.Router {
         }
       } else if (request.body.hasOwnProperty('enabled')) {
         const enabled = <boolean>request.body.enabled;
-        if (!Platform.implemented('setMdnsServerStatus') ||
-            !Platform.setMdnsServerStatus(enabled)) {
+        if (
+          !Platform.implemented('setMdnsServerStatus') ||
+          !Platform.setMdnsServerStatus(enabled)
+        ) {
           response.sendStatus(500);
           return;
         }
@@ -305,7 +298,7 @@ function build(): express.Router {
     if (toggleImplemented) {
       const enabled = request.body.enabled;
       if (Platform.setSshServerStatus(enabled)) {
-        response.status(200).json({enabled});
+        response.status(200).json({ enabled });
       } else {
         response.status(400).send('Failed to toggle SSH');
       }
@@ -378,7 +371,7 @@ function build(): express.Router {
 
   controller.get('/network/dhcp', auth, (_request, response) => {
     if (Platform.implemented('getDhcpServerStatus')) {
-      response.json({enabled: Platform.getDhcpServerStatus()});
+      response.json({ enabled: Platform.getDhcpServerStatus() });
     } else {
       response.status(500).send('DHCP status not implemented');
     }
@@ -488,7 +481,7 @@ function build(): express.Router {
     }
 
     const setImplemented = Platform.implemented('setWirelessCountry');
-    response.json({valid, current, setImplemented});
+    response.json({ valid, current, setImplemented });
   });
 
   controller.put('/localization/country', auth, (request, response) => {
@@ -520,7 +513,7 @@ function build(): express.Router {
     }
 
     const setImplemented = Platform.implemented('setTimezone');
-    response.json({valid, current, setImplemented});
+    response.json({ valid, current, setImplemented });
   });
 
   controller.put('/localization/timezone', auth, (request, response) => {
@@ -567,7 +560,7 @@ function build(): express.Router {
 
     try {
       const current = await Settings.getSetting('localization.language');
-      response.json({valid, current});
+      response.json({ valid, current });
     } catch (_) {
       response.status(500).send('Failed to get current language');
     }

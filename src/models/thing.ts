@@ -10,7 +10,7 @@
 
 import * as Constants from '../constants';
 import Database from '../db';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import UserProfile from '../user-profile';
 import fs from 'fs';
 import path from 'path';
@@ -121,9 +121,8 @@ export default class Thing extends EventEmitter {
 
     // Parse the Thing Description
     this.id = id;
-    this.title = description.title || (<Record<string, string>><unknown>description).name || '';
-    this['@context'] =
-      description['@context'] || 'https://webthings.io/schemas';
+    this.title = description.title || (<Record<string, string>>(<unknown>description)).name || '';
+    this['@context'] = description['@context'] || 'https://webthings.io/schemas';
     this['@type'] = description['@type'] || [];
     this.description = description.description || '';
     this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
@@ -142,16 +141,18 @@ export default class Thing extends EventEmitter {
         }
 
         if (property.links) {
-          property.links = property.links.filter((link) => {
-            return link.rel && link.rel !== 'property';
-          }).map((link) => {
-            if (link.proxy) {
-              delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-            }
+          property.links = property.links
+            .filter((link) => {
+              return link.rel && link.rel !== 'property';
+            })
+            .map((link) => {
+              if (link.proxy) {
+                delete link.proxy;
+                link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+              }
 
-            return link;
-          });
+              return link;
+            });
         } else {
           property.links = [];
         }
@@ -228,16 +229,18 @@ export default class Thing extends EventEmitter {
       }
 
       if (action.links) {
-        action.links = action.links.filter((link) => {
-          return link.rel && link.rel !== 'action';
-        }).map((link) => {
-          if (link.proxy) {
-            delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-          }
+        action.links = action.links
+          .filter((link) => {
+            return link.rel && link.rel !== 'action';
+          })
+          .map((link) => {
+            if (link.proxy) {
+              delete link.proxy;
+              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            }
 
-          return link;
-        });
+            return link;
+          });
       } else {
         action.links = [];
       }
@@ -257,16 +260,18 @@ export default class Thing extends EventEmitter {
       }
 
       if (event.links) {
-        event.links = event.links.filter((link) => {
-          return link.rel && link.rel !== 'event';
-        }).map((link) => {
-          if (link.proxy) {
-            delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-          }
+        event.links = event.links
+          .filter((link) => {
+            return link.rel && link.rel !== 'event';
+          })
+          .map((link) => {
+            if (link.proxy) {
+              delete link.proxy;
+              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            }
 
-          return link;
-        });
+            return link;
+          });
       } else {
         event.links = [];
       }
@@ -316,11 +321,10 @@ export default class Thing extends EventEmitter {
   setCoordinates(x: number, y: number): Promise<ThingDescription> {
     this.floorplanX = x;
     this.floorplanY = y;
-    return Database.updateThing(this.id, this.getDescription())
-      .then((descr) => {
-        this.emit(Constants.MODIFIED);
-        return descr;
-      });
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      this.emit(Constants.MODIFIED);
+      return descr;
+    });
   }
 
   /**
@@ -331,11 +335,10 @@ export default class Thing extends EventEmitter {
    */
   setLayoutIndex(index: number): Promise<ThingDescription> {
     this.layoutIndex = index;
-    return Database.updateThing(this.id, this.getDescription())
-      .then((descr) => {
-        this.emit(Constants.MODIFIED);
-        return descr;
-      });
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      this.emit(Constants.MODIFIED);
+      return descr;
+    });
   }
 
   /**
@@ -346,11 +349,10 @@ export default class Thing extends EventEmitter {
    */
   setTitle(title: string): Promise<ThingDescription> {
     this.title = title;
-    return Database.updateThing(this.id, this.getDescription())
-      .then((descr) => {
-        this.emit(Constants.MODIFIED);
-        return descr;
-      });
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      this.emit(Constants.MODIFIED);
+      return descr;
+    });
   }
 
   /**
@@ -361,8 +363,7 @@ export default class Thing extends EventEmitter {
    *                                 setting.
    */
   setIcon(iconData: IconData, updateDatabase: boolean): Promise<ThingDescription> {
-    if (!iconData.data ||
-        !['image/jpeg', 'image/png', 'image/svg+xml'].includes(iconData.mime)) {
+    if (!iconData.data || !['image/jpeg', 'image/png', 'image/svg+xml'].includes(iconData.mime)) {
       console.error('Invalid icon data:', iconData);
       throw new Error('Invalid icon data');
     }
@@ -419,11 +420,10 @@ export default class Thing extends EventEmitter {
     this.iconHref = path.join('/uploads', path.basename(tempfile.name));
 
     if (updateDatabase) {
-      return Database.updateThing(this.id, this.getDescription())
-        .then((descr) => {
-          this.emit(Constants.MODIFIED);
-          return descr;
-        });
+      return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+        this.emit(Constants.MODIFIED);
+        return descr;
+      });
     }
 
     return Promise.resolve(this.getDescription());
@@ -437,11 +437,10 @@ export default class Thing extends EventEmitter {
    */
   setSelectedCapability(capability: string): Promise<ThingDescription> {
     this.selectedCapability = capability;
-    return Database.updateThing(this.id, this.getDescription())
-      .then((descr) => {
-        this.emit(Constants.MODIFIED);
-        return descr;
-      });
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      this.emit(Constants.MODIFIED);
+      return descr;
+    });
   }
 
   /**
@@ -521,7 +520,6 @@ export default class Thing extends EventEmitter {
     this.removeListener(Constants.REMOVED, callback);
   }
 
-
   /**
    * Get a JSON Thing Description for this Thing.
    *
@@ -560,8 +558,9 @@ export default class Thing extends EventEmitter {
         oauth2_sc: {
           scheme: 'oauth2',
           flow: 'code',
-          authorization:
-          `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/authorize`,
+          authorization: `${reqSecure ? 'https' : 'http'}://${reqHost}${
+            Constants.OAUTH_PATH
+          }/authorize`,
           token: `${reqSecure ? 'https' : 'http'}://${reqHost}${Constants.OAUTH_PATH}/token`,
           scopes: [
             `${this.href}:readwrite`,
@@ -626,8 +625,7 @@ export default class Thing extends EventEmitter {
     const oldDescription = JSON.stringify(this.getDescription());
 
     // Update @context
-    this['@context'] =
-      description['@context'] || 'https://webthings.io/schemas';
+    this['@context'] = description['@context'] || 'https://webthings.io/schemas';
 
     // Update @type
     this['@type'] = description['@type'] || [];
@@ -646,16 +644,18 @@ export default class Thing extends EventEmitter {
         }
 
         if (property.links) {
-          property.links = property.links.filter((link) => {
-            return link.rel && link.rel !== 'property';
-          }).map((link) => {
-            if (link.proxy) {
-              delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-            }
+          property.links = property.links
+            .filter((link) => {
+              return link.rel && link.rel !== 'property';
+            })
+            .map((link) => {
+              if (link.proxy) {
+                delete link.proxy;
+                link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+              }
 
-            return link;
-          });
+              return link;
+            });
         } else {
           property.links = [];
         }
@@ -679,16 +679,18 @@ export default class Thing extends EventEmitter {
       }
 
       if (action.links) {
-        action.links = action.links.filter((link) => {
-          return link.rel && link.rel !== 'action';
-        }).map((link) => {
-          if (link.proxy) {
-            delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-          }
+        action.links = action.links
+          .filter((link) => {
+            return link.rel && link.rel !== 'action';
+          })
+          .map((link) => {
+            if (link.proxy) {
+              delete link.proxy;
+              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            }
 
-          return link;
-        });
+            return link;
+          });
       } else {
         action.links = [];
       }
@@ -710,16 +712,18 @@ export default class Thing extends EventEmitter {
       }
 
       if (event.links) {
-        event.links = event.links.filter((link) => {
-          return link.rel && link.rel !== 'event';
-        }).map((link) => {
-          if (link.proxy) {
-            delete link.proxy;
-            link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-          }
+        event.links = event.links
+          .filter((link) => {
+            return link.rel && link.rel !== 'event';
+          })
+          .map((link) => {
+            if (link.proxy) {
+              delete link.proxy;
+              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
+            }
 
-          return link;
-        });
+            return link;
+          });
       } else {
         event.links = [];
       }
@@ -773,20 +777,18 @@ export default class Thing extends EventEmitter {
     }
 
     // If the previously selected capability is no longer present, reset it.
-    if (this.selectedCapability &&
-        !this['@type'].includes(this.selectedCapability)) {
+    if (this.selectedCapability && !this['@type'].includes(this.selectedCapability)) {
       this.selectedCapability = '';
     }
 
-    return Database.updateThing(this.id, this.getDescription())
-      .then((descr) => {
-        const newDescription = JSON.stringify(this.getDescription());
-        if (newDescription !== oldDescription) {
-          this.emit(Constants.MODIFIED);
-        }
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      const newDescription = JSON.stringify(this.getDescription());
+      if (newDescription !== oldDescription) {
+        this.emit(Constants.MODIFIED);
+      }
 
-        return descr;
-      });
+      return descr;
+    });
   }
 
   /**

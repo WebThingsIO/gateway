@@ -202,12 +202,14 @@ class ThingModel extends Model {
       }
     }
 
-    return API.putJson(href, payload).then((json) => {
-      this.onPropertyStatus(json);
-    }).catch((error) => {
-      console.error(error);
-      throw new Error(`Error trying to set ${name}`);
-    });
+    return API.putJson(href, payload)
+      .then((json) => {
+        this.onPropertyStatus(json);
+      })
+      .catch((error) => {
+        console.error(error);
+        throw new Error(`Error trying to set ${name}`);
+      });
   }
 
   /**
@@ -235,11 +237,13 @@ class ThingModel extends Model {
       getPropertiesPromise = API.getJson(this.propertiesHref);
     }
 
-    getPropertiesPromise.then((properties) => {
-      this.onPropertyStatus(properties);
-    }).catch((error) => {
-      console.error(`Error fetching ${this.title} status: ${error}`);
-    });
+    getPropertiesPromise
+      .then((properties) => {
+        this.onPropertyStatus(properties);
+      })
+      .catch((error) => {
+        console.error(`Error fetching ${this.title} status: ${error}`);
+      });
   }
 
   /**
@@ -272,11 +276,13 @@ class ThingModel extends Model {
       return;
     }
 
-    return API.getJson(this.eventsHref).then((events) => {
-      this.events = events;
-    }).catch((e) => {
-      console.error(`Error fetching events: ${e}`);
-    });
+    return API.getJson(this.eventsHref)
+      .then((events) => {
+        this.events = events;
+      })
+      .catch((e) => {
+        console.error(`Error fetching events: ${e}`);
+      });
   }
 
   /**
@@ -290,7 +296,7 @@ class ThingModel extends Model {
         continue;
       }
       events[event] = data[event];
-      this.events.push({[event]: data[event]});
+      this.events.push({ [event]: data[event] });
     }
     return this.handleEvent(Constants.EVENT_OCCURRED, events);
   }

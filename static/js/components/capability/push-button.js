@@ -73,8 +73,7 @@ class PushButtonCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.pushed =
-      typeof this.dataset.pushed !== 'undefined' ? this.dataset.pushed : null;
+    this.pushed = typeof this.dataset.pushed !== 'undefined' ? this.dataset.pushed : null;
   }
 
   get pushed() {
@@ -156,6 +155,5 @@ class PushButtonCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-push-button-capability',
-                             PushButtonCapability);
+window.customElements.define('webthing-push-button-capability', PushButtonCapability);
 module.exports = PushButtonCapability;

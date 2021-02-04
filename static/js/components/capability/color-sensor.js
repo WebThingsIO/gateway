@@ -11,9 +11,7 @@
 
 const ColorControlCapability = require('./color-control');
 
-class ColorSensorCapability extends ColorControlCapability {
-}
+class ColorSensorCapability extends ColorControlCapability {}
 
-window.customElements.define('webthing-color-sensor-capability',
-                             ColorSensorCapability);
+window.customElements.define('webthing-color-sensor-capability', ColorSensorCapability);
 module.exports = ColorSensorCapability;

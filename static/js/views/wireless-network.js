@@ -24,8 +24,7 @@ class WirelessNetwork {
     this.quality = network.quality;
     this.configured = network.configured;
     this.connected = network.connected;
-    this.container =
-      document.getElementById('network-settings-wifi-network-list');
+    this.container = document.getElementById('network-settings-wifi-network-list');
 
     this.render();
   }
@@ -34,22 +33,21 @@ class WirelessNetwork {
    * HTML view for WirelessNetwork.
    */
   view() {
-    let infoClass = '', connectedDiv = '';
+    let infoClass = '',
+      connectedDiv = '';
     if (this.configured) {
       infoClass = 'configured';
 
       if (this.connected) {
-        connectedDiv =
-          `<div class="wireless-network-info-connected" data-l10n-id="wireless-connected"></div>`;
+        connectedDiv = `<div class="wireless-network-info-connected"
+                data-l10n-id="wireless-connected"></div>`;
       } else {
-        connectedDiv =
-          `<div class="wireless-network-info-disconnected"
+        connectedDiv = `<div class="wireless-network-info-disconnected"
                 data-l10n-id="wireless-connected"></div>`;
       }
     }
 
-    const img =
-      `/images/${this.encryption ? 'wifi-secure' : 'wifi'}.svg`;
+    const img = `/images/${this.encryption ? 'wifi-secure' : 'wifi'}.svg`;
 
     return `<li class="wireless-network-item">
         <div class="wireless-network-info ${infoClass}">

@@ -8,7 +8,7 @@
 
 import child_process from 'child_process';
 import fs from 'fs';
-import BasePlatform, {NotImplementedError} from './platforms/base';
+import BasePlatform, { NotImplementedError } from './platforms/base';
 import DarwinPlatform from './platforms/darwin';
 import LinuxArchPlatform from './platforms/linux-arch';
 import LinuxDebianPlatform from './platforms/linux-debian';
@@ -76,11 +76,13 @@ export function getArchitecture(): string {
  * Determine whether or not we're running inside a container (e.g. Docker).
  */
 export function isContainer(): boolean {
-  return fs.existsSync('/.dockerenv') ||
+  return (
+    fs.existsSync('/.dockerenv') ||
     fs.existsSync('/run/.containerenv') ||
     (fs.existsSync('/proc/1/cgroup') &&
-     fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0) ||
-    fs.existsSync('/pantavisor');
+      fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0) ||
+    fs.existsSync('/pantavisor')
+  );
 }
 
 /**
@@ -106,11 +108,7 @@ export function getPythonVersions(): string[] {
   };
 
   for (const bin of ['python', 'python2', 'python3']) {
-    const proc = child_process.spawnSync(
-      bin,
-      ['--version'],
-      {encoding: 'utf8'}
-    );
+    const proc = child_process.spawnSync(bin, ['--version'], { encoding: 'utf8' });
 
     if (proc.status === 0) {
       const output = proc.stdout || proc.stderr;
@@ -122,13 +120,13 @@ export function getPythonVersions(): string[] {
 }
 
 // Wrap platform-specific methods
-function wrapPlatform<T>(platform: BasePlatform | null, fn: string): ((...params: any[]) => T) {
+function wrapPlatform<T>(platform: BasePlatform | null, fn: string): (...params: any[]) => T {
   return (...params: any[]): T => {
     if (platform === null) {
       throw new NotImplementedError(fn);
     }
 
-    return (<(...args: any[]) => T>(<Record<string, unknown>><unknown>platform)[fn])(...params);
+    return (<(...args: any[]) => T>(<Record<string, unknown>>(<unknown>platform))[fn])(...params);
   };
 }
 
@@ -170,15 +168,19 @@ export const getWirelessMode = wrapPlatform<WirelessMode>(platform, 'getWireless
 export const setWirelessMode = wrapPlatform<boolean>(platform, 'setWirelessMode');
 export const restartGateway = wrapPlatform<boolean>(platform, 'restartGateway');
 export const restartSystem = wrapPlatform<boolean>(platform, 'restartSystem');
-export const scanWirelessNetworks =
-  wrapPlatform<WirelessNetwork[]>(platform, 'scanWirelessNetworks');
+export const scanWirelessNetworks = wrapPlatform<WirelessNetwork[]>(
+  platform,
+  'scanWirelessNetworks'
+);
 export const getSelfUpdateStatus = wrapPlatform<SelfUpdateStatus>(platform, 'getSelfUpdateStatus');
 export const setSelfUpdateStatus = wrapPlatform<boolean>(platform, 'setSelfUpdateStatus');
 export const getValidTimezones = wrapPlatform<string[]>(platform, 'getValidTimezones');
 export const getTimezone = wrapPlatform<string>(platform, 'getTimezone');
 export const setTimezone = wrapPlatform<boolean>(platform, 'setTimezone');
-export const getValidWirelessCountries =
-  wrapPlatform<string[]>(platform, 'getValidWirelessCountries');
+export const getValidWirelessCountries = wrapPlatform<string[]>(
+  platform,
+  'getValidWirelessCountries'
+);
 export const getWirelessCountry = wrapPlatform<string>(platform, 'getWirelessCountry');
 export const setWirelessCountry = wrapPlatform<boolean>(platform, 'setWirelessCountry');
 export const restartNtpSync = wrapPlatform<boolean>(platform, 'restartNtpSync');
@@ -196,6 +198,8 @@ export const implemented = (fn: string): boolean => {
   }
 
   const base = new BasePlatform();
-  return (<(...args: any[]) => unknown>(<Record<string, unknown>><unknown>base)[fn]) !=
-    (<(...args: any[]) => unknown>(<Record<string, unknown>><unknown>platform)[fn]);
+  return (
+    <(...args: any[]) => unknown>(<Record<string, unknown>>(<unknown>base))[fn] !=
+    <(...args: any[]) => unknown>(<Record<string, unknown>>(<unknown>platform))[fn]
+  );
 };

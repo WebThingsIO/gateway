@@ -6,7 +6,7 @@
 
 import assert from 'assert';
 import * as Events from '../Events';
-import PropertyTrigger, {PropertyTriggerDescription} from './PropertyTrigger';
+import PropertyTrigger, { PropertyTriggerDescription } from './PropertyTrigger';
 
 export interface BooleanTriggerDescription extends PropertyTriggerDescription {
   onValue: boolean;
@@ -33,10 +33,7 @@ export default class BooleanTrigger extends PropertyTrigger {
    * @return {TriggerDescription}
    */
   toDescription(): BooleanTriggerDescription {
-    return Object.assign(
-      super.toDescription(),
-      {onValue: this.onValue}
-    );
+    return Object.assign(super.toDescription(), { onValue: this.onValue });
   }
 
   /**
@@ -45,9 +42,9 @@ export default class BooleanTrigger extends PropertyTrigger {
    */
   onValueChanged(propValue: boolean): void {
     if (propValue === this.onValue) {
-      this.emit(Events.STATE_CHANGED, {on: true, value: propValue});
+      this.emit(Events.STATE_CHANGED, { on: true, value: propValue });
     } else {
-      this.emit(Events.STATE_CHANGED, {on: false, value: propValue});
+      this.emit(Events.STATE_CHANGED, { on: false, value: propValue });
     }
   }
 }

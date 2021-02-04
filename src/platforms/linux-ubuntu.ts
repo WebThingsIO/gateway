@@ -6,9 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {LinuxDebianPlatform} from './linux-debian';
+import { LinuxDebianPlatform } from './linux-debian';
 
-class LinuxUbuntuPlatform extends LinuxDebianPlatform {
-}
+class LinuxUbuntuPlatform extends LinuxDebianPlatform {}
 
 export default new LinuxUbuntuPlatform();

@@ -3,11 +3,14 @@ const BlockConfigureDropdown = require('./BlockConfigureDropdown');
 const fluent = require('../fluent');
 
 class NotifierOutletBlock extends RulePartBlock {
-  constructor(ruleArea, onPresentationChange, onRuleUpdate, notifier, outlet,
-              values) {
-    super(ruleArea, onPresentationChange, onRuleUpdate,
-          `${outlet.name} ${fluent.getMessage('rule-notification')}`,
-          '/images/thing-icons/notification.svg');
+  constructor(ruleArea, onPresentationChange, onRuleUpdate, notifier, outlet, values) {
+    super(
+      ruleArea,
+      onPresentationChange,
+      onRuleUpdate,
+      `${outlet.name} ${fluent.getMessage('rule-notification')}`,
+      '/images/thing-icons/notification.svg'
+    );
 
     this.notifier = notifier;
     this.outlet = outlet;
@@ -68,14 +71,16 @@ class NotifierOutletBlock extends RulePartBlock {
   }
 
   updateRulePart() {
-    this.setRulePart({effect: {
-      type: 'NotifierOutletEffect',
-      notifier: this.notifier.id,
-      outlet: this.outlet.id,
-      title: this.values.title,
-      message: this.values.message,
-      level: this.values.level,
-    }});
+    this.setRulePart({
+      effect: {
+        type: 'NotifierOutletEffect',
+        notifier: this.notifier.id,
+        outlet: this.outlet.id,
+        title: this.values.title,
+        message: this.values.message,
+        level: this.values.level,
+      },
+    });
   }
 
   setRulePart(rulePart) {

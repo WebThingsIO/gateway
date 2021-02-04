@@ -1,5 +1,5 @@
-import {Page, Section} from './elements';
-import {ThingDetailPage} from './thing-detail-page';
+import { Page, Section } from './elements';
+import { ThingDetailPage } from './thing-detail-page';
 import webdriverio from 'webdriverio';
 
 class ThingSection extends Section {
@@ -75,10 +75,9 @@ class ThingSection extends Section {
     `)}`;
 
     const rgb = fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/)!;
-    const colorStyle = `#${
-      Number(rgb[1]).toString(16)}${
-      Number(rgb[2]).toString(16)}${
-      Number(rgb[3]).toString(16)}`;
+    const colorStyle = `#${Number(rgb[1]).toString(16)}${Number(rgb[2]).toString(16)}${Number(
+      rgb[3]
+    ).toString(16)}`;
     return colorStyle;
   }
 

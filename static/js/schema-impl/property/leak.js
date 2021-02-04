@@ -16,8 +16,7 @@ const fluent = require('../../fluent');
 
 class LeakDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('leak'));
+    super(thing, name, !!property.readOnly, property.title || fluent.getMessage('leak'));
     this.id = `leak-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 
@@ -36,9 +35,7 @@ class LeakDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ?
-      fluent.getMessage('leak') :
-      fluent.getMessage('dry');
+    this.labelElement.value = value ? fluent.getMessage('leak') : fluent.getMessage('dry');
     this.labelElement.inverted = value;
   }
 }

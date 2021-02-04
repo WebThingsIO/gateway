@@ -4,11 +4,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {Level} from 'gateway-addon/lib/schema';
+import { Level } from 'gateway-addon/lib/schema';
 import assert from 'assert';
-import Effect, {EffectDescription} from './Effect';
+import Effect, { EffectDescription } from './Effect';
 import AddonManager from '../../addon-manager';
-import {State} from '../State';
+import { State } from '../State';
 
 export interface NotifierOutletEffectDescription extends EffectDescription {
   notifier: string;
@@ -55,16 +55,13 @@ export default class NotifierOutletEffect extends Effect {
    * @return {EffectDescription}
    */
   toDescription(): NotifierOutletEffectDescription {
-    return Object.assign(
-      super.toDescription(),
-      {
-        notifier: this.notifier,
-        outlet: this.outlet,
-        title: this.title,
-        message: this.message,
-        level: this.level,
-      }
-    );
+    return Object.assign(super.toDescription(), {
+      notifier: this.notifier,
+      outlet: this.outlet,
+      title: this.title,
+      message: this.message,
+      level: this.level,
+    });
   }
 
   /**
@@ -84,7 +81,8 @@ export default class NotifierOutletEffect extends Effect {
     const outlet = notifier.getOutlet(this.outlet);
     if (!outlet) {
       console.warn(
-        `Outlet "${this.outlet}" of notifier "${this.notifier}" not found, unable to notify`);
+        `Outlet "${this.outlet}" of notifier "${this.notifier}" not found, unable to notify`
+      );
       return;
     }
 

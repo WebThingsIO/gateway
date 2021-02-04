@@ -31,8 +31,7 @@ function init(scope) {
   const promptMessage = fluent.getMessage('authorize-prompt');
 
   let node1, node2;
-  if (promptMessage.indexOf('<<function>>') <
-      promptMessage.indexOf('<<name>>')) {
+  if (promptMessage.indexOf('<<function>>') < promptMessage.indexOf('<<name>>')) {
     authorizeInfo.insertBefore(authorizeFunction, authorizeName);
     node1 = authorizeFunction;
     node2 = authorizeName;
@@ -54,10 +53,7 @@ function init(scope) {
   const authorizeDomain = document.getElementById('authorize-domain');
   const sourceMessage = fluent.getMessage('authorize-source');
   const sourceParts = sourceMessage.split('<<domain>>');
-  authorizeSubInfo.insertBefore(
-    document.createTextNode(sourceParts[0]),
-    authorizeDomain
-  );
+  authorizeSubInfo.insertBefore(document.createTextNode(sourceParts[0]), authorizeDomain);
   authorizeSubInfo.appendChild(document.createTextNode(sourceParts[1]));
 
   const readWrite = scope.indexOf(':readwrite') >= 0;
@@ -83,7 +79,7 @@ function init(scope) {
   API.getThings().then((things) => {
     let checkboxIndex = 0;
     for (const thing of things) {
-      const included = global || (scope.indexOf(thing.href) >= 0);
+      const included = global || scope.indexOf(thing.href) >= 0;
       const elt = document.createElement('li');
       elt.classList.add('authorize-thing');
       elt.dataset.href = Utils.escapeHtml(thing.href);
@@ -133,9 +129,11 @@ function init(scope) {
       }
     }
 
-    authorizeScope.value = urls.map((url) => {
-      return `${url}:${readWrite}`;
-    }).join(' ');
+    authorizeScope.value = urls
+      .map((url) => {
+        return `${url}:${readWrite}`;
+      })
+      .join(' ');
   });
 
   authorizeButton.removeAttribute('disabled');

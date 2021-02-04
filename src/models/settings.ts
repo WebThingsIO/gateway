@@ -11,7 +11,7 @@
 import Database from '../db';
 import util from 'util';
 
-const DEBUG = false || (process.env.NODE_ENV === 'test');
+const DEBUG = false || process.env.NODE_ENV === 'test';
 
 /**
  * Get a setting.
@@ -38,13 +38,11 @@ export async function setSetting<T>(key: string, value: T): Promise<T> {
     await Database.setSetting(key, value);
 
     if (DEBUG) {
-      console.log('Set', key, 'to',
-                  util.inspect(value, {breakLength: Infinity}));
+      console.log('Set', key, 'to', util.inspect(value, { breakLength: Infinity }));
     }
     return value;
   } catch (e) {
-    console.error('Failed to set', key, 'to',
-                  util.inspect(value, {breakLength: Infinity}));
+    console.error('Failed to set', key, 'to', util.inspect(value, { breakLength: Infinity }));
     throw e;
   }
 }

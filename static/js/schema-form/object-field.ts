@@ -32,18 +32,18 @@ export default class ObjectField {
 
   private retrievedSchema: Record<string, unknown>;
 
-  constructor(schema: Record<string, unknown>,
-              formData: Record<string, unknown>,
-              idSchema: Record<string, unknown>,
-              name: string,
-              definitions: Record<string, unknown>,
-              onChange: ((value: unknown) => void) | null = null,
-              required = false,
-              _disabled = false,
-              _readOnly = false) {
-    this.retrievedSchema = SchemaUtils.retrieveSchema(schema,
-                                                      definitions,
-                                                      formData);
+  constructor(
+    schema: Record<string, unknown>,
+    formData: Record<string, unknown>,
+    idSchema: Record<string, unknown>,
+    name: string,
+    definitions: Record<string, unknown>,
+    onChange: ((value: unknown) => void) | null = null,
+    required = false,
+    _disabled = false,
+    _readOnly = false
+  ) {
+    this.retrievedSchema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.schema = schema;
     this.formData = formData;
     this.idSchema = idSchema;
@@ -55,8 +55,7 @@ export default class ObjectField {
 
   isRequired(name: string): boolean {
     return (
-      Array.isArray(this.retrievedSchema.required) &&
-      this.retrievedSchema.required.includes(name)
+      Array.isArray(this.retrievedSchema.required) && this.retrievedSchema.required.includes(name)
     );
   }
 
@@ -89,15 +88,15 @@ export default class ObjectField {
 
       // modify part of form based on form data.
       if (schema.hasOwnProperty('dependencies')) {
-        const newRetrievedSchema = SchemaUtils.retrieveSchema(schema,
-                                                              this.definitions,
-                                                              this.formData);
+        const newRetrievedSchema = SchemaUtils.retrieveSchema(
+          schema,
+          this.definitions,
+          this.formData
+        );
         if (!this.isSameSchema(this.retrievedSchema, newRetrievedSchema)) {
           this.retrievedSchema = newRetrievedSchema;
-          this.formData = <Record<string, unknown>>SchemaUtils.getDefaultFormState(
-            newRetrievedSchema,
-            this.formData,
-            this.definitions
+          this.formData = <Record<string, unknown>>(
+            SchemaUtils.getDefaultFormState(newRetrievedSchema, this.formData, this.definitions)
           );
           this.renderField(field);
         }
@@ -110,11 +109,9 @@ export default class ObjectField {
   }
 
   renderField(field: HTMLElement): void {
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
-    const description = <string> this.retrievedSchema.description;
-    let title = this.retrievedSchema.title ?
-      <string> this.retrievedSchema.title :
-      this.name;
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
+    const description = <string>this.retrievedSchema.description;
+    let title = this.retrievedSchema.title ? <string>this.retrievedSchema.title : this.name;
     if (typeof title !== 'undefined' && title !== null) {
       title = Utils.escapeHtml(title);
       title = this.required ? title + SchemaUtils.REQUIRED_FIELD_SYMBOL : title;
@@ -122,21 +119,20 @@ export default class ObjectField {
 
     field.innerHTML =
       (title ? `<legend id="${`${id}__title`}">${title}</legend>` : '') +
-      (description ?
-        `<p id="${id}__description" class="field-description">
-        ${Utils.escapeHtml(description)}</p>` :
-        '');
+      (description
+        ? `<p id="${id}__description" class="field-description">
+        ${Utils.escapeHtml(description)}</p>`
+        : '');
 
     // TODO support to specific properties order
-    const orderedProperties = Object.keys(
-      <Record<string, unknown>> this.retrievedSchema.properties
-    );
+    const orderedProperties = Object.keys(<Record<string, unknown>>this.retrievedSchema.properties);
 
     orderedProperties.forEach((name) => {
-      const childSchema =
-        <Record<string, unknown>>(<Record<string, unknown>> this.retrievedSchema.properties)[name];
+      const childSchema = <Record<string, unknown>>(
+        (<Record<string, unknown>>this.retrievedSchema.properties)[name]
+      );
       const childIdPrefix = `${this.idSchema.$id}_${name}`;
-      const childData = <Record<string, unknown>> this.formData[name];
+      const childData = <Record<string, unknown>>this.formData[name];
       const childIdSchema = SchemaUtils.toIdSchema(
         childSchema,
         childIdPrefix,

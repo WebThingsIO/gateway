@@ -26,15 +26,17 @@ export default class BooleanField {
 
   private readOnly: boolean;
 
-  constructor(_schema: Record<string, unknown>,
-              formData: boolean,
-              idSchema: Record<string, unknown>,
-              _name: string,
-              _definitions: Record<string, unknown>,
-              onChange: ((value: boolean) => void) | null = null,
-              required = false,
-              disabled = false,
-              readOnly = false) {
+  constructor(
+    _schema: Record<string, unknown>,
+    formData: boolean,
+    idSchema: Record<string, unknown>,
+    _name: string,
+    _definitions: Record<string, unknown>,
+    onChange: ((value: boolean) => void) | null = null,
+    required = false,
+    disabled = false,
+    readOnly = false
+  ) {
     this.formData = formData;
     this.idSchema = idSchema;
     this.onChange = onChange;
@@ -52,7 +54,7 @@ export default class BooleanField {
   }
 
   render(): HTMLDivElement {
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
     const value = this.formData;
     const field = document.createElement('div');
     field.className = 'checkbox';
@@ -63,7 +65,7 @@ export default class BooleanField {
       id="${id}"
       ${value ? 'checked' : ''}
       ${this.required ? 'required' : ''}
-      ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+      ${this.disabled || this.readOnly ? 'disabled' : ''}
       />
       <label for="${id}"></span>
       `;

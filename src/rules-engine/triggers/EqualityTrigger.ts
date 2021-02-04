@@ -5,7 +5,7 @@
  */
 
 import * as Events from '../Events';
-import PropertyTrigger, {PropertyTriggerDescription} from './PropertyTrigger';
+import PropertyTrigger, { PropertyTriggerDescription } from './PropertyTrigger';
 
 export interface EqualityTriggerDescription extends PropertyTriggerDescription {
   value: number;
@@ -30,12 +30,9 @@ export default class EqualityTrigger extends PropertyTrigger {
    * @return {TriggerDescription}
    */
   toDescription(): EqualityTriggerDescription {
-    return Object.assign(
-      super.toDescription(),
-      {
-        value: this.value,
-      }
-    );
+    return Object.assign(super.toDescription(), {
+      value: this.value,
+    });
   }
 
   /**
@@ -45,6 +42,6 @@ export default class EqualityTrigger extends PropertyTrigger {
   onValueChanged(propValue: number): void {
     const on = propValue === this.value;
 
-    this.emit(Events.STATE_CHANGED, {on: on, value: propValue});
+    this.emit(Events.STATE_CHANGED, { on: on, value: propValue });
   }
 }

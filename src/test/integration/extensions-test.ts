@@ -1,5 +1,5 @@
-import {server, chai} from '../common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai } from '../common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import * as Constants from '../../constants';
 
 describe('extensions/', () => {
@@ -9,7 +9,8 @@ describe('extensions/', () => {
   });
 
   it('gets a list of all extensions', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(Constants.EXTENSIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -20,7 +21,8 @@ describe('extensions/', () => {
   });
 
   it('fails to use an extension API without authentication', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.EXTENSIONS_PATH}/fake-extension/api/fake`)
       .set('Accept', 'application/json');
 
@@ -28,7 +30,8 @@ describe('extensions/', () => {
   });
 
   it('fails to use a nonexistent extension API', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.EXTENSIONS_PATH}/fake-extension/api/fake`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -37,7 +40,8 @@ describe('extensions/', () => {
   });
 
   it('fails to get a nonexistent extension data file', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.EXTENSIONS_PATH}/fake-extension/js/something.js`);
 
     expect(res.status).toEqual(404);

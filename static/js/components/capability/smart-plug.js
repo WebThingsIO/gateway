@@ -74,12 +74,9 @@ class SmartPlugCapability extends BaseComponent {
 
   connectedCallback() {
     this._havePower =
-      typeof this.dataset.havePower !== 'undefined' ?
-        this.dataset.havePower === 'true' :
-        false;
+      typeof this.dataset.havePower !== 'undefined' ? this.dataset.havePower === 'true' : false;
     this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : null;
-    this.power =
-      typeof this.dataset.power !== 'undefined' ? this.dataset.power : false;
+    this.power = typeof this.dataset.power !== 'undefined' ? this.dataset.power : false;
     this._icon.addEventListener('click', this._onClick);
   }
 
@@ -126,12 +123,13 @@ class SmartPlugCapability extends BaseComponent {
     e.preventDefault();
     e.stopPropagation();
 
-    this.dispatchEvent(new CustomEvent('click', {
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('click', {
+        bubbles: true,
+      })
+    );
   }
 }
 
-window.customElements.define('webthing-smart-plug-capability',
-                             SmartPlugCapability);
+window.customElements.define('webthing-smart-plug-capability', SmartPlugCapability);
 module.exports = SmartPlugCapability;

@@ -9,12 +9,10 @@
  */
 
 import express from 'express';
-import {URL} from 'url';
+import { URL } from 'url';
 import JSONWebToken from '../models/jsonwebtoken';
 import config from 'config';
-import {
-  scopeValidSubset, ScopeRaw, ClientId, ClientRegistry,
-} from '../oauth-types';
+import { scopeValidSubset, ScopeRaw, ClientId, ClientRegistry } from '../oauth-types';
 
 import OAuthClients from '../models/oauthclients';
 import * as jwtMiddleware from '../jwt-middleware';
@@ -45,9 +43,13 @@ function build(): express.Router {
 
   type AuthorizationCode = string;
   type AuthorizationError =
-    'invalid_request' | 'unauthorized_client' | 'access_denied' |
-    'unsupported_response_type' | 'invalid_scope' | 'server_error' |
-    'temporarily_unavailable';
+    | 'invalid_request'
+    | 'unauthorized_client'
+    | 'access_denied'
+    | 'unsupported_response_type'
+    | 'invalid_scope'
+    | 'server_error'
+    | 'temporarily_unavailable';
 
   type AuthorizationSuccessResponse = {
     code: AuthorizationCode;
@@ -82,13 +84,20 @@ function build(): express.Router {
   };
 
   type AccessTokenError =
-    'invalid_request' | 'invalid_client' | 'invalid_grant' |
-    'unauthorized_client' | 'unsupported_grant_type' | 'invalid_scope';
+    | 'invalid_request'
+    | 'invalid_client'
+    | 'invalid_grant'
+    | 'unauthorized_client'
+    | 'unsupported_grant_type'
+    | 'invalid_scope';
 
   type AccessTokenErrorResponse = ErrorResponse<AccessTokenError>;
 
-  function redirect(response: express.Response, baseURL: URL, params: Record<string, unknown>):
-  void {
+  function redirect(
+    response: express.Response,
+    baseURL: URL,
+    params: Record<string, unknown>
+  ): void {
     const url = new URL(baseURL.toString());
     for (const key in params) {
       if (!params.hasOwnProperty(key)) {
@@ -136,8 +145,10 @@ function build(): express.Router {
     return client;
   }
 
-  function extractClientInfo(request: express.Request, response: express.Response):
-  {clientId: string, clientSecret: string} | null {
+  function extractClientInfo(
+    request: express.Request,
+    response: express.Response
+  ): { clientId: string; clientSecret: string } | null {
     const authorization = request.headers.authorization;
     if (!authorization) {
       if (!request.body.client_id) {
@@ -194,11 +205,7 @@ function build(): express.Router {
         error: 'unsupported_response_type',
         state: authRequest.state,
       };
-      redirect(
-        response,
-        client.redirect_uri,
-        err
-      );
+      redirect(response, client.redirect_uri, err);
       return null;
     }
 
@@ -208,11 +215,7 @@ function build(): express.Router {
         error_description: 'client scope does not cover requested scope',
         state: authRequest.state,
       };
-      redirect(
-        response,
-        client.redirect_uri,
-        err
-      );
+      redirect(response, client.redirect_uri, err);
       return null;
     }
 
@@ -257,8 +260,9 @@ function build(): express.Router {
         client_id: localClient.id,
       };
       request.body = tokenRequest;
-      request.headers.authorization = `Basic ${
-        Buffer.from(`${localClient.id}:${localClient.secret}`).toString('base64')}`;
+      request.headers.authorization = `Basic ${Buffer.from(
+        `${localClient.id}:${localClient.secret}`
+      ).toString('base64')}`;
       const token = await handleAccessTokenRequest(request, response);
       if (token) {
         response.render('local-token-service', {
@@ -310,11 +314,7 @@ function build(): express.Router {
       state: authRequest.state,
     };
 
-    redirect(
-      response,
-      client.redirect_uri,
-      success
-    );
+    redirect(response, client.redirect_uri, success);
   });
 
   controller.post('/token', async (request: express.Request, response: express.Response) => {
@@ -340,8 +340,10 @@ function build(): express.Router {
    * Handles the request for an access token using an authorization code.
    * On error sends a 400 with a JSON reason.
    */
-  async function handleAccessTokenRequest(request: express.Request, response: express.Response):
-  Promise<AccessTokenSuccessResponse | null> {
+  async function handleAccessTokenRequest(
+    request: express.Request,
+    response: express.Response
+  ): Promise<AccessTokenSuccessResponse | null> {
     const requestData = request.body;
     const reqClientInfo = extractClientInfo(request, response);
     if (!reqClientInfo) {
@@ -366,8 +368,7 @@ function build(): express.Router {
       return null;
     }
 
-    if (client.id !== reqClientInfo.clientId ||
-        client.secret !== reqClientInfo.clientSecret) {
+    if (client.id !== reqClientInfo.clientId || client.secret !== reqClientInfo.clientSecret) {
       const err: ErrorResponse<UnauthorizedClient> = {
         error: 'unauthorized_client',
         error_description: 'client info mismatch',

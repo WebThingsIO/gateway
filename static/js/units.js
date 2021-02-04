@@ -128,7 +128,7 @@ const Units = {
       case 'celsius':
         if ((toUnit || App.UNITS.temperature) === 'degree fahrenheit') {
           toUnit = App.UNITS.temperature;
-          value = (value * 1.8) + 32;
+          value = value * 1.8 + 32;
         }
         break;
       case 'degree fahrenheit':
@@ -143,7 +143,7 @@ const Units = {
         break;
     }
 
-    return {value, unit: toUnit || fromUnit};
+    return { value, unit: toUnit || fromUnit };
   },
 };
 

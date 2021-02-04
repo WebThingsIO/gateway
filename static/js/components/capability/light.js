@@ -117,35 +117,27 @@ class LightCapability extends BaseComponent {
 
   connectedCallback() {
     this._haveBrightness =
-      typeof this.dataset.haveBrightness !== 'undefined' ?
-        this.dataset.haveBrightness === 'true' :
-        false;
+      typeof this.dataset.haveBrightness !== 'undefined'
+        ? this.dataset.haveBrightness === 'true'
+        : false;
     this._haveColor =
-      typeof this.dataset.haveColor !== 'undefined' ?
-        this.dataset.haveColor === 'true' :
-        false;
+      typeof this.dataset.haveColor !== 'undefined' ? this.dataset.haveColor === 'true' : false;
     this._haveColorTemperature =
-      typeof this.dataset.haveColorTemperature !== 'undefined' ?
-        this.dataset.haveColorTemperature === 'true' :
-        false;
+      typeof this.dataset.haveColorTemperature !== 'undefined'
+        ? this.dataset.haveColorTemperature === 'true'
+        : false;
     this._haveColorMode =
-      typeof this.dataset.haveColorMode !== 'undefined' ?
-        this.dataset.haveColorMode === 'true' :
-        false;
+      typeof this.dataset.haveColorMode !== 'undefined'
+        ? this.dataset.haveColorMode === 'true'
+        : false;
     this.on = typeof this.dataset.on !== 'undefined' ? this.dataset.on : false;
     this.brightness =
-      typeof this.dataset.brightness !== 'undefined' ?
-        this.dataset.brightness :
-        false;
+      typeof this.dataset.brightness !== 'undefined' ? this.dataset.brightness : false;
     this.color = this.dataset.color || OFF_FILL;
     this.colorTemperature =
-      typeof this.dataset.colorTemperature !== 'undefined' ?
-        this.dataset.colorTemperature :
-        2700;
+      typeof this.dataset.colorTemperature !== 'undefined' ? this.dataset.colorTemperature : 2700;
     this.colorMode =
-      typeof this.dataset.colorMode !== 'undefined' ?
-        this.dataset.colorMode :
-        'color';
+      typeof this.dataset.colorMode !== 'undefined' ? this.dataset.colorMode : 'color';
     this._container.addEventListener('click', this._onClick);
   }
 
@@ -276,9 +268,11 @@ class LightCapability extends BaseComponent {
     e.preventDefault();
     e.stopPropagation();
 
-    this.dispatchEvent(new CustomEvent('click', {
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('click', {
+        bubbles: true,
+      })
+    );
   }
 }
 

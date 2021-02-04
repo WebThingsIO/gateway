@@ -31,8 +31,7 @@ const Thermostat = require('./thermostat');
 const Thing = require('./thing');
 const VideoCamera = require('./video-camera');
 
-function createThingFromCapability(
-  capability, thingModel, description, format) {
+function createThingFromCapability(capability, thingModel, description, format) {
   if (capability) {
     switch (capability) {
       case 'OnOffSwitch':
@@ -140,4 +139,4 @@ function getClassFromCapability(capability) {
   return '';
 }
 
-module.exports = {createThingFromCapability, getClassFromCapability};
+module.exports = { createThingFromCapability, getClassFromCapability };

@@ -11,7 +11,9 @@ module.exports = {
   'extends': [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'prettier/@typescript-eslint'
   ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
@@ -69,10 +71,6 @@ module.exports = {
       'error',
       'never'
     ],
-    'implicit-arrow-linebreak': [
-      'error',
-      'beside'
-    ],
     '@typescript-eslint/indent': [
       'error',
       2,
@@ -99,13 +97,7 @@ module.exports = {
         'mode': 'strict'
       }
     ],
-    '@typescript-eslint/keyword-spacing': [
-      'error',
-      {
-        'after': true,
-        'before': true
-      }
-    ],
+    '@typescript-eslint/keyword-spacing': 'off',
     'linebreak-style': [
       'error',
       'unix'
@@ -122,7 +114,7 @@ module.exports = {
       'error',
       {
         'singleline': {
-          'delimiter': 'comma',
+          'delimiter': 'semi',
           'requireLast': false
         },
         'multiline': {
@@ -185,7 +177,6 @@ module.exports = {
     '@typescript-eslint/no-useless-constructor': 'error',
     'no-useless-return': 'error',
     'no-var': 'error',
-    '@typescript-eslint/no-var-requires': 'off',
     'no-void': 'error',
     'no-whitespace-before-property': 'error',
     'object-curly-newline': [
@@ -196,7 +187,7 @@ module.exports = {
     ],
     'object-curly-spacing': [
       'error',
-      'never'
+      'always'
     ],
     'object-property-newline': [
       'error',
@@ -206,7 +197,13 @@ module.exports = {
     ],
     'operator-linebreak': [
       'error',
-      'after'
+      'after',
+      {
+        'overrides': {
+          '?': 'before',
+          ':': 'before'
+        }
+      }
     ],
     'padded-blocks': [
       'error',
@@ -250,7 +247,7 @@ module.exports = {
     '@typescript-eslint/space-before-function-paren': [
       'error',
       {
-        'anonymous': 'never',
+        'anonymous': 'always',
         'asyncArrow': 'always',
         'named': 'never'
       }
@@ -299,7 +296,8 @@ module.exports = {
         '**/*.js'
       ],
       'rules': {
-        '@typescript-eslint/explicit-function-return-type': 'off'
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
       }
     }
   ]

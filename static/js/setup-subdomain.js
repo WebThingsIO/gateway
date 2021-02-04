@@ -41,30 +41,32 @@ function setupForm() {
 
   let haveRestartedNtp = false;
   function pollNtp() {
-    API.getNtpStatus().then((body) => {
-      if (body.statusImplemented) {
-        if (body.synchronized) {
-          ntpMessage.classList.add('hidden');
-        } else {
-          ntpMessage.classList.remove('hidden');
+    API.getNtpStatus()
+      .then((body) => {
+        if (body.statusImplemented) {
+          if (body.synchronized) {
+            ntpMessage.classList.add('hidden');
+          } else {
+            ntpMessage.classList.remove('hidden');
 
-          if (!haveRestartedNtp) {
-            API.restartNtpSync().catch((e) => {
-              console.error('Failed to restart NTP sync:', e);
-            });
-            haveRestartedNtp = true;
+            if (!haveRestartedNtp) {
+              API.restartNtpSync().catch((e) => {
+                console.error('Failed to restart NTP sync:', e);
+              });
+              haveRestartedNtp = true;
+            }
+
+            // poll again in 5 seconds
+            setTimeout(pollNtp, 5000);
           }
-
-          // poll again in 5 seconds
-          setTimeout(pollNtp, 5000);
         }
-      }
-    }).catch((e) => {
-      console.error('Error polling NTP status:', e);
+      })
+      .catch((e) => {
+        console.error('Error polling NTP status:', e);
 
-      // poll again in 5 seconds
-      setTimeout(pollNtp, 5000);
-    });
+        // poll again in 5 seconds
+        setTimeout(pollNtp, 5000);
+      });
   }
 
   pollNtp();
@@ -79,10 +81,7 @@ function setupForm() {
     const val = subdomain.value.toLowerCase();
     const re = new RegExp(/^\s*([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\s*$/);
     const nsRegex = new RegExp(/^ns\d*$/);
-    if (!re.test(val) ||
-        nsRegex.test(val) ||
-        ['api', 'www'].includes(val) ||
-        val.length > 63) {
+    if (!re.test(val) || nsRegex.test(val) || ['api', 'www'].includes(val) || val.length > 63) {
       return false;
     }
 
@@ -94,8 +93,10 @@ function setupForm() {
    */
   function validateEmail() {
     const val = email.value;
-    // eslint-disable-next-line max-len
-    const re = new RegExp(/^\s*[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]\s*$/, 'i');
+    const re = new RegExp(
+      /^\s*[^@\s]+@(([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])\.)+[a-z0-9][a-z0-9-]*[a-z0-9]\s*$/,
+      'i'
+    );
     return re.test(val) && val.length <= 254;
   }
 
@@ -108,7 +109,6 @@ function setupForm() {
     }
 
     const val = reclamationToken.value;
-    // eslint-disable-next-line max-len
     const re = new RegExp(/^\s*[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\s*$/);
     return re.test(val);
   }
@@ -127,8 +127,7 @@ function setupForm() {
       validationMessage.classList.remove('hidden');
     } else if (!validateToken()) {
       createDomainButton.disabled = true;
-      validationMessage.innerText =
-        fluent.getMessage('invalid-reclamation-token');
+      validationMessage.innerText = fluent.getMessage('invalid-reclamation-token');
       validationMessage.classList.remove('hidden');
     } else {
       createDomainButton.disabled = !agree.checked;
@@ -141,8 +140,7 @@ function setupForm() {
    * valid.
    */
   function submitOnEnter(evt) {
-    if (evt.key === 'Enter' && validateDomain() && validateEmail() &&
-        validateToken()) {
+    if (evt.key === 'Enter' && validateDomain() && validateEmail() && validateToken()) {
       submitForm();
     }
   }
@@ -159,50 +157,50 @@ function setupForm() {
       email.value.trim(),
       subdomain.value.trim(),
       reclamationToken.value.trim(),
-      !optIn.checked,
-    ).then(([ok, body]) => {
-      if (ok) {
-        displayMessage(fluent.getMessage('domain-success'), 'message');
-        setTimeout(() => {
-          window.location.replace(body.url);
-        }, 5000);
-      } else {
-        createDomainButton.disabled = false;
-
-        if (body.indexOf('UnavailableName') > -1) {
-          validateInput();
-
-          if (body.indexOf('ReclamationPossible') > -1) {
-            errorMessage.classList.add('hidden');
-            reclaimMessage.classList.remove('hidden');
-            reclaimMessage.querySelector('a').onclick = () => {
-              document.getElementById('opt-in-group').style.display = 'none';
-              document.getElementById('agree-group').style.display = 'none';
-              reclamationToken.style.display = 'block';
-              reclamationToken.focus();
-
-              reclaimMessage.classList.add('hidden');
-              errorMessage.textContent =
-                fluent.getMessage('check-email-for-token');
-              errorMessage.classList.remove('hidden');
-
-              API.reclaimDomain(subdomain.value).catch(() => {
-                displayMessage(fluent.getMessage('reclaim-failed'), 'error');
-              });
-            };
-          } else {
-            displayMessage(fluent.getMessage('subdomain-already-used'),
-                           'error');
-          }
-        } else if (body.indexOf('ReclamationTokenMismatch') > -1) {
-          displayMessage(fluent.getMessage('invalid-reclamation-token'),
-                         'error');
+      !optIn.checked
+    ).then(
+      ([ok, body]) => {
+        if (ok) {
+          displayMessage(fluent.getMessage('domain-success'), 'message');
+          setTimeout(() => {
+            window.location.replace(body.url);
+          }, 5000);
         } else {
-          displayMessage(fluent.getMessage('issuing-error'), 'error');
+          createDomainButton.disabled = false;
+
+          if (body.indexOf('UnavailableName') > -1) {
+            validateInput();
+
+            if (body.indexOf('ReclamationPossible') > -1) {
+              errorMessage.classList.add('hidden');
+              reclaimMessage.classList.remove('hidden');
+              reclaimMessage.querySelector('a').onclick = () => {
+                document.getElementById('opt-in-group').style.display = 'none';
+                document.getElementById('agree-group').style.display = 'none';
+                reclamationToken.style.display = 'block';
+                reclamationToken.focus();
+
+                reclaimMessage.classList.add('hidden');
+                errorMessage.textContent = fluent.getMessage('check-email-for-token');
+                errorMessage.classList.remove('hidden');
+
+                API.reclaimDomain(subdomain.value).catch(() => {
+                  displayMessage(fluent.getMessage('reclaim-failed'), 'error');
+                });
+              };
+            } else {
+              displayMessage(fluent.getMessage('subdomain-already-used'), 'error');
+            }
+          } else if (body.indexOf('ReclamationTokenMismatch') > -1) {
+            displayMessage(fluent.getMessage('invalid-reclamation-token'), 'error');
+          } else {
+            displayMessage(fluent.getMessage('issuing-error'), 'error');
+          }
         }
-      }
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    }, () => {});
+      },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      () => {}
+    );
   }
 
   subdomain.addEventListener('input', validateInput);
@@ -221,18 +219,20 @@ function setupForm() {
     displayMessage(fluent.getMessage('processing'), 'message');
 
     // call the settings controller to skip the domain subscription
-    API.skipTunnel().then(([ok, body]) => {
-      if (ok) {
-        displayMessage(fluent.getMessage('redirecting'), 'message');
-        setTimeout(() => {
-          window.location.replace(`http://${window.location.host}`);
-        }, 1000);
-      } else {
-        displayMessage(body, 'error');
-      }
-    }).catch((error) => {
-      displayMessage(error, 'error');
-    });
+    API.skipTunnel()
+      .then(([ok, body]) => {
+        if (ok) {
+          displayMessage(fluent.getMessage('redirecting'), 'message');
+          setTimeout(() => {
+            window.location.replace(`http://${window.location.host}`);
+          }, 1000);
+        } else {
+          displayMessage(body, 'error');
+        }
+      })
+      .catch((error) => {
+        displayMessage(error, 'error');
+      });
 
     return false;
   });

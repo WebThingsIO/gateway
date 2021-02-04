@@ -13,8 +13,7 @@
 const API = require('../api').default;
 const Utils = require('../utils');
 const fluent = require('../fluent');
-const {getClassFromCapability} =
-  require('../schema-impl/capability/capabilities');
+const { getClassFromCapability } = require('../schema-impl/capability/capabilities');
 
 class NewThing {
   /**
@@ -43,9 +42,7 @@ class NewThing {
   }
 
   requiresPin() {
-    return this.description.hasOwnProperty('pin') &&
-      this.description.pin.required &&
-      !this.pinSet;
+    return this.description.hasOwnProperty('pin') && this.description.pin.required && !this.pinSet;
   }
 
   requiresCredentials() {
@@ -57,15 +54,16 @@ class NewThing {
     this.element.classList.remove('credentials-required');
 
     let capabilities = [];
-    if (Array.isArray(this.description['@type']) &&
-        this.description['@type'].length > 0) {
+    if (Array.isArray(this.description['@type']) && this.description['@type'].length > 0) {
       capabilities = this.description['@type'];
     }
 
     capabilities = Utils.sortCapabilities(capabilities);
     capabilities.push('Custom');
 
-    let cls = '', type = '', customIconClass = 'hidden';
+    let cls = '',
+      type = '',
+      customIconClass = 'hidden';
     const options = [];
     for (let capability of capabilities) {
       type = fluent.getMessageStrict(capability) || capability;
@@ -90,8 +88,7 @@ class NewThing {
         }
       }
 
-      options.push(
-        `<option value="${capability}" ${selected}>${type}</option>`);
+      options.push(`<option value="${capability}" ${selected}>${type}</option>`);
     }
 
     cls = cls.trim() || 'custom-thing';
@@ -198,10 +195,8 @@ class NewThing {
     if (this.requiresPin()) {
       this.pinInput = this.element.querySelector('.new-thing-pin');
       this.pinError = this.element.querySelector('.new-thing-pin-error');
-      this.cancelButton =
-        this.element.querySelector('.new-thing-cancel-button');
-      this.submitButton =
-        this.element.querySelector('.new-thing-submit-button');
+      this.cancelButton = this.element.querySelector('.new-thing-cancel-button');
+      this.submitButton = this.element.querySelector('.new-thing-submit-button');
 
       this.pinInput.addEventListener('input', this.handlePinInput.bind(this));
       this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
@@ -209,21 +204,12 @@ class NewThing {
     } else if (this.requiresCredentials()) {
       this.usernameInput = this.element.querySelector('.new-thing-username');
       this.passwordInput = this.element.querySelector('.new-thing-password');
-      this.credentialsError =
-        this.element.querySelector('.new-thing-credentials-error');
-      this.cancelButton =
-        this.element.querySelector('.new-thing-cancel-button');
-      this.submitButton =
-        this.element.querySelector('.new-thing-submit-button');
+      this.credentialsError = this.element.querySelector('.new-thing-credentials-error');
+      this.cancelButton = this.element.querySelector('.new-thing-cancel-button');
+      this.submitButton = this.element.querySelector('.new-thing-submit-button');
 
-      this.usernameInput.addEventListener(
-        'input',
-        this.handleCredentialsInput.bind(this)
-      );
-      this.passwordInput.addEventListener(
-        'input',
-        this.handleCredentialsInput.bind(this)
-      );
+      this.usernameInput.addEventListener('input', this.handleCredentialsInput.bind(this));
+      this.passwordInput.addEventListener('input', this.handleCredentialsInput.bind(this));
       this.cancelButton.addEventListener('click', this.handleCancel.bind(this));
       this.submitButton.addEventListener('click', this.handleSubmit.bind(this));
     } else {
@@ -231,17 +217,13 @@ class NewThing {
       this.saveButton = this.element.querySelector('.new-thing-save-button');
       this.thingType = this.element.querySelector('.new-thing-type');
       this.customIcon = this.element.querySelector('.new-thing-custom-icon');
-      this.customIconInput =
-        this.element.querySelector('.new-thing-custom-icon-input');
-      this.customIconLabel =
-        this.element.querySelector('.new-thing-custom-icon-label');
+      this.customIconInput = this.element.querySelector('.new-thing-custom-icon-input');
+      this.customIconLabel = this.element.querySelector('.new-thing-custom-icon-label');
       this.label = this.element.querySelector('.new-thing-label');
 
       this.saveButton.addEventListener('click', this.handleSave.bind(this));
-      this.thingType.addEventListener('change',
-                                      this.handleTypeChange.bind(this));
-      this.customIconInput.addEventListener('change',
-                                            this.handleIconUpload.bind(this));
+      this.thingType.addEventListener('change', this.handleTypeChange.bind(this));
+      this.customIconInput.addEventListener('change', this.handleIconUpload.bind(this));
     }
   }
 
@@ -260,8 +242,7 @@ class NewThing {
     if (valid) {
       this.pinInput.setCustomValidity('');
     } else {
-      this.pinInput.setCustomValidity(
-        fluent.getMessage('new-thing-pin-invalid'));
+      this.pinInput.setCustomValidity(fluent.getMessage('new-thing-pin-invalid'));
     }
   }
 
@@ -286,33 +267,34 @@ class NewThing {
       data.password = this.passwordInput.value;
     }
 
-    API.setThingCredentials(this.id, data).then((description) => {
-      this.description = description;
+    API.setThingCredentials(this.id, data)
+      .then((description) => {
+        this.description = description;
 
-      if (this.requiresPin()) {
-        this.pinError.classList.add('hidden');
-        this.pinSet = true;
-      } else if (this.requiresCredentials()) {
-        this.credentialsError.classList.add('hidden');
-        this.credentialsSet = true;
-      }
+        if (this.requiresPin()) {
+          this.pinError.classList.add('hidden');
+          this.pinSet = true;
+        } else if (this.requiresCredentials()) {
+          this.credentialsError.classList.add('hidden');
+          this.credentialsSet = true;
+        }
 
-      this.render();
-    }).catch((error) => {
-      console.error(`Failed to set PIN/credentials: ${error}`);
-      this.submitButton.disabled = false;
+        this.render();
+      })
+      .catch((error) => {
+        console.error(`Failed to set PIN/credentials: ${error}`);
+        this.submitButton.disabled = false;
 
-      if (this.pinError) {
-        this.pinError.classList.remove('hidden');
-      } else if (this.credentialsError) {
-        this.credentialsError.classList.remove('hidden');
-      }
-    });
+        if (this.pinError) {
+          this.pinError.classList.remove('hidden');
+        } else if (this.credentialsError) {
+          this.credentialsError.classList.remove('hidden');
+        }
+      });
   }
 
   handleTypeChange() {
-    const capability =
-      this.thingType.options[this.thingType.selectedIndex].value;
+    const capability = this.thingType.options[this.thingType.selectedIndex].value;
 
     this.customIconLabel.classList.add('hidden');
     this.customIcon.classList.add('hidden');
@@ -405,31 +387,32 @@ class NewThing {
     thing.title = this.titleInput.value;
 
     if (this.thingType.options.length > 0) {
-      thing.selectedCapability =
-        this.thingType.options[this.thingType.selectedIndex].value;
+      thing.selectedCapability = this.thingType.options[this.thingType.selectedIndex].value;
     }
 
     if (thing.selectedCapability === 'Custom' && this.iconData) {
       thing.iconData = this.iconData;
     }
 
-    API.addThing(thing).then(() => {
-      this.saveButton.textContent = fluent.getMessage('new-thing-saved');
+    API.addThing(thing)
+      .then(() => {
+        this.saveButton.textContent = fluent.getMessage('new-thing-saved');
 
-      const cancelButton = document.getElementById('add-thing-cancel-button');
-      if (cancelButton) {
-        cancelButton.textContent = fluent.getMessage('new-thing-done');
-      }
-    }).catch((error) => {
-      console.error(`Failed to save thing ${error}`);
-      this.label.innerText = fluent.getMessage('failed-save');
-      this.label.classList.add('error');
-      this.label.classList.remove('hidden');
-      this.thingType.disabled = false;
-      this.titleInput.disabled = false;
-      this.saveButton.disabled = false;
-      this.customIconInput.disabled = false;
-    });
+        const cancelButton = document.getElementById('add-thing-cancel-button');
+        if (cancelButton) {
+          cancelButton.textContent = fluent.getMessage('new-thing-done');
+        }
+      })
+      .catch((error) => {
+        console.error(`Failed to save thing ${error}`);
+        this.label.innerText = fluent.getMessage('failed-save');
+        this.label.classList.add('error');
+        this.label.classList.remove('hidden');
+        this.thingType.disabled = false;
+        this.titleInput.disabled = false;
+        this.saveButton.disabled = false;
+        this.customIconInput.disabled = false;
+      });
   }
 }
 

@@ -6,7 +6,6 @@ class ThingDetailLayout {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.classList.add('thing-detail-layout-links');
 
-
     const things = document.getElementById('things');
     things.insertBefore(this.svg, things.firstChild);
 
@@ -14,8 +13,7 @@ class ThingDetailLayout {
 
     this.doLayout();
 
-    parent.registerEventListener(window, 'resize',
-                                 this.doLayout);
+    parent.registerEventListener(window, 'resize', this.doLayout);
   }
 
   /**
@@ -27,25 +25,26 @@ class ThingDetailLayout {
    * @return {Object} Object containing adjustments as such: {x, y}
    */
   adjustXY(angle, radius) {
-    let x = 0, y = 0;
-    if (angle < (Math.PI / 2)) {
+    let x = 0,
+      y = 0;
+    if (angle < Math.PI / 2) {
       x = Math.cos(angle) * radius;
       y = Math.sin(angle) * radius;
     } else if (angle < Math.PI) {
       const theta = Math.PI - angle;
       x = -(Math.cos(theta) * radius);
       y = Math.sin(theta) * radius;
-    } else if (angle < (3 * Math.PI / 2)) {
-      const theta = (3 * Math.PI / 2) - angle;
+    } else if (angle < (3 * Math.PI) / 2) {
+      const theta = (3 * Math.PI) / 2 - angle;
       x = -(Math.sin(theta) * radius);
       y = -(Math.cos(theta) * radius);
     } else {
-      const theta = (2 * Math.PI) - angle;
+      const theta = 2 * Math.PI - angle;
       x = Math.cos(theta) * radius;
       y = -(Math.sin(theta) * radius);
     }
 
-    return {x, y};
+    return { x, y };
   }
 
   doLayout() {
@@ -75,7 +74,7 @@ class ThingDetailLayout {
     this.svg.innerHTML = '';
 
     for (let i = 0; i < this.elements.length; i++) {
-      const angle = i / this.elements.length * 2 * Math.PI + angleStart;
+      const angle = (i / this.elements.length) * 2 * Math.PI + angleStart;
       const x = xScale * Math.cos(angle);
       const y = yScale * Math.sin(angle);
 
@@ -85,15 +84,11 @@ class ThingDetailLayout {
       }
 
       const point1Adjust = this.adjustXY(actualAngle, centerRadius);
-      const point2Adjust = this.adjustXY(
-        (actualAngle + Math.PI) % (2 * Math.PI),
-        outerRadius
-      );
+      const point2Adjust = this.adjustXY((actualAngle + Math.PI) % (2 * Math.PI), outerRadius);
 
       this.elements[i].style.transform = `translate(${x}px, ${y}px)`;
 
-      const line =
-          document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       line.classList.add('thing-detail-layout-link');
       line.setAttribute('x1', xScale + point1Adjust.x);
       line.setAttribute('y1', yScale + point1Adjust.y);

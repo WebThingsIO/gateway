@@ -131,11 +131,13 @@ class API {
   }
 
   userCount(): Promise<number> {
-    return this.getJson('/users/count').then((body) => {
-      return <number>body.count;
-    }).catch(() => {
-      throw new Error('Failed to get user count.');
-    });
+    return this.getJson('/users/count')
+      .then((body) => {
+        return <number>body.count;
+      })
+      .catch(() => {
+        throw new Error('Failed to get user count.');
+      });
   }
 
   assertJWT(): void {
@@ -145,17 +147,19 @@ class API {
   }
 
   verifyJWT(): Promise<boolean> {
-    return fetch('/things', {headers: this.headers()}).then((res) => res.ok);
+    return fetch('/things', { headers: this.headers() }).then((res) => res.ok);
   }
 
   createUser(name: string, email: string, password: string): Promise<void> {
-    return this.postJson('/users', {name, email, password}).then((body) => {
-      const jwt = <string>body!.jwt!;
-      localStorage.setItem('jwt', jwt);
-      this.jwt = jwt;
-    }).catch(() => {
-      throw new Error('Repeating signup not permitted');
-    });
+    return this.postJson('/users', { name, email, password })
+      .then((body) => {
+        const jwt = <string>body!.jwt!;
+        localStorage.setItem('jwt', jwt);
+        this.jwt = jwt;
+      })
+      .catch(() => {
+        throw new Error('Repeating signup not permitted');
+      });
   }
 
   getUser(id: number): Promise<Record<string, unknown>> {
@@ -163,7 +167,7 @@ class API {
   }
 
   async addUser(name: string, email: string, password: string): Promise<Record<string, unknown>> {
-    return (await this.postJson('/users', {name, email, password}))!;
+    return (await this.postJson('/users', { name, email, password }))!;
   }
 
   editUser(
@@ -173,10 +177,13 @@ class API {
     password: string,
     newPassword: string
   ): Promise<Record<string, unknown>> {
-    return this.putJson(
-      `/users/${encodeURIComponent(id)}`,
-      {id, name, email, password, newPassword}
-    );
+    return this.putJson(`/users/${encodeURIComponent(id)}`, {
+      id,
+      name,
+      email,
+      password,
+      newPassword,
+    });
   }
 
   async userEnableMfa(id: number, totp: string): Promise<Record<string, unknown>> {
@@ -185,26 +192,20 @@ class API {
     };
 
     if (totp) {
-      body.mfa = {totp};
+      body.mfa = { totp };
     }
 
     return (await this.postJson(`/users/${encodeURIComponent(id)}/mfa`, body))!;
   }
 
   async userDisableMfa(id: number): Promise<null> {
-    await this.postJson(
-      `/users/${encodeURIComponent(id)}/mfa`,
-      {enable: false}
-    );
+    await this.postJson(`/users/${encodeURIComponent(id)}/mfa`, { enable: false });
 
     return null;
   }
 
   userRegenerateMfaBackupCodes(id: number): Promise<Record<string, unknown>> {
-    return this.putJson(
-      `/users/${encodeURIComponent(id)}/mfa/codes`,
-      {generate: true}
-    );
+    return this.putJson(`/users/${encodeURIComponent(id)}/mfa/codes`, { generate: true });
   }
 
   deleteUser(id: number): Promise<void> {
@@ -222,7 +223,7 @@ class API {
     };
 
     if (totp) {
-      body.mfa = {totp};
+      body.mfa = { totp };
     }
 
     const opts = {
@@ -273,14 +274,11 @@ class API {
     addonId: string,
     config: Record<string, unknown>
   ): Promise<Record<string, unknown>> {
-    return this.putJson(
-      `/addons/${encodeURIComponent(addonId)}/config`,
-      {config}
-    );
+    return this.putJson(`/addons/${encodeURIComponent(addonId)}/config`, { config });
   }
 
   setAddonSetting(addonId: string, enabled: boolean): Promise<Record<string, unknown>> {
-    return this.putJson(`/addons/${encodeURIComponent(addonId)}`, {enabled});
+    return this.putJson(`/addons/${encodeURIComponent(addonId)}`, { enabled });
   }
 
   async installAddon(
@@ -304,13 +302,10 @@ class API {
     addonUrl: string,
     addonChecksum: string
   ): Promise<Record<string, unknown>> {
-    return this.patchJson(
-      `/addons/${encodeURIComponent(addonId)}`,
-      {
-        url: addonUrl,
-        checksum: addonChecksum,
-      }
-    );
+    return this.patchJson(`/addons/${encodeURIComponent(addonId)}`, {
+      url: addonUrl,
+      checksum: addonChecksum,
+    });
   }
 
   getAddonsInfo(): Promise<Record<string, unknown>> {
@@ -318,24 +313,21 @@ class API {
   }
 
   getExperimentSetting(experimentName: string): Promise<boolean> {
-    return this.getJson(
-      `/settings/experiments/${encodeURIComponent(experimentName)}`
-    ).then((json) => {
-      return <boolean>json.enabled;
-    }).catch((e) => {
-      if (e.message === '404') {
-        return false;
-      }
+    return this.getJson(`/settings/experiments/${encodeURIComponent(experimentName)}`)
+      .then((json) => {
+        return <boolean>json.enabled;
+      })
+      .catch((e) => {
+        if (e.message === '404') {
+          return false;
+        }
 
-      throw new Error(`Error getting ${experimentName}`);
-    });
+        throw new Error(`Error getting ${experimentName}`);
+      });
   }
 
   setExperimentSetting(experimentName: string, enabled: boolean): Promise<Record<string, unknown>> {
-    return this.putJson(
-      `/settings/experiments/${encodeURIComponent(experimentName)}`,
-      {enabled}
-    );
+    return this.putJson(`/settings/experiments/${encodeURIComponent(experimentName)}`, { enabled });
   }
 
   getUpdateStatus(): Promise<Record<string, unknown>> {
@@ -351,7 +343,7 @@ class API {
   }
 
   setSelfUpdateStatus(enabled: boolean): Promise<Record<string, unknown>> {
-    return this.putJson('/updates/self-update', {enabled});
+    return this.putJson('/updates/self-update', { enabled });
   }
 
   async startUpdate(): Promise<Record<string, unknown>> {
@@ -371,10 +363,7 @@ class API {
   }
 
   setThingLayoutIndex(thingId: string, index: number): Promise<Record<string, unknown>> {
-    return this.patchJson(
-      `/things/${encodeURIComponent(thingId)}`,
-      {layoutIndex: index}
-    );
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { layoutIndex: index });
   }
 
   setThingFloorplanPosition(
@@ -382,13 +371,10 @@ class API {
     x: number,
     y: number
   ): Promise<Record<string, unknown>> {
-    return this.patchJson(
-      `/things/${encodeURIComponent(thingId)}`,
-      {
-        floorplanX: x,
-        floorplanY: y,
-      }
-    );
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, {
+      floorplanX: x,
+      floorplanY: y,
+    });
   }
 
   setThingCredentials(
@@ -414,7 +400,7 @@ class API {
   }
 
   async addWebThing(url: string): Promise<Record<string, unknown>> {
-    return (await this.postJson('/new_things', {url}))!;
+    return (await this.postJson('/new_things', { url }))!;
   }
 
   removeThing(thingId: string): Promise<void> {
@@ -528,13 +514,13 @@ class API {
   setupTunnel(
     email: string,
     subdomain: string,
-    reclamationToken:
-    string, optout: boolean
+    reclamationToken: string,
+    optout: boolean
   ): Promise<[boolean, string | Record<string, unknown>]> {
     const opts = {
       method: 'POST',
       headers: this.headers('application/json'),
-      body: JSON.stringify({email, subdomain, reclamationToken, optout}),
+      body: JSON.stringify({ email, subdomain, reclamationToken, optout }),
     };
 
     return fetch('/settings/subscribe', opts).then((res) => {
@@ -563,7 +549,7 @@ class API {
   }
 
   async reclaimDomain(subdomain: string): Promise<Record<string, unknown>> {
-    return (await this.postJson('/settings/reclaim', {subdomain}))!;
+    return (await this.postJson('/settings/reclaim', { subdomain }))!;
   }
 
   getLanSettings(): Promise<Record<string, unknown>> {
@@ -611,7 +597,7 @@ class API {
   }
 
   setSshStatus(enabled: boolean): Promise<Record<string, unknown>> {
-    return this.putJson('/settings/system/ssh', {enabled});
+    return this.putJson('/settings/system/ssh', { enabled });
   }
 
   getPlatform(): Promise<Record<string, unknown>> {
@@ -660,7 +646,7 @@ class API {
   }
 
   setCountry(country: string): Promise<Record<string, unknown>> {
-    return this.putJson('/settings/localization/country', {country});
+    return this.putJson('/settings/localization/country', { country });
   }
 
   getTimezone(): Promise<Record<string, unknown>> {
@@ -668,7 +654,7 @@ class API {
   }
 
   setTimezone(zone: string): Promise<Record<string, unknown>> {
-    return this.putJson('/settings/localization/timezone', {zone});
+    return this.putJson('/settings/localization/timezone', { zone });
   }
 
   getLanguage(): Promise<Record<string, unknown>> {
@@ -676,7 +662,7 @@ class API {
   }
 
   setLanguage(language: string): Promise<Record<string, unknown>> {
-    return this.putJson('/settings/localization/language', {language});
+    return this.putJson('/settings/localization/language', { language });
   }
 
   getUnits(): Promise<Record<string, unknown>> {

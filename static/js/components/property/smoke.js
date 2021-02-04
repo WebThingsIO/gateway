@@ -86,14 +86,10 @@ class SmokeProperty extends BaseComponent {
 `;
     super(template);
 
-    this._name = this.shadowRoot.querySelector(
-      '.webthing-smoke-property-name');
-    this._container = this.shadowRoot.querySelector(
-      '.webthing-smoke-property-container');
-    this._value = this.shadowRoot.querySelector(
-      '.webthing-smoke-property-value');
-    this._image = this.shadowRoot.querySelector(
-      '.webthing-smoke-property-image');
+    this._name = this.shadowRoot.querySelector('.webthing-smoke-property-name');
+    this._container = this.shadowRoot.querySelector('.webthing-smoke-property-container');
+    this._value = this.shadowRoot.querySelector('.webthing-smoke-property-value');
+    this._image = this.shadowRoot.querySelector('.webthing-smoke-property-image');
 
     this._smoke = false;
   }
@@ -104,8 +100,7 @@ class SmokeProperty extends BaseComponent {
     }
 
     if (!this.value) {
-      this.value =
-        typeof this.dataset.value !== 'undefined' ? this.dataset.value : null;
+      this.value = typeof this.dataset.value !== 'undefined' ? this.dataset.value : null;
     }
   }
 

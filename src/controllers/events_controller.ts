@@ -12,7 +12,7 @@ import express from 'express';
 import Events from '../models/events';
 
 function build(): express.Router {
-  const controller = express.Router({mergeParams: true});
+  const controller = express.Router({ mergeParams: true });
 
   /**
    * Handle getting a list of events.
@@ -32,8 +32,7 @@ function build(): express.Router {
     const eventName = request.params.eventName;
 
     if (request.params.thingId) {
-      response.status(200).json(Events.getByThing(request.params.thingId,
-                                                  eventName));
+      response.status(200).json(Events.getByThing(request.params.thingId, eventName));
     } else {
       response.status(200).json(Events.getGatewayEvents(eventName));
     }

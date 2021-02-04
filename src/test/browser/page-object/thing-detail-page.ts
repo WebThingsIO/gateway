@@ -1,4 +1,4 @@
-import {Page, Section} from './elements';
+import { Page, Section } from './elements';
 import webdriverio from 'webdriverio';
 
 class InputPropertySection extends Section {
@@ -192,11 +192,7 @@ export class ThingDetailPage extends Page {
   constructor(browser: webdriverio.BrowserObject, url: string) {
     super(browser, url);
 
-    this.defineSection(
-      'colorProperty',
-      'webthing-color-property',
-      ColorPropertySection
-    );
+    this.defineSection('colorProperty', 'webthing-color-property', ColorPropertySection);
 
     this.defineSection(
       'colorTemperatureProperty',
@@ -210,17 +206,9 @@ export class ThingDetailPage extends Page {
       BrightnessPropertySection
     );
 
-    this.defineSection(
-      'levelProperty',
-      'webthing-level-property',
-      LevelPropertySection
-    );
+    this.defineSection('levelProperty', 'webthing-level-property', LevelPropertySection);
 
-    this.defineSection(
-      'onOffProperty',
-      'webthing-on-off-property',
-      OnOffPropertySection
-    );
+    this.defineSection('onOffProperty', 'webthing-on-off-property', OnOffPropertySection);
 
     // For SmartPlug
     this.defineSection(
@@ -229,46 +217,18 @@ export class ThingDetailPage extends Page {
       LabelPropertySection
     );
 
-    this.defineSection(
-      'voltageProperty',
-      `webthing-voltage-property`,
-      LabelPropertySection
-    );
+    this.defineSection('voltageProperty', `webthing-voltage-property`, LabelPropertySection);
 
-    this.defineSection(
-      'currentProperty',
-      `webthing-current-property`,
-      LabelPropertySection
-    );
+    this.defineSection('currentProperty', `webthing-current-property`, LabelPropertySection);
 
-    this.defineSection(
-      'frequencyProperty',
-      `webthing-frequency-property`,
-      LabelPropertySection
-    );
+    this.defineSection('frequencyProperty', `webthing-frequency-property`, LabelPropertySection);
 
-    this.defineSections(
-      'labelProperties',
-      'webthing-label-property',
-      LabelPropertySection
-    );
+    this.defineSections('labelProperties', 'webthing-label-property', LabelPropertySection);
 
     // For UnknownThing
-    this.defineSections(
-      'booleanProperties',
-      'webthing-boolean-property',
-      BooleanPropertySection
-    );
-    this.defineSections(
-      'stringProperties',
-      'webthing-string-property',
-      StringPropertySection
-    );
-    this.defineSections(
-      'numberProperties',
-      'webthing-number-property',
-      NumberPropertySection
-    );
+    this.defineSections('booleanProperties', 'webthing-boolean-property', BooleanPropertySection);
+    this.defineSections('stringProperties', 'webthing-string-property', StringPropertySection);
+    this.defineSections('numberProperties', 'webthing-number-property', NumberPropertySection);
 
     this.defineElement(
       'offThing',

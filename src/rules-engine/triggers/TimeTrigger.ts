@@ -5,7 +5,7 @@
  */
 
 import * as Events from '../Events';
-import Trigger, {TriggerDescription} from './Trigger';
+import Trigger, { TriggerDescription } from './Trigger';
 
 export interface TimeTriggerDescription extends TriggerDescription {
   time: string;
@@ -39,10 +39,7 @@ export default class TimeTrigger extends Trigger {
    * @return {TriggerDescription}
    */
   toDescription(): TimeTriggerDescription {
-    return Object.assign(
-      super.toDescription(),
-      {time: this.time, localized: this.localized}
-    );
+    return Object.assign(super.toDescription(), { time: this.time, localized: this.localized });
   }
 
   async start(): Promise<void> {
@@ -71,12 +68,12 @@ export default class TimeTrigger extends Trigger {
   }
 
   sendOn(): void {
-    this.emit(Events.STATE_CHANGED, {on: true, value: Date.now()});
+    this.emit(Events.STATE_CHANGED, { on: true, value: Date.now() });
     this.timeout = setTimeout(this._sendOff, 60 * 1000);
   }
 
   sendOff(): void {
-    this.emit(Events.STATE_CHANGED, {on: false, value: Date.now()});
+    this.emit(Events.STATE_CHANGED, { on: false, value: Date.now() });
     this.scheduleNext();
   }
 

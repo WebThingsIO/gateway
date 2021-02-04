@@ -23,7 +23,7 @@ function build(): express.Router {
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10,                  // 10 failed requests per windowMs
+    max: 10, // 10 failed requests per windowMs
     skipSuccessfulRequests: true,
   });
 
@@ -31,14 +31,14 @@ function build(): express.Router {
    * Serve the static login page
    */
   controller.get('/', async (_request, response) => {
-    response.sendFile('index.html', {root: loginRoot});
+    response.sendFile('index.html', { root: loginRoot });
   });
 
   /**
    * Handle login request.
    */
   controller.post('/', limiter, async (request, response) => {
-    const {body} = request;
+    const { body } = request;
     if (!body || !body.email || !body.password) {
       response.status(400).send('User requires email and password');
       return;
@@ -50,10 +50,7 @@ function build(): express.Router {
       return;
     }
 
-    const passwordMatch = await Passwords.compare(
-      body.password,
-      user.getPassword()
-    );
+    const passwordMatch = await Passwords.compare(body.password, user.getPassword());
 
     if (!passwordMatch) {
       response.sendStatus(401);
@@ -62,7 +59,7 @@ function build(): express.Router {
 
     if (user.getMfaEnrolled()) {
       if (!body.mfa) {
-        response.status(401).json({mfaRequired: true});
+        response.status(401).json({ mfaRequired: true });
         return;
       }
 
@@ -87,7 +84,7 @@ function build(): express.Router {
         }
 
         if (!backupMatch) {
-          response.status(401).json({mfaRequired: true});
+          response.status(401).json({ mfaRequired: true });
           return;
         }
       }
@@ -96,7 +93,7 @@ function build(): express.Router {
     // Issue a new JWT for this user.
     const jwt = await JSONWebToken.issueToken(user.getId()!);
     limiter.resetKey(request.ip);
-    response.status(200).json({jwt});
+    response.status(200).json({ jwt });
   });
 
   return controller;

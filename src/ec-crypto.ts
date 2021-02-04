@@ -22,7 +22,7 @@ import crypto from 'crypto';
 const CURVE = 'prime256v1';
 
 // https://tools.ietf.org/html/rfc5915#section-3
-const ECPrivateKeyASN = asn1.define('ECPrivateKey', function() {
+const ECPrivateKeyASN = asn1.define('ECPrivateKey', function () {
   this.seq().obj(
     this.key('version').int(),
     this.key('privateKey').octstr(),
@@ -32,12 +32,9 @@ const ECPrivateKeyASN = asn1.define('ECPrivateKey', function() {
 });
 
 // https://tools.ietf.org/html/rfc3280#section-4.1
-const SubjectPublicKeyInfoASN = asn1.define('SubjectPublicKeyInfo', function() {
+const SubjectPublicKeyInfoASN = asn1.define('SubjectPublicKeyInfo', function () {
   this.seq().obj(
-    this.key('algorithm').seq().obj(
-      this.key('id').objid(),
-      this.key('namedCurve').objid()
-    ),
+    this.key('algorithm').seq().obj(this.key('id').objid(), this.key('namedCurve').objid()),
     this.key('pub').bitstr()
   );
 });
@@ -55,33 +52,41 @@ const SECP256R1_CURVE = [1, 2, 840, 10045, 3, 1, 7];
  *
  * @return {Object} .public in PEM. .prviate in PEM.
  */
-export function generateKeyPair(): {public: string, private: string} {
+export function generateKeyPair(): { public: string; private: string } {
   const key = crypto.createECDH(CURVE);
   key.generateKeys();
 
-  const priv = ECPrivateKeyASN.encode({
-    version: 1,
-    privateKey: key.getPrivateKey(),
-    parameters: SECP256R1_CURVE,
-  }, 'pem', {
-    // https://tools.ietf.org/html/rfc5915#section-4
-    label: 'EC PRIVATE KEY',
-  });
-
-  const pub = SubjectPublicKeyInfoASN.encode({
-    pub: {
-      unused: 0,
-      data: key.getPublicKey(),
+  const priv = ECPrivateKeyASN.encode(
+    {
+      version: 1,
+      privateKey: key.getPrivateKey(),
+      parameters: SECP256R1_CURVE,
     },
-    algorithm: {
-      id: UNRESTRICTED_ALGORITHM_ID,
-      namedCurve: SECP256R1_CURVE,
-    },
-  }, 'pem', {
-    label: 'PUBLIC KEY',
-  });
+    'pem',
+    {
+      // https://tools.ietf.org/html/rfc5915#section-4
+      label: 'EC PRIVATE KEY',
+    }
+  );
 
-  return {public: pub, private: priv};
+  const pub = SubjectPublicKeyInfoASN.encode(
+    {
+      pub: {
+        unused: 0,
+        data: key.getPublicKey(),
+      },
+      algorithm: {
+        id: UNRESTRICTED_ALGORITHM_ID,
+        namedCurve: SECP256R1_CURVE,
+      },
+    },
+    'pem',
+    {
+      label: 'PUBLIC KEY',
+    }
+  );
+
+  return { public: pub, private: priv };
 }
 
 export const JWT_ALGORITHM = 'ES256';

@@ -22,14 +22,9 @@ class AirQualitySensor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/multi_level_sensor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/multi_level_sensor.svg',
+    });
   }
 
   /**
@@ -57,11 +52,9 @@ class AirQualitySensor extends Thing {
     this.unit = '';
 
     if (this.airQualityProperty) {
-      const property =
-        this.displayedProperties[this.airQualityProperty].convertedProperty;
+      const property = this.displayedProperties[this.airQualityProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-        `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 

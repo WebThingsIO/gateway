@@ -11,9 +11,7 @@
 
 const LabelCapability = require('./label');
 
-class AirQualityCapability extends LabelCapability {
-}
+class AirQualityCapability extends LabelCapability {}
 
-window.customElements.define('webthing-air-quality-sensor-capability',
-                             AirQualityCapability);
+window.customElements.define('webthing-air-quality-sensor-capability', AirQualityCapability);
 module.exports = AirQualityCapability;

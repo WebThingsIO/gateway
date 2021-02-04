@@ -29,15 +29,14 @@ class VideoDetail {
 
     for (const link of property.links) {
       if (link.rel === 'alternate') {
-        if (this.dashHref === null &&
-            link.mediaType === 'application/dash+xml') {
+        if (this.dashHref === null && link.mediaType === 'application/dash+xml') {
           this.dashHref = link.href;
-        } else if (this.hlsHref === null &&
-                   link.mediaType === 'application/vnd.apple.mpegurl') {
+        } else if (this.hlsHref === null && link.mediaType === 'application/vnd.apple.mpegurl') {
           this.hlsHref = link.href;
-        } else if (this.mjpegHref === null &&
-                   (link.mediaType === 'video/x-motion-jpeg' ||
-                    link.mediaType === 'video/x-jpeg')) {
+        } else if (
+          this.mjpegHref === null &&
+          (link.mediaType === 'video/x-motion-jpeg' || link.mediaType === 'video/x-jpeg')
+        ) {
           this.mjpegHref = link.href;
         }
       }
@@ -51,10 +50,7 @@ class VideoDetail {
    * Attach to the view.
    */
   attach() {
-    this.thing.element.querySelector(`#${this.id}`).addEventListener(
-      'click',
-      this.expandVideo
-    );
+    this.thing.element.querySelector(`#${this.id}`).addEventListener('click', this.expandVideo);
   }
 
   /**
@@ -111,56 +107,48 @@ class VideoDetail {
       this.positionButtons();
     }
 
-    element.querySelector('.media-modal-close').addEventListener(
-      'click',
-      () => {
-        if (this.player) {
-          this.player.destroy();
-          this.player = null;
-        }
-
-        document.body.removeChild(element);
-        document.querySelector('#things').style.display = 'block';
-        window.removeEventListener('resize', this.positionButtons);
+    element.querySelector('.media-modal-close').addEventListener('click', () => {
+      if (this.player) {
+        this.player.destroy();
+        this.player = null;
       }
-    );
+
+      document.body.removeChild(element);
+      document.querySelector('#things').style.display = 'block';
+      window.removeEventListener('resize', this.positionButtons);
+    });
 
     window.addEventListener('resize', this.positionButtons);
 
     if (this.mjpegHref) {
-      element.querySelector('.media-modal-video').addEventListener(
-        'load',
-        this.positionButtons
-      );
-      element.querySelector('.media-modal-video').src =
-        `${this.mjpegHref}?jwt=${API.jwt}`;
-    } else if (shaka.Player.isBrowserSupported() &&
-               (this.dashHref || this.hlsHref)) {
-      element.querySelector('.media-modal-video').addEventListener(
-        'loadeddata',
-        this.positionButtons
-      );
+      element.querySelector('.media-modal-video').addEventListener('load', this.positionButtons);
+      element.querySelector('.media-modal-video').src = `${this.mjpegHref}?jwt=${API.jwt}`;
+    } else if (shaka.Player.isBrowserSupported() && (this.dashHref || this.hlsHref)) {
+      element
+        .querySelector('.media-modal-video')
+        .addEventListener('loadeddata', this.positionButtons);
 
       const video = document.querySelector('.media-modal-video');
       this.player = new shaka.Player(video);
 
-      this.player.getNetworkingEngine().registerRequestFilter(
-        (type, request) => {
-          request.headers = {
-            Authorization: `Bearer ${API.jwt}`,
-          };
-        }
-      );
+      this.player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers = {
+          Authorization: `Bearer ${API.jwt}`,
+        };
+      });
 
       this.player.addEventListener('error', (e) => {
         console.error('Error playing video:', e);
       });
 
-      this.player.load(this.dashHref || this.hlsHref).then(() => {
-        video.play();
-      }).catch((e) => {
-        console.error('Error loading video:', e);
-      });
+      this.player
+        .load(this.dashHref || this.hlsHref)
+        .then(() => {
+          video.play();
+        })
+        .catch((e) => {
+          console.error('Error loading video:', e);
+        });
     }
   }
 

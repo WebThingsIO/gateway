@@ -1,4 +1,5 @@
 # rules-engine
+
 WebThings Gateway Rules Engine
 
 The rules engine takes a list of rules and communicates with the gateway to
@@ -16,6 +17,7 @@ light on" or "set thermostat to 25&deg;". In the future, both triggers and
 effects can expand to include online services.
 
 ### System overview
+
 ![System diagram](doc/fig.png)
 
 The Rules Engine coordinates the rules by listening to the Gateway for thing

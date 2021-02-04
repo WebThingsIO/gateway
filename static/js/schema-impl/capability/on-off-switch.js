@@ -22,10 +22,9 @@ class OnOffSwitch extends Thing {
    * @param {Object} options Options for building the view.
    */
   constructor(model, description, format, options) {
-    options = options ||
-      {
-        baseIcon: '/images/thing-icons/on_off_switch.svg',
-      };
+    options = options || {
+      baseIcon: '/images/thing-icons/on_off_switch.svg',
+    };
 
     super(model, description, format, options);
 
@@ -51,8 +50,7 @@ class OnOffSwitch extends Thing {
     }
 
     // If necessary, match on name.
-    if (this.onProperty === null &&
-        this.displayedProperties.hasOwnProperty('on')) {
+    if (this.onProperty === null && this.displayedProperties.hasOwnProperty('on')) {
       this.onProperty = 'on';
     }
   }

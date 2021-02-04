@@ -17,9 +17,7 @@ import fileUpload from 'express-fileupload';
 
 const UPLOADS_PATH = UserProfile.uploadsDir;
 const FLOORPLAN_PATH = path.join(UPLOADS_PATH, 'floorplan.svg');
-const FALLBACK_FLOORPLAN_PATH = path.join(Constants.STATIC_PATH,
-                                          'images',
-                                          'floorplan.svg');
+const FALLBACK_FLOORPLAN_PATH = path.join(Constants.STATIC_PATH, 'images', 'floorplan.svg');
 
 interface WithFiles {
   files?: fileUpload.FileArray;

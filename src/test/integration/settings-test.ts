@@ -1,7 +1,7 @@
-import {server, chai} from '../common';
+import { server, chai } from '../common';
 import Database from '../../db';
 import * as Platform from '../../platform';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import * as Constants from '../../constants';
 
 describe('settings/', () => {
@@ -13,7 +13,8 @@ describe('settings/', () => {
   });
 
   it('Fail to get a setting that hasnt been set', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .get(`${Constants.SETTINGS_PATH}/experiments/foo`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -22,7 +23,8 @@ describe('settings/', () => {
   });
 
   it('Fail to set a setting when missing data', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
@@ -31,11 +33,12 @@ describe('settings/', () => {
   });
 
   it('Set a setting', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true});
+      .send({ enabled: true });
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('enabled');
@@ -43,17 +46,19 @@ describe('settings/', () => {
   });
 
   it('Get a setting', async () => {
-    const putRes = await chai.request(server)
+    const putRes = await chai
+      .request(server)
       .put(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true});
+      .send({ enabled: true });
 
     expect(putRes.status).toEqual(200);
     expect(putRes.body).toHaveProperty('enabled');
     expect(putRes.body.enabled).toEqual(true);
 
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.SETTINGS_PATH}/experiments/bar`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -64,7 +69,8 @@ describe('settings/', () => {
   });
 
   it('Get platform info', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.SETTINGS_PATH}/system/platform`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -77,7 +83,8 @@ describe('settings/', () => {
   });
 
   it('Get SSH status', async () => {
-    const res = await chai.request(server)
+    const res = await chai
+      .request(server)
       .get(`${Constants.SETTINGS_PATH}/system/ssh`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -88,41 +95,45 @@ describe('settings/', () => {
   });
 
   it('Toggle SSH', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .put(`${Constants.SETTINGS_PATH}/system/ssh`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({enabled: true});
+      .send({ enabled: true });
 
     expect(err.status).toEqual(500);
   });
 
   it('Restart gateway', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(`${Constants.SETTINGS_PATH}/system/actions`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({action: 'restartGateway'});
+      .send({ action: 'restartGateway' });
 
     expect(err.status).toEqual(500);
   });
 
   it('Restart system', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(`${Constants.SETTINGS_PATH}/system/actions`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({action: 'restartSystem'});
+      .send({ action: 'restartSystem' });
 
     expect(err.status).toEqual(500);
   });
 
   it('Unknown platform action', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(`${Constants.SETTINGS_PATH}/system/actions`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({action: 'thisIsFake'});
+      .send({ action: 'thisIsFake' });
 
     expect(err.status).toEqual(400);
   });

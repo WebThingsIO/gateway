@@ -41,21 +41,16 @@ class LogsScreen {
     this.createLogScreen = document.getElementById('create-log-screen');
     this.createLogHint = document.querySelector('.create-log-hint');
     this.createLogDevice = document.querySelector('.create-log-device');
-    this.createLogDevice.addEventListener('change',
-                                          this.onCreateLogDeviceSelect);
+    this.createLogDevice.addEventListener('change', this.onCreateLogDeviceSelect);
     this.createLogProperty = document.querySelector('.create-log-property');
-    this.createLogSaveButton =
-      document.getElementById('create-log-save-button');
+    this.createLogSaveButton = document.getElementById('create-log-save-button');
     this.createLogSaveButton.addEventListener('click', this.onCreateLog);
 
     this.createLogButton = document.querySelector('.create-log-button');
     this.createLogButton.addEventListener('click', this.showCreateLog);
-    this.createLogRetentionNumber =
-      document.querySelector('.create-log-retention-duration-number');
-    this.createLogRetentionUnit =
-      document.querySelector('.create-log-retention-duration-unit');
-    this.createLogBackButton =
-      document.getElementById('create-log-back-button');
+    this.createLogRetentionNumber = document.querySelector('.create-log-retention-duration-number');
+    this.createLogRetentionUnit = document.querySelector('.create-log-retention-duration-unit');
+    this.createLogBackButton = document.getElementById('create-log-back-button');
     this.createLogBackButton.addEventListener('click', this.hideCreateLog);
 
     this.logsContainer = this.view.querySelector('.logs');
@@ -64,16 +59,13 @@ class LogsScreen {
     this.logRemoveButton = document.getElementById('log-remove-button');
     this.logRemoveButton.addEventListener('click', this.onRemoveConfirm);
     this.logRemoveName = document.getElementById('log-remove-name');
-    this.logRemoveBackButton =
-      document.getElementById('log-remove-back-button');
+    this.logRemoveBackButton = document.getElementById('log-remove-back-button');
     this.logRemoveBackButton.addEventListener('click', this.hideRemoveDialog);
-    this.logsBackButton =
-      document.getElementById('logs-back-button');
+    this.logsBackButton = document.getElementById('logs-back-button');
     this.logsBackButton.addEventListener('click', () => {
       page('/logs');
     });
-    this.menuButton =
-      document.getElementById('menu-button');
+    this.menuButton = document.getElementById('menu-button');
     this.onWindowResize();
   }
 
@@ -82,10 +74,7 @@ class LogsScreen {
     this.reload();
 
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
-    App.gatewayModel.subscribe(
-      Constants.REFRESH_THINGS,
-      this.refreshThings,
-      true);
+    App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThings, true);
   }
 
   reload() {
@@ -120,46 +109,48 @@ class LogsScreen {
       this.view.classList.remove('solo-view');
     }
 
-    API.getLogs().then((schema) => {
-      for (const id in this.logs) {
-        const log = this.logs[id];
-        log.remove();
-        delete this.logs[id];
-      }
-
-      const loadPromises = [];
-      for (const logInfo of schema) {
-        let included = true;
-        if (soloView) {
-          included = logInfo.thing === this.logDescr.thing &&
-            logInfo.property === this.logDescr.property;
+    API.getLogs()
+      .then((schema) => {
+        for (const id in this.logs) {
+          const log = this.logs[id];
+          log.remove();
+          delete this.logs[id];
         }
 
-        if (!included) {
-          continue;
+        const loadPromises = [];
+        for (const logInfo of schema) {
+          let included = true;
+          if (soloView) {
+            included =
+              logInfo.thing === this.logDescr.thing && logInfo.property === this.logDescr.property;
+          }
+
+          if (!included) {
+            continue;
+          }
+
+          const log = new Log(logInfo.thing, logInfo.property, this.start, this.end, soloView);
+
+          this.logs[logInfo.id] = log;
+          this.logsContainer.appendChild(log.elt);
+          loadPromises.push(log.load());
         }
 
-        const log = new Log(logInfo.thing, logInfo.property,
-                            this.start, this.end, soloView);
+        if (!schema || schema.length === 0) {
+          this.createLogHint.classList.remove('hidden');
+        } else {
+          this.createLogHint.classList.add('hidden');
+        }
 
-        this.logs[logInfo.id] = log;
-        this.logsContainer.appendChild(log.elt);
-        loadPromises.push(log.load());
-      }
-
-      if (!schema || schema.length === 0) {
-        this.createLogHint.classList.remove('hidden');
-      } else {
-        this.createLogHint.classList.add('hidden');
-      }
-
-      return Promise.all(loadPromises);
-    }).then(() => {
-      this.streamAll();
-    }).catch((e) => {
-      App.showMessage('Server error: unable to retrieve logs', 5000);
-      console.error('Unable to fetch schema', e);
-    });
+        return Promise.all(loadPromises);
+      })
+      .then(() => {
+        this.streamAll();
+      })
+      .catch((e) => {
+        App.showMessage('Server error: unable to retrieve logs', 5000);
+        console.error('Unable to fetch schema', e);
+      });
   }
 
   streamAll() {
@@ -184,8 +175,10 @@ class LogsScreen {
         return;
       }
 
-      if (this.messageSocket.readyState === WebSocket.OPEN ||
-          this.messageSocket.readyState === WebSocket.CONNECTING) {
+      if (
+        this.messageSocket.readyState === WebSocket.OPEN ||
+        this.messageSocket.readyState === WebSocket.CONNECTING
+      ) {
         this.messageSocket.close();
       }
     };
@@ -227,9 +220,7 @@ class LogsScreen {
         const prop = description.properties[propId];
 
         // Only add an option for the device if it has loggable properties.
-        if (prop.type === 'boolean' ||
-            prop.type === 'number' ||
-            prop.type === 'integer') {
+        if (prop.type === 'boolean' || prop.type === 'number' || prop.type === 'integer') {
           const opt = document.createElement('option');
           opt.innerText = description.title;
           opt.value = thingId;
@@ -238,8 +229,7 @@ class LogsScreen {
         }
       }
     });
-    this.createLogSaveButton.disabled =
-      this.createLogDevice.childNodes.length === 0;
+    this.createLogSaveButton.disabled = this.createLogDevice.childNodes.length === 0;
     this.onCreateLogDeviceSelect();
   }
 
@@ -253,14 +243,11 @@ class LogsScreen {
 
     for (const propId in thing.properties) {
       const prop = thing.properties[propId];
-      if (prop.type !== 'boolean' &&
-          prop.type !== 'number' &&
-          prop.type !== 'integer') {
+      if (prop.type !== 'boolean' && prop.type !== 'number' && prop.type !== 'integer') {
         continue;
       }
       const opt = document.createElement('option');
-      opt.innerText = prop.title ||
-        Utils.capitalize(propId);
+      opt.innerText = prop.title || Utils.capitalize(propId);
       opt.value = propId;
       this.createLogProperty.appendChild(opt);
     }
@@ -310,10 +297,7 @@ class LogsScreen {
       }
 
       if (body) {
-        App.showMessage(
-          `${fluent.getMessage('logs-unable-to-create')}: ${body}`,
-          5000
-        );
+        App.showMessage(`${fluent.getMessage('logs-unable-to-create')}: ${body}`, 5000);
       } else {
         App.showMessage(fluent.getMessage('logs-unable-to-create'), 5000);
       }
@@ -356,11 +340,13 @@ class LogsScreen {
     }
     const thing = this.logDescr.thing;
     const property = this.logDescr.property;
-    API.deleteLog(thing, property).then(() => {
-      page('/logs');
-    }).catch(() => {
-      App.showMessage(fluent.getMessage('logs-server-remove-error'), 5000);
-    });
+    API.deleteLog(thing, property)
+      .then(() => {
+        page('/logs');
+      })
+      .catch(() => {
+        App.showMessage(fluent.getMessage('logs-server-remove-error'), 5000);
+      });
   }
 }
 

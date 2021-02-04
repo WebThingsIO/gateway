@@ -70,8 +70,7 @@ class DoorSensorCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.open =
-      typeof this.dataset.open !== 'undefined' ? this.dataset.open : null;
+    this.open = typeof this.dataset.open !== 'undefined' ? this.dataset.open : null;
   }
 
   get open() {
@@ -94,6 +93,5 @@ class DoorSensorCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-door-sensor-capability',
-                             DoorSensorCapability);
+window.customElements.define('webthing-door-sensor-capability', DoorSensorCapability);
 module.exports = DoorSensorCapability;

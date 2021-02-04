@@ -1,7 +1,7 @@
 import * as Constants from '../../constants';
-import {server, chai, mockAdapter} from '../common';
-import {getBrowser} from './browser-common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai, mockAdapter } from '../common';
+import { getBrowser } from './browser-common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 
 let jwt: string;
 
@@ -21,7 +21,9 @@ beforeEach(async () => {
 });
 
 export async function getAddons(): Promise<Map<string, string>> {
-  const res = await chai.request(server).keepOpen()
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .get(`${Constants.ADDONS_PATH}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
@@ -34,15 +36,19 @@ export async function getAddons(): Promise<Map<string, string>> {
   return installedAddons;
 }
 
-
 export async function addThing(desc: Record<string, unknown>): Promise<void> {
-  const {id} = desc;
+  const { id } = desc;
 
-  if (desc.hasOwnProperty('@type') && (<string[]>desc['@type']).length > 0 &&
-      !desc.hasOwnProperty('selectedCapability')) {
+  if (
+    desc.hasOwnProperty('@type') &&
+    (<string[]>desc['@type']).length > 0 &&
+    !desc.hasOwnProperty('selectedCapability')
+  ) {
     desc.selectedCapability = (<string[]>desc['@type'])[0];
   }
-  await chai.request(server).keepOpen()
+  await chai
+    .request(server)
+    .keepOpen()
     .post(Constants.THINGS_PATH)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))
@@ -51,7 +57,9 @@ export async function addThing(desc: Record<string, unknown>): Promise<void> {
 }
 
 export async function getProperty<T>(id: string, property: string): Promise<T> {
-  const res = await chai.request(server).keepOpen()
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .get(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
@@ -59,16 +67,18 @@ export async function getProperty<T>(id: string, property: string): Promise<T> {
 }
 
 export async function setProperty<T>(id: string, property: string, value: T): Promise<T> {
-  const res = await chai.request(server).keepOpen()
+  const res = await chai
+    .request(server)
+    .keepOpen()
     .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt))
-    .send({[property]: value});
+    .send({ [property]: value });
   return res.body[property];
 }
 
 export function escapeHtmlForIdClass(text: string): string {
-  if (typeof (text) !== 'string') {
+  if (typeof text !== 'string') {
     text = `${text}`;
   }
 

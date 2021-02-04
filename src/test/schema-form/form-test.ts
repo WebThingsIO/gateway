@@ -1,6 +1,6 @@
 import '../jsdom-common';
 import sinon from 'sinon';
-import {fireEvent, createSchemaForm} from './test-utils';
+import { fireEvent, createSchemaForm } from './test-utils';
 
 interface TestGlobals {
   sandbox: sinon.SinonSandbox;
@@ -9,16 +9,15 @@ interface TestGlobals {
 describe('Form', () => {
   describe('Empty schema', () => {
     it('should render a form', () => {
-      const {node} = createSchemaForm({schema: {}});
+      const { node } = createSchemaForm({ schema: {} });
 
       expect(node.nodeName).toEqual('FORM');
     });
 
     it('should render a submit button', () => {
-      const {node} = createSchemaForm({schema: {}});
+      const { node } = createSchemaForm({ schema: {} });
 
-      expect(node.querySelectorAll('button[class=button-submit]'))
-        .toHaveLength(1);
+      expect(node.querySelectorAll('button[class=button-submit]')).toHaveLength(1);
     });
   });
 
@@ -26,12 +25,12 @@ describe('Form', () => {
     it('should use a single schema definition reference', () => {
       const schema = {
         definitions: {
-          testdef: {type: 'string'},
+          testdef: { type: 'string' },
         },
         $ref: '#/definitions/testdef',
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('input[type=text]')).toHaveLength(1);
     });
@@ -39,16 +38,16 @@ describe('Form', () => {
     it('should handle multiple schema definition references', () => {
       const schema = {
         definitions: {
-          testdef: {type: 'string'},
+          testdef: { type: 'string' },
         },
         type: 'object',
         properties: {
-          foo: {$ref: '#/definitions/testdef'},
-          bar: {$ref: '#/definitions/testdef'},
+          foo: { $ref: '#/definitions/testdef' },
+          bar: { $ref: '#/definitions/testdef' },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('input[type=text]')).toHaveLength(2);
     });
@@ -56,20 +55,20 @@ describe('Form', () => {
     it('should handle deeply referenced schema definitions', () => {
       const schema = {
         definitions: {
-          testdef: {type: 'string'},
+          testdef: { type: 'string' },
         },
         type: 'object',
         properties: {
           foo: {
             type: 'object',
             properties: {
-              bar: {$ref: '#/definitions/testdef'},
+              bar: { $ref: '#/definitions/testdef' },
             },
           },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('input[type=text]')).toHaveLength(1);
     });
@@ -80,17 +79,17 @@ describe('Form', () => {
           testdef: {
             type: 'object',
             properties: {
-              bar: {type: 'string'},
+              bar: { type: 'string' },
             },
           },
         },
         type: 'object',
         properties: {
-          foo: {$ref: '#/definitions/testdef/properties/bar'},
+          foo: { $ref: '#/definitions/testdef/properties/bar' },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('input[type=text]')).toHaveLength(1);
     });
@@ -98,18 +97,18 @@ describe('Form', () => {
     it('should handle referenced definitions for array items', () => {
       const schema = {
         definitions: {
-          testdef: {type: 'string'},
+          testdef: { type: 'string' },
         },
         type: 'object',
         properties: {
           foo: {
             type: 'array',
-            items: {$ref: '#/definitions/testdef'},
+            items: { $ref: '#/definitions/testdef' },
           },
         },
       };
 
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: {
           foo: ['blah'],
@@ -123,22 +122,22 @@ describe('Form', () => {
       const schema = {
         type: 'object',
         properties: {
-          foo: {$ref: '#/definitions/nonexistent'},
+          foo: { $ref: '#/definitions/nonexistent' },
         },
       };
 
-      expect(() => createSchemaForm({schema})).toThrow(/#\/definitions\/nonexistent/);
+      expect(() => createSchemaForm({ schema })).toThrow(/#\/definitions\/nonexistent/);
     });
 
     it('should propagate referenced definition defaults', () => {
       const schema = {
         definitions: {
-          testdef: {type: 'string', default: 'hello'},
+          testdef: { type: 'string', default: 'hello' },
         },
         $ref: '#/definitions/testdef',
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
     });
@@ -146,37 +145,36 @@ describe('Form', () => {
     it('should propagate nested referenced definition defaults', () => {
       const schema = {
         definitions: {
-          testdef: {type: 'string', default: 'hello'},
+          testdef: { type: 'string', default: 'hello' },
         },
         type: 'object',
         properties: {
-          foo: {$ref: '#/definitions/testdef'},
+          foo: { $ref: '#/definitions/testdef' },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
     });
 
-    it('should propagate referenced definition defaults for array items',
-       () => {
-         const schema = {
-           definitions: {
-             testdef: {type: 'string', default: 'hello'},
-           },
-           type: 'array',
-           items: {
-             $ref: '#/definitions/testdef',
-           },
-         };
+    it('should propagate referenced definition defaults for array items', () => {
+      const schema = {
+        definitions: {
+          testdef: { type: 'string', default: 'hello' },
+        },
+        type: 'array',
+        items: {
+          $ref: '#/definitions/testdef',
+        },
+      };
 
-         const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
-         (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
+      (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
-         expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
-       });
+      expect((<HTMLInputElement>node.querySelector('input[type=text]')!).value).toEqual('hello');
+    });
 
     it('should recursively handle referenced definitions', () => {
       const schema = {
@@ -185,7 +183,7 @@ describe('Form', () => {
           node: {
             type: 'object',
             properties: {
-              name: {type: 'string'},
+              name: { type: 'string' },
               children: {
                 type: 'array',
                 items: {
@@ -197,7 +195,7 @@ describe('Form', () => {
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelector('#root_children_0_name')).toBeNull();
 
@@ -210,7 +208,7 @@ describe('Form', () => {
       const schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'},
+          name: { type: 'string' },
           childObj: {
             type: 'object',
             $ref: '#/definitions/childObj',
@@ -220,13 +218,13 @@ describe('Form', () => {
           childObj: {
             type: 'object',
             properties: {
-              otherName: {type: 'string'},
+              otherName: { type: 'string' },
             },
           },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('input[type=text]')).toHaveLength(2);
     });
@@ -245,30 +243,29 @@ describe('Form', () => {
             type: 'object',
             title: 'definition title',
             properties: {
-              field: {type: 'string'},
+              field: { type: 'string' },
             },
           },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
-      expect(node.querySelector('#root_foo__title')!.textContent!.trim())
-        .toEqual('custom title');
+      expect(node.querySelector('#root_foo__title')!.textContent!.trim()).toEqual('custom title');
     });
 
     it('should propagate and handle a resolved schema definition', () => {
       const schema = {
         definitions: {
-          enumDef: {type: 'string', enum: ['a', 'b']},
+          enumDef: { type: 'string', enum: ['a', 'b'] },
         },
         type: 'object',
         properties: {
-          name: {$ref: '#/definitions/enumDef'},
+          name: { $ref: '#/definitions/enumDef' },
         },
       };
 
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('option')).toHaveLength(3);
     });
@@ -281,7 +278,7 @@ describe('Form', () => {
     };
 
     it('should not set default when a text field is cleared', () => {
-      const {node} = createSchemaForm({schema, formData: 'bar'});
+      const { node } = createSchemaForm({ schema, formData: 'bar' });
 
       const input = <HTMLInputElement>node.querySelector('input')!;
       input.value = '';
@@ -319,7 +316,7 @@ describe('Form', () => {
     };
 
     it('should propagate deeply nested defaults to form state', () => {
-      const {schemaForm, node} = createSchemaForm({schema});
+      const { schemaForm, node } = createSchemaForm({ schema });
 
       (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
@@ -335,39 +332,36 @@ describe('Form', () => {
     });
   });
 
-
   describe('Submit button handler', () => {
-    it('should not call submit handler before change form state',
-       () => {
-         const schema = {
-           type: 'object',
-           properties: {
-             foo: {type: 'string'},
-           },
-         };
-         const formData = {
-           foo: 'bar',
-         };
+    it('should not call submit handler before change form state', () => {
+      const schema = {
+        type: 'object',
+        properties: {
+          foo: { type: 'string' },
+        },
+      };
+      const formData = {
+        foo: 'bar',
+      };
 
-         const {node} = createSchemaForm({
-           schema,
-           formData,
-         });
+      const { node } = createSchemaForm({
+        schema,
+        formData,
+      });
 
-         expect((<HTMLButtonElement>node.querySelector('.button-submit')!).disabled)
-           .toBeTruthy();
-       });
+      expect((<HTMLButtonElement>node.querySelector('.button-submit')!).disabled).toBeTruthy();
+    });
 
     it('should call submit handler', () => {
       const schema = {
         type: 'object',
         properties: {
-          foo: {type: 'string'},
+          foo: { type: 'string' },
         },
       };
       const onSubmit = (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox.stub();
 
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         onSubmit,
       });
@@ -392,16 +386,16 @@ describe('Form', () => {
           type: 'string',
           minLength: 8,
         };
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
 
         const input = <HTMLInputElement>node.querySelector('input')!;
         input.value = 'short';
         fireEvent(input, 'change');
 
         expect(node.querySelectorAll('.errors-list')).toHaveLength(1);
-        expect(
-          node.querySelector('.error-item')!.textContent!.trim()
-        ).toContain('should NOT have fewer than 8 characters');
+        expect(node.querySelector('.error-item')!.textContent!.trim()).toContain(
+          'should NOT have fewer than 8 characters'
+        );
       });
     });
 
@@ -412,7 +406,7 @@ describe('Form', () => {
           minLength: 8,
           pattern: 'd+',
         };
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
 
         const input = <HTMLInputElement>node.querySelector('input')!;
         input.value = 'short';
@@ -444,7 +438,7 @@ describe('Form', () => {
             },
           },
         };
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
 
         const input = <HTMLInputElement>node.querySelector('input')!;
         input.value = 'short';
@@ -502,7 +496,7 @@ describe('Form', () => {
       };
 
       it('should only show error for property in selected branch', () => {
-        const {node} = createSchemaForm({
+        const { node } = createSchemaForm({
           schema,
         });
 
@@ -514,14 +508,15 @@ describe('Form', () => {
           // TODO: uncomment this when jsdom's validation is no longer broken.
           // it doesn't set input.validity.badInput when it should.
           // '.field1 should be number',
-          'should have required property \'field1\''
+          // eslint-disable-next-line @typescript-eslint/quotes
+          "should have required property 'field1'"
         );
       });
 
       it('should only show errors for properties in selected branch', () => {
-        const {node} = createSchemaForm({
+        const { node } = createSchemaForm({
           schema,
-          formData: {branch: 2},
+          formData: { branch: 2 },
         });
 
         const field1 = <HTMLInputElement>node.querySelector('#root_field1')!;
@@ -535,18 +530,22 @@ describe('Form', () => {
         const liNodes = node.querySelectorAll('.error-item');
         const errors = [].map.call(liNodes, (li: Element) => li.textContent!.trim());
 
-        expect(errors).toEqual(expect.arrayContaining([
-          // TODO: uncomment this when jsdom's validation is no longer broken.
-          // it doesn't set input.validity.badInput when it should.
-          // '.field1 should be number',
-          // '.field2 should be number',
-          'should have required property \'field1\'',
-          'should have required property \'field2\'',
-        ]));
+        expect(errors).toEqual(
+          expect.arrayContaining([
+            // TODO: uncomment this when jsdom's validation is no longer broken.
+            // it doesn't set input.validity.badInput when it should.
+            // '.field1 should be number',
+            // '.field2 should be number',
+            // eslint-disable-next-line @typescript-eslint/quotes
+            "should have required property 'field1'",
+            // eslint-disable-next-line @typescript-eslint/quotes
+            "should have required property 'field2'",
+          ])
+        );
       });
 
       it('should show errors when branch is other than oneOf', () => {
-        const {node} = createSchemaForm({
+        const { node } = createSchemaForm({
           schema,
         });
 
@@ -557,32 +556,31 @@ describe('Form', () => {
         const liNodes = node.querySelectorAll('.error-item');
         const errors = [].map.call(liNodes, (li: Element) => li.textContent!.trim());
 
-        expect(errors).toEqual(expect.arrayContaining([
-          '/branch should be equal to one of the allowed values',
-        ]));
+        expect(errors).toEqual(
+          expect.arrayContaining(['/branch should be equal to one of the allowed values'])
+        );
       });
     });
   });
-
 
   describe('idSchema updates based on formData', () => {
     const schema = {
       type: 'object',
       properties: {
-        a: {type: 'string', enum: ['int', 'bool']},
+        a: { type: 'string', enum: ['int', 'bool'] },
       },
       dependencies: {
         a: {
           oneOf: [
             {
               properties: {
-                a: {enum: ['int']},
+                a: { enum: ['int'] },
               },
             },
             {
               properties: {
-                a: {enum: ['bool']},
-                b: {type: 'boolean'},
+                a: { enum: ['bool'] },
+                b: { type: 'boolean' },
               },
             },
           ],
@@ -591,20 +589,18 @@ describe('Form', () => {
     };
 
     it('should not update id for a falsey value', () => {
-      const formData = {a: 'int'};
-      const {node} = createSchemaForm({schema, formData});
+      const formData = { a: 'int' };
+      const { node } = createSchemaForm({ schema, formData });
 
       const inputs = node.querySelectorAll('select, input');
       const ids = [].map.call(inputs, (input: Element) => input.id);
 
-      expect(ids).toEqual([
-        'root_a',
-      ]);
+      expect(ids).toEqual(['root_a']);
     });
 
     it('should update id based on truthy value', () => {
-      const formData = {a: 'int'};
-      const {node} = createSchemaForm({schema, formData});
+      const formData = { a: 'int' };
+      const { node } = createSchemaForm({ schema, formData });
 
       const select = <HTMLSelectElement>node.querySelector('select')!;
       select.value = 'bool';
@@ -613,10 +609,7 @@ describe('Form', () => {
       const inputs = node.querySelectorAll('select, input');
       const ids = [].map.call(inputs, (input: Element) => input.id);
 
-      expect(ids).toEqual([
-        'root_a',
-        'root_b',
-      ]);
+      expect(ids).toEqual(['root_a', 'root_b']);
     });
   });
 });

@@ -31,15 +31,17 @@ export default class NumberField {
 
   private rangeValue?: HTMLSpanElement;
 
-  constructor(schema: Record<string, unknown>,
-              formData: string | number | undefined,
-              idSchema: Record<string, unknown>,
-              _name: string,
-              definitions: Record<string, unknown>,
-              onChange: ((value?: string | number) => void) | null = null,
-              required = false,
-              disabled = false,
-              readOnly = false) {
+  constructor(
+    schema: Record<string, unknown>,
+    formData: string | number | undefined,
+    idSchema: Record<string, unknown>,
+    _name: string,
+    definitions: Record<string, unknown>,
+    onChange: ((value?: string | number) => void) | null = null,
+    required = false,
+    disabled = false,
+    readOnly = false
+  ) {
     this.schema = SchemaUtils.retrieveSchema(schema, definitions, formData);
     this.formData = formData;
     this.idSchema = idSchema;
@@ -65,9 +67,7 @@ export default class NumberField {
 
         // If the value is empty and the field is marked as value missing, that
         // means the input is truly empty and is required.
-        if (this.required &&
-            validityState.valueMissing &&
-            !validityState.badInput) {
+        if (this.required && validityState.valueMissing && !validityState.badInput) {
           // eslint-disable-next-line no-undefined
           return undefined;
         }
@@ -103,7 +103,7 @@ export default class NumberField {
   }
 
   render(): HTMLDivElement {
-    const id = Utils.escapeHtmlForIdClass(<string> this.idSchema.$id);
+    const id = Utils.escapeHtmlForIdClass(<string>this.idSchema.$id);
     let value = Number(this.formData);
     if (isNaN(value)) {
       value = 0;
@@ -111,8 +111,7 @@ export default class NumberField {
     const field = document.createElement('div');
 
     // range item
-    if (this.schema.hasOwnProperty('minimum') &&
-        this.schema.hasOwnProperty('maximum')) {
+    if (this.schema.hasOwnProperty('minimum') && this.schema.hasOwnProperty('maximum')) {
       field.className = 'field-range-wrapper';
       field.innerHTML = `
         <input
@@ -120,7 +119,7 @@ export default class NumberField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         value=${value == null ? '' : value}
         ${this.schema.multipleOf ? `step=${Number(this.schema.multipleOf)}` : ''}
         min=${Number(this.schema.minimum)}
@@ -136,10 +135,10 @@ export default class NumberField {
 
       // User can select undefiend value on field not required.
       if (!this.required) {
-        enumOptions.unshift({value: '', label: ''});
+        enumOptions.unshift({ value: '', label: '' });
       }
 
-      const selects = enumOptions.map(({value, label}, i) => {
+      const selects = enumOptions.map(({ value, label }, i) => {
         const selected = selectedValue === this.toFormData(value);
         selectedAny = selectedAny || selected;
 
@@ -157,7 +156,7 @@ export default class NumberField {
         id="${id}"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         >
         ${selects.join(' ')}
         </select>`;
@@ -167,7 +166,9 @@ export default class NumberField {
         select.selectedIndex = -1;
       }
     } else {
-      let min = '', max = '', step = 'any';
+      let min = '',
+        max = '',
+        step = 'any';
       if (this.schema.hasOwnProperty('minimum')) {
         min = `min="${this.schema.minimum}"`;
       }
@@ -186,7 +187,7 @@ export default class NumberField {
         type="number"
         class="form-control"
         ${this.required ? 'required' : ''}
-        ${(this.disabled || this.readOnly) ? 'disabled' : ''}
+        ${this.disabled || this.readOnly ? 'disabled' : ''}
         ${min} ${max} step="${step}"
         value="${value == null ? '' : Utils.escapeHtml(`${value}`)}"
         />`;

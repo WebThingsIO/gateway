@@ -30,7 +30,7 @@ import NotifiersController from './controllers/notifiers_controller';
 import OAuthClientsController from './controllers/oauthclients_controller';
 import OAuthController from './controllers/oauth_controller';
 import PingController from './controllers/ping_controller';
-import ProxyController, {WithProxyMethods} from './controllers/proxy_controller';
+import ProxyController, { WithProxyMethods } from './controllers/proxy_controller';
 import PushController from './controllers/push_controller';
 import RootController from './controllers/root_controller';
 import RulesController from './controllers/rules_controller';
@@ -68,15 +68,14 @@ class Router {
     app.use((request, response, next) => {
       // Enable HSTS
       if (request.protocol === 'https') {
-        response.set('Strict-Transport-Security',
-                     'max-age=31536000; includeSubDomains');
+        response.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
       }
 
       // Disable embedding
-      response.set('Content-Security-Policy',
-                   config.get('oauth.postToken') ?
-                     'frame-ancestors filesystem:' :
-                     'frame-ancestors \'none\''
+      response.set(
+        'Content-Security-Policy',
+        // eslint-disable-next-line @typescript-eslint/quotes
+        config.get('oauth.postToken') ? 'frame-ancestors filesystem:' : "frame-ancestors 'none'"
       );
 
       next();
@@ -104,28 +103,30 @@ class Router {
       response.setHeader('Access-Control-Allow-Origin', '*');
       response.setHeader(
         'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-      response.setHeader('Access-Control-Allow-Methods',
-                         'GET,HEAD,PUT,PATCH,POST,DELETE');
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+      );
+      response.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
 
       // If this is a proxy request, skip everything and go straight there.
       if (request.path.startsWith(Constants.PROXY_PATH)) {
         request.url = APP_PREFIX + request.url;
         next();
 
-      // If request won't accept HTML but will accept JSON,
-      // or is a WebSocket request, or is multipart/form-data
-      // treat it as an API request
-      } else if (!request.accepts('html') && request.accepts('json') ||
-                 request.headers['content-type'] === 'application/json' ||
-                 request.get('Upgrade') === 'websocket' ||
-                 request.is('multipart/form-data') ||
-                 request.path.startsWith(Constants.ADDONS_PATH) ||
-                 request.path.startsWith(Constants.INTERNAL_LOGS_PATH)) {
+        // If request won't accept HTML but will accept JSON,
+        // or is a WebSocket request, or is multipart/form-data
+        // treat it as an API request
+      } else if (
+        (!request.accepts('html') && request.accepts('json')) ||
+        request.headers['content-type'] === 'application/json' ||
+        request.get('Upgrade') === 'websocket' ||
+        request.is('multipart/form-data') ||
+        request.path.startsWith(Constants.ADDONS_PATH) ||
+        request.path.startsWith(Constants.INTERNAL_LOGS_PATH)
+      ) {
         request.url = API_PREFIX + request.url;
         next();
 
-      // Otherwise treat it as an app request
+        // Otherwise treat it as an app request
       } else {
         request.url = APP_PREFIX + request.url;
         next();
@@ -142,8 +143,7 @@ class Router {
 
     // Handle static media files before other static content. These must be
     // authenticated.
-    app.use(APP_PREFIX + Constants.MEDIA_PATH, nocache, auth,
-            express.static(UserProfile.mediaDir));
+    app.use(APP_PREFIX + Constants.MEDIA_PATH, nocache, auth, express.static(UserProfile.mediaDir));
 
     // Web app routes - send index.html and fall back to client side URL router
     app.use(`${APP_PREFIX}/*`, RootController());

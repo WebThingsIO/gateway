@@ -28,10 +28,7 @@ declare namespace ASN1 {
     encode(input: EncoderInput, type: 'pem', params: PemParams): string;
   }
 
-  export function define(
-    subject: string,
-    fn: (this: Builder) => void,
-  ): Encoder;
+  export function define(subject: string, fn: (this: Builder) => void): Encoder;
 }
 
 declare module 'asn1.js' {
@@ -39,7 +36,7 @@ declare module 'asn1.js' {
 }
 
 declare module 'promisepipe' {
-  export default function(input: NodeJS.ReadableStream, outout: NodeJS.WritableStream): void;
+  export default function (input: NodeJS.ReadableStream, outout: NodeJS.WritableStream): void;
 }
 
 declare namespace WebdriverIO {

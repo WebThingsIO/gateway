@@ -99,22 +99,16 @@ class ThermostatCapability extends BaseComponent {
 
   connectedCallback() {
     this.unit =
-      typeof this.dataset.unit !== 'undefined' ?
-        this.dataset.unit :
-        Units.nameToAbbreviation('degree celsius');
+      typeof this.dataset.unit !== 'undefined'
+        ? this.dataset.unit
+        : Units.nameToAbbreviation('degree celsius');
 
-    this.precision =
-      typeof this.dataset.precision !== 'undefined' ?
-        this.dataset.precision :
-        0;
+    this.precision = typeof this.dataset.precision !== 'undefined' ? this.dataset.precision : 0;
 
     this.temperature =
-      typeof this.dataset.temperature !== 'undefined' ?
-        this.dataset.temperature :
-        0;
+      typeof this.dataset.temperature !== 'undefined' ? this.dataset.temperature : 0;
 
-    this.state =
-      typeof this.dataset.state !== 'undefined' ? this.dataset.state : 'off';
+    this.state = typeof this.dataset.state !== 'undefined' ? this.dataset.state : 'off';
   }
 
   get unit() {
@@ -158,6 +152,5 @@ class ThermostatCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-thermostat-capability',
-                             ThermostatCapability);
+window.customElements.define('webthing-thermostat-capability', ThermostatCapability);
 module.exports = ThermostatCapability;

@@ -11,9 +11,7 @@
 
 const LabelCapability = require('./label');
 
-class HumiditySensorCapability extends LabelCapability {
-}
+class HumiditySensorCapability extends LabelCapability {}
 
-window.customElements.define('webthing-humidity-sensor-capability',
-                             HumiditySensorCapability);
+window.customElements.define('webthing-humidity-sensor-capability', HumiditySensorCapability);
 module.exports = HumiditySensorCapability;

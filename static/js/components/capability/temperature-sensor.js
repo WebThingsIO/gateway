@@ -62,19 +62,14 @@ class TemperatureSensorCapability extends BaseComponent {
 
   connectedCallback() {
     this.unit =
-      typeof this.dataset.unit !== 'undefined' ?
-        this.dataset.unit :
-        Units.nameToAbbreviation('degree celsius');
+      typeof this.dataset.unit !== 'undefined'
+        ? this.dataset.unit
+        : Units.nameToAbbreviation('degree celsius');
 
-    this.precision =
-      typeof this.dataset.precision !== 'undefined' ?
-        this.dataset.precision :
-        0;
+    this.precision = typeof this.dataset.precision !== 'undefined' ? this.dataset.precision : 0;
 
     this.temperature =
-      typeof this.dataset.temperature !== 'undefined' ?
-        this.dataset.temperature :
-        0;
+      typeof this.dataset.temperature !== 'undefined' ? this.dataset.temperature : 0;
   }
 
   get unit() {
@@ -99,11 +94,9 @@ class TemperatureSensorCapability extends BaseComponent {
 
   set temperature(value) {
     this._temperature = Number(value);
-    this._label.innerHTML =
-      `${this._temperature.toFixed(this.precision)}${this.unit}`;
+    this._label.innerHTML = `${this._temperature.toFixed(this.precision)}${this.unit}`;
   }
 }
 
-window.customElements.define('webthing-temperature-sensor-capability',
-                             TemperatureSensorCapability);
+window.customElements.define('webthing-temperature-sensor-capability', TemperatureSensorCapability);
 module.exports = TemperatureSensorCapability;

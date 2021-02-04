@@ -4,12 +4,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {fromDescription} from './index';
+import { fromDescription } from './index';
 import assert from 'assert';
 import * as Events from '../Events';
-import Trigger, {TriggerDescription} from './Trigger';
+import Trigger, { TriggerDescription } from './Trigger';
 
-const DEBUG = false || (process.env.NODE_ENV === 'test');
+const DEBUG = false || process.env.NODE_ENV === 'test';
 
 const ops = {
   AND: 'AND',
@@ -69,8 +69,7 @@ export default class MultiTrigger extends Trigger {
 
   async start(): Promise<void> {
     const starts = this.triggers.map((trigger, triggerIndex) => {
-      trigger.on(Events.STATE_CHANGED,
-                 this.onStateChanged.bind(this, triggerIndex));
+      trigger.on(Events.STATE_CHANGED, this.onStateChanged.bind(this, triggerIndex));
       return trigger.start();
     });
     await Promise.all(starts);
@@ -96,11 +95,12 @@ export default class MultiTrigger extends Trigger {
     }
     if (DEBUG) {
       console.debug(
-        `MultiTrigger(${this.id}).onStateChanged(${triggerIndex}, ${state}) -> ${this.states}`);
+        `MultiTrigger(${this.id}).onStateChanged(${triggerIndex}, ${state}) -> ${this.states}`
+      );
     }
     if (value !== this.state) {
       this.state = value;
-      this.emit(Events.STATE_CHANGED, {on: this.state});
+      this.emit(Events.STATE_CHANGED, { on: this.state });
     }
   }
 }

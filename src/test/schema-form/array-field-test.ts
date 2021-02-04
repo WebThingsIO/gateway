@@ -1,13 +1,12 @@
 import '../jsdom-common';
-import {fireEvent, createSchemaForm, makeUndefined} from './test-utils';
+import { fireEvent, createSchemaForm, makeUndefined } from './test-utils';
 
 describe('ArrayField', () => {
   describe('Unsupported array schema', () => {
     it('should warn on missing items descriptor', () => {
-      const {node} = createSchemaForm({schema: {type: 'array'}});
+      const { node } = createSchemaForm({ schema: { type: 'array' } });
 
-      expect(node.querySelector('.field-array > .unsupported-field'))
-        .toBeTruthy();
+      expect(node.querySelector('.field-array > .unsupported-field')).toBeTruthy();
     });
   });
 
@@ -16,17 +15,17 @@ describe('ArrayField', () => {
       type: 'array',
       title: 'my list',
       description: 'my description',
-      items: {type: 'string'},
+      items: { type: 'string' },
     };
 
     it('should render a fieldset', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('fieldset')).toHaveLength(1);
     });
 
     it('should render a fieldset legend', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       const legend = node.querySelector('fieldset > legend')!;
 
@@ -35,7 +34,7 @@ describe('ArrayField', () => {
     });
 
     it('should render a description', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       const description = node.querySelector('fieldset > .field-description')!;
 
@@ -44,24 +43,24 @@ describe('ArrayField', () => {
     });
 
     it('should contain no field in the list by default', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('.field-string')).toHaveLength(0);
     });
 
     it('should have an add button', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelector('.btn-add')).not.toEqual(null);
     });
 
     it('should not have an add button if addable is false', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
       expect(node.querySelector('.btn-add')).toBeNull;
     });
 
     it('should add a new field when clicking the add button', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
@@ -69,8 +68,8 @@ describe('ArrayField', () => {
     });
 
     it('should not provide an add button if length equals maxItems', () => {
-      const {node} = createSchemaForm({
-        schema: {maxItems: 2, ...schema},
+      const { node } = createSchemaForm({
+        schema: { maxItems: 2, ...schema },
         formData: ['foo', 'bar'],
       });
 
@@ -78,8 +77,8 @@ describe('ArrayField', () => {
     });
 
     it('should provide an add button if length is lesser than maxItems', () => {
-      const {node} = createSchemaForm({
-        schema: {maxItems: 2, ...schema},
+      const { node } = createSchemaForm({
+        schema: { maxItems: 2, ...schema },
         formData: ['foo'],
       });
 
@@ -87,16 +86,17 @@ describe('ArrayField', () => {
     });
 
     it('should mark a non-null array item as required', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
 
-      expect((<HTMLInputElement>node.querySelector('.field-string input[type=text]')!).required)
-        .toEqual(true);
+      expect(
+        (<HTMLInputElement>node.querySelector('.field-string input[type=text]')!).required
+      ).toEqual(true);
     });
 
     it('should convert non-array data to array', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema,
         formData: {},
       });
@@ -110,12 +110,13 @@ describe('ArrayField', () => {
     });
 
     it('should fill an array field with data', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: ['foo', 'bar'],
       });
-      const inputs: NodeListOf<HTMLInputElement> =
-        node.querySelectorAll('.field-string input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll(
+        '.field-string input[type=text]'
+      );
 
       expect(inputs).toHaveLength(2);
       expect(inputs[0].value).toEqual('foo');
@@ -123,7 +124,7 @@ describe('ArrayField', () => {
     });
 
     it('should remove a field from the list', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: ['foo', 'bar'],
       });
@@ -131,14 +132,15 @@ describe('ArrayField', () => {
 
       dropBtns[0].click();
 
-      const inputs: NodeListOf<HTMLInputElement> =
-        node.querySelectorAll('.field-string input[type=text]');
+      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll(
+        '.field-string input[type=text]'
+      );
       expect(inputs).toHaveLength(1);
       expect(inputs[0].value).toEqual('bar');
     });
 
     it('should remove a field from middle of the list', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: ['foo', 'bar', 'foobar'],
       });
@@ -146,8 +148,9 @@ describe('ArrayField', () => {
 
       dropBtns[1].click();
 
-      let inputs: NodeListOf<HTMLInputElement> =
-        node.querySelectorAll('.field-string input[type=text]');
+      let inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll(
+        '.field-string input[type=text]'
+      );
       expect(inputs).toHaveLength(2);
       expect(inputs[0].value).toEqual('foo');
       expect(inputs[1].value).toEqual('foobar');
@@ -171,20 +174,20 @@ describe('ArrayField', () => {
             items: {
               type: 'object',
               properties: {
-                bar: {type: 'string'},
-                baz: {type: 'string'},
+                bar: { type: 'string' },
+                baz: { type: 'string' },
               },
             },
           },
         },
       };
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: schemaFormlexSchema,
         formData: {
           foo: [
-            {bar: 'bar1', baz: 'baz1'},
-            {bar: 'bar2', baz: 'baz2'},
-            {bar: 'bar3', baz: 'baz3'},
+            { bar: 'bar1', baz: 'baz1' },
+            { bar: 'bar2', baz: 'baz2' },
+            { bar: 'bar3', baz: 'baz3' },
           ],
         },
       });
@@ -193,8 +196,9 @@ describe('ArrayField', () => {
 
       dropBtns[1].click();
 
-      let inputs: NodeListOf<HTMLInputElement> =
-        node.querySelectorAll('.field-string input[type=text]');
+      let inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll(
+        '.field-string input[type=text]'
+      );
       expect(inputs).toHaveLength(4);
       expect(inputs[0].value).toEqual('bar1');
       expect(inputs[1].value).toEqual('baz1');
@@ -215,10 +219,10 @@ describe('ArrayField', () => {
     it('should handle cleared field values in the array', () => {
       const schema = {
         type: 'array',
-        items: {type: 'integer'},
+        items: { type: 'integer' },
       };
       const formData = [1, 2, 3];
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema,
         formData,
       });
@@ -232,7 +236,7 @@ describe('ArrayField', () => {
     });
 
     it('should render the input with the expected ids', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
         formData: ['foo', 'bar'],
       });
@@ -251,17 +255,20 @@ describe('ArrayField', () => {
             items: {
               type: 'object',
               properties: {
-                bar: {type: 'string'},
-                baz: {type: 'string'},
+                bar: { type: 'string' },
+                baz: { type: 'string' },
               },
             },
           },
         },
       };
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: schemaFormlexSchema,
         formData: {
-          foo: [{bar: 'bar1', baz: 'baz1'}, {bar: 'bar2', baz: 'baz2'}],
+          foo: [
+            { bar: 'bar1', baz: 'baz1' },
+            { bar: 'bar2', baz: 'baz2' },
+          ],
         },
       });
 
@@ -272,40 +279,42 @@ describe('ArrayField', () => {
       expect(inputs[3].id).toEqual('root_foo_1_baz');
     });
 
-    it('should render enough inputs with proper defaults to match ' +
-     'minItems in schema when no formData is set', () => {
-      const schemaFormlexSchema = {
-        type: 'object',
-        definitions: {
-          Thing: {
-            type: 'object',
-            properties: {
-              name: {
-                type: 'string',
-                default: 'Default name',
+    it(
+      'should render enough inputs with proper defaults to match ' +
+        'minItems in schema when no formData is set',
+      () => {
+        const schemaFormlexSchema = {
+          type: 'object',
+          definitions: {
+            Thing: {
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                  default: 'Default name',
+                },
               },
             },
           },
-        },
-        properties: {
-          foo: {
-            type: 'array',
-            minItems: 2,
-            items: {
-              $ref: '#/definitions/Thing',
+          properties: {
+            foo: {
+              type: 'array',
+              minItems: 2,
+              items: {
+                $ref: '#/definitions/Thing',
+              },
             },
           },
-        },
-      };
-      const form = createSchemaForm({schema: schemaFormlexSchema,
-                                     formData: {}});
-      const inputs: NodeListOf<HTMLInputElement> = form.node.querySelectorAll('input[type=text]');
-      expect(inputs[0].value).toEqual('Default name');
-      expect(inputs[1].value).toEqual('Default name');
-    });
+        };
+        const form = createSchemaForm({ schema: schemaFormlexSchema, formData: {} });
+        const inputs: NodeListOf<HTMLInputElement> = form.node.querySelectorAll('input[type=text]');
+        expect(inputs[0].value).toEqual('Default name');
+        expect(inputs[1].value).toEqual('Default name');
+      }
+    );
 
-    it('should render an input for each default value, ' +
-     'even when this is greater than minItems', () => {
+    // eslint-disable-next-line max-len
+    it('should render an input for each default value, even when this is greater than minItems', () => {
       const schema = {
         type: 'object',
         properties: {
@@ -319,7 +328,7 @@ describe('ArrayField', () => {
           },
         },
       };
-      const {node} = createSchemaForm({schema: schema});
+      const { node } = createSchemaForm({ schema: schema });
       const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
       expect(inputs.length).toEqual(4);
       expect(inputs[0].value).toEqual('Raphael');
@@ -328,57 +337,62 @@ describe('ArrayField', () => {
       expect(inputs[3].value).toEqual('Leonardo');
     });
 
-    it('should render enough input to match minItems, ' +
-    'populating the first with default values, and the rest empty', () => {
-      const schema = {
-        type: 'object',
-        properties: {
-          turtles: {
-            type: 'array',
-            minItems: 4,
-            default: ['Raphael', 'Michaelangelo'],
-            items: {
-              type: 'string',
+    it(
+      'should render enough input to match minItems, ' +
+        'populating the first with default values, and the rest empty',
+      () => {
+        const schema = {
+          type: 'object',
+          properties: {
+            turtles: {
+              type: 'array',
+              minItems: 4,
+              default: ['Raphael', 'Michaelangelo'],
+              items: {
+                type: 'string',
+              },
             },
           },
-        },
-      };
-      const {node} = createSchemaForm({schema});
-      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
-      expect(inputs.length).toEqual(4);
-      expect(inputs[0].value).toEqual('Raphael');
-      expect(inputs[1].value).toEqual('Michaelangelo');
-      expect(inputs[2].value).toEqual('');
-      expect(inputs[3].value).toEqual('');
-    });
+        };
+        const { node } = createSchemaForm({ schema });
+        const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
+        expect(inputs.length).toEqual(4);
+        expect(inputs[0].value).toEqual('Raphael');
+        expect(inputs[1].value).toEqual('Michaelangelo');
+        expect(inputs[2].value).toEqual('');
+        expect(inputs[3].value).toEqual('');
+      }
+    );
 
-    it('should render enough input to match minItems, populating the first ' +
-    'with default values, and the rest with the item default', () => {
-      const schema = {
-        type: 'object',
-        properties: {
-          turtles: {
-            type: 'array',
-            minItems: 4,
-            default: ['Raphael', 'Michaelangelo'],
-            items: {
-              type: 'string',
-              default: 'Unknown',
+    it(
+      'should render enough input to match minItems, populating the first ' +
+        'with default values, and the rest with the item default',
+      () => {
+        const schema = {
+          type: 'object',
+          properties: {
+            turtles: {
+              type: 'array',
+              minItems: 4,
+              default: ['Raphael', 'Michaelangelo'],
+              items: {
+                type: 'string',
+                default: 'Unknown',
+              },
             },
           },
-        },
-      };
-      const {node} = createSchemaForm({schema});
-      const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
-      expect(inputs.length).toEqual(4);
-      expect(inputs[0].value).toEqual('Raphael');
-      expect(inputs[1].value).toEqual('Michaelangelo');
-      expect(inputs[2].value).toEqual('Unknown');
-      expect(inputs[3].value).toEqual('Unknown');
-    });
+        };
+        const { node } = createSchemaForm({ schema });
+        const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll('input[type=text]');
+        expect(inputs.length).toEqual(4);
+        expect(inputs[0].value).toEqual('Raphael');
+        expect(inputs[1].value).toEqual('Michaelangelo');
+        expect(inputs[2].value).toEqual('Unknown');
+        expect(inputs[3].value).toEqual('Unknown');
+      }
+    );
 
-    it('should not add minItems extra formData entries ' +
-    'when schema item is a multiselect', () => {
+    it('should not add minItems extra formData entries when schema item is a multiselect', () => {
       const schema = {
         type: 'object',
         properties: {
@@ -388,27 +402,28 @@ describe('ArrayField', () => {
             uniqueItems: true,
             items: {
               type: 'string',
-              enum: ['Aramis', 'Athos', 'Porthos', 'd\'Artagnan'],
+              // eslint-disable-next-line @typescript-eslint/quotes
+              enum: ['Aramis', 'Athos', 'Porthos', "d'Artagnan"],
             },
           },
         },
       };
-      const {schemaForm} = createSchemaForm({
+      const { schemaForm } = createSchemaForm({
         schema: schema,
         formData: {},
       });
 
-      const {errors} = schemaForm.validate(schemaForm.formData);
+      const { errors } = schemaForm.validate(schemaForm.formData);
       expect(schemaForm.formData).toHaveProperty('multipleChoicesList');
-      expect((<Record<string, Record<string, unknown>>>schemaForm.formData).multipleChoicesList)
-        .toHaveLength(0);
+      expect(
+        (<Record<string, Record<string, unknown>>>schemaForm.formData).multipleChoicesList
+      ).toHaveLength(0);
       expect(errors.length).toEqual(1);
       expect(errors[0].keyword).toEqual('minItems');
       expect(errors[0].params.limit).toEqual(3);
     });
 
-    it('should honor given formData, even when it does not ' +
-    'meet ths minItems-requirement', () => {
+    it('should honor given formData, even when it does not meet ths minItems-requirement', () => {
       const schemaFormlexSchema = {
         type: 'object',
         definitions: {
@@ -432,9 +447,9 @@ describe('ArrayField', () => {
           },
         },
       };
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: schemaFormlexSchema,
-        formData: {foo: []},
+        formData: { foo: [] },
       });
       const inputs = node.querySelectorAll('input[type=text]');
       expect(inputs.length).toEqual(0);
@@ -454,23 +469,22 @@ describe('ArrayField', () => {
 
     describe('Checkboxes', () => {
       it('should render the expected number of checkboxes', () => {
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
 
         expect(node.querySelectorAll('[type=checkbox]')).toHaveLength(3);
       });
 
       it('should render the expected labels', () => {
-        const {node} = createSchemaForm({schema});
+        const { node } = createSchemaForm({ schema });
 
-        const labels = [].map.call(
-          node.querySelectorAll('fieldset span'),
-          (node: Element) => node.textContent!.trim()
+        const labels = [].map.call(node.querySelectorAll('fieldset span'), (node: Element) =>
+          node.textContent!.trim()
         );
         expect(labels).toEqual(['foo', 'bar', 'fuzz']);
       });
 
       it('should handle a change event', () => {
-        const {schemaForm, node} = createSchemaForm({schema});
+        const { schemaForm, node } = createSchemaForm({ schema });
 
         (<HTMLInputElement>node.querySelectorAll('[type=checkbox]')[0]).click();
         (<HTMLInputElement>node.querySelectorAll('[type=checkbox]')[2]).click();
@@ -479,7 +493,7 @@ describe('ArrayField', () => {
       });
 
       it('should fill field with data', () => {
-        const {node} = createSchemaForm({
+        const { node } = createSchemaForm({
           schema,
           formData: ['foo', 'fuzz'],
         });
@@ -507,15 +521,18 @@ describe('ArrayField', () => {
     };
 
     it('should render two lists of inputs inside of a list', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema,
-        formData: [[1, 2], [3, 4]],
+        formData: [
+          [1, 2],
+          [3, 4],
+        ],
       });
       expect(node.querySelectorAll('fieldset fieldset')).toHaveLength(2);
     });
 
     it('should add an inner list when clicking the add button', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
       expect(node.querySelectorAll('fieldset fieldset')).toHaveLength(0);
 
       (<HTMLButtonElement>node.querySelector('.btn-add')!).click();
@@ -560,62 +577,62 @@ describe('ArrayField', () => {
     };
 
     it('should render a fieldset', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
 
       expect(node.querySelectorAll('fieldset')).toHaveLength(1);
     });
 
     it('should render a fieldset legend', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
       const legend = node.querySelector('fieldset > legend')!;
       expect(legend.textContent!.trim()).toEqual('List of fixed items');
       expect(legend.id).toEqual('root__title');
     });
 
     it('should render field', () => {
-      const {node} = createSchemaForm({schema});
-      const strInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-string input[type=text]'
-      )!;
-      const numInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-number input[type=number]'
-      )!;
+      const { node } = createSchemaForm({ schema });
+      const strInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-string input[type=text]')!
+      );
+      const numInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-number input[type=number]')!
+      );
       expect(strInput.id).toEqual('root_0');
       expect(numInput.id).toEqual('root_1');
     });
 
     it('should mark non-null item as required', () => {
-      const {node} = createSchemaForm({schema});
-      const strInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-string input[type=text]'
-      )!;
-      const numInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-number input[type=number]'
-      )!;
+      const { node } = createSchemaForm({ schema });
+      const strInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-string input[type=text]')!
+      );
+      const numInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-number input[type=number]')!
+      );
       expect(strInput.required).toEqual(true);
       expect(numInput.required).toEqual(true);
     });
 
     it('should fill fields with data', () => {
-      const {node} = createSchemaForm({schema, formData: ['foo', 42]});
-      const strInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-string input[type=text]'
-      )!;
-      const numInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-number input[type=number]'
-      )!;
+      const { node } = createSchemaForm({ schema, formData: ['foo', 42] });
+      const strInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-string input[type=text]')!
+      );
+      const numInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-number input[type=number]')!
+      );
       expect(strInput.value).toEqual('foo');
       expect(numInput.value).toEqual('42');
     });
 
     it('should handle change events', () => {
-      const {schemaForm, node} = createSchemaForm({schema});
-      const strInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-string input[type=text]'
-      )!;
-      const numInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-number input[type=number]'
-      )!;
+      const { schemaForm, node } = createSchemaForm({ schema });
+      const strInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-string input[type=text]')!
+      );
+      const numInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-number input[type=number]')!
+      );
 
       strInput.value = 'bar';
       fireEvent(strInput, 'change');
@@ -626,61 +643,58 @@ describe('ArrayField', () => {
     });
 
     it('should generate additional fields and fill data', () => {
-      const {node} = createSchemaForm({
+      const { node } = createSchemaForm({
         schema: schemaAdditional,
         formData: [1, 2, 'bar'],
       });
-      const addInput = <HTMLInputElement>node.querySelector(
-        'fieldset .field-string input[type=text]'
-      )!;
+      const addInput = <HTMLInputElement>(
+        node.querySelector('fieldset .field-string input[type=text]')!
+      );
       expect(addInput.id).toEqual('root_2');
       expect(addInput.value).toEqual('bar');
     });
 
     it('should have an add button if additionalItems is an object', () => {
-      const {node} = createSchemaForm({schema: schemaAdditional});
+      const { node } = createSchemaForm({ schema: schemaAdditional });
       expect(node.querySelector('.btn-add')).not.toBeNull;
     });
 
     it('should not have an add button if additionalItems is not set', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
       expect(node.querySelector('.btn-add')).toBeNull;
     });
 
     it('should not have an add button if addable is false', () => {
-      const {node} = createSchemaForm({schema});
+      const { node } = createSchemaForm({ schema });
       expect(node.querySelector('.btn-add')).toBeNull;
     });
 
-    it('[fixed-noadditional] should not provide an add button ' +
-    'regardless maxItems', () => {
-      const {node} = createSchemaForm({
-        schema: {maxItems: 3, ...schema},
+    it('[fixed-noadditional] should not provide an add button regardless maxItems', () => {
+      const { node } = createSchemaForm({
+        schema: { maxItems: 3, ...schema },
       });
 
       expect(node.querySelector('.btn-add')).toBeNull;
     });
 
-    it('[fixed] should not provide an add button if length equals maxItems',
-       () => {
-         const {node} = createSchemaForm({
-           schema: {maxItems: 2, ...schemaAdditional},
-         });
+    it('[fixed] should not provide an add button if length equals maxItems', () => {
+      const { node } = createSchemaForm({
+        schema: { maxItems: 2, ...schemaAdditional },
+      });
 
-         expect(node.querySelector('.btn-add')).toBeNull;
-       });
+      expect(node.querySelector('.btn-add')).toBeNull;
+    });
 
-    it('[fixed] should provide an add button if length is lesser ' +
-    'than maxItems', () => {
-      const {node} = createSchemaForm({
-        schema: {maxItems: 3, ...schemaAdditional},
+    it('[fixed] should provide an add button if length is lesser than maxItems', () => {
+      const { node } = createSchemaForm({
+        schema: { maxItems: 3, ...schemaAdditional },
       });
 
       expect(node.querySelector('.btn-add')).not.toBeNull;
     });
 
     describe('operations for additional items', () => {
-      const {schemaForm, node} = createSchemaForm({
+      const { schemaForm, node } = createSchemaForm({
         schema: schemaAdditional,
         formData: [1, 2, 'foo'],
       });
@@ -693,8 +707,9 @@ describe('ArrayField', () => {
       });
 
       it('should change the state when changing input value', () => {
-        const inputs: NodeListOf<HTMLInputElement> =
-          node.querySelectorAll('.field-string input[type=text]');
+        const inputs: NodeListOf<HTMLInputElement> = node.querySelectorAll(
+          '.field-string input[type=text]'
+        );
 
         inputs[0].value = 'bar';
         fireEvent(inputs[0], 'change');

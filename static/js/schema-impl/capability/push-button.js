@@ -20,14 +20,9 @@ class PushButton extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/push_button.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/push_button.svg',
+    });
 
     this.pressedEventName = null;
     this.doublePressedEventName = null;
@@ -111,11 +106,11 @@ class PushButton extends Thing {
     if (!this.pushedProperty) {
       for (const name in data) {
         if (name === this.pressedEventName) {
-          this.icon.dispatchEvent(new CustomEvent('press', {detail: 'single'}));
+          this.icon.dispatchEvent(new CustomEvent('press', { detail: 'single' }));
         } else if (name === this.doublePressedEventName) {
-          this.icon.dispatchEvent(new CustomEvent('press', {detail: 'double'}));
+          this.icon.dispatchEvent(new CustomEvent('press', { detail: 'double' }));
         } else if (name === this.longPressedEventName) {
-          this.icon.dispatchEvent(new CustomEvent('press', {detail: 'long'}));
+          this.icon.dispatchEvent(new CustomEvent('press', { detail: 'long' }));
         }
       }
     }

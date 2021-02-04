@@ -4,11 +4,11 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#75AACF">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#75AACF" />
     <title data-l10n-id="login-title">Login - WebThings Gateway</title>
-    <link rel="manifest" href="/app.webmanifest">
+    <link rel="manifest" href="/app.webmanifest" />
     <link rel="icon" href="/images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/user-form.css" />
@@ -16,11 +16,29 @@
   <body>
     <img id="wordmark" data-l10n-id="wordmark" src="/images/webthings-gateway-lockup.svg" />
     <form id="login-form" class="user-form" method="post">
-      <input type="email" id="email" name="email" data-l10n-id="user-settings-input-email" autofocus>
-      <input type="password" id="password" name="password" data-l10n-id="user-settings-input-password">
+      <input
+        type="email"
+        id="email"
+        name="email"
+        data-l10n-id="user-settings-input-email"
+        autofocus
+      />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        data-l10n-id="user-settings-input-password"
+      />
       <div id="totp-prompt" data-l10n-id="login-enter-totp" class="hidden"></div>
-      <input type="hidden" id="totp" name="totp" data-l10n-id="user-settings-input-totp"
-        minlength="6" maxlength="12" pattern="([0-9]{6}|[0-9a-f]{12})">
+      <input
+        type="hidden"
+        id="totp"
+        name="totp"
+        data-l10n-id="user-settings-input-totp"
+        minlength="6"
+        maxlength="12"
+        pattern="([0-9]{6}|[0-9a-f]{12})"
+      />
       <div id="error-submission" class="error hidden"></div>
       <button id="login-button" data-l10n-id="login-log-in" type="submit"></button>
     </form>

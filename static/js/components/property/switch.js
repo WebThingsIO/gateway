@@ -102,12 +102,9 @@ class SwitchProperty extends BaseComponent {
 `;
     super(template);
 
-    this._input =
-      this.shadowRoot.querySelector('.webthing-switch-property-switch');
-    this._name =
-      this.shadowRoot.querySelector('.webthing-switch-property-name');
-    this._label =
-      this.shadowRoot.querySelector('.webthing-switch-property-label');
+    this._input = this.shadowRoot.querySelector('.webthing-switch-property-switch');
+    this._name = this.shadowRoot.querySelector('.webthing-switch-property-name');
+    this._label = this.shadowRoot.querySelector('.webthing-switch-property-label');
     this._onClick = this.__onClick.bind(this);
     this._onKeyUp = this.__onKeyUp.bind(this);
   }
@@ -122,9 +119,7 @@ class SwitchProperty extends BaseComponent {
     }
 
     this.readOnly =
-      typeof this.dataset.readOnly !== 'undefined' ?
-        this.dataset.readOnly === 'true' :
-        false;
+      typeof this.dataset.readOnly !== 'undefined' ? this.dataset.readOnly === 'true' : false;
 
     this._upgradeProperty('checked');
 
@@ -229,12 +224,14 @@ class SwitchProperty extends BaseComponent {
     }
 
     this.checked = !this.checked;
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: {
-        checked: this.checked,
-      },
-      bubbles: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          checked: this.checked,
+        },
+        bubbles: true,
+      })
+    );
   }
 }
 

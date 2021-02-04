@@ -12,8 +12,8 @@ import config from 'config';
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
-import {ncp} from 'ncp';
-import rimraf, {sync as rimrafSync} from 'rimraf';
+import { ncp } from 'ncp';
+import rimraf, { sync as rimrafSync } from 'rimraf';
 import UserProfile from './user-profile';
 import Database from './db';
 import * as Settings from './models/settings';
@@ -173,12 +173,10 @@ export default function migrate(): Promise<unknown[]> {
 
   // Move old uploads, if necessary.
   const oldUploadsDir = path.join(UserProfile.gatewayDir, 'static', 'uploads');
-  if (fs.existsSync(oldUploadsDir) &&
-    fs.lstatSync(oldUploadsDir).isDirectory()) {
+  if (fs.existsSync(oldUploadsDir) && fs.lstatSync(oldUploadsDir).isDirectory()) {
     const fnames = fs.readdirSync(oldUploadsDir);
     for (const fname of fnames) {
-      renameFile(
-        path.join(oldUploadsDir, fname), path.join(UserProfile.uploadsDir, fname));
+      renameFile(path.join(oldUploadsDir, fname), path.join(UserProfile.uploadsDir, fname));
     }
 
     fs.rmdirSync(oldUploadsDir);
@@ -212,12 +210,10 @@ export default function migrate(): Promise<unknown[]> {
     let changed = false;
 
     // addonManager.listUrl -> addonManager.listUrls
-    if (cfg.hasOwnProperty('addonManager') &&
-        cfg.addonManager.hasOwnProperty('listUrl')) {
+    if (cfg.hasOwnProperty('addonManager') && cfg.addonManager.hasOwnProperty('listUrl')) {
       if (cfg.addonManager.hasOwnProperty('listUrls')) {
         cfg.addonManager.listUrls.push(cfg.addonManager.listUrl);
-        cfg.addonManager.listUrls =
-          Array.from(new Set(cfg.addonManager.listUrls));
+        cfg.addonManager.listUrls = Array.from(new Set(cfg.addonManager.listUrls));
       } else {
         cfg.addonManager.listUrls = [cfg.addonManager.listUrl];
       }
@@ -239,8 +235,7 @@ export default function migrate(): Promise<unknown[]> {
   // Move add-ons.
   if (process.env.NODE_ENV !== 'test') {
     const oldAddonsDir = path.join(UserProfile.gatewayDir, 'build', 'addons');
-    if (fs.existsSync(oldAddonsDir) &&
-      fs.lstatSync(oldAddonsDir).isDirectory()) {
+    if (fs.existsSync(oldAddonsDir) && fs.lstatSync(oldAddonsDir).isDirectory()) {
       const fnames = fs.readdirSync(oldAddonsDir);
       for (const fname of fnames) {
         const oldFname = path.join(oldAddonsDir, fname);

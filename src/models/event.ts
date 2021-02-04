@@ -8,8 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {Utils} from 'gateway-addon';
-import {Any} from 'gateway-addon/lib/schema';
+import { Utils } from 'gateway-addon';
+import { Any } from 'gateway-addon/lib/schema';
 
 export interface EventDescription {
   data: Any;

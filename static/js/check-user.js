@@ -10,20 +10,22 @@
 const API = require('./api').default;
 
 if (API.isLoggedIn()) {
-  API.verifyJWT().then((valid) => {
-    if (!valid) {
-      redirectUnauthed();
-    } else if (document.body) {
-      document.body.classList.remove('hidden');
-    } else {
-      document.addEventListener('DOMContentLoaded', () => {
+  API.verifyJWT()
+    .then((valid) => {
+      if (!valid) {
+        redirectUnauthed();
+      } else if (document.body) {
         document.body.classList.remove('hidden');
-      });
-    }
-  }).catch(() => {
-    document.body.classList.remove('hidden');
-    document.getElementById('connectivity-scrim').classList.remove('hidden');
-  });
+      } else {
+        document.addEventListener('DOMContentLoaded', () => {
+          document.body.classList.remove('hidden');
+        });
+      }
+    })
+    .catch(() => {
+      document.body.classList.remove('hidden');
+      document.getElementById('connectivity-scrim').classList.remove('hidden');
+    });
 } else {
   redirectUnauthed();
 }

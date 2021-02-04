@@ -39,7 +39,7 @@ export function extractJWTQS(req: express.Request): string | false {
  * @return {string|false} JWT string or false.
  */
 export function extractJWTHeader(req: express.Request): string | false {
-  const {authorization} = req.headers;
+  const { authorization } = req.headers;
   if (!authorization) {
     return false;
   }
@@ -80,15 +80,14 @@ export function scopeAllowsRequest(scope: string | undefined, request: express.R
     const readwrite = access === Constants.READWRITE;
     path = parts[0];
     const allowedDirect = requestPath.startsWith(path);
-    const allowedThings = requestPath === Constants.THINGS_PATH &&
-      path.startsWith(Constants.THINGS_PATH);
+    const allowedThings =
+      requestPath === Constants.THINGS_PATH && path.startsWith(Constants.THINGS_PATH);
     // Allow access to media only if scope covers all things
-    const allowedMedia = requestPath.startsWith(Constants.MEDIA_PATH) &&
-      path === Constants.THINGS_PATH;
+    const allowedMedia =
+      requestPath.startsWith(Constants.MEDIA_PATH) && path === Constants.THINGS_PATH;
 
     if (allowedDirect || allowedThings || allowedMedia) {
-      if (!readwrite && request.method !== 'GET' &&
-          request.method !== 'OPTIONS') {
+      if (!readwrite && request.method !== 'GET' && request.method !== 'OPTIONS') {
         return false;
       }
       return true;
@@ -99,8 +98,8 @@ export function scopeAllowsRequest(scope: string | undefined, request: express.R
 
 export function middleware(): express.Handler {
   return (req, res, next) => {
-    authenticate(req).
-      then((jwt) => {
+    authenticate(req)
+      .then((jwt) => {
         if (!jwt) {
           res.status(401).end();
           return;
@@ -112,22 +111,20 @@ export function middleware(): express.Handler {
           scope = `${Constants.OAUTH_PATH}:${Constants.READWRITE}`;
         }
         if (!scopeAllowsRequest(scope, req)) {
-          res.status(401).send(
-            `Token of role ${payload.role} used out of scope: ${scope}`);
+          res.status(401).send(`Token of role ${payload.role} used out of scope: ${scope}`);
           return;
         }
         if (payload.role !== Constants.USER_TOKEN) {
           if (!payload.scope) {
-            res.status(400)
-              .send('Token must contain scope');
+            res.status(400).send('Token must contain scope');
             return;
           }
         }
 
         (<express.Request & WithJWT>req).jwt = jwt;
         next();
-      }).
-      catch((err) => {
+      })
+      .catch((err) => {
         console.error('error running jwt middleware', err.stack);
         next(err);
       });

@@ -57,7 +57,7 @@ export function compareSync(passwordText: string, passwordHash: string): boolean
  * @param {object} token - an MFA token, must contain a totp member
  * @return {boolean} If the token has been verified
  */
-export function verifyMfaToken(sharedSecret: string, token: {totp: string}): boolean {
+export function verifyMfaToken(sharedSecret: string, token: { totp: string }): boolean {
   // only supporting TOTP for now
   if (token.totp) {
     return speakeasy.totp.verify({

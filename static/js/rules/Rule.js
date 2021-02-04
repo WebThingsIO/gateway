@@ -127,8 +127,7 @@ class Rule {
             }
           }
         }
-        const singleStr =
-          this.singleTriggerToHumanRepresentation(trigger.triggers[i], html);
+        const singleStr = this.singleTriggerToHumanRepresentation(trigger.triggers[i], html);
         if (!singleStr) {
           return null;
         }
@@ -141,30 +140,22 @@ class Rule {
       const d = new Date();
       const parts = trigger.time.split(':');
       d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
-      const formatted = d.toLocaleTimeString(
-        // eslint-disable-next-line no-undefined
-        App.LANGUAGE,
-        {
-          hour: '2-digit',    // only show hour and minute
-          minute: '2-digit',  // am/pm is added automatically
-        }
-      );
+      const formatted = d.toLocaleTimeString(App.LANGUAGE, {
+        hour: '2-digit', // only show hour and minute
+        minute: '2-digit', // am/pm is added automatically
+      });
       return `the time of day is ${formatted}`;
     }
 
     if (trigger.type === 'EventTrigger') {
-      const triggerThing = this.gateway.things.filter(
-        RuleUtils.byThing(trigger.thing)
-      )[0];
+      const triggerThing = this.gateway.things.filter(RuleUtils.byThing(trigger.thing))[0];
       if (!triggerThing) {
         return null;
       }
       return `${triggerThing.title} event "${trigger.label}" occurs`;
     }
 
-    const triggerThing = this.gateway.things.filter(
-      RuleUtils.byProperty(trigger.property)
-    )[0];
+    const triggerThing = this.gateway.things.filter(RuleUtils.byProperty(trigger.property))[0];
     if (!triggerThing) {
       return null;
     }
@@ -232,8 +223,7 @@ class Rule {
             effectStr += 'and ';
           }
         }
-        const singleStr =
-          this.singleEffectToHumanRepresentation(effect.effects[i]);
+        const singleStr = this.singleEffectToHumanRepresentation(effect.effects[i]);
         if (!singleStr) {
           return null;
         }
@@ -246,31 +236,27 @@ class Rule {
       return `send a browser notification`;
     }
     if (effect.type === 'NotifierOutletEffect') {
-      const notifier = this.gateway.notifiers
-        .filter((notifier) => notifier.id === effect.notifier)[0];
+      const notifier = this.gateway.notifiers.filter(
+        (notifier) => notifier.id === effect.notifier
+      )[0];
       if (!notifier) {
         return null;
       }
-      const outlet = notifier.outlets
-        .filter((outlet) => outlet.id === effect.outlet)[0];
+      const outlet = notifier.outlets.filter((outlet) => outlet.id === effect.outlet)[0];
       if (!outlet) {
         return null;
       }
       return `send a notification through ${outlet.name}`;
     }
     if (effect.type === 'ActionEffect') {
-      const effectThing = this.gateway.things.filter(
-        RuleUtils.byThing(effect.thing)
-      )[0];
+      const effectThing = this.gateway.things.filter(RuleUtils.byThing(effect.thing))[0];
       if (!effectThing) {
         return null;
       }
       return `do ${effectThing.title} action "${effect.label}"`;
     }
 
-    const effectThing = this.gateway.things.filter(
-      RuleUtils.byProperty(effect.property)
-    )[0];
+    const effectThing = this.gateway.things.filter(RuleUtils.byProperty(effect.property))[0];
     if (!effectThing) {
       return null;
     }
@@ -321,18 +307,13 @@ class Rule {
     let effectStr = '???';
 
     if (this.trigger) {
-      triggerStr =
-        this.singleTriggerToHumanRepresentation(this.trigger, html) ||
-        triggerStr;
+      triggerStr = this.singleTriggerToHumanRepresentation(this.trigger, html) || triggerStr;
     }
     if (this.effect) {
-      effectStr =
-        this.singleEffectToHumanRepresentation(this.effect) ||
-        effectStr;
+      effectStr = this.singleEffectToHumanRepresentation(this.effect) || effectStr;
     }
 
-    const effectExists = this.effect && this.effect.effects &&
-      this.effect.effects.length > 0;
+    const effectExists = this.effect && this.effect.effects && this.effect.effects.length > 0;
     let permanent = true; // Default to permanent
     if (effectExists) {
       for (const effect of this.effect.effects) {
@@ -384,8 +365,10 @@ class Rule {
    * @return {boolean}
    */
   valid() {
-    return !!(this.singleTriggerToHumanRepresentation(this.trigger, false) &&
-      this.singleEffectToHumanRepresentation(this.effect, false));
+    return !!(
+      this.singleTriggerToHumanRepresentation(this.trigger, false) &&
+      this.singleEffectToHumanRepresentation(this.effect, false)
+    );
   }
 }
 

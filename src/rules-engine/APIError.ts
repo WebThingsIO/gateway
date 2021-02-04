@@ -17,6 +17,6 @@ export default class APIError extends Error {
   }
 
   toString(): string {
-    return JSON.stringify({error: true, message: this.message});
+    return JSON.stringify({ error: true, message: this.message });
   }
 }

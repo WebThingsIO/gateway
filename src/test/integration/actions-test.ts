@@ -1,5 +1,5 @@
-import {server, chai, mockAdapter} from '../common';
-import {TEST_USER, createUser, headerAuth} from '../user';
+import { server, chai, mockAdapter } from '../common';
+import { TEST_USER, createUser, headerAuth } from '../user';
 import * as Constants from '../../constants';
 
 describe('actions/', () => {
@@ -31,8 +31,9 @@ describe('actions/', () => {
   };
 
   async function addDevice(desc: Record<string, unknown>): Promise<ChaiHttp.Response> {
-    const {id} = desc;
-    const res = await chai.request(server)
+    const { id } = desc;
+    const res = await chai
+      .request(server)
       .post(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
@@ -46,7 +47,8 @@ describe('actions/', () => {
   });
 
   it('GET with no actions', async () => {
-    let res = await chai.request(server)
+    let res = await chai
+      .request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -54,7 +56,8 @@ describe('actions/', () => {
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(0);
 
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(`${Constants.ACTIONS_PATH}/pair`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -64,7 +67,8 @@ describe('actions/', () => {
   });
 
   it('should fail to create a new action (empty body)', async () => {
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
@@ -76,7 +80,8 @@ describe('actions/', () => {
     const descr = {
       potato: {},
     };
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
@@ -88,7 +93,8 @@ describe('actions/', () => {
     const descr = {
       potato: {},
     };
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(`${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
@@ -97,12 +103,13 @@ describe('actions/', () => {
   });
 
   it('should fail when plugin rejects requestAction', async () => {
-    const {id} = thingLight;
+    const { id } = thingLight;
     await addDevice(thingLight);
     const descr = {
       rejectRequest: {},
     };
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .post(`${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
@@ -119,7 +126,8 @@ describe('actions/', () => {
       },
     };
 
-    const pair = await chai.request(server)
+    const pair = await chai
+      .request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
@@ -127,7 +135,8 @@ describe('actions/', () => {
 
     expect(pair.status).toEqual(201);
 
-    let res = await chai.request(server)
+    let res = await chai
+      .request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -142,7 +151,8 @@ describe('actions/', () => {
     expect(res.body[0].pair).toHaveProperty('status');
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(`${Constants.ACTIONS_PATH}/pair`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -158,7 +168,8 @@ describe('actions/', () => {
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
     const actionHref = res.body[0].pair.href;
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(actionHref)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -181,7 +192,8 @@ describe('actions/', () => {
       },
     };
 
-    const pair = await chai.request(server)
+    const pair = await chai
+      .request(server)
       .post(`${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
@@ -189,7 +201,8 @@ describe('actions/', () => {
 
     expect(pair.status).toEqual(201);
 
-    let res = await chai.request(server)
+    let res = await chai
+      .request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -204,7 +217,8 @@ describe('actions/', () => {
     expect(res.body[0].pair).toHaveProperty('status');
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(`${Constants.ACTIONS_PATH}/pair`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -220,7 +234,8 @@ describe('actions/', () => {
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
     const actionHref = res.body[0].pair.href;
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(actionHref)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -236,7 +251,8 @@ describe('actions/', () => {
 
   it('should error retrieving a nonexistent action', async () => {
     const actionId = 'foobarmissing';
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .get(`${Constants.ACTIONS_PATH}/pair/${actionId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -252,13 +268,15 @@ describe('actions/', () => {
       },
     };
 
-    await chai.request(server)
+    await chai
+      .request(server)
       .post(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(descr);
 
-    let res = await chai.request(server)
+    let res = await chai
+      .request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -267,13 +285,15 @@ describe('actions/', () => {
     expect(res.body.length).toEqual(1);
 
     const actionHref = res.body[0].pair.href;
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .delete(actionHref)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(204);
 
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -283,7 +303,8 @@ describe('actions/', () => {
 
   it('should error removing a nonexistent action', async () => {
     const actionId = 555;
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .delete(`${Constants.ACTIONS_PATH}/pair/${actionId}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -291,7 +312,7 @@ describe('actions/', () => {
   });
 
   it('should fail when plugin rejects removeAction', async () => {
-    const {id} = thingLight;
+    const { id } = thingLight;
     await addDevice(thingLight);
     const descr = {
       rejectRemove: {
@@ -300,13 +321,15 @@ describe('actions/', () => {
     };
 
     const basePath = `${Constants.THINGS_PATH}/${id}${Constants.ACTIONS_PATH}`;
-    await chai.request(server)
+    await chai
+      .request(server)
       .post(basePath)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
       .send(descr);
 
-    let res = await chai.request(server)
+    let res = await chai
+      .request(server)
       .get(basePath)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -314,7 +337,8 @@ describe('actions/', () => {
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body.length).toEqual(1);
 
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(`${basePath}/rejectRemove`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -324,7 +348,8 @@ describe('actions/', () => {
 
     const actionHref = res.body[0].rejectRemove.href;
 
-    const err = await chai.request(server)
+    const err = await chai
+      .request(server)
       .delete(actionHref)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
@@ -337,14 +362,16 @@ describe('actions/', () => {
     // a specific device
     mockAdapter().unpairDevice(thingId);
 
-    let res = await chai.request(server)
+    let res = await chai
+      .request(server)
       .post(Constants.ACTIONS_PATH)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({unpair: {input: {id: thingId}}});
+      .send({ unpair: { input: { id: thingId } } });
     expect(res.status).toEqual(201);
 
-    res = await chai.request(server)
+    res = await chai
+      .request(server)
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));

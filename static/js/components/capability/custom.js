@@ -64,8 +64,7 @@ class CustomCapability extends BaseComponent {
   }
 
   connectedCallback() {
-    this.iconHref =
-      typeof this.dataset.iconHref !== 'undefined' ? this.dataset.iconHref : '';
+    this.iconHref = typeof this.dataset.iconHref !== 'undefined' ? this.dataset.iconHref : '';
   }
 
   get iconHref() {

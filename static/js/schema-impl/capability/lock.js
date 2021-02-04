@@ -20,14 +20,9 @@ class Lock extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/lock.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/lock.svg',
+    });
   }
 
   /**
@@ -47,8 +42,7 @@ class Lock extends Thing {
     }
 
     // If necessary, match on name.
-    if (this.lockedProperty === null &&
-        this.displayedProperties.hasOwnProperty('locked')) {
+    if (this.lockedProperty === null && this.displayedProperties.hasOwnProperty('locked')) {
       this.lockedProperty = 'locked';
     }
   }

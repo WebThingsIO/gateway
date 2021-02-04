@@ -16,8 +16,7 @@ const fluent = require('../../fluent');
 
 class SmokeDetail extends StringLabelDetail {
   constructor(thing, name, property) {
-    super(thing, name, !!property.readOnly,
-          property.title || fluent.getMessage('smoke'));
+    super(thing, name, !!property.readOnly, property.title || fluent.getMessage('smoke'));
     this.id = `smoke-${Utils.escapeHtmlForIdClass(this.name)}`;
   }
 

@@ -15,7 +15,7 @@ import Things from '../models/things';
 import AddonManager from '../addon-manager';
 
 function build(): express.Router {
-  const controller = express.Router({mergeParams: true});
+  const controller = express.Router({ mergeParams: true });
 
   /**
    * Handle creating a new action.
@@ -31,8 +31,7 @@ function build(): express.Router {
 
     const actionName = keys[0];
 
-    if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
-                                              'input')) {
+    if (!Object.prototype.hasOwnProperty.call(request.body[actionName], 'input')) {
       response.status(400).send('Missing input');
       return;
     }
@@ -56,12 +55,11 @@ function build(): express.Router {
 
     try {
       if (thingId) {
-        await AddonManager.requestAction(
-          thingId, action.getId(), actionName, actionParams);
+        await AddonManager.requestAction(thingId, action.getId(), actionName, actionParams);
       }
       await Actions.add(action);
 
-      response.status(201).json({[actionName]: action.getDescription()});
+      response.status(201).json({ [actionName]: action.getDescription() });
     } catch (e) {
       console.error('Creating action', actionName, 'failed');
       console.error(e);
@@ -86,8 +84,7 @@ function build(): express.Router {
   controller.get('/:actionName', (request, response) => {
     const actionName = request.params.actionName;
     if (request.params.thingId) {
-      response.status(200).json(Actions.getByThing(request.params.thingId,
-                                                   actionName));
+      response.status(200).json(Actions.getByThing(request.params.thingId, actionName));
     } else {
       response.status(200).json(Actions.getGatewayActions(actionName));
     }
@@ -114,8 +111,7 @@ function build(): express.Router {
       return;
     }
 
-    if (!Object.prototype.hasOwnProperty.call(request.body[actionName],
-                                              'input')) {
+    if (!Object.prototype.hasOwnProperty.call(request.body[actionName], 'input')) {
       response.status(400).send('Missing input');
       return;
     }
@@ -139,12 +135,11 @@ function build(): express.Router {
 
     try {
       if (thingId) {
-        await AddonManager.requestAction(
-          thingId, action.getId(), actionName, actionParams);
+        await AddonManager.requestAction(thingId, action.getId(), actionName, actionParams);
       }
       await Actions.add(action);
 
-      response.status(201).json({[actionName]: action.getDescription()});
+      response.status(201).json({ [actionName]: action.getDescription() });
     } catch (e) {
       console.error('Creating action', actionName, 'failed');
       console.error(e);
@@ -159,7 +154,7 @@ function build(): express.Router {
     const actionId = request.params.actionId;
     const action = Actions.get(actionId);
     if (action) {
-      response.status(200).json({[action.getName()]: action.getDescription()});
+      response.status(200).json({ [action.getName()]: action.getDescription() });
     } else {
       const error = `Action "${actionId}" not found`;
       console.error(error);
@@ -170,36 +165,33 @@ function build(): express.Router {
   /**
    * Handle cancelling an action.
    */
-  controller.delete(
-    '/:actionName/:actionId',
-    async (request, response) => {
-      const actionName = request.params.actionName;
-      const actionId = request.params.actionId;
-      const thingId = request.params.thingId;
+  controller.delete('/:actionName/:actionId', async (request, response) => {
+    const actionName = request.params.actionName;
+    const actionId = request.params.actionId;
+    const thingId = request.params.thingId;
 
-      if (thingId) {
-        try {
-          await AddonManager.removeAction(thingId, actionId, actionName);
-        } catch (e) {
-          console.error('Removing action', actionId, 'failed');
-          console.error(e);
-          response.status(400).send(e);
-          return;
-        }
-      }
-
+    if (thingId) {
       try {
-        Actions.remove(actionId);
+        await AddonManager.removeAction(thingId, actionId, actionName);
       } catch (e) {
         console.error('Removing action', actionId, 'failed');
         console.error(e);
-        response.status(404).send(e);
+        response.status(400).send(e);
         return;
       }
-
-      response.sendStatus(204);
     }
-  );
+
+    try {
+      Actions.remove(actionId);
+    } catch (e) {
+      console.error('Removing action', actionId, 'failed');
+      console.error(e);
+      response.status(404).send(e);
+      return;
+    }
+
+    response.sendStatus(204);
+  });
 
   return controller;
 }

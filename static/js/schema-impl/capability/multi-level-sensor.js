@@ -22,14 +22,9 @@ class MultiLevelSensor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/multi_level_sensor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/multi_level_sensor.svg',
+    });
   }
 
   /**
@@ -49,8 +44,7 @@ class MultiLevelSensor extends Thing {
     }
 
     // If necessary, match on name.
-    if (this.levelProperty === null &&
-        this.displayedProperties.hasOwnProperty('level')) {
+    if (this.levelProperty === null && this.displayedProperties.hasOwnProperty('level')) {
       this.levelProperty = 'level';
     }
 
@@ -58,11 +52,9 @@ class MultiLevelSensor extends Thing {
     this.unit = '';
 
     if (this.levelProperty) {
-      const property =
-        this.displayedProperties[this.levelProperty].convertedProperty;
+      const property = this.displayedProperties[this.levelProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-          `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 

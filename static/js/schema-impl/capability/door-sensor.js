@@ -20,14 +20,9 @@ class DoorSensor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/door_sensor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/door_sensor.svg',
+    });
   }
 
   /**

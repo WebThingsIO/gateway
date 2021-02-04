@@ -12,15 +12,15 @@
  */
 
 import config from 'config';
-import {EventEmitter} from 'events';
-import {IpcSocket, Constants} from 'gateway-addon';
+import { EventEmitter } from 'events';
+import { IpcSocket, Constants } from 'gateway-addon';
 import * as Settings from '../models/settings';
 import UserProfile from '../user-profile';
-import {Message} from 'gateway-addon/lib/schema';
+import { Message } from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
 import pkg from '../package.json';
 import Plugin from './plugin';
-import {AddonManager} from '../addon-manager';
+import { AddonManager } from '../addon-manager';
 
 const MessageType = Constants.MessageType;
 
@@ -33,7 +33,7 @@ export default class PluginServer extends EventEmitter {
 
   private ipcSocket: IpcSocket;
 
-  constructor(addonManager: AddonManager, {verbose}: {verbose?: boolean} = {}) {
+  constructor(addonManager: AddonManager, { verbose }: { verbose?: boolean } = {}) {
     super();
     this.manager = addonManager;
 
@@ -45,7 +45,7 @@ export default class PluginServer extends EventEmitter {
       config.get('ports.ipc'),
       this.onMsg.bind(this),
       'IpcSocket(plugin-server)',
-      {verbose: this.verbose}
+      { verbose: this.verbose }
     );
   }
 
@@ -61,8 +61,7 @@ export default class PluginServer extends EventEmitter {
    * plugins. Each plugin will get its own IPC channel once its registered.
    */
   onMsg(msg: Message, ws: WebSocket): void {
-    this.verbose &&
-      console.log('PluginServer: Rcvd:', msg);
+    this.verbose && console.log('PluginServer: Rcvd:', msg);
 
     if (msg.messageType === MessageType.PLUGIN_REGISTER_REQUEST) {
       const plugin = this.registerPlugin(msg.data.pluginId);
@@ -71,42 +70,48 @@ export default class PluginServer extends EventEmitter {
       const units = {
         temperature: 'degree celsius',
       };
-      Settings.getSetting('localization.language').then((lang) => {
-        if (lang) {
-          language = <string>lang;
-        }
+      Settings.getSetting('localization.language')
+        .then((lang) => {
+          if (lang) {
+            language = <string>lang;
+          }
 
-        return Settings.getSetting('localization.units.temperature');
-      }).then((temp) => {
-        if (temp) {
-          units.temperature = <string>temp;
-        }
+          return Settings.getSetting('localization.units.temperature');
+        })
+        .then((temp) => {
+          if (temp) {
+            units.temperature = <string>temp;
+          }
 
-        return Promise.resolve();
-      }).catch(() => {
-        return Promise.resolve();
-      }).then(() => {
-        ws.send(JSON.stringify({
-          messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
-          data: {
-            pluginId: msg.data.pluginId,
-            gatewayVersion: pkg.version,
-            userProfile: {
-              addonsDir: UserProfile.addonsDir,
-              baseDir: UserProfile.baseDir,
-              configDir: UserProfile.configDir,
-              dataDir: UserProfile.dataDir,
-              mediaDir: UserProfile.mediaDir,
-              logDir: UserProfile.logDir,
-              gatewayDir: UserProfile.gatewayDir,
-            },
-            preferences: {
-              language,
-              units,
-            },
-          },
-        }));
-      });
+          return Promise.resolve();
+        })
+        .catch(() => {
+          return Promise.resolve();
+        })
+        .then(() => {
+          ws.send(
+            JSON.stringify({
+              messageType: MessageType.PLUGIN_REGISTER_RESPONSE,
+              data: {
+                pluginId: msg.data.pluginId,
+                gatewayVersion: pkg.version,
+                userProfile: {
+                  addonsDir: UserProfile.addonsDir,
+                  baseDir: UserProfile.baseDir,
+                  configDir: UserProfile.configDir,
+                  dataDir: UserProfile.dataDir,
+                  mediaDir: UserProfile.mediaDir,
+                  logDir: UserProfile.logDir,
+                  gatewayDir: UserProfile.gatewayDir,
+                },
+                preferences: {
+                  language,
+                  units,
+                },
+              },
+            })
+          );
+        });
     } else if (msg.data.pluginId) {
       const plugin = this.getPlugin(msg.data.pluginId);
       if (plugin) {

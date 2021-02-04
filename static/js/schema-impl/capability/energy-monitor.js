@@ -22,14 +22,9 @@ class EnergyMonitor extends Thing {
    * @param {Number} format See Constants.ThingFormat
    */
   constructor(model, description, format) {
-    super(
-      model,
-      description,
-      format,
-      {
-        baseIcon: '/images/thing-icons/energy_monitor.svg',
-      }
-    );
+    super(model, description, format, {
+      baseIcon: '/images/thing-icons/energy_monitor.svg',
+    });
   }
 
   /**
@@ -49,8 +44,10 @@ class EnergyMonitor extends Thing {
     }
 
     // If necessary, match on name.
-    if (this.powerProperty === null &&
-        this.displayedProperties.hasOwnProperty('instantaneousPower')) {
+    if (
+      this.powerProperty === null &&
+      this.displayedProperties.hasOwnProperty('instantaneousPower')
+    ) {
       this.powerProperty = 'instantaneousPower';
     }
 
@@ -58,11 +55,9 @@ class EnergyMonitor extends Thing {
     this.unit = 'watt';
 
     if (this.powerProperty) {
-      const property =
-        this.displayedProperties[this.powerProperty].convertedProperty;
+      const property = this.displayedProperties[this.powerProperty].convertedProperty;
 
-      if (property.hasOwnProperty('multipleOf') &&
-          `${property.multipleOf}`.includes('.')) {
+      if (property.hasOwnProperty('multipleOf') && `${property.multipleOf}`.includes('.')) {
         this.precision = `${property.multipleOf}`.split('.')[1].length;
       }
 

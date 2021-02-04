@@ -11,9 +11,7 @@
 
 const LabelCapability = require('./label');
 
-class MultiLevelSensorCapability extends LabelCapability {
-}
+class MultiLevelSensorCapability extends LabelCapability {}
 
-window.customElements.define('webthing-multi-level-sensor-capability',
-                             MultiLevelSensorCapability);
+window.customElements.define('webthing-multi-level-sensor-capability', MultiLevelSensorCapability);
 module.exports = MultiLevelSensorCapability;

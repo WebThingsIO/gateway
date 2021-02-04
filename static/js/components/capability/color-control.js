@@ -71,6 +71,5 @@ class ColorControlCapability extends BaseComponent {
   }
 }
 
-window.customElements.define('webthing-color-control-capability',
-                             ColorControlCapability);
+window.customElements.define('webthing-color-control-capability', ColorControlCapability);
 module.exports = ColorControlCapability;

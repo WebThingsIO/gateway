@@ -38,19 +38,15 @@ class AddonConfig {
     if (errors.length > 0) {
       this.scrollToTop();
     } else {
-      this.configForm.submitButton.innerText =
-        fluent.getMessage('addon-config-applying');
+      this.configForm.submitButton.innerText = fluent.getMessage('addon-config-applying');
       API.setAddonConfig(this.id, formData)
         .then(() => {
           page('/settings/addons');
         })
         .catch((err) => {
-          console.error(
-            `Failed to set config for add-on: ${this.name}\n${err}`
-          );
+          console.error(`Failed to set config for add-on: ${this.name}\n${err}`);
           this.configForm.errorField.render([err]);
-          this.configForm.submitButton.innerText =
-            fluent.getMessage('addon-config-apply');
+          this.configForm.submitButton.innerText = fluent.getMessage('addon-config-apply');
         });
     }
   }
@@ -81,7 +77,8 @@ class AddonConfig {
           this.name,
           config,
           this.handleApply.bind(this),
-          {submitText: fluent.getMessage('addon-config-apply')});
+          { submitText: fluent.getMessage('addon-config-apply') }
+        );
         this.container.appendChild(this.configForm.render());
       })
       .catch((err) => {
