@@ -3,6 +3,7 @@ import { getAddons } from '../test-utils';
 import { SettingsPage } from '../page-object/settings-page';
 import { waitForExpect } from '../../expect-utils';
 import AddonManager from '../../../addon-manager';
+import sleep from '../../../sleep';
 
 afterEach(async () => {
   await AddonManager.uninstallAddon('virtual-things-adapter', true, false);
@@ -11,6 +12,9 @@ afterEach(async () => {
 describe('Addon', () => {
   it('should be able to install the virtual-things-adapter', async () => {
     const browser = getBrowser();
+
+    // give the browser a few seconds to finish loading everything before moving on
+    await sleep(5000);
 
     const settingsPage = new SettingsPage(browser);
     await settingsPage.open();
@@ -29,14 +33,17 @@ describe('Addon', () => {
 
     const addon3 = await discoverAddonPage.findAddon('Virtual Things');
     await addon3.add();
-    await browser.waitUntil(async () => {
-      const addon4 = await discoverAddonPage.findAddon('Virtual Things');
-      if (!addon4) {
-        return false;
-      }
+    await browser.waitUntil(
+      async () => {
+        const addon4 = await discoverAddonPage.findAddon('Virtual Things');
+        if (!addon4) {
+          return false;
+        }
 
-      return await addon4.hasAdded();
-    }, 30000);
+        return await addon4.hasAdded();
+      },
+      { timeout: 30000 }
+    );
 
     const addonSettingsPage2 = await discoverAddonPage.back();
     await waitForExpect(async () => {

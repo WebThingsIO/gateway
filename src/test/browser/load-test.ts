@@ -1,3 +1,4 @@
+import { ElementArray } from 'webdriverio';
 import { waitForExpect } from '../expect-utils';
 import { getBrowser } from './browser-common';
 import AddonManager from '../../addon-manager';
@@ -21,7 +22,7 @@ describe('basic browser tests', () => {
     const password = await browser.$('#password');
     const confirmPassword = await browser.$('#confirm-password');
 
-    await name.waitForExist(5000);
+    await name.waitForExist({ timeout: 5000 });
     await name.setValue('Test User');
     await email.setValue('test@example.com');
     await password.setValue('rosebud');
@@ -31,7 +32,7 @@ describe('basic browser tests', () => {
     await createUserButton.click();
 
     const menuButton = await browser.$('#menu-button');
-    await menuButton.waitForExist(5000);
+    await menuButton.waitForExist({ timeout: 5000 });
 
     await waitForExpect(async () => {
       const newUrl = await browser.getUrl();
@@ -57,19 +58,22 @@ describe('basic browser tests', () => {
     await settingsMenuItem.click();
 
     // wait fadeout menu-scrim
-    await browser.waitUntil(async () => {
-      const menuScrim = await browser.$('#menu-scrim.hidden');
-      if (!menuScrim || !menuScrim.isExisting()) {
+    await browser.waitUntil(
+      async () => {
+        const menuScrim = await browser.$('#menu-scrim.hidden');
+        if (!menuScrim || !menuScrim.isExisting()) {
+          return false;
+        }
+
+        const width = await menuScrim.getCSSProperty('width');
+        if (width && width.parsed && width.parsed.value === 0) {
+          return true;
+        }
+
         return false;
-      }
-
-      const width = await menuScrim.getCSSProperty('width');
-      if (width && width.parsed && width.parsed.value === 0) {
-        return true;
-      }
-
-      return false;
-    }, 5000);
+      },
+      { timeout: 5000 }
+    );
 
     const addonSettingsLink = await browser.$('#addon-settings-link');
     await addonSettingsLink.click();
@@ -80,12 +84,12 @@ describe('basic browser tests', () => {
     const addonInstallVirtualThingsAdapter = await browser.$(
       '#addon-install-virtual-things-adapter'
     );
-    await addonInstallVirtualThingsAdapter.waitForExist(5000);
+    await addonInstallVirtualThingsAdapter.waitForExist({ timeout: 5000 });
     await addonInstallVirtualThingsAdapter.click();
 
     // virtual-things-adapter is ~10MB, so it might take some time to install
     const addonDiscoverySettingsAdded = await browser.$('.addon-discovery-settings-added');
-    await addonDiscoverySettingsAdded.waitForExist(30000);
+    await addonDiscoverySettingsAdded.waitForExist({ timeout: 30000 });
 
     const settingsBackButton = await browser.$('#settings-back-button');
     await settingsBackButton.click();
@@ -96,22 +100,25 @@ describe('basic browser tests', () => {
     await thingsMenuItem.click();
 
     // wait fadeout menu-scrim
-    await browser.waitUntil(async () => {
-      const menuScrim = await browser.$('#menu-scrim.hidden');
-      if (!menuScrim || !menuScrim.isExisting()) {
+    await browser.waitUntil(
+      async () => {
+        const menuScrim = await browser.$('#menu-scrim.hidden');
+        if (!menuScrim || !menuScrim.isExisting()) {
+          return false;
+        }
+
+        const width = await menuScrim.getCSSProperty('width');
+        if (width && width.parsed && width.parsed.value === 0) {
+          return true;
+        }
+
         return false;
-      }
-
-      const width = await menuScrim.getCSSProperty('width');
-      if (width && width.parsed && width.parsed.value === 0) {
-        return true;
-      }
-
-      return false;
-    }, 5000);
+      },
+      { timeout: 5000 }
+    );
 
     const addButton = await browser.$('#add-button');
-    await addButton.waitForDisplayed(5000);
+    await addButton.waitForDisplayed({ timeout: 5000 });
     await addButton.click();
 
     const newThingVirtualThings2SaveButton = await browser.$(
@@ -126,11 +133,15 @@ describe('basic browser tests', () => {
     const addThingBackButton = await browser.$('#add-thing-back-button');
     await addThingBackButton.click();
 
-    let things = await browser.$$('.thing');
-    expect(things.length).toBe(2);
-    await things[0].click();
+    let things: ElementArray | null = null;
+    await waitForExpect(async () => {
+      things = await browser.$$('.thing');
+      expect(things.length).toBe(2);
+    });
 
-    let link = await things[0].$('.thing-details-link');
+    await things![0].click();
+
+    let link = await things![0].$('.thing-details-link');
     await link.click();
     let detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-2')).toBeTruthy();
@@ -139,7 +150,7 @@ describe('basic browser tests', () => {
     await backButton.click();
 
     const webthingCustomCapability = await browser.$('webthing-custom-capability');
-    webthingCustomCapability.waitForExist(2000);
+    webthingCustomCapability.waitForExist({ timeout: 2000 });
 
     things = await browser.$$('.thing');
     expect(things.length).toBe(2);
