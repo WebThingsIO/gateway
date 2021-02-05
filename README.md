@@ -333,13 +333,20 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
 
 ## Browser Support
 
-The Gateway only supports the following browsers, due to its use of the [`Fetch API`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and [`WebSocket API`](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API):
+The Gateway requires a browser that supports:
+- [Fetch](https://caniuse.com/fetch)
+- [Web Sockets](https://caniuse.com/websockets):
+- [ECMAScript 2015 (ES6)](https://caniuse.com/es6)
+- [CustomEvent](https://caniuse.com/customevent)
+- [Custom Elements (V1)](https://caniuse.com/custom-elementsv1)
+- [Shadow DOM (V1)](https://caniuse.com/shadowdomv1)
 
-- Firefox 52+
-- Chrome 43+
-- Edge 14+
+Currently, that translates roughly to:
+- Firefox 63+
+- Chrome 54+
+- Edge 79+
 - Safari 10.1+
-- Opera 29+
+- Opera 41+
 
 ## Debugging
 
