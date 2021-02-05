@@ -92,7 +92,7 @@ create-user =
 user-settings-input-name =
     .placeholder = Nome
 user-settings-input-email =
-    .placeholder = E-mail
+    .placeholder = Email
 user-settings-input-password =
     .placeholder = Senha
 user-settings-input-totp =
@@ -315,11 +315,11 @@ smoke = Fumaça
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Parece que você já cadastrou este subdomínio. Para recuperar, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">clique aqui</a>.
-check-email-for-token = Verifique se recebeu o token de recuperação por e-mail e cole-o acima.
+check-email-for-token = Verifique se recebeu o token de recuperação por email e cole-o acima.
 reclaim-failed = Não foi possível recuperar o domínio.
 subdomain-already-used = Este subdomínio já está sendo usado. Escolha um diferente.
 invalid-subdomain = Subdomínio inválido.
-invalid-email = Endereço de e-mail inválido.
+invalid-email = Endereço de email inválido.
 invalid-reclamation-token = Token de recuperação inválido.
 domain-success = Sucesso! Aguarde enquanto redirecionamos você…
 issuing-error = Erro ao emitir certificado. Tente novamente.
