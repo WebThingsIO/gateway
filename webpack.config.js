@@ -11,6 +11,27 @@ const path = require('path');
 const { v1: uuidv1 } = require('uuid');
 const webpack = require('webpack');
 
+const babelOptions = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        modules: 'commonjs',
+        targets: [
+          'supports fetch',
+          'supports websockets',
+          'supports es6',
+          'supports customevent',
+          'supports custom-elementsv1',
+          'supports shadowdomv1',
+        ].join(' and '),
+        useBuiltIns: 'usage',
+        corejs: 3,
+      },
+    ],
+  ],
+};
+
 const pluginsWeb = [
   new CleanWebpackPlugin({
     cleanOnceBeforeBuildPatterns: ['**/*', '!service-worker.js*'],
@@ -150,27 +171,7 @@ const webpackWeb = {
         ],
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  modules: 'commonjs',
-                  targets: {
-                    chrome: '43',
-                    opera: '29',
-                    edge: '14',
-                    firefox: '52',
-                    safari: '10.1',
-                    ios: '10',
-                  },
-                  useBuiltIns: 'usage',
-                  corejs: 3,
-                },
-              ],
-            ],
-            plugins: ['@babel/plugin-proposal-object-rest-spread'],
-          },
+          options: babelOptions,
         },
       },
       {
@@ -248,27 +249,7 @@ const webpackSW = {
         include: path.resolve(__dirname, 'static'),
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  modules: 'commonjs',
-                  targets: {
-                    chrome: '43',
-                    opera: '29',
-                    edge: '14',
-                    firefox: '52',
-                    safari: '10.1',
-                    ios: '10',
-                  },
-                  useBuiltIns: 'usage',
-                  corejs: 3,
-                },
-              ],
-            ],
-            plugins: ['@babel/plugin-proposal-object-rest-spread'],
-          },
+          options: babelOptions,
         },
       },
     ],
