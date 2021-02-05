@@ -4,13 +4,24 @@ import { server } from '../common';
 import { ChildProcess } from 'child_process';
 import { AddressInfo } from 'net';
 
-const options: Record<string, unknown> = {
+const seleniumOptions = {
+  requestOpts: {
+    timeout: 240 * 1000,
+  },
+  drivers: {
+    chrome: {},
+  },
+  ignoreExtraDrivers: true,
+};
+
+const webdriverioOptions: Record<string, unknown> = {
   logLevel: 'warn',
   capabilities: {
-    browserName: 'firefox',
+    browserName: 'chrome',
     acceptInsecureCerts: true,
-    'moz:firefoxOptions': {
-      args: ['-headless'],
+    acceptSslCerts: true,
+    'goog:chromeOptions': {
+      args: ['--headless', '--disable-gpu', '--allow-insecure-localhost', '--disable-web-security'],
     },
   },
 };
@@ -22,7 +33,7 @@ beforeAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
   // Starting up and interacting with a browser takes forever
   await new Promise<void>((res, rej) => {
-    selenium.install((err) => {
+    selenium.install(seleniumOptions, (err) => {
       if (err) {
         rej(err);
       } else {
@@ -31,16 +42,16 @@ beforeAll(async () => {
     });
   });
   child = await new Promise((res, rej) => {
-    selenium.start((err, child) => {
+    selenium.start(seleniumOptions, (err, c) => {
       if (err) {
         rej(err);
       } else {
-        res(child);
+        res(c);
       }
     });
   });
-  options.baseUrl = `https://localhost:${(<AddressInfo>server.address()!).port}`;
-  browser = await remote(options);
+  webdriverioOptions.baseUrl = `https://localhost:${(<AddressInfo>server.address()!).port}`;
+  browser = await remote(webdriverioOptions);
 
   await browser.setWindowSize(1280, 800);
 });

@@ -16,16 +16,6 @@ class ThingSection extends Section {
         'webthing-smart-plug-capability',
       ].join(',')
     );
-    this.defineElement(
-      'level',
-      [
-        'webthing-light-capability',
-        'webthing-multi-level-sensor-capability',
-        'webthing-multi-level-switch-capability',
-        'webthing-humidity-sensor-capability',
-      ].join(',')
-    );
-    this.defineElement('power', 'webthing-smart-plug-capability');
   }
 
   async click(): Promise<void> {
@@ -35,19 +25,22 @@ class ThingSection extends Section {
   }
 
   async waitClickable(): Promise<void> {
-    await this.browser.waitUntil(async () => {
-      const menuScrim = await this.browser.$('#menu-scrim.hidden');
-      if (!menuScrim || !menuScrim.isExisting()) {
+    await this.browser.waitUntil(
+      async () => {
+        const menuScrim = await this.browser.$('#menu-scrim.hidden');
+        if (!menuScrim || !menuScrim.isExisting()) {
+          return false;
+        }
+
+        const width = await menuScrim.getCSSProperty('width');
+        if (width && width.parsed && width.parsed.value === 0) {
+          return true;
+        }
+
         return false;
-      }
-
-      const width = await menuScrim.getCSSProperty('width');
-      if (width && width.parsed && width.parsed.value === 0) {
-        return true;
-      }
-
-      return false;
-    }, 5000);
+      },
+      { timeout: 5000 }
+    );
   }
 
   async thingTitle(): Promise<string> {
@@ -56,25 +49,36 @@ class ThingSection extends Section {
   }
 
   async thingLevelDisplayed(): Promise<string> {
-    const level = await this.level();
-    return await level.getText();
+    return await this.browser.execute(`(function () {
+      const selector = [
+        'webthing-light-capability',
+        'webthing-multi-level-sensor-capability',
+        'webthing-multi-level-switch-capability',
+        'webthing-humidity-sensor-capability',
+      ].join(',');
+      const container = document.querySelector(selector);
+      const label = container.shadowRoot.querySelector('#label,#contents');
+      return label.innerText;
+    })()`);
   }
 
   async thingPowerDisplayed(): Promise<string> {
-    const power = await this.power();
-    return await power.getText();
+    return await this.browser.execute(`(function () {
+      const container = document.querySelector('webthing-smart-plug-capability');
+      const label = container.shadowRoot.querySelector('#label');
+      return label.innerText;
+    })()`);
   }
 
   async thingColorDisplayed(): Promise<string> {
     // Function represented as string since otherwise mangling breaks it
-    const fill = `${await this.browser.execute(`
-      const wlc = document.querySelector('webthing-light-capability');
-      const icon =
-        wlc.shadowRoot.querySelector('.webthing-light-capability-icon');
+    const fill = await this.browser.execute(`(function () {
+      const container = document.querySelector('webthing-light-capability');
+      const icon = container.shadowRoot.querySelector('#icon');
       return icon.style.fill;
-    `)}`;
+    })()`);
 
-    const rgb = fill.match(/^rgb\((\d+), (\d+), (\d+)\)$/)!;
+    const rgb = `${fill}`.match(/^rgb\((\d+), (\d+), (\d+)\)$/)!;
     const colorStyle = `#${Number(rgb[1]).toString(16)}${Number(rgb[2]).toString(16)}${Number(
       rgb[3]
     ).toString(16)}`;
@@ -129,18 +133,21 @@ export class ThingsPage extends Page {
   }
 
   async wait(): Promise<void> {
-    await this.browser.waitUntil(async () => {
-      const menuScrim = await this.browser.$('#menu-scrim.hidden');
-      if (!menuScrim || !menuScrim.isExisting()) {
+    await this.browser.waitUntil(
+      async () => {
+        const menuScrim = await this.browser.$('#menu-scrim.hidden');
+        if (!menuScrim || !menuScrim.isExisting()) {
+          return false;
+        }
+
+        const width = await menuScrim.getCSSProperty('width');
+        if (width && width.parsed && width.parsed.value === 0) {
+          return true;
+        }
+
         return false;
-      }
-
-      const width = await menuScrim.getCSSProperty('width');
-      if (width && width.parsed && width.parsed.value === 0) {
-        return true;
-      }
-
-      return false;
-    }, 5000);
+      },
+      { timeout: 5000 }
+    );
   }
 }

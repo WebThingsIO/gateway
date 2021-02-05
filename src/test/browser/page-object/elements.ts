@@ -11,12 +11,19 @@ class Elements {
 
   protected rootElement?: webdriverio.Element;
 
+  protected selector: string;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [name: string]: any;
 
-  constructor(browser: webdriverio.BrowserObject, rootElement?: webdriverio.Element) {
+  constructor(
+    browser: webdriverio.BrowserObject,
+    rootElement?: webdriverio.Element,
+    selector?: string
+  ) {
     this.browser = browser;
     this.rootElement = rootElement;
+    this.selector = selector ?? '';
   }
 
   defineDisplayedProperty(name: string, selector: string): void {
@@ -57,26 +64,29 @@ class Elements {
       const rootElement = this.rootElement;
       if (!rootElement) {
         const el = await this.browser.$(selector);
-        return await el.waitForExist(TIMEOUT_MS);
+        return await el.waitForExist({ timeout: TIMEOUT_MS });
       }
 
-      return await this.browser.waitUntil(async () => {
-        const elements = await rootElement.$$(selector);
+      return await this.browser.waitUntil(
+        async () => {
+          const elements = await rootElement.$$(selector);
 
-        if (typeof onValue === 'boolean') {
-          for (const el of elements) {
-            const data = await el.getProperty('on');
+          if (typeof onValue === 'boolean') {
+            for (const el of elements) {
+              const data = await el.getProperty('on');
 
-            if (data === onValue) {
-              return true;
+              if (data === onValue) {
+                return true;
+              }
             }
-          }
 
-          return false;
-        } else {
-          return elements.length > 0;
-        }
-      }, TIMEOUT_MS);
+            return false;
+          } else {
+            return elements.length > 0;
+          }
+        },
+        { timeout: TIMEOUT_MS }
+      );
     };
   }
 
@@ -136,7 +146,7 @@ export class Page extends Elements {
     this[name] = async () => {
       const rootElement = this.rootElement || this.browser;
       const e = await rootElement.$(selector);
-      return new section(this.browser, e);
+      return new section(this.browser, e, selector);
     };
 
     this.defineDisplayedProperty(name, selector);
@@ -158,7 +168,7 @@ export class Page extends Elements {
     this[name] = async () => {
       const rootElement = this.rootElement || this.browser;
       const elements = await rootElement.$$(selector);
-      return elements.map((e) => new section(this.browser, e));
+      return elements.map((e) => new section(this.browser, e, selector));
     };
 
     this.defineDisplayedProperty(name, selector);

@@ -14,7 +14,7 @@ beforeEach(async () => {
   const password = await browser.$('#password');
   const loginButton = await browser.$('#login-button');
 
-  await email.waitForExist(5000);
+  await email.waitForExist({ timeout: 5000 });
   await email.setValue(TEST_USER.email);
   await password.setValue(TEST_USER.password);
   await loginButton.click();

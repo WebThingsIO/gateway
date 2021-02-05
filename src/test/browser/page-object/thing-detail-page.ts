@@ -13,16 +13,16 @@ class ColorPropertySection extends InputPropertySection {
       const root = document.querySelector('webthing-color-property');
       const input = root.shadowRoot.querySelector('input[type="color"]');
       input.focus();
-      input.value = \`${value}\`;
+      input.value = '${value}';
       input.blur();
     `);
   }
 
   async getValue(): Promise<string> {
-    return await this.browser.execute(`
+    return await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-color-property');
       return el.value;
-    `);
+    })()`);
   }
 }
 
@@ -38,19 +38,22 @@ class ColorTemperaturePropertySection extends InputPropertySection {
   }
 
   async getValue(): Promise<number> {
-    const val = await this.browser.execute(`
+    const val = await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-color-temperature-property');
       return el.value;
-    `);
+    })()`);
     return Number(val);
   }
 }
 
-class LabelPropertySection extends Section {
+class NumericLabelPropertySection extends Section {
   async getDisplayedText(): Promise<string> {
-    const element = this.rootElement!;
-    const data = await element.getText();
-    return data.split('\n')[0].trim();
+    return await this.browser.execute(`(function () {
+      const element = document.querySelector('${this.selector}');
+      const contents =
+        element.shadowRoot.querySelector('.webthing-numeric-label-property-contents');
+      return contents.innerText;
+    })()`);
   }
 }
 
@@ -65,10 +68,10 @@ class BrightnessPropertySection extends InputPropertySection {
   }
 
   async getValue(): Promise<number> {
-    const val = await this.browser.execute(`
+    const val = await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-brightness-property');
       return el.value;
-    `);
+    })()`);
     return Number(val);
   }
 }
@@ -85,10 +88,10 @@ class LevelPropertySection extends InputPropertySection {
   }
 
   async getValue(): Promise<number> {
-    const val = await this.browser.execute(`
+    const val = await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-level-property');
       return el.value;
-    `);
+    })()`);
     return Number(val);
   }
 }
@@ -105,19 +108,26 @@ class OnOffPropertySection extends InputPropertySection {
 
   async waitForClickable(): Promise<void> {
     const element = this.rootElement!;
-    await this.browser.waitUntil(async () => {
-      return await element.isDisplayed();
-    }, 5000);
-    await this.browser.waitUntil(async () => {
-      return await element.isEnabled();
-    }, 5000);
+    await this.browser.waitUntil(
+      async () => {
+        return await element.isDisplayed();
+      },
+      { timeout: 5000 }
+    );
+    await this.browser.waitUntil(
+      async () => {
+        return await element.isEnabled();
+      },
+      { timeout: 5000 }
+    );
   }
 
   async getValue(): Promise<boolean> {
-    return await this.browser.execute(`
+    const val = await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-on-off-property');
       return el.value;
-    `);
+    })()`);
+    return Boolean(val);
   }
 }
 
@@ -133,19 +143,26 @@ class BooleanPropertySection extends InputPropertySection {
 
   async waitForClickable(): Promise<void> {
     const element = this.rootElement!;
-    await this.browser.waitUntil(async () => {
-      return await element.isDisplayed();
-    }, 5000);
-    await this.browser.waitUntil(async () => {
-      return await element.isEnabled();
-    }, 5000);
+    await this.browser.waitUntil(
+      async () => {
+        return await element.isDisplayed();
+      },
+      { timeout: 5000 }
+    );
+    await this.browser.waitUntil(
+      async () => {
+        return await element.isEnabled();
+      },
+      { timeout: 5000 }
+    );
   }
 
   async getValue(): Promise<boolean> {
-    return await this.browser.execute(`
+    const val = await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-boolean-property');
       return el.value;
-    `);
+    })()`);
+    return Boolean(val);
   }
 }
 
@@ -155,16 +172,16 @@ class StringPropertySection extends InputPropertySection {
       const root = document.querySelector('webthing-string-property');
       const input = root.shadowRoot.querySelector('input[type="text"]');
       input.focus();
-      input.value = \`${value}\`;
+      input.value = '${value}';
       input.blur();
     `);
   }
 
   async getValue(): Promise<string> {
-    return await this.browser.execute(`
+    return await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-string-property');
       return el.value;
-    `);
+    })()`);
   }
 }
 
@@ -180,10 +197,10 @@ class NumberPropertySection extends InputPropertySection {
   }
 
   async getValue(): Promise<number> {
-    const val = await this.browser.execute(`
+    const val = await this.browser.execute(`(function () {
       const el = document.querySelector('webthing-number-property');
       return el.value;
-    `);
+    })()`);
     return Number(val);
   }
 }
@@ -214,16 +231,18 @@ export class ThingDetailPage extends Page {
     this.defineSection(
       'powerProperty',
       `webthing-instantaneous-power-property`,
-      LabelPropertySection
+      NumericLabelPropertySection
     );
 
-    this.defineSection('voltageProperty', `webthing-voltage-property`, LabelPropertySection);
+    this.defineSection('voltageProperty', `webthing-voltage-property`, NumericLabelPropertySection);
 
-    this.defineSection('currentProperty', `webthing-current-property`, LabelPropertySection);
+    this.defineSection('currentProperty', `webthing-current-property`, NumericLabelPropertySection);
 
-    this.defineSection('frequencyProperty', `webthing-frequency-property`, LabelPropertySection);
-
-    this.defineSections('labelProperties', 'webthing-label-property', LabelPropertySection);
+    this.defineSection(
+      'frequencyProperty',
+      `webthing-frequency-property`,
+      NumericLabelPropertySection
+    );
 
     // For UnknownThing
     this.defineSections('booleanProperties', 'webthing-boolean-property', BooleanPropertySection);
