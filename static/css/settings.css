@@ -907,6 +907,8 @@
 }
 
 /* stylelint-disable no-descending-specificity */
+.network-settings-wrap input:not([type]),
+.network-settings-wrap input[type=''],
 .network-settings-wrap input[type='password'],
 .network-settings-wrap input[type='text'],
 .network-select,
@@ -914,13 +916,15 @@
   display: block;
   margin: 1rem;
 }
-/* stylelint-enable no-descending-specificity */
 
+.network-settings-wrap input:not([type]),
+.network-settings-wrap input[type=''],
 .network-settings-wrap input[type='password'],
 .network-settings-wrap input[type='text'],
 .network-select {
   width: 18rem;
 }
+/* stylelint-enable no-descending-specificity */
 
 /* stylelint-disable-next-line no-descending-specificity */
 .user-form input {
@@ -943,8 +947,13 @@
   color: #f95;
 }
 
+/* stylelint-disable no-descending-specificity */
+.network-settings-wrap input:not([type]),
+.network-settings-wrap input[type=''],
 .network-settings-wrap input[type='text'],
 .network-settings-wrap input[type='password'],
+.user-form input:not([type]),
+.user-form input[type=''],
 .user-form input[type='text'],
 .user-form input[type='password'],
 .user-form input[type='email'] {
@@ -955,11 +964,14 @@
   padding: 0.5rem;
 }
 
+.user-form input:not([type]),
+.user-form input[type=''],
 .user-form input[type='text'],
 .user-form input[type='password'],
 .user-form input[type='email'] {
   margin: 1rem auto;
 }
+/* stylelint-enable no-descending-specificity */
 
 /* stylelint-disable no-descending-specificity */
 .network-button,

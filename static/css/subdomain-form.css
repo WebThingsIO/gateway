@@ -88,6 +88,8 @@ p {
   padding-bottom: 0.6rem;
 }
 
+input:not([type]),
+input[type=''],
 input[type='text'],
 input[type='email'] {
   height: 2.3rem;

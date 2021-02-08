@@ -51,6 +51,8 @@ p {
   padding-bottom: 0.6rem;
 }
 
+input:not([type]),
+input[type=''],
 input[type='text'],
 input[type='password'],
 input[type='email'] {
