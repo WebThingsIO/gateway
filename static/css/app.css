@@ -85,6 +85,8 @@ section.selected {
   display: block;
 }
 
+input:not([type]),
+input[type=''],
 input[type='number'],
 input[type='text'],
 input[type='password'],

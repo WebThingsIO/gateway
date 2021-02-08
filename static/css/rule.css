@@ -290,7 +290,11 @@
   margin-left: 0.6rem;
 }
 
+.property-select-option input:not([type]),
+.property-select-option input[type=''],
 .property-select-option input[type='text'],
+.message-input-container input:not([type]),
+.message-input-container input[type=''],
 .message-input-container input[type='text'] {
   width: 7rem;
 }
