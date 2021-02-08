@@ -239,7 +239,7 @@ logs-server-remove-error = Erro do servidor: não é possível remover o registo
 add-thing-scanning-icon =
     .alt = Procurar
 add-thing-scanning = A procurar por novos dispositivos…
-add-thing-add-adapters-hint = Não foram encontradas coisas novas. Tente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar alguns complementos</a>.
+add-thing-add-adapters-hint = Não foram encontradas coisas novas. Experimente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar alguns complementos</a>.
 add-thing-add-by-url = Adicionar por endereço…
 add-thing-done = Concluído
 add-thing-cancel = Cancelar
