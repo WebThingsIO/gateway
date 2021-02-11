@@ -11,7 +11,7 @@ import AddonManager from '../../addon-manager';
 import Effect, { EffectDescription } from './Effect';
 import Things from '../../models/things';
 import { State } from '../State';
-import { Input } from 'gateway-addon/lib/schema';
+import { Any } from 'gateway-addon/lib/schema';
 
 export interface ActionEffectDescription extends EffectDescription {
   thing: string;
@@ -23,7 +23,7 @@ export interface ActionEffectDescription extends EffectDescription {
  * An Effect which creates an action
  */
 export default class ActionEffect extends Effect {
-  parameters: Input;
+  parameters: Any;
 
   thing: string;
 
@@ -40,7 +40,7 @@ export default class ActionEffect extends Effect {
 
     this.thing = desc.thing;
     this.action = desc.action;
-    this.parameters = <Input>desc.parameters || {};
+    this.parameters = <Any>desc.parameters || {};
   }
 
   /**

@@ -14,7 +14,7 @@ import AddonManager from '../addon-manager';
 import Database from '../db';
 import Thing, { Router, ThingDescription } from './thing';
 import * as Constants from '../constants';
-import { Device, Device as DeviceSchema, PropertyValue } from 'gateway-addon/lib/schema';
+import { Any, Device as DeviceSchema } from 'gateway-addon/lib/schema';
 import WebSocket from 'ws';
 import { HttpErrorWithCode } from '../errors';
 
@@ -359,9 +359,9 @@ class Things {
   /**
    * @param {String} thingId
    * @param {String} propertyName
-   * @return {Promise<PropertyValue>} resolves to value of property
+   * @return {Promise<Any>} resolves to value of property
    */
-  async getThingProperty(thingId: string, propertyName: string): Promise<PropertyValue> {
+  async getThingProperty(thingId: string, propertyName: string): Promise<Any> {
     try {
       return await AddonManager.getProperty(thingId, propertyName);
     } catch (e) {
@@ -375,14 +375,10 @@ class Things {
   /**
    * @param {String} thingId
    * @param {String} propertyName
-   * @param {PropertyValue} value
-   * @return {Promise<PropertyValue>} resolves to new value
+   * @param {Any} value
+   * @return {Promise<Any>} resolves to new value
    */
-  async setThingProperty(
-    thingId: string,
-    propertyName: string,
-    value: PropertyValue
-  ): Promise<PropertyValue> {
+  async setThingProperty(thingId: string, propertyName: string, value: Any): Promise<Any> {
     let thing: ThingDescription;
     try {
       thing = await this.getThingDescription(thingId, 'localhost', true);
@@ -448,7 +444,7 @@ AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
 
 AddonManager.on(
   Constants.CONNECTED,
-  ({ device, connected }: { device: Device; connected: boolean }) => {
+  ({ device, connected }: { device: DeviceSchema; connected: boolean }) => {
     instance.handleConnected(device.id, connected);
   }
 );

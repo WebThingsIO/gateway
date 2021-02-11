@@ -11,7 +11,7 @@ import Things from '../models/things';
 import { EventEmitter } from 'events';
 import * as Events from './Events';
 import { Property as AddonProperty } from 'gateway-addon';
-import { PropertyValue } from 'gateway-addon/lib/schema';
+import { Any } from 'gateway-addon/lib/schema';
 
 export interface PropertyDescription {
   id: string;
@@ -87,7 +87,7 @@ export default class Property extends EventEmitter {
   /**
    * @return {Promise} resolves to property's value or undefined if not found
    */
-  async get(): Promise<PropertyValue> {
+  async get(): Promise<Any> {
     try {
       return await Things.getThingProperty(this.thing, this.id);
     } catch (e) {
@@ -98,10 +98,10 @@ export default class Property extends EventEmitter {
   }
 
   /**
-   * @param {PropertyValue} value
+   * @param {Any} value
    * @return {Promise} resolves when set is done
    */
-  set(value: PropertyValue): Promise<PropertyValue> {
+  set(value: Any): Promise<Any> {
     return Things.setThingProperty(this.thing, this.id, value)
       .catch((e: unknown) => {
         console.warn('Rule set failed, retrying once', e);
@@ -144,7 +144,7 @@ export default class Property extends EventEmitter {
     });
   }
 
-  onPropertyChanged(property: AddonProperty<PropertyValue>): void {
+  onPropertyChanged(property: AddonProperty<Any>): void {
     if (property.getDevice().getId() !== this.thing) {
       return;
     }

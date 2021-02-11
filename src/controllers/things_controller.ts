@@ -22,19 +22,19 @@ import Thing from '../models/thing';
 import Things from '../models/things';
 import AddonManager from '../addon-manager';
 import { WithJWT } from '../jwt-middleware';
-import { Input, PropertyValue } from 'gateway-addon/lib/schema';
+import { Any } from 'gateway-addon/lib/schema';
 import { Property } from 'gateway-addon';
 
 interface SetPropertyMessage {
   messageType: 'setProperty';
   id?: string;
-  data: Record<string, PropertyValue>;
+  data: Record<string, Any>;
 }
 
 interface RequestActionMessage {
   messageType: 'requestAction';
   id?: string;
-  data: Record<string, { input?: Input }>;
+  data: Record<string, { input?: Any }>;
 }
 
 interface AddEventSubscriptionMessage {
@@ -46,7 +46,7 @@ interface AddEventSubscriptionMessage {
 interface PropertyStatusMessage {
   messageType: 'propertyStatus';
   id: string;
-  data: Record<string, PropertyValue>;
+  data: Record<string, Any>;
 }
 
 interface ActionStatusMessage {
@@ -297,7 +297,7 @@ function build(): express.Router {
       return;
     }
 
-    const result: Record<string, PropertyValue> = {};
+    const result: Record<string, Any> = {};
     for (const name in thing.getProperties()) {
       try {
         const value = await AddonManager.getProperty(thingId, name);
@@ -485,7 +485,7 @@ function build(): express.Router {
       });
     }
 
-    function onPropertyChanged(property: Property<PropertyValue>): void {
+    function onPropertyChanged(property: Property<Any>): void {
       if (typeof thingId !== 'undefined' && property.getDevice().getId() !== thingId) {
         return;
       }

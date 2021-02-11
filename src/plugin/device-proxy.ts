@@ -11,11 +11,10 @@ import * as Constants from '../constants';
 import { Constants as AddonConstants, Device, Property } from 'gateway-addon';
 import {
   ActionDescription,
+  Any,
   Device as DeviceSchema,
   EventDescription1,
-  Input,
   Link,
-  PropertyValue,
 } from 'gateway-addon/lib/schema';
 import Deferred from '../deferred';
 import Actions from '../models/actions';
@@ -53,7 +52,7 @@ export default class DeviceProxy extends Device {
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
       const propertyProxy = new PropertyProxy(this, propertyName, propertyDict);
-      this.addProperty(<Property<PropertyValue>>(<unknown>propertyProxy));
+      this.addProperty(<Property<Any>>(<unknown>propertyProxy));
     }
 
     // Copy over any extra device fields which might be useful for debugging.
@@ -103,7 +102,7 @@ export default class DeviceProxy extends Device {
   /**
    * @method requestAction
    */
-  requestAction(actionId: string, actionName: string, input: Input): Promise<void> {
+  requestAction(actionId: string, actionName: string, input: Any): Promise<void> {
     return new Promise((resolve, reject) => {
       // TODO: fix after updating gateway-addon
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -175,7 +174,7 @@ export default class DeviceProxy extends Device {
     });
   }
 
-  notifyPropertyChanged(property: Property<PropertyValue>): void {
+  notifyPropertyChanged(property: Property<Any>): void {
     this.getAdapter().getManager().emit(Constants.PROPERTY_CHANGED, property);
   }
 

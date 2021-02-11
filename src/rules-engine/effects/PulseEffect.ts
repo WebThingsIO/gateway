@@ -7,7 +7,7 @@
 import assert from 'assert';
 import PropertyEffect from './PropertyEffect';
 import { SetEffectDescription } from './SetEffect';
-import { PropertyValue } from 'gateway-addon/lib/schema';
+import { Any } from 'gateway-addon/lib/schema';
 import { State } from '../State';
 
 export type PulseEffectDescription = SetEffectDescription;
@@ -17,11 +17,11 @@ export type PulseEffectDescription = SetEffectDescription;
  * a value before restoring its original value
  */
 export default class PulseEffect extends PropertyEffect {
-  private value: PropertyValue;
+  private value: Any;
 
   private on: boolean;
 
-  private oldValue: PropertyValue;
+  private oldValue: Any;
 
   /**
    * @param {EffectDescription} desc
@@ -55,7 +55,7 @@ export default class PulseEffect extends PropertyEffect {
   /**
    * @param {State} state
    */
-  setState(state: State): Promise<PropertyValue> {
+  setState(state: State): Promise<Any> {
     if (state.on) {
       // If we're already active, just perform the effect again
       if (this.on) {
