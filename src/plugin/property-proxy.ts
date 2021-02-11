@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { PropertyValue, Property as PropertySchema } from 'gateway-addon/lib/schema';
+import { Any, Property as PropertySchema } from 'gateway-addon/lib/schema';
 import Deferred from '../deferred';
 import { Property, Constants } from 'gateway-addon';
 import DeviceProxy from './device-proxy';
 const MessageType = Constants.MessageType;
 
-export default class PropertyProxy extends Property<PropertyValue> {
-  private propertyChangedPromises: Deferred<PropertyValue, unknown>[];
+export default class PropertyProxy extends Property<Any> {
+  private propertyChangedPromises: Deferred<Any, unknown>[];
 
   private propertyDict: PropertySchema;
 
@@ -40,8 +40,8 @@ export default class PropertyProxy extends Property<PropertyValue> {
    * @returns a promise which is resoved when the next
    * propertyChanged notification is received.
    */
-  onPropertyChanged(): Promise<PropertyValue> {
-    const deferredChange = new Deferred<PropertyValue, unknown>();
+  onPropertyChanged(): Promise<Any> {
+    const deferredChange = new Deferred<Any, unknown>();
     this.propertyChangedPromises.push(deferredChange);
     return deferredChange.getPromise();
   }
@@ -79,9 +79,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
       this.setMultipleOf(propertyDict.multipleOf);
     }
     if (Array.isArray(propertyDict.enum)) {
-      // TODO: fix after updating gateway-addon
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this as any).enum = propertyDict.enum;
+      this.setEnum(propertyDict.enum);
     }
     if (Array.isArray(propertyDict.links)) {
       this.setLinks(propertyDict.links);
@@ -99,7 +97,7 @@ export default class PropertyProxy extends Property<PropertyValue> {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    */
-  setValue(value: PropertyValue): Promise<PropertyValue> {
+  setValue(value: Any): Promise<Any> {
     return new Promise((resolve, reject) => {
       this.getDevice().getAdapter().sendMsg(MessageType.DEVICE_SET_PROPERTY_COMMAND, {
         deviceId: this.getDevice().getId(),

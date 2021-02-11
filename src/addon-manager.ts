@@ -31,7 +31,7 @@ import { URLSearchParams } from 'url';
 import { ncp } from 'ncp';
 
 import pkg from './package.json';
-import { Level, PropertyValue, Device as DeviceSchema, Input } from 'gateway-addon/lib/schema';
+import { Any, Device as DeviceSchema, Level } from 'gateway-addon/lib/schema';
 import PluginServer from './plugin/plugin-server';
 import Plugin from './plugin/plugin';
 import { Adapter, APIHandler, Device, Notifier, Outlet } from 'gateway-addon';
@@ -104,9 +104,7 @@ export class AddonManager extends EventEmitter {
    */
   addAdapter(adapter: Adapter): void {
     if (!adapter.getName()) {
-      // TODO: fix after updating gateway-addon
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (adapter as any).name = adapter.constructor.name;
+      adapter.setName(adapter.constructor.name);
     }
     this.adapters.set(adapter.getId(), adapter);
 
@@ -381,10 +379,10 @@ export class AddonManager extends EventEmitter {
    * @returns a promise which resolves to the retrieved value of `propertyName`
    *          from the thing identified by `thingId`.
    */
-  getProperty(thingId: string, propertyName: string): Promise<PropertyValue> {
+  getProperty(thingId: string, propertyName: string): Promise<Any> {
     const device = this.getDevice(thingId);
     if (device) {
-      return device.getProperty(propertyName).then((value) => <PropertyValue>value);
+      return device.getProperty(propertyName).then((value) => <Any>value);
     }
 
     return Promise.reject(`getProperty: device: ${thingId} not found.`);
@@ -395,7 +393,7 @@ export class AddonManager extends EventEmitter {
    * @returns a promise which resolves to the updated value of `propertyName`
    *          for the thing identified by `thingId`.
    */
-  setProperty(thingId: string, propertyName: string, value: PropertyValue): Promise<PropertyValue> {
+  setProperty(thingId: string, propertyName: string, value: Any): Promise<Any> {
     const device = this.getDevice(thingId);
     if (device) {
       return device.setProperty(propertyName, value);
@@ -449,12 +447,7 @@ export class AddonManager extends EventEmitter {
    * @method requestAction
    * @returns a promise which resolves when the action has been requested.
    */
-  requestAction(
-    thingId: string,
-    actionId: string,
-    actionName: string,
-    input: Input
-  ): Promise<void> {
+  requestAction(thingId: string, actionId: string, actionName: string, input: Any): Promise<void> {
     const device = this.getDevice(thingId);
     if (device) {
       return device.requestAction(actionId, actionName, input);
