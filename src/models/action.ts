@@ -12,11 +12,11 @@ import Actions from './actions';
 import * as Constants from '../constants';
 import { EventEmitter } from 'events';
 import { Utils } from 'gateway-addon';
-import { ActionDescription as AddonActionDescription, Input } from 'gateway-addon/lib/schema';
+import { ActionDescription as AddonActionDescription, Any } from 'gateway-addon/lib/schema';
 import Thing from './thing';
 
 export interface ActionDescription {
-  input: Input;
+  input: Any;
   href: string;
   status: string;
   timeRequested: string;
@@ -29,7 +29,7 @@ export default class Action extends EventEmitter {
 
   private name: string;
 
-  private input: Input;
+  private input: Any;
 
   private href: string;
 
@@ -49,7 +49,7 @@ export default class Action extends EventEmitter {
    * @param {Object} input
    * @param {Thing?} thing
    */
-  constructor(name: string, input?: Input, thing?: Thing) {
+  constructor(name: string, input?: Any, thing?: Thing) {
     super();
 
     this.id = Actions.generateId();
@@ -125,7 +125,7 @@ export default class Action extends EventEmitter {
     return this.name;
   }
 
-  getInput(): Input {
+  getInput(): Any {
     return this.input;
   }
 

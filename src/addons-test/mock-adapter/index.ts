@@ -9,16 +9,15 @@
 import { Action, Adapter, AddonManagerProxy, Device, Property } from 'gateway-addon';
 import {
   Action as ActionSchema,
+  Any,
   Event as EventSchema,
-  Input,
   Property as PropertySchema,
-  PropertyValue,
 } from 'gateway-addon/lib/schema';
 import express from 'express';
 import { Server } from 'http';
 import manifest from './manifest.json';
 
-class MockProperty extends Property<PropertyValue> {
+class MockProperty extends Property<Any> {
   constructor(device: MockDevice, name: string, propertyDescription: PropertySchema) {
     super(device, name, propertyDescription);
     if (propertyDescription.unit) {
@@ -38,7 +37,7 @@ class MockProperty extends Property<PropertyValue> {
    * @note it is possible that the updated value doesn't match
    * the value passed in.
    */
-  setValue(value: PropertyValue): Promise<PropertyValue> {
+  setValue(value: Any): Promise<Any> {
     return new Promise((resolve, reject) => {
       if (/^rejectProperty/.test(this.getName())) {
         reject('Read-only property');
@@ -60,13 +59,9 @@ class MockDevice extends Device {
   constructor(adapter: MockAdapter, id: string, deviceDescription: Record<string, unknown>) {
     super(adapter, id);
     this.setTitle(<string>deviceDescription.title);
-    // TODO: fix after updating gateway-addon
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this as any)['@type'] = deviceDescription['@type'];
+    this.setTypes(<string[]>deviceDescription['@type']);
     this.setDescription(<string>deviceDescription.description);
-    // TODO: fix after updating gateway-addon
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this as any).baseHref = `http://127.0.0.1:${adapter.getPort()}`;
+    this.setBaseHref(`http://127.0.0.1:${adapter.getPort()}`);
     for (const propertyName in <Record<string, PropertySchema>>deviceDescription.properties) {
       const propertyDescription = (<Record<string, PropertySchema>>deviceDescription.properties)[
         propertyName
@@ -87,7 +82,7 @@ class MockDevice extends Device {
     }
   }
 
-  requestAction(actionId: string, actionName: string, input: Input): Promise<void> {
+  requestAction(actionId: string, actionName: string, input: Any): Promise<void> {
     if (actionName === 'rejectRequest') {
       return Promise.reject();
     }

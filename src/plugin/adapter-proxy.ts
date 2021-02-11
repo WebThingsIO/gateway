@@ -38,9 +38,7 @@ export default class AdapterProxy extends Adapter {
   ) {
     super(<AddonManagerProxy>(<unknown>addonManager), adapterId, packageName);
 
-    // TODO: fix after updating gateway-addon
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this as any).name = name;
+    this.setName(name);
   }
 
   getEventHandlers(): Record<string, (...args: any[]) => void> {

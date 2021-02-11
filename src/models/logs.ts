@@ -6,7 +6,7 @@ import * as Constants from '../constants';
 import UserProfile from '../user-profile';
 import AddonManager from '../addon-manager';
 import { Property } from 'gateway-addon';
-import { PropertyValue } from 'gateway-addon/lib/schema';
+import { Any } from 'gateway-addon/lib/schema';
 
 const sqlite3 = verbose();
 
@@ -21,7 +21,7 @@ class Logs {
 
   private descrToId: Record<string, number>;
 
-  private _onPropertyChanged: (property: Property<PropertyValue>) => void;
+  private _onPropertyChanged: (property: Property<Any>) => void;
 
   private _clearOldMetrics: () => Promise<void>;
 
@@ -234,7 +234,7 @@ class Logs {
     delete this.idToDescr[id];
   }
 
-  onPropertyChanged(property: Property<PropertyValue>): void {
+  onPropertyChanged(property: Property<Any>): void {
     const thingId = property.getDevice().getId();
     const descr = this.propertyDescr(thingId, property.getName());
     property.getValue().then((value) => {

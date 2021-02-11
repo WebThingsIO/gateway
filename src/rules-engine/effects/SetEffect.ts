@@ -6,11 +6,11 @@
 
 import assert from 'assert';
 import PropertyEffect, { PropertyEffectDescription } from './PropertyEffect';
-import { PropertyValue } from 'gateway-addon/lib/schema';
+import { Any } from 'gateway-addon/lib/schema';
 import { State } from '../State';
 
 export interface SetEffectDescription extends PropertyEffectDescription {
-  value: PropertyValue;
+  value: Any;
 }
 
 /**
@@ -18,7 +18,7 @@ export interface SetEffectDescription extends PropertyEffectDescription {
  * a value when triggered
  */
 export default class SetEffect extends PropertyEffect {
-  private value: PropertyValue;
+  private value: Any;
 
   private on = false;
 
@@ -51,7 +51,7 @@ export default class SetEffect extends PropertyEffect {
   /**
    * @return {State}
    */
-  setState(state: State): Promise<PropertyValue> {
+  setState(state: State): Promise<Any> {
     if (!this.on && state.on) {
       this.on = true;
       return this.property.set(this.value);
