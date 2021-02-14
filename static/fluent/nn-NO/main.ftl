@@ -276,6 +276,7 @@ BarometricPressureSensor = Barometrisk trykksensor
 Custom = Tilpassa eining
 Thing = Eining
 AirQualitySensor = Luftkvalitetssensor
+SmokeSensor = Røyksensor
 
 ## Properties
 
@@ -309,6 +310,7 @@ inactive = Inaktiv
 humidity = Luftfukt
 concentration = Konsentrasjon
 density = Densitet
+smoke = Røyk
 
 ## Domain Setup
 
@@ -390,6 +392,8 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = ft
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
@@ -512,6 +516,7 @@ tunnel-setup-welcome = Velkomen
 tunnel-setup-choose-address = Vel ei sikker nettadresse for gateway-en din:
 tunnel-setup-input-subdomain =
     .placeholder = underdomene
+tunnel-setup-email-opt-in = Hald meg oppdatert med nyheiter om WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Reclaim-token
 tunnel-setup-error = Det oppstod ein feil under innstillinga av underdomenet.
