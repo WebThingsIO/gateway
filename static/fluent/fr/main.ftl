@@ -276,6 +276,7 @@ BarometricPressureSensor = Capteur de pression barométrique
 Custom = Objet personnalisé
 Thing = Objet
 AirQualitySensor = Capteur de qualité de l’air
+SmokeSensor = Détecteur de fumée
 
 ## Properties
 
@@ -309,6 +310,7 @@ inactive = Inactif
 humidity = Humidité
 concentration = Concentration
 density = Densité
+smoke = Fumée
 
 ## Domain Setup
 
@@ -514,6 +516,8 @@ tunnel-setup-welcome = Bienvenue
 tunnel-setup-choose-address = Sélectionner une adresse web sécurisée pour votre passerelle :
 tunnel-setup-input-subdomain =
     .placeholder = sous-domaine
+tunnel-setup-email-opt-in = Tenez-moi au courant de l’actualité de WebThings.
+tunnel-setup-agree-privacy-policy = Acceptez la <a data-l10n-name="tunnel-setup-privacy-policy-link">Politique de confidentialité</a> et les <a data-l10n-name="tunnel-setup-tos-link">Conditions d’utilisation</a> de WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Jeton de récupération
 tunnel-setup-error = Une erreur est survenue en créant le sous-domaine.
