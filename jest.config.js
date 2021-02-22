@@ -1,11 +1,12 @@
 module.exports = {
   coverageDirectory: './coverage/',
+  rootDir: './build/',
   moduleFileExtensions: [
     'js',
     'json',
   ],
   testMatch: [
-    '<rootDir>/build/test/**/*-test.js',
+    '<rootDir>/test/**/*-test.js',
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
@@ -15,7 +16,7 @@ module.exports = {
     '\\.js$': 'babel-jest',
   },
   setupFilesAfterEnv: [
-    '<rootDir>/build/test/common.js',
+    '<rootDir>/test/common.js',
   ],
   testEnvironment: 'node',
 };
