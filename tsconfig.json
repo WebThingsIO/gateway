@@ -25,7 +25,12 @@
     "esModuleInterop": true,
     "allowJs": true,
     "checkJs": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "node",
+      "jest",
+      "webdriverio/async"
+    ]
   },
   "include": [
     "**/*.ts"
