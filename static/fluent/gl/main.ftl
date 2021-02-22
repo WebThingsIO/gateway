@@ -272,8 +272,11 @@ HumiditySensor = Sensor de humidade
 Alarm = Alarma
 Thermostat = Termostato
 Lock = Pechar
+BarometricPressureSensor = Sensor de presión barométrica
 Custom = Obxecto personalizado
 Thing = Obxecto
+AirQualitySensor = Sensor de calidade do aire
+SmokeSensor = Sensor de fumes
 
 ## Properties
 
@@ -304,6 +307,10 @@ jammed = Espetado
 unknown = Descoñecido
 active = Activo
 inactive = Inactivo
+humidity = Humidade
+concentration = Concentración
+density = Densidade
+smoke = Fume
 
 ## Domain Setup
 
@@ -385,6 +392,8 @@ abbrev-minute = m
 abbrev-second = s
 abbrev-millisecond = ms
 abbrev-foot = pés
+abbrev-micrograms-per-cubic-meter = µg/m³
+abbrev-hectopascal = hPa
 
 ## New Thing View
 
@@ -507,6 +516,8 @@ tunnel-setup-welcome = Benvido
 tunnel-setup-choose-address = Escolla un enderezo web seguro para a súa entrada:
 tunnel-setup-input-subdomain =
     .placeholder = subdominio
+tunnel-setup-email-opt-in = Mantéñame actualizado con novas sobre WebThings.
+tunnel-setup-agree-privacy-policy = Acepto a <a data-l10n-name="tunnel-setup-privacy-policy-link">Norma de privacidade</a> de WebThings e os <a data-l10n-name="tunnel-setup-tos-link">Termos de servizo</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Mostra de reclamación
 tunnel-setup-error = Produciuse un erro ao configurar o subdominio.
