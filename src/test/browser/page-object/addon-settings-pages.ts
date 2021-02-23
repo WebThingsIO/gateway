@@ -1,8 +1,7 @@
 import { Page, Section } from './elements';
-import webdriverio from 'webdriverio';
 
 class AddonSection extends Section {
-  constructor(browser: webdriverio.BrowserObject, rootElement: webdriverio.Element) {
+  constructor(browser: WebdriverIO.Browser, rootElement: WebdriverIO.Element) {
     super(browser, rootElement);
 
     this.defineElement('removeButton', '.addon-settings-remove');
@@ -40,7 +39,7 @@ class AddonSection extends Section {
 }
 
 export class AddonSettingsPage extends Page {
-  constructor(browser: webdriverio.BrowserObject, url: string) {
+  constructor(browser: WebdriverIO.Browser, url: string) {
     super(browser, url);
     this.defineSections('addons', '.addon-item', AddonSection);
     this.defineElement('discover', '#discover-addons-button');
@@ -72,7 +71,7 @@ export class AddonSettingsPage extends Page {
 }
 
 class DiscoveredAddonSection extends Section {
-  constructor(browser: webdriverio.BrowserObject, rootElement: webdriverio.Element) {
+  constructor(browser: WebdriverIO.Browser, rootElement: WebdriverIO.Element) {
     super(browser, rootElement);
     this.defineElement('addButton', '.addon-discovery-settings-add');
     this.defineElement('added', '.addon-discovery-settings-added');
@@ -93,13 +92,13 @@ class DiscoveredAddonSection extends Section {
 }
 
 export class AddonDiscoverPage extends Page {
-  constructor(browser: webdriverio.BrowserObject, url: string) {
+  constructor(browser: WebdriverIO.Browser, url: string) {
     super(browser, url);
     this.defineSections('addons', '.discovered-addon-item', DiscoveredAddonSection);
     this.defineElement('backButton', '#settings-back-button');
   }
 
-  async findAddon(name: string): Promise<webdriverio.Element | null> {
+  async findAddon(name: string): Promise<Element | null> {
     const addons = await this.addons();
     for (const addon of addons) {
       const addonName = await addon.getName();

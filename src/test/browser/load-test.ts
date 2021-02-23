@@ -136,7 +136,7 @@ describe('basic browser tests', () => {
     let things: ElementArray | null = null;
     await waitForExpect(async () => {
       things = await browser.$$('.thing');
-      expect(things.length).toBe(2);
+      expect(things!.length).toBe(2);
     });
 
     await things![0].click();
@@ -153,8 +153,8 @@ describe('basic browser tests', () => {
     webthingCustomCapability.waitForExist({ timeout: 2000 });
 
     things = await browser.$$('.thing');
-    expect(things.length).toBe(2);
-    link = await things[1].$('.thing-details-link');
+    expect(things!.length).toBe(2);
+    link = await things![1].$('.thing-details-link');
     await link.click();
     detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-9')).toBeTruthy();

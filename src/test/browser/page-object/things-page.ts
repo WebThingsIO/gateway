@@ -1,9 +1,8 @@
 import { Page, Section } from './elements';
 import { ThingDetailPage } from './thing-detail-page';
-import webdriverio from 'webdriverio';
 
 class ThingSection extends Section {
-  constructor(browser: webdriverio.BrowserObject, rootElement: webdriverio.Element) {
+  constructor(browser: WebdriverIO.Browser, rootElement: WebdriverIO.Element) {
     super(browser, rootElement);
     this.defineElement('title', '.thing-title');
     this.defineElement('detailLink', '.thing-details-link');
@@ -103,7 +102,7 @@ class ThingSection extends Section {
 }
 
 export class ThingsPage extends Page {
-  constructor(browser: webdriverio.BrowserObject) {
+  constructor(browser: WebdriverIO.Browser) {
     super(browser, '/things');
     this.defineSections('things', '.thing', ThingSection);
     this.defineSections(
