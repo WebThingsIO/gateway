@@ -12,7 +12,7 @@ Web of Things gateway.
 
 - If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://webthings.io/gateway/) a pre-built software image to an SD card.
 - If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/webthingsio/gateway), for both ARM and amd64. You can also build your own image from this repository.
-- On Fedora, Debian, Raspbian, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases).
+- On Fedora, Debian, Raspberry Pi OS, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases).
 - On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/). The PKGBUILD for this package can also be seen [here](https://github.com/WebThingsIO/gateway-aur).
 - Otherwise, you can build it from source yourself (see below).
 
@@ -292,7 +292,7 @@ $ npm run jest build/test/{test-name}.js
   - **`tunnel-service.ts`** - Utilities to determine state of tunnel and manage the PageKite process
   - **`user-profile.ts`** - Manages persistent user data
   - **`utils.ts`** - Various utility functions
-  - **`wifi-setup.ts`** - Initial Wi-Fi setup code for Raspbian
+  - **`wifi-setup.ts`** - Initial Wi-Fi setup code for Raspberry Pi OS
 - **`static/`** - Static CSS, JavaScript & image resources for web app front end
 - **`tools/`** - Helpful utilities (not part of the build)
 - **`package.json`** - npm module manifest
