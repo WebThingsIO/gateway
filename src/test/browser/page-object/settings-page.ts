@@ -1,9 +1,8 @@
 import { Page, Section } from './elements';
 import { AddonSettingsPage } from './addon-settings-pages';
-import webdriverio from 'webdriverio';
 
 class SettingSection extends Section {
-  constructor(browser: webdriverio.BrowserObject, rootElement: webdriverio.Element) {
+  constructor(browser: WebdriverIO.Browser, rootElement: WebdriverIO.Element) {
     super(browser, rootElement);
     this.defineElement('link', 'a');
   }
@@ -24,7 +23,7 @@ class SettingSection extends Section {
 }
 
 export class SettingsPage extends Page {
-  constructor(browser: webdriverio.BrowserObject) {
+  constructor(browser: WebdriverIO.Browser) {
     super(browser, '/settings');
     this.defineSection('addon', '#addon-settings-link', SettingSection);
   }

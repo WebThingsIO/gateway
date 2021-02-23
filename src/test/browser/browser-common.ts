@@ -1,4 +1,4 @@
-import { remote, BrowserObject } from 'webdriverio';
+import { remote, RemoteOptions } from 'webdriverio';
 import * as selenium from 'selenium-standalone';
 import { server } from '../common';
 import { ChildProcess } from 'child_process';
@@ -14,7 +14,7 @@ const seleniumOptions = {
   ignoreExtraDrivers: true,
 };
 
-const webdriverioOptions: Record<string, unknown> = {
+const webdriverioOptions: RemoteOptions = {
   logLevel: 'warn',
   capabilities: {
     browserName: 'chrome',
@@ -28,7 +28,7 @@ const webdriverioOptions: Record<string, unknown> = {
 
 const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 let child: ChildProcess | null = null;
-let browser: BrowserObject | null = null;
+let browser: WebdriverIO.Browser | null = null;
 beforeAll(async () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
   // Starting up and interacting with a browser takes forever
@@ -68,7 +68,7 @@ afterAll(async () => {
   }
 });
 
-export function getBrowser(): BrowserObject {
+export function getBrowser(): WebdriverIO.Browser {
   return browser!;
 }
 

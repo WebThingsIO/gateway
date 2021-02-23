@@ -1,5 +1,3 @@
-import webdriverio from 'webdriverio';
-
 const TIMEOUT_MS = 30000;
 
 function capitalizeFirstLetter(str: string): string {
@@ -7,20 +5,16 @@ function capitalizeFirstLetter(str: string): string {
 }
 
 class Elements {
-  protected browser: webdriverio.BrowserObject;
+  protected browser: WebdriverIO.Browser;
 
-  protected rootElement?: webdriverio.Element;
+  protected rootElement?: WebdriverIO.Element;
 
   protected selector: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [name: string]: any;
 
-  constructor(
-    browser: webdriverio.BrowserObject,
-    rootElement?: webdriverio.Element,
-    selector?: string
-  ) {
+  constructor(browser: WebdriverIO.Browser, rootElement?: WebdriverIO.Element, selector?: string) {
     this.browser = browser;
     this.rootElement = rootElement;
     this.selector = selector ?? '';
@@ -97,7 +91,9 @@ class Elements {
      * @return element
      */
     this[name] = async () => {
-      const rootElement = this.rootElement || this.browser;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rootElement: { $: (this: any, selector: string) => Promise<WebdriverIO.Element> } =
+        this.rootElement || this.browser;
       return await rootElement.$(selector);
     };
 
@@ -126,7 +122,7 @@ export class Section extends Elements {}
 export class Page extends Elements {
   protected path: string;
 
-  constructor(browser: webdriverio.BrowserObject, path: string) {
+  constructor(browser: WebdriverIO.Browser, path: string) {
     super(browser);
     this.path = path;
   }
@@ -144,7 +140,9 @@ export class Page extends Elements {
      * @return Section
      */
     this[name] = async () => {
-      const rootElement = this.rootElement || this.browser;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rootElement: { $: (this: any, selector: string) => Promise<WebdriverIO.Element> } =
+        this.rootElement || this.browser;
       const e = await rootElement.$(selector);
       return new section(this.browser, e, selector);
     };
@@ -168,7 +166,7 @@ export class Page extends Elements {
     this[name] = async () => {
       const rootElement = this.rootElement || this.browser;
       const elements = await rootElement.$$(selector);
-      return elements.map((e) => new section(this.browser, e, selector));
+      return elements.map((e: WebdriverIO.Element) => new section(this.browser, e, selector));
     };
 
     this.defineDisplayedProperty(name, selector);

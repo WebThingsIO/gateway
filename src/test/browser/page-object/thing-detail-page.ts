@@ -1,5 +1,4 @@
 import { Page, Section } from './elements';
-import webdriverio from 'webdriverio';
 
 class InputPropertySection extends Section {
   async getId(): Promise<string> {
@@ -206,7 +205,7 @@ class NumberPropertySection extends InputPropertySection {
 }
 
 export class ThingDetailPage extends Page {
-  constructor(browser: webdriverio.BrowserObject, url: string) {
+  constructor(browser: WebdriverIO.Browser, url: string) {
     super(browser, url);
 
     this.defineSection('colorProperty', 'webthing-color-property', ColorPropertySection);
