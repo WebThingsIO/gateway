@@ -12,7 +12,7 @@ Web of Things gateway.
 
 - If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://webthings.io/gateway/) a pre-built software image to an SD card.
 - If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/webthingsio/gateway), for both ARM and amd64. You can also build your own image from this repository.
-- On Fedora, Debian, Raspbian, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases). Those packages are built from the [gateway-rpm](https://github.com/WebThingsIO/gateway-rpm) and [gateway-deb](https://github.com/WebThingsIO/gateway-deb) repos.
+- On Fedora, Debian, Raspberry Pi OS, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases).
 - On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/). The PKGBUILD for this package can also be seen [here](https://github.com/WebThingsIO/gateway-aur).
 - Otherwise, you can build it from source yourself (see below).
 
@@ -36,60 +36,77 @@ Web of Things gateway.
 
 If you're installing on a Raspberry Pi then you may need to set up the OS on the Raspberry Pi first. [See here](https://github.com/WebThingsIO/wiki/wiki/Setting-up-Raspberry-Pi) for instructions.
 
-### Update Package Cache (Linux only)
+### Install Dependencies
 
-Under Ubuntu/Debian Linux:
+#### Ubuntu/Debian Linux
 
 ```
 $ sudo apt update
+$ sudo apt install \
+    autoconf \
+    build-essential \
+    curl \
+    git \
+    libbluetooth-dev \
+    libboost-python-dev \
+    libboost-thread-dev \
+    libffi-dev \
+    libglib2.0-dev \
+    libpng-dev \
+    libudev-dev \
+    libusb-1.0-0-dev \
+    pkg-config \
+    python-pip \
+    python3-pip
+$ sudo -H python2 -m pip install six
+$ sudo -H python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
-Under Fedora Linux:
+#### Fedora Linux
 
 ```
 $ sudo dnf --refresh upgrade
+$ sudo dnf group install "C Development Tools and Libraries"
+$ sudo dnf install \
+    autoconf \
+    bluez-libs-devel \
+    boost-devel \
+    boost-python2-devel \
+    boost-python3-devel \
+    curl \
+    git \
+    glib2-devel \
+    libffi-devel \
+    libpng-devel \
+    libudev-devel \
+    libusb1-devel \
+    pkgconfig \
+    python2-pip \
+    python3-pip
+$ sudo -H python2 -m pip install six
+$ sudo -H python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
-### Install pkg-config
-
-Under Ubuntu/Debian Linux:
+#### macOS
 
 ```
-$ sudo apt install pkg-config
+$ brew update
+$ brew install \
+    autoconf \
+    libffi \
+    pkg-config
+$ sudo -H python2 -m pip install six
+$ sudo -H python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
-Under Fedora Linux:
+### Install Node.js
 
-```
-$ sudo dnf install pkgconfig
-```
-
-Under macOS:
-
-```
-$ brew install pkg-config
-```
-
-### Install curl (needed to install nvm)
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install curl
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install curl
-```
-
-### Install nvm (Recommended)
+#### nvm (Recommended)
 
 nvm allows you to easily install different versions of node. To install nvm:
 
 ```
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
 
 Reinitialize your terminal session.
@@ -98,7 +115,7 @@ Reinitialize your terminal session.
 $ . ~/.bashrc
 ```
 
-### Install node (if you didn't use nvm)
+#### Manual
 
 (If you already installed node via nvm you can skip this step)
 
@@ -111,144 +128,6 @@ The following is required in order to let node and python3 use the Bluetooth ada
 ```
 $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 $ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
-```
-
-### Install Bluetooth and BT Low Energy support libraries (Linux only)
-
-The following are required in order to install the Python modules that support Bluetooth
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install boost-python2-devel boost-python3-devel boost-devel bluez-libs-devel glib2-devel
-```
-
-### Install libusb and libudev (Linux only)
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install libusb-1.0-0-dev libudev-dev
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install libudev-devel libusb1-devel
-```
-
-### Install autoconf
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install autoconf
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install autoconf
-```
-
-Under macOS:
-
-```
-$ brew install autoconf
-```
-
-### Install libpng (Linux only)
-
-Under x86-64 or x86 Ubuntu/Debian Linux:
-
-```
-$ sudo apt install libpng16-16
-```
-
-Under ARM Ubuntu/Debian Linux:
-
-```
-$ sudo apt install libpng-dev
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install libpng-devel
-```
-
-### Install libffi
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install libffi-dev
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install libffi-devel
-```
-
-Under macOS:
-
-```
-$ brew install libffi
-```
-
-### Install git
-
-You'll need git to checkout the repositories.
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install git
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install git
-```
-
-### Install gcc
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install build-essential
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf group install "C Development Tools and Libraries"
-```
-
-### Install Python tools
-
-Under Ubuntu/Debian Linux:
-
-```
-$ sudo apt install python-pip python3-pip
-$ sudo python2 -m pip install six
-$ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
-```
-
-Under Fedora Linux:
-
-```
-$ sudo dnf install python2-pip python3-pip
-$ sudo python2 -m pip install six
-$ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
 ## Download and Build Gateway
@@ -329,13 +208,13 @@ $ sudo python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-p
       $ npm start
       ```
 
-    - Load `https://localhost:4443` in your web browser (or use the server's IP address if loading remotely). Since you're using a self-signed certificate, you'll need to add a security exception in the browser.
+    - Load https://localhost:4443 in your web browser (or use the server's IP address if loading remotely). Since you're using a self-signed certificate, you'll need to add a security exception in the browser.
 
 ## Browser Support
 
 The Gateway requires a browser that supports:
 - [Fetch](https://caniuse.com/fetch)
-- [Web Sockets](https://caniuse.com/websockets):
+- [Web Sockets](https://caniuse.com/websockets)
 - [ECMAScript 2015 (ES6)](https://caniuse.com/es6)
 - [CustomEvent](https://caniuse.com/customevent)
 - [Custom Elements (V1)](https://caniuse.com/custom-elementsv1)
@@ -354,67 +233,66 @@ If you are using VS Code, simply use the "launch" target. It will build the gate
 
 If you are not using VS Code, run `npm run debug` and it will build the gateway and launch it with `--inspect`.
 
-## Install additional dependencies for Test (Debian)
+## Testing
 
-These steps are required on Debian
+### Install Additional Dependencies
 
-```
-$ sudo apt install firefox openjdk-8-jre
-```
+In order to run the browser tests, you'll need to install [Google Chrome](https://www.google.com/chrome/index.html) and a JDK (e.g. OpenJDK).
 
-## Running Tests
+### Running Tests
 
 To run the linter and all tests:
 
 ```
-$ npm test
+$ npm run test
 ```
 
 To run a single test:
 
 ```
-$ jest build/test/{test-name}.js
+$ npm run jest build/test/{test-name}.js
 ```
-
-(assumes you have the `jest` command on your `PATH`, otherwise use `./node_modules/.bin/jest`)
 
 ## Source Code Structure
 
 - **`config/`** - Gateway configuration files
+- **`deb/`** - Tools for building .deb packages
+- **`docker/`** and **`Dockerfile`** - Tools for building Docker image
 - **`image/`** - Tools for building the Raspberry Pi image
+- **`rpm/`** - Tools for building .rpm packages
 - **`src/`**
   - **`addons-test/`** - Add-ons used strictly for testing
   - **`controllers/`** - App URL routes and their logic
+  - **`iso-639/`** - Small utility for interacting with ISO-639 data, i.e. locale names
   - **`models/`** - Data model and business logic
   - **`platforms/`** - Platform-specific functionality
   - **`plugin/`** - Utility classes and methods used by add-ons
   - **`rules-engine/`** - The rules engine
-  - **`test/`** - Integration tests
-  - **`views/`** - HTML views
-  - **`addon-loader.js`** - Script used for starting up Node-based add-ons
-  - **`addon-manager.js`** - Manages add-ons (e.g. Zigbee, Z-Wave)
-  - **`app.js`** - The main back end
-  - **`certificate-manager.js`** - Certificate registration and renewal, via Let's Encrypt
-  - **`command-utils.js`** - Utilities used by commands parser
-  - **`constants.js`** - System-wide constants
-  - **`db.js`** - Manages the SQLite3 database
-  - **`deferred.js`** - Wraps up a promise in a slightly more convenient manner for passing around, or saving
-  - **`dynamic-require.js`** - Small utility to require code from file system, rather than webpacked bundle
-  - **`ec-crypto.js`** - Elliptic curve helpers for the ES256 curve
-  - **`jwt-middleware.js`** - Express middleware for determining authentication status
-  - **`log-timestamps.js`** - Utilities for adding timestamps to console logging functions
-  - **`mdns-server.js`** - mDNS server
-  - **`oauth-types.js`** - OAuth types
-  - **`passwords.js`** - Password utilities
-  - **`platform.js`** - Platform-specific utilities
-  - **`push-service.js`** - Push notification service
-  - **`router.js`** - Routes app URLs to controllers
-  - **`router-setup.js`** - Initial router setup code for OpenWrt
-  - **`sleep.js`** - Small utility to implement a promise-based sleep
-  - **`ssltunnel.js`** - Utilities to determine state of tunnel and manage the PageKite process
-  - **`user-profile.js`** - Manages persistent user data
-  - **`utils.js`** - Various utility functions
-  - **`wifi-setup.js`** - Initial Wi-Fi setup code for Raspbian
+  - **`test/`** - Integration and unit tests
+  - **`views/`** - Handlebars templates
+  - **`addon-loader.ts`** - Script used for starting up Node-based add-ons
+  - **`addon-manager.ts`** - Manages add-ons (e.g. Zigbee, Z-Wave)
+  - **`addon-utils.ts`** - Utilities for add-ons, e.g. for reading the manifests
+  - **`app.ts`** - The main back end
+  - **`certificate-manager.ts`** - Certificate registration and renewal, via Let's Encrypt
+  - **`constants.ts`** - System-wide constants
+  - **`db.ts`** - Manages the SQLite3 database
+  - **`deferred.ts`** - Wraps up a promise in a slightly more convenient manner for passing around, or saving
+  - **`ec-crypto.ts`** - Elliptic curve helpers for the ES256 curve
+  - **`errors.ts`** - Common error classes
+  - **`jwt-middleware.ts`** - Express middleware for determining authentication status
+  - **`log-timestamps.ts`** - Utilities for adding timestamps to console logging functions
+  - **`migrate.ts`** - User profile migration
+  - **`oauth-types.ts`** - OAuth types
+  - **`passwords.ts`** - Password utilities
+  - **`platform.ts`** - Platform-specific utilities
+  - **`push-service.ts`** - Push notification service
+  - **`router.ts`** - Routes app URLs to controllers
+  - **`sleep.ts`** - Small utility to implement a promise-based sleep
+  - **`tunnel-service.ts`** - Utilities to determine state of tunnel and manage the PageKite process
+  - **`user-profile.ts`** - Manages persistent user data
+  - **`utils.ts`** - Various utility functions
+  - **`wifi-setup.ts`** - Initial Wi-Fi setup code for Raspberry Pi OS
 - **`static/`** - Static CSS, JavaScript & image resources for web app front end
 - **`tools/`** - Helpful utilities (not part of the build)
 - **`package.json`** - npm module manifest
