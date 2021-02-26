@@ -20,32 +20,30 @@ import { HttpErrorWithCode } from '../errors';
 
 const ajv = new Ajv({ strict: false });
 
-class Things {
+class Things extends EventEmitter {
   /**
    * A Map of Things in the Things database.
    */
-  private things = new Map<string, Thing>();
+  private things: Map<string, Thing>;
 
   /**
    * A collection of open websockets listening for new things.
    */
-  private websockets: WebSocket[] = [];
+  private websockets: WebSocket[];
 
   /**
    * The promise object returned by Database.getThings()
    */
   private getThingsPromise?: Promise<Map<string, Thing>> | null;
 
-  /**
-   * An EventEmitter used to bubble up added things
-   *
-   * Note that this differs from AddonManager's THING_ADDED because that thing
-   * added is when the addon discovers a thing, not when the model is
-   * instantiated
-   */
-  private emitter = new EventEmitter();
-
   private router?: Router;
+
+  constructor() {
+    super();
+
+    this.things = new Map<string, Thing>();
+    this.websockets = [];
+  }
 
   setRouter(router: Router): void {
     this.router = router;
@@ -204,7 +202,7 @@ class Things {
 
     return Database.createThing(thing.getId(), thing.getDescription()).then((thingDesc) => {
       this.things.set(thing.getId(), thing);
-      this.emitter.emit(Constants.THING_ADDED, thing);
+      this.emit(Constants.THING_ADDED, thing);
       return thingDesc;
     });
   }
@@ -417,18 +415,10 @@ class Things {
     }
   }
 
-  on(name: string, listener: (...args: any[]) => void): void {
-    this.emitter.on(name, listener);
-  }
-
-  removeListener(name: string, listener: (...args: any[]) => void): void {
-    this.emitter.removeListener(name, listener);
-  }
-
   clearState(): void {
     this.websockets = [];
     this.things = new Map();
-    this.emitter.removeAllListeners();
+    this.removeAllListeners();
   }
 }
 
