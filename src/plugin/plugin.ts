@@ -389,15 +389,8 @@ export default class Plugin {
         }
 
         this.apiHandlers.delete(packageName);
-        if (this.adapters.size === 0 && this.notifiers.size === 0 && this.apiHandlers.size === 0) {
-          // We've unloaded everything for the plugin, now unload the plugin.
-          this.unload();
-          this.unloadCompletedPromise = handler.unloadCompletedPromise;
-          handler.unloadCompletedPromise = null;
-        } else if (handler.unloadCompletedPromise) {
-          handler.unloadCompletedPromise.resolve();
-          handler.unloadCompletedPromise = null;
-        }
+        handler.unloadCompletedPromise?.resolve();
+        handler.unloadCompletedPromise = null;
 
         return;
       }
@@ -461,33 +454,14 @@ export default class Plugin {
         }
 
         this.adapters.delete(adapterId);
-        if (this.adapters.size === 0 && this.notifiers.size === 0 && this.apiHandlers.size === 0) {
-          // We've unloaded everything for the plugin, now unload the plugin.
-
-          // We may need to reevaluate this, and only auto-unload
-          // the plugin for the MockAdapter. For plugins which
-          // support hot-swappable dongles (like zwave/zigbee) it makes
-          // sense to have a plugin loaded with no adapters present.
-          this.unload();
-          this.unloadCompletedPromise = adapter.unloadCompletedPromise;
-          adapter.unloadCompletedPromise = null;
-        } else if (adapter.unloadCompletedPromise) {
-          adapter.unloadCompletedPromise.resolve();
-          adapter.unloadCompletedPromise = null;
-        }
+        adapter.unloadCompletedPromise?.resolve();
+        adapter.unloadCompletedPromise = null;
         break;
       }
       case MessageType.NOTIFIER_UNLOAD_RESPONSE:
         this.notifiers.delete(notifierId);
-        if (this.adapters.size === 0 && this.notifiers.size === 0 && this.apiHandlers.size === 0) {
-          // We've unloaded everything for the plugin, now unload the plugin.
-          this.unload();
-          this.unloadCompletedPromise = notifier.unloadCompletedPromise;
-          notifier.unloadCompletedPromise = null;
-        } else if (notifier.unloadCompletedPromise) {
-          notifier.unloadCompletedPromise.resolve();
-          notifier.unloadCompletedPromise = null;
-        }
+        notifier.unloadCompletedPromise?.resolve();
+        notifier.unloadCompletedPromise = null;
         break;
 
       case MessageType.DEVICE_ADDED_NOTIFICATION: {
@@ -860,16 +834,15 @@ export default class Plugin {
     return this.startPromise;
   }
 
-  unload(): void {
+  unload(): Promise<void> {
+    const unloadCompletedPromise = new Deferred<void, void>();
+    this.unloadCompletedPromise = unloadCompletedPromise;
     this.restart = false;
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
+    return unloadCompletedPromise.getPromise();
   }
 
-  unloadComponents(): Promise<void> {
-    const adapters = Array.from(this.adapters.values());
-    const notifiers = Array.from(this.notifiers.values());
-    const apiHandlers = Array.from(this.apiHandlers.values());
-
+  async unloadComponents(): Promise<void> {
     const unloadPromises = [];
 
     for (const adapter of this.adapters.values()) {
@@ -896,14 +869,15 @@ export default class Plugin {
       unloadPromises.push(apiHandler.unload());
     }
 
-    if (adapters.length === 0 && notifiers.length === 0 && apiHandlers.length === 0) {
-      // If there are no adapters, notifiers, or API handlers, manually unload
-      // the plugin, otherwise it will just restart. Note that if the addon is
-      // disabled, then there might not be a plugin either.
-      this.unload();
-    }
+    console.log(`Waiting for components of plugin ${this.pluginId} to be unloaded`);
 
-    return Promise.all(unloadPromises).then();
+    await Promise.all(unloadPromises);
+
+    console.log(`Unloading plugin ${this.pluginId}`);
+
+    await this.unload();
+
+    console.log(`Plugin ${this.pluginId} unloaded`);
   }
 
   kill(): void {
