@@ -88,8 +88,6 @@ export default class Plugin {
 
   private unloadCompletedPromise: Deferred<void, void> | null = null;
 
-  private unloadedRcvdPromise?: Deferred<void, void>;
-
   private nextId = 0;
 
   private requestActionPromises = new Map();
@@ -406,11 +404,9 @@ export default class Plugin {
       case MessageType.PLUGIN_UNLOAD_RESPONSE:
         this.shutdown();
         this.pluginServer!.unregisterPlugin(msg.data.pluginId);
-        if (this.unloadedRcvdPromise) {
-          if (this.unloadCompletedPromise) {
-            this.unloadCompletedPromise.resolve();
-            this.unloadCompletedPromise = null;
-          }
+        if (this.unloadCompletedPromise) {
+          this.unloadCompletedPromise.resolve();
+          this.unloadCompletedPromise = null;
         }
         return;
 
@@ -866,7 +862,6 @@ export default class Plugin {
 
   unload(): void {
     this.restart = false;
-    this.unloadedRcvdPromise = new Deferred();
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
   }
 
