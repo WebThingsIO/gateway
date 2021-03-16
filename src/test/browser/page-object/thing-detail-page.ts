@@ -130,15 +130,8 @@ class OnOffPropertySection extends InputPropertySection {
   }
 }
 
-class BooleanPropertySection extends InputPropertySection {
-  async click(): Promise<void> {
-    await this.waitForClickable();
-    await this.browser.execute(`
-      const root = document.querySelector('webthing-boolean-property');
-      const label = root.shadowRoot.querySelector('label');
-      label.click();
-    `);
-  }
+abstract class ClickablePropertySection extends InputPropertySection {
+  abstract click(): Promise<void>;
 
   async waitForClickable(): Promise<void> {
     const element = this.rootElement!;
@@ -154,6 +147,17 @@ class BooleanPropertySection extends InputPropertySection {
       },
       { timeout: 5000 }
     );
+  }
+}
+
+class BooleanPropertySection extends ClickablePropertySection {
+  async click(): Promise<void> {
+    await this.waitForClickable();
+    await this.browser.execute(`
+      const root = document.querySelector('webthing-boolean-property');
+      const label = root.shadowRoot.querySelector('label');
+      label.click();
+    `);
   }
 
   async getValue(): Promise<boolean> {
@@ -204,6 +208,26 @@ class NumberPropertySection extends InputPropertySection {
   }
 }
 
+class PhotoPropertySection extends ClickablePropertySection {
+  async click(): Promise<void> {
+    await this.waitForClickable();
+    await this.browser.execute(`(function () {
+      const el = document.querySelector('webthing-image-property')
+      el.click();
+    })()`);
+  }
+}
+
+class VideoPropertySection extends ClickablePropertySection {
+  async click(): Promise<void> {
+    await this.waitForClickable();
+    await this.browser.execute(`(function () {
+      const el = document.querySelector('webthing-video-property')
+      el.click();
+    })()`);
+  }
+}
+
 export class ThingDetailPage extends Page {
   constructor(browser: WebdriverIO.Browser, url: string) {
     super(browser, url);
@@ -242,7 +266,9 @@ export class ThingDetailPage extends Page {
       `webthing-frequency-property`,
       NumericLabelPropertySection
     );
-
+    // For cameras
+    this.defineSection('photoProperty', 'webthing-image-property', PhotoPropertySection);
+    this.defineSection('videoProperty', 'webthing-video-property', VideoPropertySection);
     // For UnknownThing
     this.defineSections('booleanProperties', 'webthing-boolean-property', BooleanPropertySection);
     this.defineSections('stringProperties', 'webthing-string-property', StringPropertySection);

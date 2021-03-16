@@ -1,0 +1,5 @@
+#EXTM3U
+## Generated with https://github.com/google/shaka-packager version v2.4.3-dd9870075f-release
+
+#EXT-X-STREAM-INF:BANDWIDTH=26658,AVERAGE-BANDWIDTH=26658,CODECS="vp09.00.30.08.00.02.02.02.00",RESOLUTION=800x600,FRAME-RATE=25.000
+stream_0.m3u8

@@ -368,14 +368,14 @@ class PropertySelect {
         property.name = propName;
       }
 
-      const links = property.links.filter((l) => !l.rel || l.rel === 'property');
-      if (links.length === 0) {
+      const forms = property.forms || [];
+      if (forms.length === 0) {
         continue;
       }
 
-      property.id = RuleUtils.extractProperty(links[0].href);
-      property.thing = RuleUtils.extractThing(links[0].href);
-      delete property.links;
+      property.id = RuleUtils.extractProperty(forms[0].href);
+      property.thing = RuleUtils.extractThing(forms[0].href);
+      delete property.forms;
 
       const name = property.title || Utils.capitalize(property.name);
       if (role === 'trigger') {

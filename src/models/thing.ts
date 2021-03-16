@@ -20,6 +20,7 @@ import {
   Event as EventSchema,
   Property as PropertySchema,
   Link,
+  Form,
 } from 'gateway-addon/lib/schema';
 import Action from './action';
 import Event from './event';
@@ -42,6 +43,7 @@ export interface ThingDescription {
   actions: Record<string, ActionSchema>;
   events: Record<string, EventSchema>;
   links: Link[];
+  forms: Form[];
   floorplanVisibility: boolean;
   floorplanX: number;
   floorplanY: number;
@@ -106,6 +108,8 @@ export default class Thing extends EventEmitter {
 
   private links: Link[];
 
+  private forms: Form[];
+
   private iconHref: string | null;
 
   private group_id: string | null;
@@ -137,6 +141,7 @@ export default class Thing extends EventEmitter {
     this.events = description.events || {};
     this.connected = false;
     this.eventsDispatched = [];
+    this.forms = [];
 
     if (description.properties) {
       for (const propertyName in description.properties) {
@@ -146,51 +151,64 @@ export default class Thing extends EventEmitter {
           delete property.href;
         }
 
-        if (property.links) {
-          property.links = property.links
-            .filter((link) => {
-              return link.rel && link.rel !== 'property';
-            })
-            .map((link) => {
-              if (link.proxy) {
-                delete link.proxy;
-                link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-              }
+        if (property.forms) {
+          property.forms = property.forms.map((form) => {
+            // TODO: WebThingsIO non-standard keyword
+            if (form.proxy) {
+              delete form.proxy;
+              form.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${form.href}`;
+            }
 
-              return link;
-            });
+            return form;
+          });
         } else {
-          property.links = [];
+          property.forms = [];
         }
 
         // Give the property a URL
-        property.links.push({
-          rel: 'property',
+        // Conservative approach do not remove provided forms
+        property.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
 
         this.properties[propertyName] = property;
       }
+
+      // If there are properties, add a top level form for them
+      if (Object.keys(description.properties).length > 0) {
+        this.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}`,
+          op: Constants.WoTOperation.READ_ALL_PROPERTIES,
+        });
+      }
     }
+
+    // If there are actions, add a top level form for them
+    if (Object.keys(description.actions ?? {}).length > 0) {
+      this.forms.push({
+        href: `${this.href}${Constants.ACTIONS_PATH}`,
+        op: Constants.WoTOperation.QUERY_ALL_ACTIONS,
+      });
+    }
+
+    // If there are events, add a top level form for them
+    if (Object.keys(description.events ?? {}).length > 0) {
+      this.forms.push({
+        href: `${this.href}${Constants.EVENTS_PATH}`,
+        op: [
+          Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS,
+          Constants.WoTOperation.UNSUBSCRIBE_ALL_EVENTS,
+        ],
+        subprotocol: 'sse',
+      });
+    }
+
     this.floorplanVisibility = description.floorplanVisibility;
     this.floorplanX = description.floorplanX;
     this.floorplanY = description.floorplanY;
     this.layoutIndex = description.layoutIndex;
     this.selectedCapability = description.selectedCapability;
-    this.links = [
-      {
-        rel: 'properties',
-        href: `${this.href}/properties`,
-      },
-      {
-        rel: 'actions',
-        href: `${this.href}/actions`,
-      },
-      {
-        rel: 'events',
-        href: `${this.href}/events`,
-      },
-    ];
+    this.links = [];
 
     const uiLink = {
       rel: 'alternate',
@@ -204,10 +222,6 @@ export default class Thing extends EventEmitter {
 
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (['properties', 'actions', 'events'].includes(link.rel as string)) {
-          continue;
-        }
-
         if (link.rel === 'alternate' && link.mediaType === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
@@ -235,26 +249,21 @@ export default class Thing extends EventEmitter {
         delete action.href;
       }
 
-      if (action.links) {
-        action.links = action.links
-          .filter((link) => {
-            return link.rel && link.rel !== 'action';
-          })
-          .map((link) => {
-            if (link.proxy) {
-              delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-            }
+      if (action.forms) {
+        action.forms = action.forms.map((form) => {
+          if (form.proxy) {
+            delete form.proxy;
+            form.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${form.href}`;
+          }
 
-            return link;
-          });
+          return form;
+        });
       } else {
-        action.links = [];
+        action.forms = [];
       }
 
       // Give the action a URL
-      action.links.push({
-        rel: 'action',
+      action.forms!.push({
         href: `${this.href}${Constants.ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
       });
     }
@@ -266,27 +275,23 @@ export default class Thing extends EventEmitter {
         delete event.href;
       }
 
-      if (event.links) {
-        event.links = event.links
-          .filter((link) => {
-            return link.rel && link.rel !== 'event';
-          })
-          .map((link) => {
-            if (link.proxy) {
-              delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-            }
+      if (event.forms) {
+        event.forms = event.forms.map((form) => {
+          if (form.proxy) {
+            delete form.proxy;
+            form.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${form.href}`;
+          }
 
-            return link;
-          });
+          return form;
+        });
       } else {
-        event.links = [];
+        event.forms = [];
       }
 
       // Give the event a URL
-      event.links.push({
-        rel: 'event',
+      event.forms.push({
         href: `${this.href}${Constants.EVENTS_PATH}/${encodeURIComponent(eventName)}`,
+        subprotocol: 'sse',
       });
     }
 
@@ -584,6 +589,7 @@ export default class Thing extends EventEmitter {
       actions: this.actions,
       events: this.events,
       links: JSON.parse(JSON.stringify(this.links)),
+      forms: this.forms,
       floorplanVisibility: this.floorplanVisibility,
       floorplanX: this.floorplanX,
       floorplanY: this.floorplanY,
@@ -681,7 +687,7 @@ export default class Thing extends EventEmitter {
 
     // Update description
     this.description = description.description || '';
-
+    this.forms = [];
     // Update properties
     this.properties = {};
     if (description.properties) {
@@ -692,29 +698,34 @@ export default class Thing extends EventEmitter {
           delete property.href;
         }
 
-        if (property.links) {
-          property.links = property.links
-            .filter((link) => {
-              return link.rel && link.rel !== 'property';
-            })
-            .map((link) => {
-              if (link.proxy) {
-                delete link.proxy;
-                link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-              }
+        if (property.forms) {
+          property.forms = property.forms.map((form) => {
+            // TODO: WebThingsIO non-standard keyword
+            if (form.proxy) {
+              delete form.proxy;
+              form.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${form.href}`;
+            }
 
-              return link;
-            });
+            return form;
+          });
         } else {
-          property.links = [];
+          property.forms = [];
         }
 
         // Give the property a URL
-        property.links.push({
-          rel: 'property',
+        // Conservative approach do not remove provided forms
+        property.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
         this.properties[propertyName] = property;
+      }
+
+      // If there are properties, add a top level form for them
+      if (Object.keys(description.properties).length > 0) {
+        this.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}`,
+          op: Constants.WoTOperation.READ_ALL_PROPERTIES,
+        });
       }
     }
 
@@ -727,26 +738,21 @@ export default class Thing extends EventEmitter {
         delete action.href;
       }
 
-      if (action.links) {
-        action.links = action.links
-          .filter((link) => {
-            return link.rel && link.rel !== 'action';
-          })
-          .map((link) => {
-            if (link.proxy) {
-              delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-            }
+      if (action.forms) {
+        action.forms = action.forms.map((form) => {
+          if (form.proxy) {
+            delete form.proxy;
+            form.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${form.href}`;
+          }
 
-            return link;
-          });
+          return form;
+        });
       } else {
-        action.links = [];
+        action.forms = [];
       }
 
       // Give the action a URL
-      action.links.push({
-        rel: 'action',
+      action.forms!.push({
         href: `${this.href}${Constants.ACTIONS_PATH}/${encodeURIComponent(actionName)}`,
       });
     }
@@ -760,27 +766,44 @@ export default class Thing extends EventEmitter {
         delete event.href;
       }
 
-      if (event.links) {
-        event.links = event.links
-          .filter((link) => {
-            return link.rel && link.rel !== 'event';
-          })
-          .map((link) => {
-            if (link.proxy) {
-              delete link.proxy;
-              link.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
-            }
+      if (event.forms) {
+        event.forms = event.forms.map((form) => {
+          // TODO: WebThingsIO non-standard keyword
+          if (form.proxy) {
+            delete form.proxy;
+            form.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${form.href}`;
+          }
 
-            return link;
-          });
+          return form;
+        });
       } else {
-        event.links = [];
+        event.forms = [];
       }
 
       // Give the event a URL
-      event.links.push({
-        rel: 'event',
+      event.forms.push({
         href: `${this.href}${Constants.EVENTS_PATH}/${encodeURIComponent(eventName)}`,
+        subprotocol: 'sse',
+      });
+    }
+
+    // If there are actions, add a top level form for them
+    if (Object.keys(description.actions ?? {}).length > 0) {
+      this.forms.push({
+        href: `${this.href}${Constants.ACTIONS_PATH}`,
+        op: Constants.WoTOperation.QUERY_ALL_ACTIONS,
+      });
+    }
+
+    // If there are events, add a top level form for them
+    if (Object.keys(description.events ?? {}).length > 0) {
+      this.forms.push({
+        href: `${this.href}${Constants.EVENTS_PATH}`,
+        op: [
+          Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS,
+          Constants.WoTOperation.UNSUBSCRIBE_ALL_EVENTS,
+        ],
+        subprotocol: 'sse',
       });
     }
 
@@ -803,10 +826,6 @@ export default class Thing extends EventEmitter {
     // Update the UI href
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (['properties', 'actions', 'events'].includes(link.rel as string)) {
-          continue;
-        }
-
         if (link.rel === 'alternate' && link.mediaType === 'text/html') {
           if (link.proxy) {
             delete link.proxy;

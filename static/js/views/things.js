@@ -216,9 +216,9 @@ const ThingsScreen = {
         }
 
         let href;
-        for (const link of description.actions[actionName].links) {
-          if (link.rel === 'action') {
-            href = link.href;
+        for (const form of description.actions[actionName].forms) {
+          if (!form.op || form.op === Constants.WoTOperation.INVOKE_ACTION) {
+            href = form.href;
             break;
           }
         }

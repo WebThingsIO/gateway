@@ -168,9 +168,9 @@ class Thing {
         }
 
         let href;
-        for (const link of property.links) {
-          if (!link.rel || link.rel === 'property') {
-            href = link.href;
+        for (const form of property.forms) {
+          if (!form.op || form.op === Constants.WoTOperation.READ_PROPERTY) {
+            href = form.href;
             break;
           }
         }
@@ -301,9 +301,9 @@ class Thing {
           const action = description.actions[name];
 
           let href;
-          for (const link of description.actions[name].links) {
-            if (link.rel === 'action') {
-              href = link.href;
+          for (const form of description.actions[name].forms) {
+            if (!form.op || form.op === Constants.WoTOperation.INVOKE_ACTION) {
+              href = form.href;
               break;
             }
           }

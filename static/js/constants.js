@@ -12,3 +12,12 @@ module.exports.ThingFormat = {
   EXPANDED: 1,
   LINK_ICON: 2,
 };
+
+module.exports.WoTOperation = {
+  READ_PROPERTY: 'readyproperty',
+  INVOKE_ACTION: 'invokeaction',
+  READ_ALL_PROPERTIES: 'readallproperties',
+  SUBSCRIBE_ALL_EVENTS: 'subscribeallevents',
+  UNSUBSCRIBE_ALL_EVENTS: 'unsubscribeallevents',
+  QUERY_ALL_ACTIONS: 'queryallactions',
+};
