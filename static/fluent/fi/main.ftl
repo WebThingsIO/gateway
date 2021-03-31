@@ -276,6 +276,7 @@ BarometricPressureSensor = Ilmanpaineanturi
 Custom = Mukautettu esine
 Thing = Esine
 AirQualitySensor = Ilmanlaatuanturi
+SmokeSensor = Savuanturi
 
 ## Properties
 
@@ -515,6 +516,8 @@ tunnel-setup-welcome = Tervetuloa
 tunnel-setup-choose-address = Valitse turvallinen verkko-osoite yhdyskäytävällesi:
 tunnel-setup-input-subdomain =
     .placeholder = aliverkkotunnus
+tunnel-setup-email-opt-in = Pidä minut ajan tasalla WebThings-uutisten osalta.
+tunnel-setup-agree-privacy-policy = Hyväksy WebThingsin <a data-l10n-name="tunnel-setup-privacy-policy-link">tietosuojakäytäntö</a> ja <a data-l10n-name="tunnel-setup-tos-link">käyttöehdot</a>.
 tunnel-setup-input-reclamation-token =
     .placeholder = Palautuspoletti
 tunnel-setup-error = Aliverkkotunnuksen asennuksessa tapahtui virhe.
