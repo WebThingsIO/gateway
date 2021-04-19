@@ -591,11 +591,11 @@ wifi-setup-skip = Hepgor
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Yn cysylltu â'r diwifr - { -webthings-gateway-brand }
-connecting-header = Cysylltu â'r diwifr…
+connecting-title = Yn cysylltu â'r Wi-Fi — { -webthings-gateway-brand }
+connecting-header = Cysylltu â'r Wi-Fi…
 connecting-connect = Sicrhewch eich bod wedi'ch cysylltu â'r un rhwydwaith ac yna llywio i { $gateway-link } yn eich porwr gwe i barhau'r gosod.
 connecting-warning = Sylw: Os nad ydych yn gallu llwytho { $domain }, chwiliwch am gyfeiriad IP y porth ar eich llwybrydd.
-connecting-header-skipped = Hepgor cam gosod y diwifr
+connecting-header-skipped = Hepgor cam gosod y Wi-Fi
 connecting-skipped = Mae'r porth nawr yn cael ei gychwyn. Yn eich porwr gwe, ewch i { $gateway-link } tra ar yr un  rhwydwaith â'r porth i barhau'r gosod.
 
 ## Creating Wi-Fi Network Page
