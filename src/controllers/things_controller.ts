@@ -360,7 +360,7 @@ function build(): express.Router {
   controller.use(`/:thingId${Constants.EVENTS_PATH}`, EventsController());
 
   /**
-   * Modify a Thing's floorplan position or layout index.
+   * Modify a Thing's floorplan position, layout index or directory.
    */
   controller.patch('/:thingId', async (request, response) => {
     const thingId = request.params.thingId;
@@ -383,6 +383,8 @@ function build(): express.Router {
         description = await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
       } else if (request.body.hasOwnProperty('layoutIndex')) {
         description = await thing.setLayoutIndex(request.body.layoutIndex);
+      } else if (request.body.hasOwnProperty('directory')) {
+        description = await thing.setDirectory(request.body.directory);
       } else {
         response.status(400).send('request body missing required parameters');
         return;

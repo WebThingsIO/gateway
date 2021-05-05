@@ -50,6 +50,7 @@ export interface ThingDescription {
   iconData: IconData;
   security: string;
   securityDefinitions: SecurityDefinition;
+  directory_id: string | null;
 }
 
 interface IconData {
@@ -103,6 +104,8 @@ export default class Thing extends EventEmitter {
   private links: Link[];
 
   private iconHref: string | null;
+
+  private directory_id: string | null;
 
   /**
    * Thing constructor.
@@ -289,6 +292,8 @@ export default class Thing extends EventEmitter {
     } else if (description.iconData) {
       this.setIcon(description.iconData, false);
     }
+
+    this.directory_id = description.directory_id || null;
   }
 
   getId(): string {
@@ -301,6 +306,10 @@ export default class Thing extends EventEmitter {
 
   getLayoutIndex(): number {
     return this.layoutIndex;
+  }
+
+  getDirectory(): string | null {
+    return this.directory_id;
   }
 
   getHref(): string {
@@ -444,6 +453,20 @@ export default class Thing extends EventEmitter {
   }
 
   /**
+   * Set the directory for a Thing in the overview.
+   *
+   * @param {string} directory_id ID of the directory
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  setDirectory(directory_id: string | null): Promise<ThingDescription> {
+    this.directory_id = directory_id;
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      this.emit(Constants.MODIFIED);
+      return descr;
+    });
+  }
+
+  /**
    * Dispatch an event to all listeners subscribed to the Thing
    * @param {Event} event
    */
@@ -542,6 +565,7 @@ export default class Thing extends EventEmitter {
       layoutIndex: this.layoutIndex,
       selectedCapability: this.selectedCapability,
       iconHref: this.iconHref,
+      directory_id: this.directory_id,
     } as ThingDescription;
 
     if (typeof reqHost !== 'undefined') {

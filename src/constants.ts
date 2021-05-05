@@ -11,6 +11,7 @@ import path from 'path';
 // Web server routes
 export const USERS_PATH = '/users';
 export const THINGS_PATH = '/things';
+export const DIRECTORIES_PATH = '/directories';
 export const PROPERTIES_PATH = '/properties';
 export const NEW_THINGS_PATH = '/new_things';
 export const ADAPTERS_PATH = '/adapters';

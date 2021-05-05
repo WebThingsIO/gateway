@@ -19,7 +19,7 @@ import { PushSubscription } from 'web-push';
 
 const sqlite3 = verbose();
 
-const TABLES = ['users', 'jsonwebtokens', 'things', 'settings', 'pushSubscriptions'];
+const TABLES = ['users', 'jsonwebtokens', 'things', 'directories', 'settings', 'pushSubscriptions'];
 
 const DEBUG = false || process.env.NODE_ENV === 'test';
 
@@ -67,6 +67,9 @@ class Database {
   createTables(): void {
     // Create Things table
     this.db!.run('CREATE TABLE IF NOT EXISTS things (id TEXT PRIMARY KEY, description TEXT);');
+
+    // Create Directories table
+    this.db!.run('CREATE TABLE IF NOT EXISTS directories (id TEXT PRIMARY KEY, description TEXT);');
 
     // Create Users table
     this.db!.run(
@@ -194,6 +197,88 @@ class Database {
     return new Promise((resolve, reject) => {
       const db = this.db!;
       db.run('DELETE FROM things WHERE id = ?', [id], (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+  
+  /**
+   * Get all Directories stored in the database.
+   *
+   * @return Promise which resolves with a list of Directory objects.
+   */
+  getDirectories(): Promise<Record<string, unknown>[]> {
+    return this.all('SELECT id, description FROM directories').then((rows) => {
+      const directories = [];
+      for (const row of rows) {
+        const directory = JSON.parse(<string>row.description);
+        directory.id = row.id;
+        directories.push(directory);
+      }
+
+      return directories;
+    });
+  }
+
+  /**
+   * Add a new Directory to the Database.
+   *
+   * @param String id The ID to give the new Directory.
+   * @param String description A serialised Directory description.
+   */
+  createDirectory<T>(id: string, description: T): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
+      db.run(
+        'INSERT INTO directories (id, description) VALUES (?, ?)',
+        [id, JSON.stringify(description)],
+        (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(description);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Update a Directory in the Database.
+   *
+   * @param String id ID of the directory to update.
+   * @param String description A serialised Directory description.
+   */
+  updateDirectory<T>(id: string, description: T): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
+      db.run(
+        'UPDATE directories SET description=? WHERE id=?',
+        [JSON.stringify(description), id],
+        (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(description);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Remove a Directory from the Database.
+   *
+   * @param String id The ID of the Directory to remove.
+   */
+  removeDirectory(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
+      db.run('DELETE FROM directories WHERE id = ?', [id], (error) => {
         if (error) {
           reject(error);
         } else {
