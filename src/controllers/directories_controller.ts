@@ -13,6 +13,7 @@ import express from 'express';
 import expressWs from 'express-ws';
 import Directory from '../models/directory';
 import Directories from '../models/directories';
+import Things from '../models/things';
 import { WithJWT } from '../jwt-middleware';
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'ws';
@@ -136,6 +137,25 @@ function build(): express.Router {
       })
       .catch((error: unknown) => {
         console.error(`Error getting directory description for directory with id ${id}:`, error);
+        response.status(404).send(error);
+      });
+  });
+
+  /**
+   * Get things in a Directory.
+   */
+  controller.get('/:directoryId/things', (request, response) => {
+    const id = request.params.directoryId;
+    Things.getThingDescriptions(request.get('Host'), request.secure)
+      .then((things) => {
+        const filteredThings = Array.from(things.values())
+          .filter((thing) => {
+            return thing.directory_id == id;
+          });
+        response.status(200).json(filteredThings);
+      })
+      .catch((error: unknown) => {
+        console.error(`Error getting things in directory ${id}:`, error);
         response.status(404).send(error);
       });
   });
