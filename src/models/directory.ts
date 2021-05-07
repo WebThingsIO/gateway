@@ -111,7 +111,6 @@ export default class Directory extends EventEmitter {
       });
       this.emit(Constants.REMOVED, true);
     });
-
   }
 
   /**
@@ -126,5 +125,37 @@ export default class Directory extends EventEmitter {
       this.emit(Constants.MODIFIED);
       return descr;
     });
+  }
+
+  /**
+   * Add a subscription to the Directory's modified state
+   * @param {Function} callback
+   */
+  addModifiedSubscription(callback: () => void): void {
+    this.on(Constants.MODIFIED, callback);
+  }
+
+  /**
+   * Remove a subscription to the Directory's modified state
+   * @param {Function} callback
+   */
+  removeModifiedSubscription(callback: () => void): void {
+    this.removeListener(Constants.MODIFIED, callback);
+  }
+
+  /**
+   * Add a subscription to the Directory's removed state
+   * @param {Function} callback
+   */
+  addRemovedSubscription(callback: (arg: boolean) => void): void {
+    this.on(Constants.REMOVED, callback);
+  }
+
+  /**
+   * Remove a subscription to the Directory's removed state
+   * @param {Function} callback
+   */
+  removeRemovedSubscription(callback: (arg: boolean) => void): void {
+    this.removeListener(Constants.REMOVED, callback);
   }
 }

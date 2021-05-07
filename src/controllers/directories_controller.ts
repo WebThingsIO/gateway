@@ -11,12 +11,49 @@
 import * as Constants from '../constants';
 import express from 'express';
 import expressWs from 'express-ws';
+import Directory from '../models/directory';
 import Directories from '../models/directories';
 import { WithJWT } from '../jwt-middleware';
 import { v4 as uuidv4 } from 'uuid';
+import WebSocket from 'ws';
+
+interface DirectoryAddedMessage {
+  messageType: 'directoryAdded';
+  id: string;
+  data: Record<string, never>;
+}
+
+interface DirectoryModifiedMessage {
+  messageType: 'directoryModified';
+  id: string;
+  data: Record<string, never>;
+}
+
+interface DirectoryRemovedMessage {
+  messageType: 'directoryRemoved';
+  id: string;
+  data: Record<string, never>;
+}
+
+interface ErrorMessage {
+  messageType: 'error';
+  data: {
+    code: number;
+    status: string;
+    message: string;
+  };
+}
+
+type OutgoingMessage =
+  | DirectoryAddedMessage
+  | DirectoryModifiedMessage
+  | DirectoryRemovedMessage
+  | ErrorMessage;
 
 function build(): express.Router {
   const controller: express.Router & expressWs.WithWebsocketMethod = express.Router();
+
+  controller.ws('/', websocketHandler);
 
   /**
    * Get a list of Directories.
@@ -102,7 +139,7 @@ function build(): express.Router {
         response.status(404).send(error);
       });
   });
-  
+
   /**
    * Modify a Directory's layout index.
    */
@@ -186,6 +223,100 @@ function build(): express.Router {
         response.status(500).send(`Failed to remove directory ${directoryId}: ${e}`);
       });
   });
+
+  function websocketHandler(websocket: WebSocket, _request: express.Request): void {
+    // Since the Gateway have the asynchronous express middlewares, there is a
+    // possibility that the WebSocket have been closed.
+    if (websocket.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    function sendMessage(message: OutgoingMessage): void {
+      websocket.send(JSON.stringify(message), (err) => {
+        if (err) {
+          console.error(`WebSocket sendMessage failed: ${err}`);
+        }
+      });
+    }
+
+    let directoryCleanups: Record<string, () => void> = {};
+
+    function addDirectory(directory: Directory): void {
+      const onModified = (): void => {
+        sendMessage({
+          id: directory.getId(),
+          messageType: Constants.DIRECTORY_MODIFIED,
+          data: {},
+        });
+      };
+      directory.addModifiedSubscription(onModified);
+
+      const directoryCleanup = (): void => {
+        directory.removeModifiedSubscription(onModified);
+      };
+      directoryCleanups[directory.getId()] = directoryCleanup;
+    }
+
+    function onDirectoryAdded(directory: Directory): void {
+      sendMessage({
+        id: directory.getId(),
+        messageType: Constants.DIRECTORY_ADDED,
+        data: {},
+      });
+
+      addDirectory(directory);
+    }
+
+    function onDirectoryRemoved(directory: Directory): void {
+      if (directoryCleanups[directory.getId()]) {
+        directoryCleanups[directory.getId()]();
+        delete directoryCleanups[directory.getId()];
+      }
+      sendMessage({
+        id: directory.getId(),
+        messageType: Constants.DIRECTORY_REMOVED,
+        data: {},
+      });
+    }
+
+    Directories.getDirectories().then((directories: Map<string, Directory>) => {
+      directories.forEach(addDirectory);
+    });
+    Directories.on(Constants.DIRECTORY_ADDED, onDirectoryAdded);
+    Directories.on(Constants.DIRECTORY_REMOVED, onDirectoryRemoved);
+
+    const heartbeatInterval = setInterval(() => {
+      try {
+        websocket.ping();
+      } catch (e) {
+        // Do nothing. Let cleanup() handle directories if necessary.
+        websocket.terminate();
+      }
+    }, 30 * 1000);
+
+    const cleanup = (): void => {
+      Directories.removeListener(Constants.DIRECTORY_ADDED, onDirectoryAdded);
+      for (const id in directoryCleanups) {
+        directoryCleanups[id]();
+      }
+      directoryCleanups = {};
+      clearInterval(heartbeatInterval);
+    };
+
+    websocket.on('error', cleanup);
+    websocket.on('close', cleanup);
+
+    websocket.on('message', (_requestText: string) => {
+      sendMessage({
+        messageType: Constants.ERROR,
+        data: {
+          code: 400,
+          status: '400 Bad Request',
+          message: `Invalid request`,
+        },
+      });
+    });
+  }
 
   return controller;
 }

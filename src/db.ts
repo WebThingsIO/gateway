@@ -205,7 +205,7 @@ class Database {
       });
     });
   }
-  
+
   /**
    * Get all Directories stored in the database.
    *

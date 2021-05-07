@@ -11,6 +11,7 @@
 import { EventEmitter } from 'events';
 import Database from '../db';
 import Directory, { DirectoryDescription } from './directory';
+import * as Constants from '../constants';
 
 class Directories extends EventEmitter {
   /**
@@ -51,7 +52,6 @@ class Directories extends EventEmitter {
       // Update the map of Directories
       this.directories = new Map();
       directories.forEach((directory) => {
-
         this.directories.set(
           <string>directory.id,
           new Directory(<string>directory.id, <DirectoryDescription>(<unknown>directory))
@@ -135,9 +135,12 @@ class Directories extends EventEmitter {
    */
   createDirectory(id: string, description: DirectoryDescription): Promise<DirectoryDescription> {
     const directory = new Directory(id, description);
-
-    return Database.createDirectory(directory.getId(), directory.getDescription()).then((directoryDesc) => {
+    return Database.createDirectory(
+      directory.getId(),
+      directory.getDescription()
+    ).then((directoryDesc) => {
       this.directories.set(directory.getId(), directory);
+      this.emit(Constants.DIRECTORY_ADDED, directory);
       return directoryDesc;
     });
   }
@@ -182,9 +185,9 @@ class Directories extends EventEmitter {
       if (!directory) {
         return;
       }
-
       directory.remove();
       this.directories.delete(id);
+      this.emit(Constants.DIRECTORY_REMOVED, directory);
     });
   }
 

@@ -61,6 +61,9 @@ export const SET_PROPERTY = 'setProperty';
 export const THING_ADDED = 'thingAdded';
 export const THING_MODIFIED = 'thingModified';
 export const THING_REMOVED = 'thingRemoved';
+export const DIRECTORY_ADDED = 'directoryAdded';
+export const DIRECTORY_MODIFIED = 'directoryModified';
+export const DIRECTORY_REMOVED = 'directoryRemoved';
 
 // OAuth things
 export const ACCESS_TOKEN = 'access_token';
