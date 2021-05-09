@@ -366,6 +366,11 @@ class API {
     return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { layoutIndex: index });
   }
 
+  setThingDirectory(thingId: string, directoryId: string | null): Promise<Record<string, unknown>> {
+    directoryId = directoryId || '';
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { directory: directoryId });
+  }
+
   setThingFloorplanPosition(
     thingId: string,
     x: number,
@@ -409,6 +414,36 @@ class API {
 
   updateThing(thingId: string, updates: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson(`/things/${encodeURIComponent(thingId)}`, updates);
+  }
+
+  getDirectories(): Promise<Record<string, unknown>> {
+    return this.getJson('/directories');
+  }
+
+  getDirectory(directoryId: string): Promise<Record<string, unknown>> {
+    return this.getJson(`/directories/${encodeURIComponent(directoryId)}`);
+  }
+
+  setDirectoryLayoutIndex(directoryId: string, index: number): Promise<Record<string, unknown>> {
+    return this.patchJson(
+      `/directories/${encodeURIComponent(directoryId)}`,
+      { layoutIndex: index }
+    );
+  }
+
+  async addDirectory(description: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.postJson('/directories', description))!;
+  }
+
+  removeDirectory(directoryId: string): Promise<void> {
+    return this.delete(`/directories/${encodeURIComponent(directoryId)}`);
+  }
+
+  updateDirectory(
+    directoryId: string,
+    updates: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
+    return this.putJson(`/directories/${encodeURIComponent(directoryId)}`, updates);
   }
 
   getPushKey(): Promise<Record<string, unknown>> {

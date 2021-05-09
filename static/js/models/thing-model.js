@@ -37,6 +37,9 @@ class ThingModel extends Model {
       this.id = decodeURIComponent(this.href.pathname.split('/').pop());
     }
 
+    // Parse directory id of Thing
+    this.directory_id = description.directory_id;
+
     // Parse events URL
     for (const link of description.links) {
       switch (link.rel) {

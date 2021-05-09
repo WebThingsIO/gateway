@@ -9,11 +9,20 @@
   padding: 7.6rem 0;
 }
 
-#things {
+#things-container {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
   max-height: 100%;
+}
+
+#things {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+#directories {
   text-align: center;
   font-size: 1.6rem;
   color: #fff;
@@ -27,4 +36,32 @@
 
 #add-thing-back-button {
   background-color: transparent;
+}
+
+.directory {
+
+}
+
+.directory div.bar {
+
+}
+
+.directory div.bar div.title {
+
+}
+
+.directory div.bar button.remove {
+
+}
+
+[draggable] {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.drag-target {
+  border: 0.2rem dashed white;
 }

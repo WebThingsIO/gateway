@@ -19,6 +19,7 @@ class GatewayModel extends Model {
     this.thingModels = new Map();
     this.things = new Map();
     this.connectedThings = new Map();
+    this.directories = new Map();
     this.onMessage = this.onMessage.bind(this);
     this.queue = Promise.resolve(true);
     this.connectWebSocket();
@@ -37,10 +38,12 @@ class GatewayModel extends Model {
     switch (event) {
       case Constants.REFRESH_THINGS:
         if (immediate) {
-          handler(this.things);
+          handler(this.things, this.directories);
         }
         break;
       case Constants.DELETE_THINGS:
+        break;
+      case Constants.DELETE_DIRECTORIES:
         break;
       default:
         console.warn(`GatewayModel does not support event:${event}`);
@@ -130,7 +133,7 @@ class GatewayModel extends Model {
     }
 
     if (!skipEvent) {
-      return this.handleEvent(Constants.DELETE_THINGS, this.things);
+      return this.handleEvent(Constants.DELETE_THINGS, this.things, this.directories);
     }
   }
 
@@ -140,6 +143,11 @@ class GatewayModel extends Model {
     this.ws = new ReopeningWebSocket(wsHref);
     this.ws.addEventListener('open', this.refreshThings.bind(this));
     this.ws.addEventListener('message', this.onMessage);
+    const directoriesHref = `${window.location.origin}/directories?jwt=${API.jwt}`;
+    const directoriesWsHref = directoriesHref.replace(/^http/, 'ws');
+    this.directoriesWs = new ReopeningWebSocket(directoriesWsHref);
+    this.directoriesWs.addEventListener('open', this.refreshThings.bind(this));
+    this.directoriesWs.addEventListener('message', this.onMessage);
   }
 
   onMessage(event) {
@@ -154,6 +162,11 @@ class GatewayModel extends Model {
         break;
       case 'thingModified':
         this.refreshThing(message.id);
+        break;
+      case 'directoryAdded':
+      case 'directoryModified':
+      case 'directoryRemoved':
+        this.refreshThings();
         break;
       default:
         break;
@@ -177,10 +190,25 @@ class GatewayModel extends Model {
 
           removedIds.forEach((thingId) => this.handleRemove(thingId, true));
 
-          return this.handleEvent(Constants.REFRESH_THINGS, this.things);
+          return API.getDirectories();
+        })
+        .then((directories) => {
+          const fetchedIds = new Set();
+          directories.forEach((description) => {
+            const directoryId = decodeURIComponent(description.href.split('/').pop());
+            fetchedIds.add(directoryId);
+            this.setDirectory(directoryId, description);
+          });
+
+          const removedIds = Array.from(this.directories.keys()).filter((id) => {
+            return !fetchedIds.has(id);
+          });
+
+          removedIds.forEach((directoryId) => this.handleRemoveDirectory(directoryId, true));
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.directories);
         })
         .catch((e) => {
-          console.error(`Get things failed ${e}`);
+          console.error(`Get things or directories failed ${e}`);
         });
     });
   }
@@ -193,12 +221,89 @@ class GatewayModel extends Model {
             throw new Error(`Unavailable Thing Description: ${description}`);
           }
           this.setThing(thingId, description);
-          return this.handleEvent(Constants.REFRESH_THINGS, this.things);
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.directories);
         })
         .catch((e) => {
           console.error(`Get thing id:${thingId} failed ${e}`);
         });
     });
+  }
+
+  setDirectory(directoryId, description) {
+    this.directories.set(directoryId, description);
+  }
+
+  getDirectory(directoryId) {
+    if (this.directories.has(directoryId)) {
+      return Promise.resolve(this.directories.get(directoryId));
+    }
+    return this.refreshDirectory(directoryId).then(() => {
+      return this.directories.get(directoryId);
+    });
+  }
+
+  /**
+   * Remove the directory.
+   *
+   * @param {string} directoryId - Id of the directory
+   */
+  removeDirectory(directoryId) {
+    if (!this.directories.has(directoryId)) {
+      return Promise.reject(`No directory id:${directoryId}`);
+    }
+    return this.addQueue(() => {
+      if (!this.directories.has(directoryId)) {
+        throw new Error(`Directory id:${directoryId} already removed`);
+      }
+      return API.removeDirectory(directoryId)
+        .then(() => {
+          return this.handleEvent(Constants.DELETE_DIRECTORIES, this.things, this.directories);
+        });
+    });
+  }
+
+  /**
+   * Add a new directory.
+   *
+   * @param {string} title - title of the directory
+   */
+  addDirectory(title) {
+    return this.addQueue(() => {
+      return API.addDirectory(title).then((directory) => {
+        const directoryId = decodeURIComponent(directory.href.split('/').pop());
+        return directoryId;
+      });
+    });
+  }
+
+  /**
+   * Update the directory.
+   *
+   * @param {string} directoryId - Id of the directory
+   * @param {object} updates - contents of update
+   */
+  updateDirectory(directoryId, updates) {
+    if (!this.directories.has(directoryId)) {
+      return Promise.reject(`No directory id:${directoryId}`);
+    }
+    return this.addQueue(() => {
+      if (!this.directories.has(directoryId)) {
+        throw new Error(`Directory id:${directoryId} already updated`);
+      }
+      const directory = this.directories.get(directoryId);
+      return directory.updateDirectory(updates).then(() => {
+        this.refreshDirectory(directoryId);
+      });
+    });
+  }
+
+  handleRemoveDirectory(directoryId, skipEvent = false) {
+    if (this.directories.has(directoryId)) {
+      this.directories.delete(directoryId);
+    }
+    if (!skipEvent) {
+      return this.handleEvent(Constants.DELETE_DIRECTORIES, this.things, this.directories);
+    }
   }
 }
 

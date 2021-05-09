@@ -19,6 +19,8 @@ const EventList = require('./event-list');
 const fluent = require('../fluent');
 const Icons = require('../icons');
 const { createThingFromCapability } = require('../schema-impl/capability/capabilities');
+const API = require('../api').default;
+const Utils = require('../utils');
 
 const ThingsScreen = {
   /**
@@ -26,6 +28,7 @@ const ThingsScreen = {
    */
   init: function () {
     this.thingsElement = document.getElementById('things');
+    this.directoriesElement = document.getElementById('directories');
     this.thingTitleElement = document.getElementById('thing-title');
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
@@ -94,15 +97,130 @@ const ThingsScreen = {
     }
   },
 
-  refreshThings: function (things) {
+  refreshThings: function (things, directories) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
     }
-    if (things.size === 0) {
+    if (things.size === 0 && directories.size === 0) {
       this.thingsElement.innerHTML = fluent.getMessage('no-things');
     } else {
       this.thingsElement.innerHTML = '';
+    }
+    this.directoriesElement.innerHTML = '';
+    if (directories.size !== 0) {
+      directories.forEach((directory, directoryId) => {
+        const directoryNode = document.createElement('DIV');
+        directoryNode.setAttribute('class', 'directory');
+        directoryNode.setAttribute('id', `directory-${directoryId}`);
+        directoryNode.setAttribute('layoutIndex', `${directory.layoutIndex}`);
+
+        function handleDragOver(e) {
+          e.preventDefault();
+
+          this.thingsElement.childNodes.forEach((node) => {
+            node.classList.remove('drag-target');
+          });
+
+          let dropNode = e.target;
+          while (!dropNode.classList || !dropNode.classList.contains('directory')) {
+            dropNode = dropNode.parentNode;
+          }
+
+          if (dropNode) {
+            e.dataTransfer.dropEffect = 'move';
+            dropNode.classList.add('drag-target');
+          }
+        }
+
+        function handleDragEnter(e) {
+          e.preventDefault();
+        }
+
+        function handleDragLeave(e) {
+          e.preventDefault();
+
+          let dropNode = e.target;
+          while (!dropNode.classList || !dropNode.classList.contains('directory')) {
+            dropNode = dropNode.parentNode;
+          }
+
+          if (dropNode) {
+            dropNode.classList.remove('drag-target');
+          }
+        }
+
+        function handleDrop(e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          let dropNode = e.target;
+          while (!dropNode.classList || !dropNode.classList.contains('directory')) {
+            dropNode = dropNode.parentNode;
+          }
+
+          const dragNode = document.getElementById(e.dataTransfer.getData('text'));
+
+          if (!dropNode || !dragNode || dropNode.id === dragNode.id) {
+            return;
+          }
+
+          dragNode.parentNode.removeChild(dragNode);
+
+          dropNode.appendChild(dragNode);
+
+          const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
+          directoryId = dropNode.getAttribute('id').replace(/^directory-/, '');
+          const layoutIndex = Array.from(dropNode.childNodes)
+            .filter((node) => node.classList.contains('thing'))
+            .length;
+
+          Promise.all([
+            API.setThingDirectory(
+              dragNodeId,
+              directoryId
+            ),
+            API.setThingLayoutIndex(
+              dragNodeId,
+              layoutIndex,
+            ),
+          ])
+            .then(() => {
+              App.gatewayModel.refreshThings();
+            })
+            .catch((e) => {
+              console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
+            });
+        }
+
+        directoryNode.ondragover = handleDragOver.bind(this);
+        directoryNode.ondragenter = handleDragEnter.bind(this);
+        directoryNode.ondragleave = handleDragLeave.bind(this);
+        directoryNode.ondrop = handleDrop.bind(this);
+
+        const bar = document.createElement('DIV');
+        bar.setAttribute('class', 'bar');
+        bar.setAttribute('layoutIndex', '-1');
+
+        const title = document.createElement('DIV');
+        title.setAttribute('class', 'title');
+        title.innerText = directory.title;
+        bar.appendChild(title);
+
+        const removeDirectoryButton = document.createElement('BUTTON');
+        removeDirectoryButton.setAttribute('class', 'remove');
+        removeDirectoryButton.innerText = 'x';
+        removeDirectoryButton.addEventListener('click', () => {
+          App.gatewayModel.removeDirectory(directoryId);
+        });
+        bar.appendChild(removeDirectoryButton);
+
+        directoryNode.appendChild(bar);
+
+        this.directoriesElement.appendChild(directoryNode);
+      });
+    }
+    if (things.size !== 0) {
       things.forEach((description, thingId) => {
         App.gatewayModel.getThingModel(thingId).then((thingModel) => {
           this.renderThing(thingModel, description);
@@ -131,17 +249,18 @@ const ThingsScreen = {
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThings);
-
     this.refreshThing = () => {
       return App.gatewayModel
         .getThing(thingId)
         .then(async (description) => {
           if (!description) {
             this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+            this.directoriesElement.innerHTML = '';
             return;
           }
 
           this.thingsElement.innerHTML = '';
+          this.directoriesElement.innerHTML = '';
 
           const thingModel = await App.gatewayModel.getThingModel(thingId);
           const thing = this.renderThing(thingModel, description, Constants.ThingFormat.EXPANDED);
@@ -166,6 +285,7 @@ const ThingsScreen = {
         .catch((e) => {
           console.error(`Thing id ${thingId} not found ${e}`);
           this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+          this.directoriesElement.innerHTML = '';
         });
     };
 
@@ -184,6 +304,7 @@ const ThingsScreen = {
       .getThing(thingId)
       .then((description) => {
         this.thingsElement.innerHTML = '';
+        this.directoriesElement.innerHTML = '';
 
         if (
           !description.hasOwnProperty('actions') ||
@@ -191,6 +312,7 @@ const ThingsScreen = {
           !description.actions[actionName].hasOwnProperty('input')
         ) {
           this.thingsElement.innerHTML = fluent.getMessage('action-not-found');
+          this.directoriesElement.innerHTML = '';
           return;
         }
 
@@ -219,6 +341,7 @@ const ThingsScreen = {
         document.getElementById('thing-title-title').innerText = description.title;
 
         this.thingsElement.innerHTML = '';
+        this.directoriesElement.innerHTML = '';
         new ActionInputForm(
           href,
           actionName,
@@ -229,6 +352,7 @@ const ThingsScreen = {
       .catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+        this.directoriesElement.innerHTML = '';
       });
   },
 
@@ -245,6 +369,7 @@ const ThingsScreen = {
       .getThing(thingId)
       .then(async (description) => {
         this.thingsElement.innerHTML = '';
+        this.directoriesElement.innerHTML = '';
         if (!description.hasOwnProperty('events')) {
           this.thingsElement.innerHTML = fluent.getMessage('events-not-found');
           return;
@@ -269,11 +394,13 @@ const ThingsScreen = {
         document.getElementById('thing-title-title').innerText = description.title;
 
         this.thingsElement.innerHTML = '';
+        this.directoriesElement.innerHTML = '';
         this.eventList = new EventList(thingModel, description);
       })
       .catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+        this.directoriesElement.innerHTML = '';
       });
   },
 };

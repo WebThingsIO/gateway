@@ -94,6 +94,10 @@ class Thing {
       this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
+    } else if (this.model.directory_id) {
+      this.container = document.querySelector(
+        `#directory-${this.model.directory_id}`
+      );
     } else {
       this.container = document.getElementById('things');
     }
@@ -601,7 +605,7 @@ class Thing {
 
     if (format == Constants.ThingFormat.EXPANDED) {
       element.innerHTML = this.expandedView().trim();
-      return this.container.appendChild(element.firstChild);
+      return document.getElementById('things').appendChild(element.firstChild);
     }
 
     element.innerHTML = this.interactiveView().trim();
@@ -695,7 +699,7 @@ class Thing {
     const dropNodeStart = dropNode.getBoundingClientRect().x;
     const dropNodeWidth = dropNode.getBoundingClientRect().width;
 
-    this.container.removeChild(dragNode);
+    dragNode.parentNode.removeChild(dragNode);
 
     if (dropX - dropNodeStart < dropNodeWidth / 2) {
       this.container.insertBefore(dragNode, dropNode);
@@ -708,23 +712,43 @@ class Thing {
       }
     }
 
-    this.container.childNodes.forEach((node, index) => {
-      node.dataset.layoutIndex = index;
+    const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
+    API.setThingDirectory(
+      dragNodeId,
+      this.model.directory_id
+    )
+      .then(() => {
+        Array.from(this.container.childNodes)
+          .filter((node) => node.classList.contains('thing'))
+          .forEach((node, index) => {
+            node.dataset.layoutIndex = index;
 
-      const id = Utils.unescapeHtml(node.id).replace(/^thing-/, '');
-      API.setThingLayoutIndex(id, index)
-        .then(() => {
-          App.gatewayModel.refreshThings();
-        })
-        .catch((e) => {
-          console.error(`Error trying to arrange thing ${id}: ${e}`);
-        });
-    });
+            const id = Utils.unescapeHtml(node.id).replace(/^thing-/, '');
+            API.setThingLayoutIndex(id, index)
+              .then(() => {
+                App.gatewayModel.refreshThings();
+              })
+              .catch((e) => {
+                console.error(`Error trying to arrange thing ${id}: ${e}`);
+              });
+          });
+      })
+      .catch((e) => {
+        console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
+      });
   }
 
   handleDragEnd() {
-    this.container.childNodes.forEach((node) => {
-      node.classList.remove('drag-start', 'drag-end');
+    let container;
+    if (this.format === Constants.ThingFormat.LINK_ICON) {
+      container = document.getElementById('floorplan');
+    } else {
+      container = document.getElementById('things-container');
+    }
+    container.querySelectorAll('.drag-start, .drag-end, .drag-target').forEach((node) => {
+      node.classList.remove('drag-start', 'drag-end', 'drag-target');
+    });
+    container.querySelectorAll('.thing').forEach((node) => {
       node.style.cursor = 'grab';
     });
   }

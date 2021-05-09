@@ -34,6 +34,9 @@ const AddThingScreen = {
     this.addonsHint = document.getElementById('add-adapters-hint');
     this.addonsHintAnchor = document.getElementById('add-adapters-hint-anchor');
     this.addByUrlAnchor = document.getElementById('add-by-url-anchor');
+    this.addDirectoryContainer = document.getElementById('add-directory');
+    this.addDirectoryInput = document.getElementById('add-directory-title-input');
+    this.addDirectoryButton = document.getElementById('add-directory-add-button');
     this.pairingTimeout = null;
     this.visibleThings = new Set();
     // Add event listeners
@@ -41,6 +44,7 @@ const AddThingScreen = {
     this.cancelButton.addEventListener('click', this.hide.bind(this));
     this.addonsHintAnchor.addEventListener('click', this.hide.bind(this));
     this.addByUrlAnchor.addEventListener('click', this.showNewWebThing.bind(this));
+    this.addDirectoryButton.addEventListener('click', this.addDirectory.bind(this));
     this.closing = false;
   },
 
@@ -178,6 +182,15 @@ const AddThingScreen = {
     e.preventDefault();
     new NewWebThing();
   },
+
+  addDirectory: function () {
+    App.gatewayModel.addDirectory({
+      title: this.addDirectoryInput.value,
+    }).then(() => {
+      this.hide();
+    });
+  },
+
 };
 
 module.exports = AddThingScreen;

@@ -384,7 +384,11 @@ function build(): express.Router {
       } else if (request.body.hasOwnProperty('layoutIndex')) {
         description = await thing.setLayoutIndex(request.body.layoutIndex);
       } else if (request.body.hasOwnProperty('directory')) {
-        description = await thing.setDirectory(request.body.directory);
+        if (request.body.directory === '') {
+          description = await thing.setDirectory(null);
+        } else {
+          description = await thing.setDirectory(request.body.directory);
+        }
       } else {
         response.status(400).send('request body missing required parameters');
         return;
