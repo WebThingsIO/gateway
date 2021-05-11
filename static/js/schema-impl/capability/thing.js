@@ -699,15 +699,16 @@ class Thing {
     const dropNodeStart = dropNode.getBoundingClientRect().x;
     const dropNodeWidth = dropNode.getBoundingClientRect().width;
 
-    dragNode.parentNode.removeChild(dragNode);
-
     let dropIndex = parseInt(dropNode.getAttribute('data-layout-index'));
 
-    if (dragNode.parentNode === dropNode.parentNode &&
+    if (
+      dragNode.parentNode === dropNode.parentNode &&
       parseInt(dragNode.getAttribute('data-layout-index')) < dropIndex
     ) {
       dropIndex -= 1;
     }
+
+    dragNode.parentNode.removeChild(dragNode);
 
     if (dropX - dropNodeStart < dropNodeWidth / 2) {
       this.container.insertBefore(dragNode, dropNode);

@@ -200,8 +200,10 @@ class Things extends EventEmitter {
     thing.setConnected(true);
     this.setThingLayoutIndex(thing, Infinity);
 
-    return Database.createThing(thing.getId(), thing.getDescription()).then((thingDesc) => {
+    return Database.createThing(thing.getId(), thing.getDescription()).then(() => {
       this.things.set(thing.getId(), thing);
+      return this.setThingLayoutIndex(thing, Infinity);
+    }).then((thingDesc) => {
       this.emit(Constants.THING_ADDED, thing);
       return thingDesc;
     });

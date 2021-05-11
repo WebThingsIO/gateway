@@ -167,6 +167,7 @@ const AddThingScreen = {
    */
   hide: function () {
     this.element.classList.add('hidden');
+    this.addDirectoryInput.value = '';
     this.requestCancelPairing();
     App.gatewayModel.refreshThings();
   },
