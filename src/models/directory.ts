@@ -103,12 +103,12 @@ export default class Directory extends EventEmitter {
    * Remove the Directory
    */
   remove(): Promise<void> {
-    return Things.getThings().then((things) => {
-      things.forEach((thing) => {
+    return Things.getThings().then(async (things) => {
+      for (const thing of things.values()) {
         if (thing.getDirectory() === this.getId()) {
-          thing.setDirectory(null);
+          await Things.setThingDirectory(thing, null);
         }
-      });
+      }
       this.emit(Constants.REMOVED, true);
     });
   }

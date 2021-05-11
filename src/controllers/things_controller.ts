@@ -381,14 +381,16 @@ function build(): express.Router {
     try {
       if (request.body.hasOwnProperty('floorplanX') && request.body.hasOwnProperty('floorplanY')) {
         description = await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
+      } else if (
+        request.body.hasOwnProperty('layoutIndex') && request.body.hasOwnProperty('directory')
+      ) {
+        description = await Things.setThingDirectoryAndLayoutIndex(
+          thing, request.body.directory, request.body.layoutIndex
+        );
       } else if (request.body.hasOwnProperty('layoutIndex')) {
-        description = await thing.setLayoutIndex(request.body.layoutIndex);
+        description = await Things.setThingLayoutIndex(thing, request.body.layoutIndex);
       } else if (request.body.hasOwnProperty('directory')) {
-        if (request.body.directory === '') {
-          description = await thing.setDirectory(null);
-        } else {
-          description = await thing.setDirectory(request.body.directory);
-        }
+        description = await Things.setThingDirectory(thing, request.body.directory);
       } else {
         response.status(400).send('request body missing required parameters');
         return;

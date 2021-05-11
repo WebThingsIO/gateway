@@ -701,6 +701,14 @@ class Thing {
 
     dragNode.parentNode.removeChild(dragNode);
 
+    let dropIndex = parseInt(dropNode.getAttribute('data-layout-index'));
+
+    if (dragNode.parentNode === dropNode.parentNode &&
+      parseInt(dragNode.getAttribute('data-layout-index')) < dropIndex
+    ) {
+      dropIndex -= 1;
+    }
+
     if (dropX - dropNodeStart < dropNodeWidth / 2) {
       this.container.insertBefore(dragNode, dropNode);
     } else {
@@ -710,28 +718,13 @@ class Thing {
       } else {
         this.container.appendChild(dragNode);
       }
+      dropIndex += 1;
     }
 
     const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-    API.setThingDirectory(
-      dragNodeId,
-      this.model.directory_id
-    )
+    API.setThingDirectoryAndLayoutIndex(dragNodeId, this.model.directory_id, dropIndex)
       .then(() => {
-        Array.from(this.container.childNodes)
-          .filter((node) => node.classList.contains('thing'))
-          .forEach((node, index) => {
-            node.dataset.layoutIndex = index;
-
-            const id = Utils.unescapeHtml(node.id).replace(/^thing-/, '');
-            API.setThingLayoutIndex(id, index)
-              .then(() => {
-                App.gatewayModel.refreshThings();
-              })
-              .catch((e) => {
-                console.error(`Error trying to arrange thing ${id}: ${e}`);
-              });
-          });
+        App.gatewayModel.refreshThings();
       })
       .catch((e) => {
         console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);

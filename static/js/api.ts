@@ -371,6 +371,18 @@ class API {
     return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { directory: directoryId });
   }
 
+  setThingDirectoryAndLayoutIndex(
+    thingId: string,
+    directoryId: string | null,
+    index: number
+  ): Promise<Record<string, unknown>> {
+    directoryId = directoryId || '';
+    return this.patchJson(
+      `/things/${encodeURIComponent(thingId)}`,
+      { directory: directoryId, layoutIndex: index }
+    );
+  }
+
   setThingFloorplanPosition(
     thingId: string,
     x: number,

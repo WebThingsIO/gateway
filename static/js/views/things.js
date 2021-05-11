@@ -171,20 +171,10 @@ const ThingsScreen = {
 
           const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
           directoryId = dropNode.getAttribute('id').replace(/^directory-/, '');
-          const layoutIndex = Array.from(dropNode.childNodes)
-            .filter((node) => node.classList.contains('thing'))
-            .length;
-
-          Promise.all([
-            API.setThingDirectory(
-              dragNodeId,
-              directoryId
-            ),
-            API.setThingLayoutIndex(
-              dragNodeId,
-              layoutIndex,
-            ),
-          ])
+          API.setThingDirectory(
+            dragNodeId,
+            directoryId
+          )
             .then(() => {
               App.gatewayModel.refreshThings();
             })

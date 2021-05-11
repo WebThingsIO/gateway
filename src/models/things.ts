@@ -71,7 +71,7 @@ class Things extends EventEmitter {
       // Update the map of Things
       this.things = new Map();
       things.forEach((thing, index) => {
-        // This should only happen on the first migration.
+        // This should only happen on the first migration. // TODO
         if (!thing.hasOwnProperty('layoutIndex')) {
           thing.layoutIndex = index;
         }
@@ -198,7 +198,7 @@ class Things extends EventEmitter {
   createThing(id: string, description: ThingDescription): Promise<ThingDescription> {
     const thing = new Thing(id, description, this.router!);
     thing.setConnected(true);
-    thing.setLayoutIndex(this.things.size);
+    this.setThingLayoutIndex(thing, Infinity);
 
     return Database.createThing(thing.getId(), thing.getDescription()).then((thingDesc) => {
       this.things.set(thing.getId(), thing);
@@ -329,6 +329,99 @@ class Things extends EventEmitter {
   }
 
   /**
+   * Set the layout index for a Thing.
+   *
+   * @param {number} thing The thing.
+   * @param {number} index The new layout index.
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  async setThingLayoutIndex(thing: Thing, index: number): Promise<ThingDescription> {
+    const things = Array.from(this.things.values())
+      .filter((t) => t.getDirectory() == thing.getDirectory());
+    index = Math.min(things.length - 1, Math.max(0, index));
+    let movePromises: Promise<ThingDescription | null>[];
+
+    if (thing.getLayoutIndex() < index) {
+      movePromises = things.map((t) => {
+        if (thing.getLayoutIndex() < t.getLayoutIndex() && t.getLayoutIndex() <= index) {
+          return t.setLayoutIndex(t.getLayoutIndex() - 1);
+        } else {
+          return new Promise((resolve) => resolve(null));
+        }
+      });
+    } else {
+      movePromises = things.map((t) => {
+        if (index <= t.getLayoutIndex() && t.getLayoutIndex() < thing.getLayoutIndex()) {
+          return t.setLayoutIndex(t.getLayoutIndex() + 1);
+        } else {
+          return new Promise((resolve) => resolve(null));
+        }
+      });
+    }
+
+    return new Promise((resolve) => {
+      return Promise.all(movePromises).then(() => {
+        resolve(thing.setLayoutIndex(index));
+      });
+    });
+  }
+
+  /**
+   * Set the directory for a Thing in the overview.
+   *
+   * @param {number} thing The thing.
+   * @param {string} directory_id ID of the directory
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  setThingDirectory(thing: Thing, directory_id: string | null): Promise<ThingDescription> {
+    if (!directory_id) {
+      directory_id = null;
+    }
+    return new Promise((resolve) => {
+      this.setThingLayoutIndex(thing, Infinity)
+        .then(() => {
+          return thing.setDirectory(directory_id);
+        })
+        .then(() => {
+          const index = Array.from(this.things.values())
+            .filter((t) => t.getDirectory() == thing.getDirectory())
+            .length - 1;
+          return thing.setLayoutIndex(index);
+        })
+        .then((res) => {
+          resolve(res);
+        });
+    });
+  }
+
+  /**
+   * Set the directory and layout index for a Thing in the overview.
+   *
+   * @param {number} thing The thing.
+   * @param {string} directory_id ID of the directory
+   * @param {string} directory_id The new layout index.
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  setThingDirectoryAndLayoutIndex(
+    thing: Thing,
+    directory_id: string | null,
+    index: number
+  ): Promise<ThingDescription> {
+    if (!directory_id) {
+      directory_id = null;
+    }
+    return new Promise((resolve) => {
+      this.setThingDirectory(thing, directory_id)
+        .then(() => {
+          return this.setThingLayoutIndex(thing, index);
+        })
+        .then((res) => {
+          resolve(res);
+        });
+    });
+  }
+
+  /**
    * Remove a Thing.
    *
    * @param String id ID to give Thing.
@@ -342,15 +435,18 @@ class Things extends EventEmitter {
       }
 
       const index = thing.getLayoutIndex();
+      const directory_id = thing.getDirectory();
 
       thing.remove();
       this.things.delete(id);
 
-      this.things.forEach((t) => {
-        if (t.getLayoutIndex() > index) {
-          t.setLayoutIndex(t.getLayoutIndex() - 1);
-        }
-      });
+      Array.from(this.things.values())
+        .filter((t) => t.getDirectory() == directory_id)
+        .forEach((t) => {
+          if (t.getLayoutIndex() > index) {
+            t.setLayoutIndex(t.getLayoutIndex() - 1);
+          }
+        });
     });
   }
 
