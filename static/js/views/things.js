@@ -19,8 +19,10 @@ const EventList = require('./event-list');
 const fluent = require('../fluent');
 const Icons = require('../icons');
 const { createThingFromCapability } = require('../schema-impl/capability/capabilities');
+const Directory = require('./directory');
 const API = require('../api').default;
 const Utils = require('../utils');
+
 
 const ThingsScreen = {
   /**
@@ -38,6 +40,11 @@ const ThingsScreen = {
     this.addButton.addEventListener('click', AddThingScreen.show.bind(AddThingScreen));
     this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
+
+    this.thingsElement.ondragover = this.handleDragOver.bind(this);
+    this.thingsElement.ondragenter = this.handleDragEnter.bind(this);
+    this.thingsElement.ondragleave = this.handleDragLeave.bind(this);
+    this.thingsElement.ondrop = this.handleDrop.bind(this);
   },
 
   renderThing: function (thingModel, description, format) {
@@ -109,105 +116,8 @@ const ThingsScreen = {
     }
     this.directoriesElement.innerHTML = '';
     if (directories.size !== 0) {
-      directories.forEach((directory, directoryId) => {
-        const directoryNode = document.createElement('DIV');
-        directoryNode.setAttribute('class', 'directory');
-        directoryNode.setAttribute('id', `directory-${directoryId}`);
-        directoryNode.setAttribute('layoutIndex', `${directory.layoutIndex}`);
-
-        function handleDragOver(e) {
-          e.preventDefault();
-
-          this.thingsElement.childNodes.forEach((node) => {
-            node.classList.remove('drag-target');
-          });
-
-          let dropNode = e.target;
-          while (!dropNode.classList || !dropNode.classList.contains('directory')) {
-            dropNode = dropNode.parentNode;
-          }
-
-          if (dropNode) {
-            e.dataTransfer.dropEffect = 'move';
-            dropNode.classList.add('drag-target');
-          }
-        }
-
-        function handleDragEnter(e) {
-          e.preventDefault();
-        }
-
-        function handleDragLeave(e) {
-          e.preventDefault();
-
-          let dropNode = e.target;
-          while (!dropNode.classList || !dropNode.classList.contains('directory')) {
-            dropNode = dropNode.parentNode;
-          }
-
-          if (dropNode) {
-            dropNode.classList.remove('drag-target');
-          }
-        }
-
-        function handleDrop(e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          let dropNode = e.target;
-          while (!dropNode.classList || !dropNode.classList.contains('directory')) {
-            dropNode = dropNode.parentNode;
-          }
-
-          const dragNode = document.getElementById(e.dataTransfer.getData('text'));
-
-          if (!dropNode || !dragNode || dropNode.id === dragNode.id) {
-            return;
-          }
-
-          dragNode.parentNode.removeChild(dragNode);
-
-          dropNode.appendChild(dragNode);
-
-          const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-          directoryId = dropNode.getAttribute('id').replace(/^directory-/, '');
-          API.setThingDirectory(
-            dragNodeId,
-            directoryId
-          )
-            .then(() => {
-              App.gatewayModel.refreshThings();
-            })
-            .catch((e) => {
-              console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
-            });
-        }
-
-        directoryNode.ondragover = handleDragOver.bind(this);
-        directoryNode.ondragenter = handleDragEnter.bind(this);
-        directoryNode.ondragleave = handleDragLeave.bind(this);
-        directoryNode.ondrop = handleDrop.bind(this);
-
-        const bar = document.createElement('DIV');
-        bar.setAttribute('class', 'bar');
-        bar.setAttribute('layoutIndex', '-1');
-
-        const title = document.createElement('DIV');
-        title.setAttribute('class', 'title');
-        title.innerText = directory.title;
-        bar.appendChild(title);
-
-        const removeDirectoryButton = document.createElement('BUTTON');
-        removeDirectoryButton.setAttribute('class', 'remove');
-        removeDirectoryButton.innerText = 'x';
-        removeDirectoryButton.addEventListener('click', () => {
-          App.gatewayModel.removeDirectory(directoryId);
-        });
-        bar.appendChild(removeDirectoryButton);
-
-        directoryNode.appendChild(bar);
-
-        this.directoriesElement.appendChild(directoryNode);
+      directories.forEach((description) => {
+        new Directory(description);
       });
     }
     if (things.size !== 0) {
@@ -391,6 +301,45 @@ const ThingsScreen = {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
         this.directoriesElement.innerHTML = '';
+      });
+  },
+
+  handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    this.thingsElement.classList.add('drag-target');
+  },
+
+  handleDragEnter(e) {
+    e.preventDefault();
+  },
+
+  handleDragLeave(e) {
+    e.preventDefault();
+    this.thingsElement.classList.remove('drag-target');
+  },
+
+  handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const dragNode = document.getElementById(e.dataTransfer.getData('text'));
+
+    if (!dragNode) {
+      return;
+    }
+
+    dragNode.parentNode.removeChild(dragNode);
+
+    this.thingsElement.appendChild(dragNode);
+
+    const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
+    API.setThingDirectory(dragNodeId, null)
+      .then(() => {
+        App.gatewayModel.refreshThings();
+      })
+      .catch((e) => {
+        console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
       });
   },
 };
