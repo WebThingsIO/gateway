@@ -46,14 +46,37 @@ class Directory {
     bar.setAttribute('class', 'bar');
     bar.setAttribute('layoutIndex', '-1');
 
+    const leftcontainer = document.createElement('DIV');
+    leftcontainer.setAttribute('class', 'leftcontainer');
+
+    const foldInButton = document.createElement('BUTTON');
+    foldInButton.setAttribute('class', 'foldIn');
+    const cookie = `directory-${this.id}-closed=1`;
+    if (!document.cookie.split(';').map((c) => c.trim()).includes(cookie)) {
+      element.classList.add('open');
+    }
+    foldInButton.addEventListener('click', () => {
+      document.cookie = `${cookie};expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+      if (element.classList.contains('open')) {
+        element.classList.remove('open');
+        const d = new Date();
+        d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+        document.cookie = `${cookie};expires=${d.toUTCString()}`;
+      } else {
+        element.classList.add('open');
+      }
+    });
+    leftcontainer.appendChild(foldInButton);
+
     const title = document.createElement('DIV');
     title.setAttribute('class', 'title');
     title.innerText = this.title;
-    bar.appendChild(title);
+    leftcontainer.appendChild(title);
+
+    bar.appendChild(leftcontainer);
 
     const removeDirectoryButton = document.createElement('BUTTON');
     removeDirectoryButton.setAttribute('class', 'remove');
-    removeDirectoryButton.innerText = 'x';
     removeDirectoryButton.addEventListener('click', () => {
       App.gatewayModel.removeDirectory(this.id);
     });

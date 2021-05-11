@@ -14,18 +14,25 @@
   top: 50%;
   transform: translateY(-50%);
   max-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 #things {
   text-align: center;
   font-size: 1.6rem;
   color: #fff;
+  flex-direction: column;
+  margin: auto;
 }
 
 #directories {
   text-align: center;
   font-size: 1.6rem;
+  flex-direction: column;
   color: #fff;
+  display: flex;
+  margin: auto;
 }
 
 #add-button {
@@ -39,19 +46,78 @@
 }
 
 .directory {
+  background: #5288af;
+  border-radius: 5px;
+  border: 1px solid #48779a;
+  margin: 12px 0px;
+  min-width: 250px;
+  min-height: 50px;
+  max-height: 32px;
+  overflow: hidden;
+}
 
+.directory.open {
+  max-height: 100000px;
+}
+
+.directory .thing {
+  opacity: 1;
+}
+
+.directory:not(.open) .thing {
+  opacity: 0;
 }
 
 .directory div.bar {
-
+  flex-direction: row;
+  justify-content: space-between;
+  display: flex;
+  padding: 5px 10px;
+  position: relative;
 }
 
 .directory div.bar div.title {
-
+  color: white;
 }
 
 .directory div.bar button.remove {
+  background: none;
+  border: none;
+  background-image: url(/images/clear_arrayfield.svg);
+  position: absolute;
+  top: 5px;
+  right: 1rem;
+  width: 25px;
+  border-radius: 50%;
+  height: 25px;
+  background-color: #597285;
+}
 
+.directory div.bar button.remove:hover {
+  background-color: #658196;
+}
+
+.directory div.bar .leftcontainer {
+  display: flex;
+}
+
+.directory div.bar button.foldIn {
+  background-image: url(/images/right-arrow.png);
+  transform: rotate(90deg);
+  background-size: 15px 15px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  width: 25px;
+  margin-right: 5px;
+  background-color: transparent;
+  height: 25px;
+  transition: transform 0.3s;
+  cursor: grab;
+}
+
+.directory.open div.bar button.foldIn {
+  transform: rotate(-90deg);
 }
 
 [draggable] {
@@ -63,5 +129,9 @@
 }
 
 .drag-target {
+  border: 0.2rem dashed white;
+}
+
+.directory.open.drag-target {
   border: 0.2rem dashed white;
 }
