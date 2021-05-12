@@ -24,6 +24,8 @@
   color: #fff;
   flex-direction: column;
   margin: auto;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 #directories {
@@ -54,6 +56,8 @@
   min-height: 50px;
   max-height: 32px;
   overflow: hidden;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .directory.open {

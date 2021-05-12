@@ -195,18 +195,15 @@ class Things extends EventEmitter {
    * @param String id ID to give Thing.
    * @param Object description Thing description.
    */
-  createThing(id: string, description: ThingDescription): Promise<ThingDescription> {
+  async createThing(id: string, description: ThingDescription): Promise<ThingDescription> {
     const thing = new Thing(id, description, this.router!);
     thing.setConnected(true);
-    this.setThingLayoutIndex(thing, Infinity);
 
-    return Database.createThing(thing.getId(), thing.getDescription()).then(() => {
-      this.things.set(thing.getId(), thing);
-      return this.setThingLayoutIndex(thing, Infinity);
-    }).then((thingDesc) => {
-      this.emit(Constants.THING_ADDED, thing);
-      return thingDesc;
-    });
+    const thingDesc = await Database.createThing(thing.getId(), thing.getDescription());
+    this.things.set(thing.getId(), thing);
+    await this.setThingLayoutIndex(thing, Infinity);
+    this.emit(Constants.THING_ADDED, thing);
+    return thingDesc;
   }
 
   /**
@@ -337,10 +334,12 @@ class Things extends EventEmitter {
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setThingLayoutIndex(thing: Thing, index: number): Promise<ThingDescription> {
+  async setThingLayoutIndex(thing: Thing, index: number, emitModified = true): Promise<void> {
     const things = Array.from(this.things.values())
       .filter((t) => t.getDirectory() == thing.getDirectory());
+
     index = Math.min(things.length - 1, Math.max(0, index));
+
     let movePromises: Promise<ThingDescription | null>[];
 
     if (thing.getLayoutIndex() < index) {
@@ -361,11 +360,12 @@ class Things extends EventEmitter {
       });
     }
 
-    return new Promise((resolve) => {
-      return Promise.all(movePromises).then(() => {
-        resolve(thing.setLayoutIndex(index));
-      });
-    });
+    await Promise.all(movePromises);
+    await thing.setLayoutIndex(index);
+
+    if (emitModified) {
+      this.emit(Constants.LAYOUT_MODIFIED);
+    }
   }
 
   /**
@@ -375,25 +375,25 @@ class Things extends EventEmitter {
    * @param {string} directory_id ID of the directory
    * @return {Promise} A promise which resolves with the description set.
    */
-  setThingDirectory(thing: Thing, directory_id: string | null): Promise<ThingDescription> {
+  async setThingDirectory(
+    thing: Thing,
+    directory_id: string | null,
+    emitModified = true
+  ): Promise<void> {
     if (!directory_id) {
       directory_id = null;
     }
-    return new Promise((resolve) => {
-      this.setThingLayoutIndex(thing, Infinity)
-        .then(() => {
-          return thing.setDirectory(directory_id);
-        })
-        .then(() => {
-          const index = Array.from(this.things.values())
-            .filter((t) => t.getDirectory() == thing.getDirectory())
-            .length - 1;
-          return thing.setLayoutIndex(index);
-        })
-        .then((res) => {
-          resolve(res);
-        });
-    });
+
+    await this.setThingLayoutIndex(thing, Infinity, false);
+    await thing.setDirectory(directory_id);
+    const index = Array.from(this.things.values())
+      .filter((t) => t.getDirectory() == thing.getDirectory())
+      .length - 1;
+    await thing.setLayoutIndex(index);
+
+    if (emitModified) {
+      this.emit(Constants.LAYOUT_MODIFIED);
+    }
   }
 
   /**
@@ -401,26 +401,20 @@ class Things extends EventEmitter {
    *
    * @param {number} thing The thing.
    * @param {string} directory_id ID of the directory
-   * @param {string} directory_id The new layout index.
+   * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
-  setThingDirectoryAndLayoutIndex(
+  async setThingDirectoryAndLayoutIndex(
     thing: Thing,
     directory_id: string | null,
     index: number
-  ): Promise<ThingDescription> {
+  ): Promise<void> {
     if (!directory_id) {
       directory_id = null;
     }
-    return new Promise((resolve) => {
-      this.setThingDirectory(thing, directory_id)
-        .then(() => {
-          return this.setThingLayoutIndex(thing, index);
-        })
-        .then((res) => {
-          resolve(res);
-        });
-    });
+    await this.setThingDirectory(thing, directory_id, false);
+    await this.setThingLayoutIndex(thing, index, false);
+    this.emit(Constants.LAYOUT_MODIFIED);
   }
 
   /**
@@ -449,6 +443,7 @@ class Things extends EventEmitter {
             t.setLayoutIndex(t.getLayoutIndex() - 1);
           }
         });
+      this.emit(Constants.LAYOUT_MODIFIED);
     });
   }
 

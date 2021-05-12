@@ -166,6 +166,7 @@ class GatewayModel extends Model {
       case 'directoryAdded':
       case 'directoryModified':
       case 'directoryRemoved':
+      case 'layoutModified':
         this.refreshThings();
         break;
       default:

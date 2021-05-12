@@ -85,6 +85,11 @@ interface ThingRemovedMessage {
   data: Record<string, never>;
 }
 
+interface LayoutModifiedMessage {
+  messageType: 'layoutModified';
+  data: Record<string, never>;
+}
+
 interface ErrorMessage {
   messageType: 'error';
   data: {
@@ -104,6 +109,7 @@ type OutgoingMessage =
   | ThingAddedMessage
   | ThingModifiedMessage
   | ThingRemovedMessage
+  | LayoutModifiedMessage
   | ErrorMessage;
 
 function build(): express.Router {
@@ -377,26 +383,25 @@ function build(): express.Router {
       return;
     }
 
-    let description;
     try {
       if (request.body.hasOwnProperty('floorplanX') && request.body.hasOwnProperty('floorplanY')) {
-        description = await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
+        await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
       } else if (
         request.body.hasOwnProperty('layoutIndex') && request.body.hasOwnProperty('directory')
       ) {
-        description = await Things.setThingDirectoryAndLayoutIndex(
+        await Things.setThingDirectoryAndLayoutIndex(
           thing, request.body.directory, request.body.layoutIndex
         );
       } else if (request.body.hasOwnProperty('layoutIndex')) {
-        description = await Things.setThingLayoutIndex(thing, request.body.layoutIndex);
+        await Things.setThingLayoutIndex(thing, request.body.layoutIndex);
       } else if (request.body.hasOwnProperty('directory')) {
-        description = await Things.setThingDirectory(thing, request.body.directory);
+        await Things.setThingDirectory(thing, request.body.directory);
       } else {
         response.status(400).send('request body missing required parameters');
         return;
       }
 
-      response.status(200).json(description);
+      response.status(200).json(thing.getDescription());
     } catch (e) {
       response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
     }
@@ -652,6 +657,14 @@ function build(): express.Router {
       });
       Things.on(Constants.THING_ADDED, onThingAdded);
     }
+
+    function onLayoutModified(): void {
+      sendMessage({
+        messageType: Constants.LAYOUT_MODIFIED,
+        data: {},
+      });
+    }
+    Things.on(Constants.LAYOUT_MODIFIED, onLayoutModified);
 
     AddonManager.on(Constants.PROPERTY_CHANGED, onPropertyChanged);
     Actions.on(Constants.ACTION_STATUS, onActionStatus);

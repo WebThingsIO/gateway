@@ -64,6 +64,7 @@ export const THING_REMOVED = 'thingRemoved';
 export const DIRECTORY_ADDED = 'directoryAdded';
 export const DIRECTORY_MODIFIED = 'directoryModified';
 export const DIRECTORY_REMOVED = 'directoryRemoved';
+export const LAYOUT_MODIFIED = 'layoutModified';
 
 // OAuth things
 export const ACCESS_TOKEN = 'access_token';

@@ -345,7 +345,6 @@ export default class Thing extends EventEmitter {
   setLayoutIndex(index: number): Promise<ThingDescription> {
     this.layoutIndex = index;
     return Database.updateThing(this.id, this.getDescription()).then((descr) => {
-      this.emit(Constants.MODIFIED);
       return descr;
     });
   }
@@ -461,7 +460,6 @@ export default class Thing extends EventEmitter {
   setDirectory(directory_id: string | null): Promise<ThingDescription> {
     this.directory_id = directory_id;
     return Database.updateThing(this.id, this.getDescription()).then((descr) => {
-      this.emit(Constants.MODIFIED);
       return descr;
     });
   }
