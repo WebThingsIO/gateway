@@ -36,6 +36,11 @@ interface DirectoryRemovedMessage {
   data: Record<string, never>;
 }
 
+interface LayoutModifiedMessage {
+  messageType: 'layoutModified';
+  data: Record<string, never>;
+}
+
 interface ErrorMessage {
   messageType: 'error';
   data: {
@@ -49,6 +54,7 @@ type OutgoingMessage =
   | DirectoryAddedMessage
   | DirectoryModifiedMessage
   | DirectoryRemovedMessage
+  | LayoutModifiedMessage
   | ErrorMessage;
 
 function build(): express.Router {
@@ -178,16 +184,18 @@ function build(): express.Router {
       return;
     }
 
-    let description;
     try {
       if (request.body.hasOwnProperty('layoutIndex')) {
-        description = await directory.setLayoutIndex(request.body.layoutIndex);
+        await Directories.setDirectoryLayoutIndex(
+          directory,
+          request.body.layoutIndex
+        );
       } else {
         response.status(400).send('request body missing required parameters');
         return;
       }
 
-      response.status(200).json(description);
+      response.status(200).json(directory.getDescription());
     } catch (e) {
       response.status(500).send(`Failed to update directory ${directoryId}: ${e}`);
     }
@@ -302,6 +310,15 @@ function build(): express.Router {
     Directories.getDirectories().then((directories: Map<string, Directory>) => {
       directories.forEach(addDirectory);
     });
+
+    function onLayoutModified(): void {
+      sendMessage({
+        messageType: Constants.LAYOUT_MODIFIED,
+        data: {},
+      });
+    }
+    Directories.on(Constants.LAYOUT_MODIFIED, onLayoutModified);
+
     Directories.on(Constants.DIRECTORY_ADDED, onDirectoryAdded);
     Directories.on(Constants.DIRECTORY_REMOVED, onDirectoryRemoved);
 

@@ -616,6 +616,10 @@ class Thing {
     element.firstChild.ondragend = this.handleDragEnd.bind(this);
     element.firstChild.ondrop = this.handleDrop.bind(this);
 
+    if (!this.container) {
+      this.container = document.getElementById('things');
+    }
+
     for (const node of this.container.childNodes.values()) {
       if (node.dataset.layoutIndex > this.layoutIndex) {
         return this.container.insertBefore(element.firstChild, node);
@@ -627,7 +631,8 @@ class Thing {
 
   handleDragStart(e) {
     e.target.style.cursor = 'grabbing';
-    e.dataTransfer.setData('text', e.target.id);
+    e.dataTransfer.setData('text', this.element.id);
+    e.dataTransfer.items.add('', 'application/thing');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.dropEffect = 'move';
 
@@ -639,27 +644,23 @@ class Thing {
   handleDragOver(e) {
     e.preventDefault();
 
+    if (!Array.from(e.dataTransfer.types).includes('application/thing')) {
+      return;
+    }
+
     this.container.childNodes.forEach((node) => {
       node.classList.remove('drag-start', 'drag-end');
     });
+    e.dataTransfer.dropEffect = 'move';
 
-    let dropNode = e.target;
-    while (!dropNode.classList || !dropNode.classList.contains('thing')) {
-      dropNode = dropNode.parentNode;
-    }
+    const dropX = e.clientX;
+    const elementStart = this.element.getBoundingClientRect().x;
+    const elementWidth = this.element.getBoundingClientRect().width;
 
-    if (dropNode) {
-      e.dataTransfer.dropEffect = 'move';
-
-      const dropX = e.clientX;
-      const dropNodeStart = dropNode.getBoundingClientRect().x;
-      const dropNodeWidth = dropNode.getBoundingClientRect().width;
-
-      if (dropX - dropNodeStart < dropNodeWidth / 2) {
-        dropNode.classList.add('drag-start');
-      } else {
-        dropNode.classList.add('drag-end');
-      }
+    if (dropX - elementStart < elementWidth / 2) {
+      this.element.classList.add('drag-start');
+    } else {
+      this.element.classList.add('drag-end');
     }
   }
 
@@ -670,39 +671,31 @@ class Thing {
   handleDragLeave(e) {
     e.preventDefault();
 
-    let dropNode = e.target;
-    while (!dropNode.classList || !dropNode.classList.contains('thing')) {
-      dropNode = dropNode.parentNode;
-    }
-
-    if (dropNode) {
-      dropNode.classList.remove('drag-start', 'drag-end');
-    }
+    this.element.classList.remove('drag-start', 'drag-end');
   }
 
   handleDrop(e) {
     e.preventDefault();
-    e.stopPropagation();
 
-    let dropNode = e.target;
-    while (!dropNode.classList || !dropNode.classList.contains('thing')) {
-      dropNode = dropNode.parentNode;
+    if (!Array.from(e.dataTransfer.types).includes('application/thing')) {
+      return;
     }
 
-    const dragNode = document.getElementById(e.dataTransfer.getData('text'));
+    e.stopPropagation();
 
-    if (!dropNode || !dragNode || dropNode.id === dragNode.id) {
+    const dragNode = document.getElementById(e.dataTransfer.getData('text'));
+    if (!dragNode) {
       return;
     }
 
     const dropX = e.clientX;
-    const dropNodeStart = dropNode.getBoundingClientRect().x;
-    const dropNodeWidth = dropNode.getBoundingClientRect().width;
+    const elementStart = this.element.getBoundingClientRect().x;
+    const elementWidth = this.element.getBoundingClientRect().width;
 
-    let dropIndex = parseInt(dropNode.getAttribute('data-layout-index'));
+    let dropIndex = parseInt(this.element.getAttribute('data-layout-index'));
 
     if (
-      dragNode.parentNode === dropNode.parentNode &&
+      dragNode.parentNode === this.element.parentNode &&
       parseInt(dragNode.getAttribute('data-layout-index')) < dropIndex
     ) {
       dropIndex -= 1;
@@ -710,10 +703,10 @@ class Thing {
 
     dragNode.parentNode.removeChild(dragNode);
 
-    if (dropX - dropNodeStart < dropNodeWidth / 2) {
-      this.container.insertBefore(dragNode, dropNode);
+    if (dropX - elementStart < elementWidth / 2) {
+      this.container.insertBefore(dragNode, this.element);
     } else {
-      const sibling = dropNode.nextSibling;
+      const sibling = this.element.nextSibling;
       if (sibling) {
         this.container.insertBefore(dragNode, sibling);
       } else {

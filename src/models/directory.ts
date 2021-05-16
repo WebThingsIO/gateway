@@ -122,7 +122,6 @@ export default class Directory extends EventEmitter {
   setLayoutIndex(index: number): Promise<DirectoryDescription> {
     this.layoutIndex = index;
     return Database.updateDirectory(this.id, this.getDescription()).then((descr) => {
-      this.emit(Constants.MODIFIED);
       return descr;
     });
   }

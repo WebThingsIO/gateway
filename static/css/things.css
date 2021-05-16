@@ -57,7 +57,9 @@
   max-height: 32px;
   overflow: hidden;
   padding-left: 5px;
-  padding-right: 5px;
+  padding-right: 5px;    
+  position: relative;
+  overflow: inherit;
 }
 
 .directory.open {
@@ -138,4 +140,22 @@
 
 .directory.open.drag-target {
   border: 0.2rem dashed white;
+}
+
+.drag-before::before {
+  content: '';
+  position: absolute;
+  border-top: 0.2rem dashed white;
+  width: 100%;
+  top: -14px;
+  left: 0;
+}
+
+.drag-after::after {
+  content: '';
+  position: absolute;
+  border-top: 0.2rem dashed white;
+  width: 100%;
+  bottom: -14px;
+  left: 0;
 }

@@ -306,6 +306,14 @@ const ThingsScreen = {
 
   handleDragOver(e) {
     e.preventDefault();
+
+    if (
+      this.directoriesElement.childNodes.length === 0 ||
+      !Array.from(e.dataTransfer.types).includes('application/thing')
+    ) {
+      return;
+    }
+
     e.dataTransfer.dropEffect = 'move';
     this.thingsElement.classList.add('drag-target');
   },
@@ -321,10 +329,17 @@ const ThingsScreen = {
 
   handleDrop(e) {
     e.preventDefault();
+
+    if (
+      this.directoriesElement.childNodes.length === 0 ||
+      !Array.from(e.dataTransfer.types).includes('application/thing')
+    ) {
+      return;
+    }
+
     e.stopPropagation();
 
     const dragNode = document.getElementById(e.dataTransfer.getData('text'));
-
     if (!dragNode) {
       return;
     }

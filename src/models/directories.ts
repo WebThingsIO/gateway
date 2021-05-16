@@ -133,16 +133,19 @@ class Directories extends EventEmitter {
    * @param String id ID to give Directory.
    * @param Object description Directory description.
    */
-  createDirectory(id: string, description: DirectoryDescription): Promise<DirectoryDescription> {
+  async createDirectory(
+    id: string,
+    description: DirectoryDescription
+  ): Promise<DirectoryDescription> {
     const directory = new Directory(id, description);
-    return Database.createDirectory(
+    const directoryDesc = await Database.createDirectory(
       directory.getId(),
       directory.getDescription()
-    ).then((directoryDesc) => {
-      this.directories.set(directory.getId(), directory);
-      this.emit(Constants.DIRECTORY_ADDED, directory);
-      return directoryDesc;
-    });
+    );
+    this.directories.set(directory.getId(), directory);
+    await this.setDirectoryLayoutIndex(directory, Infinity);
+    this.emit(Constants.DIRECTORY_ADDED, directory);
+    return directoryDesc;
   }
 
   /**
@@ -175,6 +178,40 @@ class Directories extends EventEmitter {
   }
 
   /**
+   * Set the layout index for a Directory.
+   *
+   * @param {number} directory The directory.
+   * @param {number} index The new layout index.
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  async setDirectoryLayoutIndex(
+    directory: Directory,
+    index: number,
+    emitModified = true
+  ): Promise<void> {
+    const directories = Array.from(this.directories.values());
+
+    index = Math.min(directories.length - 1, Math.max(0, index));
+
+    const movePromises = directories.map((d) => { // TODO also do this for things
+      if (directory.getLayoutIndex() < d.getLayoutIndex() && d.getLayoutIndex() <= index) {
+        return d.setLayoutIndex(d.getLayoutIndex() - 1);
+      } else if (index <= d.getLayoutIndex() && d.getLayoutIndex() < directory.getLayoutIndex()) {
+        return d.setLayoutIndex(d.getLayoutIndex() + 1);
+      } else {
+        return new Promise((resolve) => resolve(null));
+      }
+    });
+
+    await Promise.all(movePromises);
+    await directory.setLayoutIndex(index);
+
+    if (emitModified) {
+      this.emit(Constants.LAYOUT_MODIFIED);
+    }
+  }
+
+  /**
    * Remove a Directory.
    *
    * @param String id ID to give Directory.
@@ -185,8 +222,19 @@ class Directories extends EventEmitter {
       if (!directory) {
         return;
       }
+
+      const index = directory.getLayoutIndex();
+
       directory.remove();
       this.directories.delete(id);
+
+      Array.from(this.directories.values())
+        .forEach((d) => {
+          if (d.getLayoutIndex() > index) {
+            d.setLayoutIndex(d.getLayoutIndex() - 1);
+          }
+        });
+      this.emit(Constants.LAYOUT_MODIFIED);
       this.emit(Constants.DIRECTORY_REMOVED, directory);
     });
   }
