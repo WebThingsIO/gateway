@@ -67,7 +67,12 @@ class Directory {
     const foldInButton = document.createElement('BUTTON');
     foldInButton.setAttribute('class', 'foldIn');
     const cookie = `directory-${this.id}-closed=1`;
-    if (!document.cookie.split(';').map((c) => c.trim()).includes(cookie)) {
+    if (
+      !document.cookie
+        .split(';')
+        .map((c) => c.trim())
+        .includes(cookie)
+    ) {
       this.element.classList.add('open');
     }
     foldInButton.addEventListener('click', () => {
@@ -75,7 +80,7 @@ class Directory {
       if (this.element.classList.contains('open')) {
         this.element.classList.remove('open');
         const d = new Date();
-        d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+        d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000);
         document.cookie = `${cookie};expires=${d.toUTCString()}`;
       } else {
         this.element.classList.add('open');
@@ -167,10 +172,7 @@ class Directory {
       this.element.appendChild(dragNode);
 
       const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-      API.setThingDirectory(
-        dragNodeId,
-        this.id
-      )
+      API.setThingDirectory(dragNodeId, this.id)
         .then(() => {
           App.gatewayModel.refreshThings();
         })

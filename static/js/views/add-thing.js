@@ -185,13 +185,14 @@ const AddThingScreen = {
   },
 
   addDirectory: function () {
-    App.gatewayModel.addDirectory({
-      title: this.addDirectoryInput.value,
-    }).then(() => {
-      this.hide();
-    });
+    App.gatewayModel
+      .addDirectory({
+        title: this.addDirectoryInput.value,
+      })
+      .then(() => {
+        this.hide();
+      });
   },
-
 };
 
 module.exports = AddThingScreen;

@@ -256,10 +256,9 @@ class GatewayModel extends Model {
       if (!this.directories.has(directoryId)) {
         throw new Error(`Directory id:${directoryId} already removed`);
       }
-      return API.removeDirectory(directoryId)
-        .then(() => {
-          return this.handleEvent(Constants.DELETE_DIRECTORIES, this.things, this.directories);
-        });
+      return API.removeDirectory(directoryId).then(() => {
+        return this.handleEvent(Constants.DELETE_DIRECTORIES, this.things, this.directories);
+      });
     });
   }
 

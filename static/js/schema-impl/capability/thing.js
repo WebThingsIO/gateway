@@ -95,9 +95,7 @@ class Thing {
       this.x = description.floorplanX;
       this.y = description.floorplanY;
     } else if (this.model.directory_id) {
-      this.container = document.querySelector(
-        `#directory-${this.model.directory_id}`
-      );
+      this.container = document.querySelector(`#directory-${this.model.directory_id}`);
     } else {
       this.container = document.getElementById('things');
     }

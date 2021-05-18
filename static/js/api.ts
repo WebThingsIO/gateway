@@ -377,10 +377,10 @@ class API {
     index: number
   ): Promise<Record<string, unknown>> {
     directoryId = directoryId || '';
-    return this.patchJson(
-      `/things/${encodeURIComponent(thingId)}`,
-      { directory: directoryId, layoutIndex: index }
-    );
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, {
+      directory: directoryId,
+      layoutIndex: index,
+    });
   }
 
   setThingFloorplanPosition(
@@ -437,10 +437,9 @@ class API {
   }
 
   setDirectoryLayoutIndex(directoryId: string, index: number): Promise<Record<string, unknown>> {
-    return this.patchJson(
-      `/directories/${encodeURIComponent(directoryId)}`,
-      { layoutIndex: index }
-    );
+    return this.patchJson(`/directories/${encodeURIComponent(directoryId)}`, {
+      layoutIndex: index,
+    });
   }
 
   async addDirectory(description: Record<string, unknown>): Promise<Record<string, unknown>> {

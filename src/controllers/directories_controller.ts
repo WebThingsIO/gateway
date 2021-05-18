@@ -89,11 +89,9 @@ function build(): express.Router {
             const parts = path.split(':');
             hrefs.push(parts[0]);
           }
-          Directories.getListDirectoryDescriptions(hrefs).then(
-            (directories) => {
-              response.status(200).json(directories);
-            }
-          );
+          Directories.getListDirectoryDescriptions(hrefs).then((directories) => {
+            response.status(200).json(directories);
+          });
         }
       }
     } else {
@@ -154,10 +152,9 @@ function build(): express.Router {
     const id = request.params.directoryId;
     Things.getThingDescriptions(request.get('Host'), request.secure)
       .then((things) => {
-        const filteredThings = Array.from(things.values())
-          .filter((thing) => {
-            return thing.directory_id == id;
-          });
+        const filteredThings = Array.from(things.values()).filter((thing) => {
+          return thing.directory_id == id;
+        });
         response.status(200).json(filteredThings);
       })
       .catch((error: unknown) => {
@@ -186,10 +183,7 @@ function build(): express.Router {
 
     try {
       if (request.body.hasOwnProperty('layoutIndex')) {
-        await Directories.setDirectoryLayoutIndex(
-          directory,
-          request.body.layoutIndex
-        );
+        await Directories.setDirectoryLayoutIndex(directory, request.body.layoutIndex);
       } else {
         response.status(400).send('request body missing required parameters');
         return;

@@ -387,10 +387,13 @@ function build(): express.Router {
       if (request.body.hasOwnProperty('floorplanX') && request.body.hasOwnProperty('floorplanY')) {
         await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
       } else if (
-        request.body.hasOwnProperty('layoutIndex') && request.body.hasOwnProperty('directory')
+        request.body.hasOwnProperty('layoutIndex') &&
+        request.body.hasOwnProperty('directory')
       ) {
         await Things.setThingDirectoryAndLayoutIndex(
-          thing, request.body.directory, request.body.layoutIndex
+          thing,
+          request.body.directory,
+          request.body.layoutIndex
         );
       } else if (request.body.hasOwnProperty('layoutIndex')) {
         await Things.setThingLayoutIndex(thing, request.body.layoutIndex);

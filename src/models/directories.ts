@@ -193,7 +193,8 @@ class Directories extends EventEmitter {
 
     index = Math.min(directories.length - 1, Math.max(0, index));
 
-    const movePromises = directories.map((d) => { // TODO also do this for things
+    const movePromises = directories.map((d) => {
+      // TODO also do this for things
       if (directory.getLayoutIndex() < d.getLayoutIndex() && d.getLayoutIndex() <= index) {
         return d.setLayoutIndex(d.getLayoutIndex() - 1);
       } else if (index <= d.getLayoutIndex() && d.getLayoutIndex() < directory.getLayoutIndex()) {
@@ -228,12 +229,11 @@ class Directories extends EventEmitter {
       directory.remove();
       this.directories.delete(id);
 
-      Array.from(this.directories.values())
-        .forEach((d) => {
-          if (d.getLayoutIndex() > index) {
-            d.setLayoutIndex(d.getLayoutIndex() - 1);
-          }
-        });
+      Array.from(this.directories.values()).forEach((d) => {
+        if (d.getLayoutIndex() > index) {
+          d.setLayoutIndex(d.getLayoutIndex() - 1);
+        }
+      });
       this.emit(Constants.LAYOUT_MODIFIED);
       this.emit(Constants.DIRECTORY_REMOVED, directory);
     });

@@ -335,8 +335,9 @@ class Things extends EventEmitter {
    * @return {Promise} A promise which resolves with the description set.
    */
   async setThingLayoutIndex(thing: Thing, index: number, emitModified = true): Promise<void> {
-    const things = Array.from(this.things.values())
-      .filter((t) => t.getDirectory() == thing.getDirectory());
+    const things = Array.from(this.things.values()).filter(
+      (t) => t.getDirectory() == thing.getDirectory()
+    );
 
     index = Math.min(things.length - 1, Math.max(0, index));
 
@@ -386,9 +387,9 @@ class Things extends EventEmitter {
 
     await this.setThingLayoutIndex(thing, Infinity, false);
     await thing.setDirectory(directory_id);
-    const index = Array.from(this.things.values())
-      .filter((t) => t.getDirectory() == thing.getDirectory())
-      .length - 1;
+    const index =
+      Array.from(this.things.values()).filter((t) => t.getDirectory() == thing.getDirectory())
+        .length - 1;
     await thing.setLayoutIndex(index);
 
     if (emitModified) {

@@ -23,7 +23,6 @@ const Directory = require('./directory');
 const API = require('../api').default;
 const Utils = require('../utils');
 
-
 const ThingsScreen = {
   /**
    * Initialise Things Screen.
