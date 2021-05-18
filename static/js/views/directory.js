@@ -95,14 +95,56 @@ class Directory {
 
     bar.appendChild(leftcontainer);
 
-    const removeDirectoryButton = document.createElement('BUTTON');
-    removeDirectoryButton.setAttribute('class', 'remove');
-    removeDirectoryButton.addEventListener('click', () => {
-      App.gatewayModel.removeDirectory(this.id);
+    const editDirectoryButton = document.createElement('BUTTON');
+    editDirectoryButton.setAttribute('class', 'edit');
+    editDirectoryButton.addEventListener('click', () => {
+      if (this.overflowMenu.classList.contains('open')) {
+        this.overflowMenu.classList.remove('open');
+      } else {
+        this.overflowMenu.classList.add('open');
+      }
     });
-    bar.appendChild(removeDirectoryButton);
+    bar.appendChild(editDirectoryButton);
+
+    this.buildOverflowMenu();
+    bar.appendChild(this.overflowMenu);
 
     this.element.appendChild(bar);
+  }
+
+  buildOverflowMenu() {
+    this.overflowMenu = document.createElement('DIV');
+    this.overflowMenu.setAttribute('class', 'directory-overflow-menu');
+
+    const editEntry = document.createElement('A');
+    editEntry.href = '#';
+    editEntry.innerHTML = '<img src="/images/edit-plain.svg">Edit';
+    editEntry.addEventListener('click', () => {
+      const newEvent = new CustomEvent('_directorycontextmenu', {
+        detail: {
+          directoryId: this.id,
+          directoryTitle: this.title,
+          action: 'edit',
+        },
+      });
+      window.dispatchEvent(newEvent);
+    });
+    this.overflowMenu.appendChild(editEntry);
+
+    const deleteEntry = document.createElement('A');
+    deleteEntry.href = '#';
+    deleteEntry.innerHTML = '<img src="/images/remove.svg">Remove';
+    deleteEntry.addEventListener('click', () => {
+      const newEvent = new CustomEvent('_directorycontextmenu', {
+        detail: {
+          directoryId: this.id,
+          directoryTitle: this.title,
+          action: 'remove',
+        },
+      });
+      window.dispatchEvent(newEvent);
+    });
+    this.overflowMenu.appendChild(deleteEntry);
   }
 
   handleDragStart(e) {
@@ -111,6 +153,8 @@ class Directory {
     e.dataTransfer.items.add('', 'application/directory');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.dropEffect = 'move';
+
+    this.overflowMenu.classList.remove('open');
 
     if ('vibrate' in navigator) {
       navigator.vibrate(50);

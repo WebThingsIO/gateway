@@ -1,0 +1,99 @@
+#directory-context-menu {
+  text-align: center;
+}
+
+#directory-context-menu-heading {
+  line-height: 9.6rem;
+}
+
+#directory-context-menu-heading-text {
+  font-size: 1.6rem;
+}
+
+#directory-context-menu-content {
+  text-align: center;
+  position: relative;
+  top: calc(50% - 3.8rem);
+  transform: translateY(-50%);
+}
+
+#directory-context-menu-heading .hidden,
+#directory-context-menu-content .hidden {
+  display: none;
+}
+
+.directory-context-menu-button {
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1.6rem;
+  width: 60%;
+  min-width: 15rem;
+  height: 6rem;
+}
+
+.directory-context-menu-button.danger {
+  background-color: #f55;
+}
+
+#directory-context-menu-back-button {
+  background-color: transparent;
+}
+
+#directory-context-menu-content-edit {
+  background-color: #597285;
+  width: 50%;
+  min-width: 28rem;
+  max-width: 65rem;
+  margin: 1rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  border-radius: 0.5rem;
+}
+
+#edit-directory-metadata {
+  flex: 1;
+  padding: 1rem 1rem 0 1rem;
+  text-align: left;
+}
+
+#edit-directory-title {
+  display: block;
+  width: calc(100% - 1rem);
+}
+
+.edit-directory-button {
+  height: 4rem;
+  background-color: #7f93a1;
+  margin: 1.25rem 0;
+}
+
+.edit-directory-button:disabled,
+.edit-directory-button:disabled:hover,
+.edit-directory-button:hover:active {
+  background-color: #597285;
+}
+
+#edit-directory-label {
+  display: block;
+  text-align: left;
+  color: #ccc;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+#edit-directory-label.error {
+  color: orange;
+}
+
+@media only screen and (max-width: 800px) {
+  #edit-directory-spacer {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  #edit-directory-metadata {
+    padding-bottom: 1rem;
+  }
+}

@@ -885,6 +885,40 @@
       </div>
     </div>
 
+    <!-- Directory Context Menu -->
+    <div id="directory-context-menu" class="hidden dialog">
+      <button
+        id="directory-context-menu-back-button"
+        class="back-button icon-button"
+        data-l10n-id="back-button"
+      ></button>
+      <div id="directory-context-menu-heading">
+        <span id="directory-context-menu-heading-text"></span>
+      </div>
+      <div id="directory-context-menu-content">
+        <div id="directory-context-menu-content-edit" class="hidden">
+          <div id="edit-directory-metadata">
+            <input type="text" id="edit-directory-title" />
+            <span id="edit-directory-spacer"></span>
+            </label>
+            <span id="edit-directory-label" class="hidden"></span>
+          </div>
+          <button
+            id="edit-directory-save-button"
+            class="edit-directory-button text-button"
+            data-l10n-id="context-menu-save"
+          ></button>
+        </div>
+        <div id="directory-context-menu-content-remove" class="hidden">
+          <button
+            id="remove-directory-button"
+            class="directory-context-menu-button danger"
+            data-l10n-id="context-menu-remove"
+          ></button>
+        </div>
+      </div>
+    </div>
+
     <div id="log-remove-dialog" class="hidden dialog">
       <div class="log-remove-container">
         <h2>

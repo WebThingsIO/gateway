@@ -86,25 +86,19 @@
   color: white;
 }
 
-.directory div.bar button.remove {
-  background: none;
+.directory div.bar .leftcontainer {
+  display: flex;
+}
+
+.directory div.bar button.edit {
   border: none;
-  background-image: url(/images/clear_arrayfield.svg);
   position: absolute;
   top: 5px;
   right: 1rem;
   width: 25px;
   border-radius: 50%;
   height: 25px;
-  background-color: #597285;
-}
-
-.directory div.bar button.remove:hover {
-  background-color: #658196;
-}
-
-.directory div.bar .leftcontainer {
-  display: flex;
+  background: no-repeat center/100% url(/images/overflow.svg);
 }
 
 .directory div.bar button.foldIn {
@@ -158,4 +152,53 @@
   width: 100%;
   bottom: -14px;
   left: 0;
+}
+
+.directory-overflow-menu {
+  position: absolute;
+  top: 4.5rem;
+  right: 0.3rem;
+  background-color: #48779a;
+  color: white;
+  padding: 1rem 0;
+  border-radius: 0.5rem;
+  transform: scale(1);
+  transition: transform 0.25s ease;
+  transform-origin: top right;
+  z-index: 100;
+  text-align: left;
+}
+
+.directory-overflow-menu::after {
+  content: '';
+  position: absolute;
+  top: -0.9rem;
+  right: 1rem;
+  border-width: 0rem 1rem 1rem;
+  border-style: solid;
+  border-color: #48779a transparent;
+  display: block;
+  width: 0;
+}
+
+.directory-overflow-menu > a {
+  color: #fff;
+  font-size: 2rem;
+  display: block;
+  padding: 0.4rem 1rem;
+  text-decoration: none;
+}
+
+.directory-overflow-menu > a > img {
+  height: 2rem;
+  padding-right: 1rem;
+  margin-bottom: -0.3rem;
+}
+
+.directory-overflow-menu:not(.open) {
+  transform: scale(0);
+}
+
+.directory-overflow-menu > a:hover {
+  background-color: #4d80a5;
 }

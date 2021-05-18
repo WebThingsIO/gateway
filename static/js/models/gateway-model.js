@@ -238,7 +238,7 @@ class GatewayModel extends Model {
     if (this.directories.has(directoryId)) {
       return Promise.resolve(this.directories.get(directoryId));
     }
-    return this.refreshDirectory(directoryId).then(() => {
+    return this.refreshThings().then(() => {
       return this.directories.get(directoryId);
     });
   }
@@ -290,9 +290,8 @@ class GatewayModel extends Model {
       if (!this.directories.has(directoryId)) {
         throw new Error(`Directory id:${directoryId} already updated`);
       }
-      const directory = this.directories.get(directoryId);
-      return directory.updateDirectory(updates).then(() => {
-        this.refreshDirectory(directoryId);
+      return API.updateDirectory(directoryId, updates).then(() => {
+        this.refreshThings();
       });
     });
   }
