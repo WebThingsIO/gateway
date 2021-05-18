@@ -341,25 +341,15 @@ class Things extends EventEmitter {
 
     index = Math.min(things.length - 1, Math.max(0, index));
 
-    let movePromises: Promise<ThingDescription | null>[];
-
-    if (thing.getLayoutIndex() < index) {
-      movePromises = things.map((t) => {
-        if (thing.getLayoutIndex() < t.getLayoutIndex() && t.getLayoutIndex() <= index) {
-          return t.setLayoutIndex(t.getLayoutIndex() - 1);
-        } else {
-          return new Promise((resolve) => resolve(null));
-        }
-      });
-    } else {
-      movePromises = things.map((t) => {
-        if (index <= t.getLayoutIndex() && t.getLayoutIndex() < thing.getLayoutIndex()) {
-          return t.setLayoutIndex(t.getLayoutIndex() + 1);
-        } else {
-          return new Promise((resolve) => resolve(null));
-        }
-      });
-    }
+    const movePromises = things.map((t) => {
+      if (thing.getLayoutIndex() < t.getLayoutIndex() && t.getLayoutIndex() <= index) {
+        return t.setLayoutIndex(t.getLayoutIndex() - 1);
+      } else if (index <= t.getLayoutIndex() && t.getLayoutIndex() < thing.getLayoutIndex()) {
+        return t.setLayoutIndex(t.getLayoutIndex() + 1);
+      } else {
+        return new Promise((resolve) => resolve(null));
+      }
+    });
 
     await Promise.all(movePromises);
     await thing.setLayoutIndex(index);
