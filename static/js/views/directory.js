@@ -98,10 +98,10 @@ class Directory {
     const editDirectoryButton = document.createElement('BUTTON');
     editDirectoryButton.setAttribute('class', 'edit');
     editDirectoryButton.addEventListener('click', () => {
-      if (this.overflowMenu.classList.contains('open')) {
-        this.overflowMenu.classList.remove('open');
+      if (this.overflowMenu.classList.contains('hidden')) {
+        this.overflowMenu.classList.remove('hidden');
       } else {
-        this.overflowMenu.classList.add('open');
+        this.overflowMenu.classList.add('hidden');
       }
     });
     bar.appendChild(editDirectoryButton);
@@ -114,7 +114,7 @@ class Directory {
 
   buildOverflowMenu() {
     this.overflowMenu = document.createElement('DIV');
-    this.overflowMenu.setAttribute('class', 'directory-overflow-menu');
+    this.overflowMenu.setAttribute('class', 'directory-overflow-menu hidden');
 
     const editEntry = document.createElement('A');
     editEntry.href = '#';
@@ -154,7 +154,7 @@ class Directory {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.dropEffect = 'move';
 
-    this.overflowMenu.classList.remove('open');
+    this.overflowMenu.classList.add('hidden');
 
     if ('vibrate' in navigator) {
       navigator.vibrate(50);

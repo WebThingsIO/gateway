@@ -195,7 +195,7 @@
   margin-bottom: -0.3rem;
 }
 
-.directory-overflow-menu:not(.open) {
+.directory-overflow-menu.hidden {
   transform: scale(0);
 }
 
