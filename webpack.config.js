@@ -125,6 +125,7 @@ const webpackWeb = {
       './static/css/context-menu.css',
       './static/css/directory-context-menu.css',
       './static/css/thing.css',
+      './static/css/directory.css',
       './static/css/floorplan.css',
       './static/css/settings.css',
       './static/css/rules-common.css',
