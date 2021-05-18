@@ -13,6 +13,7 @@
 const API = require('../api').default;
 const App = require('../app');
 const Utils = require('../utils');
+const fluent = require('../fluent');
 
 class Directory {
   /**
@@ -118,7 +119,7 @@ class Directory {
 
     const editEntry = document.createElement('A');
     editEntry.href = '#';
-    editEntry.innerHTML = '<img src="/images/edit-plain.svg">Edit';
+    editEntry.innerHTML = `<img src="/images/edit-plain.svg">${fluent.getMessage('edit')}`;
     editEntry.addEventListener('click', () => {
       const newEvent = new CustomEvent('_directorycontextmenu', {
         detail: {
@@ -133,7 +134,7 @@ class Directory {
 
     const deleteEntry = document.createElement('A');
     deleteEntry.href = '#';
-    deleteEntry.innerHTML = '<img src="/images/remove.svg">Remove';
+    deleteEntry.innerHTML = `<img src="/images/remove.svg">${fluent.getMessage('remove')}`;
     deleteEntry.addEventListener('click', () => {
       const newEvent = new CustomEvent('_directorycontextmenu', {
         detail: {

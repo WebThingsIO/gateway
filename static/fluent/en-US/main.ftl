@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Incorrect credentials
 new-thing-saved = Saved
 new-thing-done = Done
+add-directory = Add new directory
+new-directory-save = Create
 
 ## New Web Thing View
 
