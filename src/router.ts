@@ -36,7 +36,7 @@ import RootController from './controllers/root_controller';
 import RulesController from './controllers/rules_controller';
 import SettingsController from './controllers/settings_controller';
 import ThingsController from './controllers/things_controller';
-import DirectoriesController from './controllers/directories_controller';
+import GroupsController from './controllers/groups_controller';
 import UpdatesController from './controllers/updates_controller';
 import UploadsController from './controllers/uploads_controller';
 import UsersController from './controllers/users_controller';
@@ -158,7 +158,7 @@ class Router {
     // Authenticated API routes
     app.use(API_PREFIX + Constants.THINGS_PATH, nocache, auth, ThingsController());
     app.use(API_PREFIX + Constants.NEW_THINGS_PATH, nocache, auth, NewThingsController());
-    app.use(API_PREFIX + Constants.DIRECTORIES_PATH, nocache, auth, DirectoriesController());
+    app.use(API_PREFIX + Constants.GROUPS_PATH, nocache, auth, GroupsController());
     app.use(API_PREFIX + Constants.ADAPTERS_PATH, nocache, auth, AdaptersController());
     app.use(API_PREFIX + Constants.ACTIONS_PATH, nocache, auth, ActionsController());
     app.use(API_PREFIX + Constants.EVENTS_PATH, nocache, auth, EventsController());

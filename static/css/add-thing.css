@@ -328,7 +328,7 @@
   }
 }
 
-#add-directory {
+#add-group {
   background-color: #597285;
   width: 50%;
   min-width: 28rem;
@@ -342,12 +342,12 @@
   flex-wrap: wrap;
 }
 
-#add-directory-label {
+#add-group-label {
   flex-basis: 100%;
   flex-grow: 1;
 }
 
-#add-directory-title-input {
+#add-group-title-input {
   height: 1.75rem;
   background-color: #d2d9de;
   border: none;
@@ -359,7 +359,7 @@
   margin-top: 15px;
 }
 
-#add-directory-add-button {
+#add-group-add-button {
   background-color: #7f93a1;
   border: none;
   border-radius: 0.5rem;

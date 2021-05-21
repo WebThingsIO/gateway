@@ -19,7 +19,7 @@ import { PushSubscription } from 'web-push';
 
 const sqlite3 = verbose();
 
-const TABLES = ['users', 'jsonwebtokens', 'things', 'directories', 'settings', 'pushSubscriptions'];
+const TABLES = ['users', 'jsonwebtokens', 'things', 'groups', 'settings', 'pushSubscriptions'];
 
 const DEBUG = false || process.env.NODE_ENV === 'test';
 
@@ -68,8 +68,8 @@ class Database {
     // Create Things table
     this.db!.run('CREATE TABLE IF NOT EXISTS things (id TEXT PRIMARY KEY, description TEXT);');
 
-    // Create Directories table
-    this.db!.run('CREATE TABLE IF NOT EXISTS directories (id TEXT PRIMARY KEY, description TEXT);');
+    // Create Groups table
+    this.db!.run('CREATE TABLE IF NOT EXISTS groups (id TEXT PRIMARY KEY, description TEXT);');
 
     // Create Users table
     this.db!.run(
@@ -207,34 +207,34 @@ class Database {
   }
 
   /**
-   * Get all Directories stored in the database.
+   * Get all Groups stored in the database.
    *
-   * @return Promise which resolves with a list of Directory objects.
+   * @return Promise which resolves with a list of Group objects.
    */
-  getDirectories(): Promise<Record<string, unknown>[]> {
-    return this.all('SELECT id, description FROM directories').then((rows) => {
-      const directories = [];
+  getGroups(): Promise<Record<string, unknown>[]> {
+    return this.all('SELECT id, description FROM groups').then((rows) => {
+      const groups = [];
       for (const row of rows) {
-        const directory = JSON.parse(<string>row.description);
-        directory.id = row.id;
-        directories.push(directory);
+        const group = JSON.parse(<string>row.description);
+        group.id = row.id;
+        groups.push(group);
       }
 
-      return directories;
+      return groups;
     });
   }
 
   /**
-   * Add a new Directory to the Database.
+   * Add a new Group to the Database.
    *
-   * @param String id The ID to give the new Directory.
-   * @param String description A serialised Directory description.
+   * @param String id The ID to give the new Group.
+   * @param String description A serialised Group description.
    */
-  createDirectory<T>(id: string, description: T): Promise<T> {
+  createGroup<T>(id: string, description: T): Promise<T> {
     return new Promise((resolve, reject) => {
       const db = this.db!;
       db.run(
-        'INSERT INTO directories (id, description) VALUES (?, ?)',
+        'INSERT INTO groups (id, description) VALUES (?, ?)',
         [id, JSON.stringify(description)],
         (error) => {
           if (error) {
@@ -248,16 +248,16 @@ class Database {
   }
 
   /**
-   * Update a Directory in the Database.
+   * Update a Group in the Database.
    *
-   * @param String id ID of the directory to update.
-   * @param String description A serialised Directory description.
+   * @param String id ID of the group to update.
+   * @param String description A serialised Group description.
    */
-  updateDirectory<T>(id: string, description: T): Promise<T> {
+  updateGroup<T>(id: string, description: T): Promise<T> {
     return new Promise((resolve, reject) => {
       const db = this.db!;
       db.run(
-        'UPDATE directories SET description=? WHERE id=?',
+        'UPDATE groups SET description=? WHERE id=?',
         [JSON.stringify(description), id],
         (error) => {
           if (error) {
@@ -271,14 +271,14 @@ class Database {
   }
 
   /**
-   * Remove a Directory from the Database.
+   * Remove a Group from the Database.
    *
-   * @param String id The ID of the Directory to remove.
+   * @param String id The ID of the Group to remove.
    */
-  removeDirectory(id: string): Promise<void> {
+  removeGroup(id: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const db = this.db!;
-      db.run('DELETE FROM directories WHERE id = ?', [id], (error) => {
+      db.run('DELETE FROM groups WHERE id = ?', [id], (error) => {
         if (error) {
           reject(error);
         } else {

@@ -15,27 +15,27 @@ const App = require('../app');
 const Utils = require('../utils');
 const fluent = require('../fluent');
 
-class Directory {
+class Group {
   /**
-   * Directory constructor.
+   * Group constructor.
    *
-   * @param {Object} description Directory description object.
+   * @param {Object} description Group description object.
    */
   constructor(description) {
     this.title = description.title;
     this.layoutIndex = description.layoutIndex;
     this.id = decodeURIComponent(description.href.split('/').pop());
-    this.directoriesElement = document.getElementById('directories');
+    this.groupsElement = document.getElementById('groups');
     this.element = this.render();
   }
 
   /**
-   * Render Directory view and add to DOM.
+   * Render Group view and add to DOM.
    */
   render() {
     this.element = document.createElement('div');
-    this.element.setAttribute('class', 'directory');
-    this.element.setAttribute('id', `directory-${this.id}`);
+    this.element.setAttribute('class', 'group');
+    this.element.setAttribute('id', `group-${this.id}`);
     this.element.setAttribute('data-layout-index', `${this.layoutIndex}`);
 
     this.initializeView();
@@ -47,13 +47,13 @@ class Directory {
     this.element.firstChild.ondragend = this.handleDragEnd.bind(this);
     this.element.ondrop = this.handleDrop.bind(this);
 
-    for (const node of this.directoriesElement.childNodes.values()) {
+    for (const node of this.groupsElement.childNodes.values()) {
       if (node.dataset.layoutIndex > this.layoutIndex) {
-        return this.directoriesElement.insertBefore(this.element, node);
+        return this.groupsElement.insertBefore(this.element, node);
       }
     }
 
-    return this.directoriesElement.appendChild(this.element);
+    return this.groupsElement.appendChild(this.element);
   }
 
   initializeView() {
@@ -67,7 +67,7 @@ class Directory {
 
     const foldInButton = document.createElement('BUTTON');
     foldInButton.setAttribute('class', 'foldIn');
-    const cookie = `directory-${this.id}-closed=1`;
+    const cookie = `group-${this.id}-closed=1`;
     if (
       !document.cookie
         .split(';')
@@ -96,16 +96,16 @@ class Directory {
 
     bar.appendChild(leftcontainer);
 
-    const editDirectoryButton = document.createElement('BUTTON');
-    editDirectoryButton.setAttribute('class', 'edit');
-    editDirectoryButton.addEventListener('click', () => {
+    const editGroupButton = document.createElement('BUTTON');
+    editGroupButton.setAttribute('class', 'edit');
+    editGroupButton.addEventListener('click', () => {
       if (this.overflowMenu.classList.contains('hidden')) {
         this.overflowMenu.classList.remove('hidden');
       } else {
         this.overflowMenu.classList.add('hidden');
       }
     });
-    bar.appendChild(editDirectoryButton);
+    bar.appendChild(editGroupButton);
 
     this.buildOverflowMenu();
     bar.appendChild(this.overflowMenu);
@@ -115,16 +115,16 @@ class Directory {
 
   buildOverflowMenu() {
     this.overflowMenu = document.createElement('DIV');
-    this.overflowMenu.setAttribute('class', 'directory-overflow-menu hidden');
+    this.overflowMenu.setAttribute('class', 'group-overflow-menu hidden');
 
     const editEntry = document.createElement('A');
     editEntry.href = '#';
     editEntry.innerHTML = `<img src="/images/edit-plain.svg">${fluent.getMessage('edit')}`;
     editEntry.addEventListener('click', () => {
-      const newEvent = new CustomEvent('_directorycontextmenu', {
+      const newEvent = new CustomEvent('_groupcontextmenu', {
         detail: {
-          directoryId: this.id,
-          directoryTitle: this.title,
+          groupId: this.id,
+          groupTitle: this.title,
           action: 'edit',
         },
       });
@@ -136,10 +136,10 @@ class Directory {
     deleteEntry.href = '#';
     deleteEntry.innerHTML = `<img src="/images/remove.svg">${fluent.getMessage('remove')}`;
     deleteEntry.addEventListener('click', () => {
-      const newEvent = new CustomEvent('_directorycontextmenu', {
+      const newEvent = new CustomEvent('_groupcontextmenu', {
         detail: {
-          directoryId: this.id,
-          directoryTitle: this.title,
+          groupId: this.id,
+          groupTitle: this.title,
           action: 'remove',
         },
       });
@@ -151,7 +151,7 @@ class Directory {
   handleDragStart(e) {
     e.target.style.cursor = 'grabbing';
     e.dataTransfer.setData('text', this.element.id);
-    e.dataTransfer.items.add('', 'application/directory');
+    e.dataTransfer.items.add('', 'application/group');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.dropEffect = 'move';
 
@@ -168,8 +168,8 @@ class Directory {
     if (Array.from(e.dataTransfer.types).includes('application/thing')) {
       this.element.classList.add('drag-target');
       e.dataTransfer.dropEffect = 'move';
-    } else if (Array.from(e.dataTransfer.types).includes('application/directory')) {
-      this.directoriesElement.childNodes.forEach((node) => {
+    } else if (Array.from(e.dataTransfer.types).includes('application/group')) {
+      this.groupsElement.childNodes.forEach((node) => {
         node.classList.remove('drag-before', 'drag-after');
       });
 
@@ -200,7 +200,7 @@ class Directory {
     e.preventDefault();
 
     const types = Array.from(e.dataTransfer.types);
-    if (!types.includes('application/thing') && !types.includes('application/directory')) {
+    if (!types.includes('application/thing') && !types.includes('application/group')) {
       return;
     }
 
@@ -217,12 +217,12 @@ class Directory {
       this.element.appendChild(dragNode);
 
       const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-      API.setThingDirectory(dragNodeId, this.id)
+      API.setThingGroup(dragNodeId, this.id)
         .then(() => {
           App.gatewayModel.refreshThings();
         })
         .catch((e) => {
-          console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
+          console.error(`Error trying to change group of thing ${dragNodeId}: ${e}`);
         });
     } else {
       const dropY = e.clientY;
@@ -241,36 +241,36 @@ class Directory {
       dragNode.parentNode.removeChild(dragNode);
 
       if (dropY - elementStart < elementHeight / 2) {
-        this.directoriesElement.insertBefore(dragNode, this.element);
+        this.groupsElement.insertBefore(dragNode, this.element);
       } else {
         const sibling = this.element.nextSibling;
         if (sibling) {
-          this.directoriesElement.insertBefore(dragNode, sibling);
+          this.groupsElement.insertBefore(dragNode, sibling);
         } else {
-          this.directoriesElement.appendChild(dragNode);
+          this.groupsElement.appendChild(dragNode);
         }
         dropIndex += 1;
       }
 
-      const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^directory-/, '');
-      API.setDirectoryLayoutIndex(dragNodeId, dropIndex)
+      const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^group-/, '');
+      API.setGroupLayoutIndex(dragNodeId, dropIndex)
         .then(() => {
           App.gatewayModel.refreshThings();
         })
         .catch((e) => {
-          console.error(`Error trying to change directory ${dragNodeId}: ${e}`);
+          console.error(`Error trying to change group ${dragNodeId}: ${e}`);
         });
     }
   }
 
   handleDragEnd() {
-    this.directoriesElement.querySelectorAll('.drag-before, .drag-after').forEach((node) => {
+    this.groupsElement.querySelectorAll('.drag-before, .drag-after').forEach((node) => {
       node.classList.remove('drag-before', 'drag-after');
     });
-    this.directoriesElement.querySelectorAll('.directory .bar').forEach((node) => {
+    this.groupsElement.querySelectorAll('.group .bar').forEach((node) => {
       node.style.cursor = 'grab';
     });
   }
 }
 
-module.exports = Directory;
+module.exports = Group;

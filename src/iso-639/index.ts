@@ -12,7 +12,7 @@ const by1 = new Map();
 const by3 = new Map();
 
 /**
- * Parse the table in this directory.
+ * Parse the table in this group.
  */
 function readFile(): boolean {
   let fname;
@@ -24,7 +24,7 @@ function readFile(): boolean {
       }
     }
   } catch (e) {
-    console.error('Failed to list directory:', e);
+    console.error('Failed to list group:', e);
     return false;
   }
 

@@ -1,7 +1,7 @@
 /**
- * Directories Controller.
+ * Groups Controller.
  *
- * Manages HTTP requests to /directories.
+ * Manages HTTP requests to /groups.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -11,27 +11,27 @@
 import * as Constants from '../constants';
 import express from 'express';
 import expressWs from 'express-ws';
-import Directory from '../models/directory';
-import Directories from '../models/directories';
+import Group from '../models/group';
+import Groups from '../models/groups';
 import Things from '../models/things';
 import { WithJWT } from '../jwt-middleware';
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'ws';
 
-interface DirectoryAddedMessage {
-  messageType: 'directoryAdded';
+interface GroupAddedMessage {
+  messageType: 'groupAdded';
   id: string;
   data: Record<string, never>;
 }
 
-interface DirectoryModifiedMessage {
-  messageType: 'directoryModified';
+interface GroupModifiedMessage {
+  messageType: 'groupModified';
   id: string;
   data: Record<string, never>;
 }
 
-interface DirectoryRemovedMessage {
-  messageType: 'directoryRemoved';
+interface GroupRemovedMessage {
+  messageType: 'groupRemoved';
   id: string;
   data: Record<string, never>;
 }
@@ -51,9 +51,9 @@ interface ErrorMessage {
 }
 
 type OutgoingMessage =
-  | DirectoryAddedMessage
-  | DirectoryModifiedMessage
-  | DirectoryRemovedMessage
+  | GroupAddedMessage
+  | GroupModifiedMessage
+  | GroupRemovedMessage
   | LayoutModifiedMessage
   | ErrorMessage;
 
@@ -63,7 +63,7 @@ function build(): express.Router {
   controller.ws('/', websocketHandler);
 
   /**
-   * Get a list of Directories.
+   * Get a list of Groups.
    */
   controller.get('/', (req, response) => {
     const request = <express.Request & WithJWT>req;
@@ -76,42 +76,42 @@ function build(): express.Router {
           !scope.includes(' ') &&
           scope.indexOf('/') == 0 &&
           scope.split('/').length == 2 &&
-          scope.split(':')[0] === Constants.DIRECTORIES_PATH
+          scope.split(':')[0] === Constants.GROUPS_PATH
         ) {
-          Directories.getDirectoryDescriptions().then((directories) => {
-            response.status(200).json(directories);
+          Groups.getGroupDescriptions().then((groups) => {
+            response.status(200).json(groups);
           });
         } else {
-          // Get hrefs of directories in scope
+          // Get hrefs of groups in scope
           const paths = scope.split(' ');
           const hrefs = new Array(0);
           for (const path of paths) {
             const parts = path.split(':');
             hrefs.push(parts[0]);
           }
-          Directories.getListDirectoryDescriptions(hrefs).then((directories) => {
-            response.status(200).json(directories);
+          Groups.getListGroupDescriptions(hrefs).then((groups) => {
+            response.status(200).json(groups);
           });
         }
       }
     } else {
-      Directories.getDirectoryDescriptions().then((directories) => {
-        response.status(200).json(directories);
+      Groups.getGroupDescriptions().then((groups) => {
+        response.status(200).json(groups);
       });
     }
   });
 
   /**
-   * Handle creating a new directory.
+   * Handle creating a new group.
    */
   controller.post('/', async (request, response) => {
     const description = request.body;
     const id = uuidv4();
 
     try {
-      // If the directory already exists, bail out.
-      await Directories.getDirectory(id);
-      const err = 'Directory already added';
+      // If the group already exists, bail out.
+      await Groups.getGroup(id);
+      const err = 'Group already added';
       console.log(err, id);
       response.status(400).send(err);
       return;
@@ -120,86 +120,86 @@ function build(): express.Router {
     }
 
     try {
-      const directory = await Directories.createDirectory(id, description);
-      console.log(`Successfully created new directory ${directory.title}`);
-      response.status(201).send(directory);
+      const group = await Groups.createGroup(id, description);
+      console.log(`Successfully created new group ${group.title}`);
+      response.status(201).send(group);
     } catch (error) {
-      console.error('Error saving new directory', id, description);
+      console.error('Error saving new group', id, description);
       console.error(error);
       response.status(500).send(error);
     }
   });
 
   /**
-   * Get a Directory.
+   * Get a Group.
    */
-  controller.get('/:directoryId', (request, response) => {
-    const id = request.params.directoryId;
-    Directories.getDirectoryDescription(id)
-      .then((directory) => {
-        response.status(200).json(directory);
+  controller.get('/:groupId', (request, response) => {
+    const id = request.params.groupId;
+    Groups.getGroupDescription(id)
+      .then((group) => {
+        response.status(200).json(group);
       })
       .catch((error: unknown) => {
-        console.error(`Error getting directory description for directory with id ${id}:`, error);
+        console.error(`Error getting group description for group with id ${id}:`, error);
         response.status(404).send(error);
       });
   });
 
   /**
-   * Get things in a Directory.
+   * Get things in a Group.
    */
-  controller.get('/:directoryId/things', (request, response) => {
-    const id = request.params.directoryId;
+  controller.get('/:groupId/things', (request, response) => {
+    const id = request.params.groupId;
     Things.getThingDescriptions(request.get('Host'), request.secure)
       .then((things) => {
         const filteredThings = Array.from(things.values()).filter((thing) => {
-          return thing.directory_id == id;
+          return thing.group_id == id;
         });
         response.status(200).json(filteredThings);
       })
       .catch((error: unknown) => {
-        console.error(`Error getting things in directory ${id}:`, error);
+        console.error(`Error getting things in group ${id}:`, error);
         response.status(404).send(error);
       });
   });
 
   /**
-   * Modify a Directory's layout index.
+   * Modify a Group's layout index.
    */
-  controller.patch('/:directoryId', async (request, response) => {
-    const directoryId = request.params.directoryId;
+  controller.patch('/:groupId', async (request, response) => {
+    const groupId = request.params.groupId;
     if (!request.body) {
       response.status(400).send('request body missing');
       return;
     }
 
-    let directory;
+    let group;
     try {
-      directory = await Directories.getDirectory(directoryId);
+      group = await Groups.getGroup(groupId);
     } catch (e) {
-      response.status(404).send('directory not found');
+      response.status(404).send('group not found');
       return;
     }
 
     try {
       if (request.body.hasOwnProperty('layoutIndex')) {
-        await Directories.setDirectoryLayoutIndex(directory, request.body.layoutIndex);
+        await Groups.setGroupLayoutIndex(group, request.body.layoutIndex);
       } else {
         response.status(400).send('request body missing required parameters');
         return;
       }
 
-      response.status(200).json(directory.getDescription());
+      response.status(200).json(group.getDescription());
     } catch (e) {
-      response.status(500).send(`Failed to update directory ${directoryId}: ${e}`);
+      response.status(500).send(`Failed to update group ${groupId}: ${e}`);
     }
   });
 
   /**
-   * Modify a Directory.
+   * Modify a Group.
    */
-  controller.put('/:directoryId', async (request, response) => {
-    const directoryId = request.params.directoryId;
+  controller.put('/:groupId', async (request, response) => {
+    const groupId = request.params.groupId;
     if (!request.body || !request.body.hasOwnProperty('title')) {
       response.status(400).send('title parameter required');
       return;
@@ -211,19 +211,19 @@ function build(): express.Router {
       return;
     }
 
-    let directory;
+    let group;
     try {
-      directory = await Directories.getDirectory(directoryId);
+      group = await Groups.getGroup(groupId);
     } catch (e) {
-      response.status(500).send(`Failed to retrieve directory ${directoryId}: ${e}`);
+      response.status(500).send(`Failed to retrieve group ${groupId}: ${e}`);
       return;
     }
 
     let description;
     try {
-      description = await directory.setTitle(title);
+      description = await group.setTitle(title);
     } catch (e) {
-      response.status(500).send(`Failed to update directory ${directoryId}: ${e}`);
+      response.status(500).send(`Failed to update group ${groupId}: ${e}`);
       return;
     }
 
@@ -231,18 +231,18 @@ function build(): express.Router {
   });
 
   /**
-   * Remove a Directory.
+   * Remove a Group.
    */
-  controller.delete('/:directoryId', (request, response) => {
-    const directoryId = request.params.directoryId;
+  controller.delete('/:groupId', (request, response) => {
+    const groupId = request.params.groupId;
 
-    Directories.removeDirectory(directoryId)
+    Groups.removeGroup(groupId)
       .then(() => {
-        console.log(`Successfully deleted ${directoryId} from database.`);
+        console.log(`Successfully deleted ${groupId} from database.`);
         response.sendStatus(204);
       })
       .catch((e: unknown) => {
-        response.status(500).send(`Failed to remove directory ${directoryId}: ${e}`);
+        response.status(500).send(`Failed to remove group ${groupId}: ${e}`);
       });
   });
 
@@ -261,48 +261,48 @@ function build(): express.Router {
       });
     }
 
-    let directoryCleanups: Record<string, () => void> = {};
+    let groupCleanups: Record<string, () => void> = {};
 
-    function addDirectory(directory: Directory): void {
+    function addGroup(group: Group): void {
       const onModified = (): void => {
         sendMessage({
-          id: directory.getId(),
-          messageType: Constants.DIRECTORY_MODIFIED,
+          id: group.getId(),
+          messageType: Constants.GROUP_MODIFIED,
           data: {},
         });
       };
-      directory.addModifiedSubscription(onModified);
+      group.addModifiedSubscription(onModified);
 
-      const directoryCleanup = (): void => {
-        directory.removeModifiedSubscription(onModified);
+      const groupCleanup = (): void => {
+        group.removeModifiedSubscription(onModified);
       };
-      directoryCleanups[directory.getId()] = directoryCleanup;
+      groupCleanups[group.getId()] = groupCleanup;
     }
 
-    function onDirectoryAdded(directory: Directory): void {
+    function onGroupAdded(group: Group): void {
       sendMessage({
-        id: directory.getId(),
-        messageType: Constants.DIRECTORY_ADDED,
+        id: group.getId(),
+        messageType: Constants.GROUP_ADDED,
         data: {},
       });
 
-      addDirectory(directory);
+      addGroup(group);
     }
 
-    function onDirectoryRemoved(directory: Directory): void {
-      if (directoryCleanups[directory.getId()]) {
-        directoryCleanups[directory.getId()]();
-        delete directoryCleanups[directory.getId()];
+    function onGroupRemoved(group: Group): void {
+      if (groupCleanups[group.getId()]) {
+        groupCleanups[group.getId()]();
+        delete groupCleanups[group.getId()];
       }
       sendMessage({
-        id: directory.getId(),
-        messageType: Constants.DIRECTORY_REMOVED,
+        id: group.getId(),
+        messageType: Constants.GROUP_REMOVED,
         data: {},
       });
     }
 
-    Directories.getDirectories().then((directories: Map<string, Directory>) => {
-      directories.forEach(addDirectory);
+    Groups.getGroups().then((groups: Map<string, Group>) => {
+      groups.forEach(addGroup);
     });
 
     function onLayoutModified(): void {
@@ -311,26 +311,26 @@ function build(): express.Router {
         data: {},
       });
     }
-    Directories.on(Constants.LAYOUT_MODIFIED, onLayoutModified);
+    Groups.on(Constants.LAYOUT_MODIFIED, onLayoutModified);
 
-    Directories.on(Constants.DIRECTORY_ADDED, onDirectoryAdded);
-    Directories.on(Constants.DIRECTORY_REMOVED, onDirectoryRemoved);
+    Groups.on(Constants.GROUP_ADDED, onGroupAdded);
+    Groups.on(Constants.GROUP_REMOVED, onGroupRemoved);
 
     const heartbeatInterval = setInterval(() => {
       try {
         websocket.ping();
       } catch (e) {
-        // Do nothing. Let cleanup() handle directories if necessary.
+        // Do nothing. Let cleanup() handle groups if necessary.
         websocket.terminate();
       }
     }, 30 * 1000);
 
     const cleanup = (): void => {
-      Directories.removeListener(Constants.DIRECTORY_ADDED, onDirectoryAdded);
-      for (const id in directoryCleanups) {
-        directoryCleanups[id]();
+      Groups.removeListener(Constants.GROUP_ADDED, onGroupAdded);
+      for (const id in groupCleanups) {
+        groupCleanups[id]();
       }
-      directoryCleanups = {};
+      groupCleanups = {};
       clearInterval(heartbeatInterval);
     };
 

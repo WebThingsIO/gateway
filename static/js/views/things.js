@@ -19,7 +19,7 @@ const EventList = require('./event-list');
 const fluent = require('../fluent');
 const Icons = require('../icons');
 const { createThingFromCapability } = require('../schema-impl/capability/capabilities');
-const Directory = require('./directory');
+const Group = require('./group');
 const API = require('../api').default;
 const Utils = require('../utils');
 
@@ -29,7 +29,7 @@ const ThingsScreen = {
    */
   init: function () {
     this.thingsElement = document.getElementById('things');
-    this.directoriesElement = document.getElementById('directories');
+    this.groupsElement = document.getElementById('groups');
     this.thingTitleElement = document.getElementById('thing-title');
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
@@ -103,20 +103,20 @@ const ThingsScreen = {
     }
   },
 
-  refreshThings: function (things, directories) {
+  refreshThings: function (things, groups) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
     }
-    if (things.size === 0 && directories.size === 0) {
+    if (things.size === 0 && groups.size === 0) {
       this.thingsElement.innerHTML = fluent.getMessage('no-things');
     } else {
       this.thingsElement.innerHTML = '';
     }
-    this.directoriesElement.innerHTML = '';
-    if (directories.size !== 0) {
-      directories.forEach((description) => {
-        new Directory(description);
+    this.groupsElement.innerHTML = '';
+    if (groups.size !== 0) {
+      groups.forEach((description) => {
+        new Group(description);
       });
     }
     if (things.size !== 0) {
@@ -154,12 +154,12 @@ const ThingsScreen = {
         .then(async (description) => {
           if (!description) {
             this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-            this.directoriesElement.innerHTML = '';
+            this.groupsElement.innerHTML = '';
             return;
           }
 
           this.thingsElement.innerHTML = '';
-          this.directoriesElement.innerHTML = '';
+          this.groupsElement.innerHTML = '';
 
           const thingModel = await App.gatewayModel.getThingModel(thingId);
           const thing = this.renderThing(thingModel, description, Constants.ThingFormat.EXPANDED);
@@ -184,7 +184,7 @@ const ThingsScreen = {
         .catch((e) => {
           console.error(`Thing id ${thingId} not found ${e}`);
           this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-          this.directoriesElement.innerHTML = '';
+          this.groupsElement.innerHTML = '';
         });
     };
 
@@ -203,7 +203,7 @@ const ThingsScreen = {
       .getThing(thingId)
       .then((description) => {
         this.thingsElement.innerHTML = '';
-        this.directoriesElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
 
         if (
           !description.hasOwnProperty('actions') ||
@@ -211,7 +211,7 @@ const ThingsScreen = {
           !description.actions[actionName].hasOwnProperty('input')
         ) {
           this.thingsElement.innerHTML = fluent.getMessage('action-not-found');
-          this.directoriesElement.innerHTML = '';
+          this.groupsElement.innerHTML = '';
           return;
         }
 
@@ -240,7 +240,7 @@ const ThingsScreen = {
         document.getElementById('thing-title-title').innerText = description.title;
 
         this.thingsElement.innerHTML = '';
-        this.directoriesElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
         new ActionInputForm(
           href,
           actionName,
@@ -251,7 +251,7 @@ const ThingsScreen = {
       .catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-        this.directoriesElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
       });
   },
 
@@ -268,7 +268,7 @@ const ThingsScreen = {
       .getThing(thingId)
       .then(async (description) => {
         this.thingsElement.innerHTML = '';
-        this.directoriesElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
         if (!description.hasOwnProperty('events')) {
           this.thingsElement.innerHTML = fluent.getMessage('events-not-found');
           return;
@@ -293,13 +293,13 @@ const ThingsScreen = {
         document.getElementById('thing-title-title').innerText = description.title;
 
         this.thingsElement.innerHTML = '';
-        this.directoriesElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
         this.eventList = new EventList(thingModel, description);
       })
       .catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
-        this.directoriesElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
       });
   },
 
@@ -307,7 +307,7 @@ const ThingsScreen = {
     e.preventDefault();
 
     if (
-      this.directoriesElement.childNodes.length === 0 ||
+      this.groupsElement.childNodes.length === 0 ||
       !Array.from(e.dataTransfer.types).includes('application/thing')
     ) {
       return;
@@ -330,7 +330,7 @@ const ThingsScreen = {
     e.preventDefault();
 
     if (
-      this.directoriesElement.childNodes.length === 0 ||
+      this.groupsElement.childNodes.length === 0 ||
       !Array.from(e.dataTransfer.types).includes('application/thing')
     ) {
       return;
@@ -348,12 +348,12 @@ const ThingsScreen = {
     this.thingsElement.appendChild(dragNode);
 
     const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-    API.setThingDirectory(dragNodeId, null)
+    API.setThingGroup(dragNodeId, null)
       .then(() => {
         App.gatewayModel.refreshThings();
       })
       .catch((e) => {
-        console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
+        console.error(`Error trying to change group of thing ${dragNodeId}: ${e}`);
       });
   },
 };

@@ -19,7 +19,7 @@ class GatewayModel extends Model {
     this.thingModels = new Map();
     this.things = new Map();
     this.connectedThings = new Map();
-    this.directories = new Map();
+    this.groups = new Map();
     this.onMessage = this.onMessage.bind(this);
     this.queue = Promise.resolve(true);
     this.connectWebSocket();
@@ -38,12 +38,12 @@ class GatewayModel extends Model {
     switch (event) {
       case Constants.REFRESH_THINGS:
         if (immediate) {
-          handler(this.things, this.directories);
+          handler(this.things, this.groups);
         }
         break;
       case Constants.DELETE_THINGS:
         break;
-      case Constants.DELETE_DIRECTORIES:
+      case Constants.DELETE_GROUPS:
         break;
       default:
         console.warn(`GatewayModel does not support event:${event}`);
@@ -133,7 +133,7 @@ class GatewayModel extends Model {
     }
 
     if (!skipEvent) {
-      return this.handleEvent(Constants.DELETE_THINGS, this.things, this.directories);
+      return this.handleEvent(Constants.DELETE_THINGS, this.things, this.groups);
     }
   }
 
@@ -143,11 +143,11 @@ class GatewayModel extends Model {
     this.ws = new ReopeningWebSocket(wsHref);
     this.ws.addEventListener('open', this.refreshThings.bind(this));
     this.ws.addEventListener('message', this.onMessage);
-    const directoriesHref = `${window.location.origin}/directories?jwt=${API.jwt}`;
-    const directoriesWsHref = directoriesHref.replace(/^http/, 'ws');
-    this.directoriesWs = new ReopeningWebSocket(directoriesWsHref);
-    this.directoriesWs.addEventListener('open', this.refreshThings.bind(this));
-    this.directoriesWs.addEventListener('message', this.onMessage);
+    const groupsHref = `${window.location.origin}/groups?jwt=${API.jwt}`;
+    const groupsWsHref = groupsHref.replace(/^http/, 'ws');
+    this.groupsWs = new ReopeningWebSocket(groupsWsHref);
+    this.groupsWs.addEventListener('open', this.refreshThings.bind(this));
+    this.groupsWs.addEventListener('message', this.onMessage);
   }
 
   onMessage(event) {
@@ -163,9 +163,9 @@ class GatewayModel extends Model {
       case 'thingModified':
         this.refreshThing(message.id);
         break;
-      case 'directoryAdded':
-      case 'directoryModified':
-      case 'directoryRemoved':
+      case 'groupAdded':
+      case 'groupModified':
+      case 'groupRemoved':
       case 'layoutModified':
         this.refreshThings();
         break;
@@ -191,25 +191,25 @@ class GatewayModel extends Model {
 
           removedIds.forEach((thingId) => this.handleRemove(thingId, true));
 
-          return API.getDirectories();
+          return API.getGroups();
         })
-        .then((directories) => {
+        .then((groups) => {
           const fetchedIds = new Set();
-          directories.forEach((description) => {
-            const directoryId = decodeURIComponent(description.href.split('/').pop());
-            fetchedIds.add(directoryId);
-            this.setDirectory(directoryId, description);
+          groups.forEach((description) => {
+            const groupId = decodeURIComponent(description.href.split('/').pop());
+            fetchedIds.add(groupId);
+            this.setGroup(groupId, description);
           });
 
-          const removedIds = Array.from(this.directories.keys()).filter((id) => {
+          const removedIds = Array.from(this.groups.keys()).filter((id) => {
             return !fetchedIds.has(id);
           });
 
-          removedIds.forEach((directoryId) => this.handleRemoveDirectory(directoryId, true));
-          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.directories);
+          removedIds.forEach((groupId) => this.handleRemoveGroup(groupId, true));
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.groups);
         })
         .catch((e) => {
-          console.error(`Get things or directories failed ${e}`);
+          console.error(`Get things or groups failed ${e}`);
         });
     });
   }
@@ -222,7 +222,7 @@ class GatewayModel extends Model {
             throw new Error(`Unavailable Thing Description: ${description}`);
           }
           this.setThing(thingId, description);
-          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.directories);
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.groups);
         })
         .catch((e) => {
           console.error(`Get thing id:${thingId} failed ${e}`);
@@ -230,78 +230,78 @@ class GatewayModel extends Model {
     });
   }
 
-  setDirectory(directoryId, description) {
-    this.directories.set(directoryId, description);
+  setGroup(groupId, description) {
+    this.groups.set(groupId, description);
   }
 
-  getDirectory(directoryId) {
-    if (this.directories.has(directoryId)) {
-      return Promise.resolve(this.directories.get(directoryId));
+  getGroup(groupId) {
+    if (this.groups.has(groupId)) {
+      return Promise.resolve(this.groups.get(groupId));
     }
     return this.refreshThings().then(() => {
-      return this.directories.get(directoryId);
+      return this.groups.get(groupId);
     });
   }
 
   /**
-   * Remove the directory.
+   * Remove the group.
    *
-   * @param {string} directoryId - Id of the directory
+   * @param {string} groupId - Id of the group
    */
-  removeDirectory(directoryId) {
-    if (!this.directories.has(directoryId)) {
-      return Promise.reject(`No directory id:${directoryId}`);
+  removeGroup(groupId) {
+    if (!this.groups.has(groupId)) {
+      return Promise.reject(`No group id:${groupId}`);
     }
     return this.addQueue(() => {
-      if (!this.directories.has(directoryId)) {
-        throw new Error(`Directory id:${directoryId} already removed`);
+      if (!this.groups.has(groupId)) {
+        throw new Error(`Group id:${groupId} already removed`);
       }
-      return API.removeDirectory(directoryId).then(() => {
-        return this.handleEvent(Constants.DELETE_DIRECTORIES, this.things, this.directories);
+      return API.removeGroup(groupId).then(() => {
+        return this.handleEvent(Constants.DELETE_GROUPS, this.things, this.groups);
       });
     });
   }
 
   /**
-   * Add a new directory.
+   * Add a new group.
    *
-   * @param {string} title - title of the directory
+   * @param {string} title - title of the group
    */
-  addDirectory(title) {
+  addGroup(title) {
     return this.addQueue(() => {
-      return API.addDirectory(title).then((directory) => {
-        const directoryId = decodeURIComponent(directory.href.split('/').pop());
-        return directoryId;
+      return API.addGroup(title).then((group) => {
+        const groupId = decodeURIComponent(group.href.split('/').pop());
+        return groupId;
       });
     });
   }
 
   /**
-   * Update the directory.
+   * Update the group.
    *
-   * @param {string} directoryId - Id of the directory
+   * @param {string} groupId - Id of the group
    * @param {object} updates - contents of update
    */
-  updateDirectory(directoryId, updates) {
-    if (!this.directories.has(directoryId)) {
-      return Promise.reject(`No directory id:${directoryId}`);
+  updateGroup(groupId, updates) {
+    if (!this.groups.has(groupId)) {
+      return Promise.reject(`No group id:${groupId}`);
     }
     return this.addQueue(() => {
-      if (!this.directories.has(directoryId)) {
-        throw new Error(`Directory id:${directoryId} already updated`);
+      if (!this.groups.has(groupId)) {
+        throw new Error(`Group id:${groupId} already updated`);
       }
-      return API.updateDirectory(directoryId, updates).then(() => {
+      return API.updateGroup(groupId, updates).then(() => {
         this.refreshThings();
       });
     });
   }
 
-  handleRemoveDirectory(directoryId, skipEvent = false) {
-    if (this.directories.has(directoryId)) {
-      this.directories.delete(directoryId);
+  handleRemoveGroup(groupId, skipEvent = false) {
+    if (this.groups.has(groupId)) {
+      this.groups.delete(groupId);
     }
     if (!skipEvent) {
-      return this.handleEvent(Constants.DELETE_DIRECTORIES, this.things, this.directories);
+      return this.handleEvent(Constants.DELETE_GROUPS, this.things, this.groups);
     }
   }
 }

@@ -94,8 +94,8 @@ class Thing {
       this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
-    } else if (this.model.directory_id) {
-      this.container = document.querySelector(`#directory-${this.model.directory_id}`);
+    } else if (this.model.group_id) {
+      this.container = document.querySelector(`#group-${this.model.group_id}`);
     } else {
       this.container = document.getElementById('things');
     }
@@ -714,12 +714,12 @@ class Thing {
     }
 
     const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-    API.setThingDirectoryAndLayoutIndex(dragNodeId, this.model.directory_id, dropIndex)
+    API.setThingGroupAndLayoutIndex(dragNodeId, this.model.group_id, dropIndex)
       .then(() => {
         App.gatewayModel.refreshThings();
       })
       .catch((e) => {
-        console.error(`Error trying to change directory of thing ${dragNodeId}: ${e}`);
+        console.error(`Error trying to change group of thing ${dragNodeId}: ${e}`);
       });
   }
 

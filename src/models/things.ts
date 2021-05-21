@@ -336,7 +336,7 @@ class Things extends EventEmitter {
    */
   async setThingLayoutIndex(thing: Thing, index: number, emitModified = true): Promise<void> {
     const things = Array.from(this.things.values()).filter(
-      (t) => t.getDirectory() == thing.getDirectory()
+      (t) => t.getGroup() == thing.getGroup()
     );
 
     index = Math.min(things.length - 1, Math.max(0, index));
@@ -360,25 +360,25 @@ class Things extends EventEmitter {
   }
 
   /**
-   * Set the directory for a Thing in the overview.
+   * Set the group for a Thing in the overview.
    *
    * @param {number} thing The thing.
-   * @param {string} directory_id ID of the directory
+   * @param {string} group_id ID of the group
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setThingDirectory(
+  async setThingGroup(
     thing: Thing,
-    directory_id: string | null,
+    group_id: string | null,
     emitModified = true
   ): Promise<void> {
-    if (!directory_id) {
-      directory_id = null;
+    if (!group_id) {
+      group_id = null;
     }
 
     await this.setThingLayoutIndex(thing, Infinity, false);
-    await thing.setDirectory(directory_id);
+    await thing.setGroup(group_id);
     const index =
-      Array.from(this.things.values()).filter((t) => t.getDirectory() == thing.getDirectory())
+      Array.from(this.things.values()).filter((t) => t.getGroup() == thing.getGroup())
         .length - 1;
     await thing.setLayoutIndex(index);
 
@@ -388,22 +388,22 @@ class Things extends EventEmitter {
   }
 
   /**
-   * Set the directory and layout index for a Thing in the overview.
+   * Set the group and layout index for a Thing in the overview.
    *
    * @param {number} thing The thing.
-   * @param {string} directory_id ID of the directory
+   * @param {string} group_id ID of the group
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setThingDirectoryAndLayoutIndex(
+  async setThingGroupAndLayoutIndex(
     thing: Thing,
-    directory_id: string | null,
+    group_id: string | null,
     index: number
   ): Promise<void> {
-    if (!directory_id) {
-      directory_id = null;
+    if (!group_id) {
+      group_id = null;
     }
-    await this.setThingDirectory(thing, directory_id, false);
+    await this.setThingGroup(thing, group_id, false);
     await this.setThingLayoutIndex(thing, index, false);
     this.emit(Constants.LAYOUT_MODIFIED);
   }
@@ -422,13 +422,13 @@ class Things extends EventEmitter {
       }
 
       const index = thing.getLayoutIndex();
-      const directory_id = thing.getDirectory();
+      const group_id = thing.getGroup();
 
       thing.remove();
       this.things.delete(id);
 
       Array.from(this.things.values())
-        .filter((t) => t.getDirectory() == directory_id)
+        .filter((t) => t.getGroup() == group_id)
         .forEach((t) => {
           if (t.getLayoutIndex() > index) {
             t.setLayoutIndex(t.getLayoutIndex() - 1);

@@ -11,7 +11,7 @@ import path from 'path';
 // Web server routes
 export const USERS_PATH = '/users';
 export const THINGS_PATH = '/things';
-export const DIRECTORIES_PATH = '/directories';
+export const GROUPS_PATH = '/groups';
 export const PROPERTIES_PATH = '/properties';
 export const NEW_THINGS_PATH = '/new_things';
 export const ADAPTERS_PATH = '/adapters';
@@ -61,9 +61,9 @@ export const SET_PROPERTY = 'setProperty';
 export const THING_ADDED = 'thingAdded';
 export const THING_MODIFIED = 'thingModified';
 export const THING_REMOVED = 'thingRemoved';
-export const DIRECTORY_ADDED = 'directoryAdded';
-export const DIRECTORY_MODIFIED = 'directoryModified';
-export const DIRECTORY_REMOVED = 'directoryRemoved';
+export const GROUP_ADDED = 'groupAdded';
+export const GROUP_MODIFIED = 'groupModified';
+export const GROUP_REMOVED = 'groupRemoved';
 export const LAYOUT_MODIFIED = 'layoutModified';
 
 // OAuth things

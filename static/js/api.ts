@@ -366,19 +366,19 @@ class API {
     return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { layoutIndex: index });
   }
 
-  setThingDirectory(thingId: string, directoryId: string | null): Promise<Record<string, unknown>> {
-    directoryId = directoryId || '';
-    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { directory: directoryId });
+  setThingGroup(thingId: string, groupId: string | null): Promise<Record<string, unknown>> {
+    groupId = groupId || '';
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { group: groupId });
   }
 
-  setThingDirectoryAndLayoutIndex(
+  setThingGroupAndLayoutIndex(
     thingId: string,
-    directoryId: string | null,
+    groupId: string | null,
     index: number
   ): Promise<Record<string, unknown>> {
-    directoryId = directoryId || '';
+    groupId = groupId || '';
     return this.patchJson(`/things/${encodeURIComponent(thingId)}`, {
-      directory: directoryId,
+      group: groupId,
       layoutIndex: index,
     });
   }
@@ -428,33 +428,33 @@ class API {
     return this.putJson(`/things/${encodeURIComponent(thingId)}`, updates);
   }
 
-  getDirectories(): Promise<Record<string, unknown>> {
-    return this.getJson('/directories');
+  getGroups(): Promise<Record<string, unknown>> {
+    return this.getJson('/groups');
   }
 
-  getDirectory(directoryId: string): Promise<Record<string, unknown>> {
-    return this.getJson(`/directories/${encodeURIComponent(directoryId)}`);
+  getGroup(groupId: string): Promise<Record<string, unknown>> {
+    return this.getJson(`/groups/${encodeURIComponent(groupId)}`);
   }
 
-  setDirectoryLayoutIndex(directoryId: string, index: number): Promise<Record<string, unknown>> {
-    return this.patchJson(`/directories/${encodeURIComponent(directoryId)}`, {
+  setGroupLayoutIndex(groupId: string, index: number): Promise<Record<string, unknown>> {
+    return this.patchJson(`/groups/${encodeURIComponent(groupId)}`, {
       layoutIndex: index,
     });
   }
 
-  async addDirectory(description: Record<string, unknown>): Promise<Record<string, unknown>> {
-    return (await this.postJson('/directories', description))!;
+  async addGroup(description: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.postJson('/groups', description))!;
   }
 
-  removeDirectory(directoryId: string): Promise<void> {
-    return this.delete(`/directories/${encodeURIComponent(directoryId)}`);
+  removeGroup(groupId: string): Promise<void> {
+    return this.delete(`/groups/${encodeURIComponent(groupId)}`);
   }
 
-  updateDirectory(
-    directoryId: string,
+  updateGroup(
+    groupId: string,
     updates: Record<string, unknown>
   ): Promise<Record<string, unknown>> {
-    return this.putJson(`/directories/${encodeURIComponent(directoryId)}`, updates);
+    return this.putJson(`/groups/${encodeURIComponent(groupId)}`, updates);
   }
 
   getPushKey(): Promise<Record<string, unknown>> {

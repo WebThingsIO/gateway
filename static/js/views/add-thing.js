@@ -34,9 +34,9 @@ const AddThingScreen = {
     this.addonsHint = document.getElementById('add-adapters-hint');
     this.addonsHintAnchor = document.getElementById('add-adapters-hint-anchor');
     this.addByUrlAnchor = document.getElementById('add-by-url-anchor');
-    this.addDirectoryContainer = document.getElementById('add-directory');
-    this.addDirectoryInput = document.getElementById('add-directory-title-input');
-    this.addDirectoryButton = document.getElementById('add-directory-add-button');
+    this.addGroupContainer = document.getElementById('add-group');
+    this.addGroupInput = document.getElementById('add-group-title-input');
+    this.addGroupButton = document.getElementById('add-group-add-button');
     this.pairingTimeout = null;
     this.visibleThings = new Set();
     // Add event listeners
@@ -44,7 +44,7 @@ const AddThingScreen = {
     this.cancelButton.addEventListener('click', this.hide.bind(this));
     this.addonsHintAnchor.addEventListener('click', this.hide.bind(this));
     this.addByUrlAnchor.addEventListener('click', this.showNewWebThing.bind(this));
-    this.addDirectoryButton.addEventListener('click', this.addDirectory.bind(this));
+    this.addGroupButton.addEventListener('click', this.addGroup.bind(this));
     this.closing = false;
   },
 
@@ -167,7 +167,7 @@ const AddThingScreen = {
    */
   hide: function () {
     this.element.classList.add('hidden');
-    this.addDirectoryInput.value = '';
+    this.addGroupInput.value = '';
     this.requestCancelPairing();
     App.gatewayModel.refreshThings();
   },
@@ -184,10 +184,10 @@ const AddThingScreen = {
     new NewWebThing();
   },
 
-  addDirectory: function () {
+  addGroup: function () {
     App.gatewayModel
-      .addDirectory({
-        title: this.addDirectoryInput.value,
+      .addGroup({
+        title: this.addGroupInput.value,
       })
       .then(() => {
         this.hide();

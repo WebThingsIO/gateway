@@ -1,4 +1,4 @@
-.directory {
+.group {
   background: #5288af;
   border-radius: 5px;
   border: 1px solid #48779a;
@@ -13,19 +13,19 @@
   overflow: inherit;
 }
 
-.directory.open {
+.group.open {
   max-height: 100000px;
 }
 
-.directory .thing {
+.group .thing {
   opacity: 1;
 }
 
-.directory:not(.open) .thing {
+.group:not(.open) .thing {
   opacity: 0;
 }
 
-.directory div.bar {
+.group div.bar {
   flex-direction: row;
   justify-content: space-between;
   display: flex;
@@ -33,15 +33,15 @@
   position: relative;
 }
 
-.directory div.bar div.title {
+.group div.bar div.title {
   color: white;
 }
 
-.directory div.bar .leftcontainer {
+.group div.bar .leftcontainer {
   display: flex;
 }
 
-.directory div.bar button.edit {
+.group div.bar button.edit {
   border: none;
   position: absolute;
   top: 5px;
@@ -52,7 +52,7 @@
   background: no-repeat center/100% url(/images/overflow.svg);
 }
 
-.directory div.bar button.foldIn {
+.group div.bar button.foldIn {
   background-image: url(/images/right-arrow.png);
   transform: rotate(90deg);
   background-size: 15px 15px;
@@ -67,11 +67,11 @@
   cursor: grab;
 }
 
-.directory.open div.bar button.foldIn {
+.group.open div.bar button.foldIn {
   transform: rotate(-90deg);
 }
 
-.directory.open.drag-target {
+.group.open.drag-target {
   border: 0.2rem dashed white;
 }
 
@@ -93,7 +93,7 @@
   left: 0;
 }
 
-.directory-overflow-menu {
+.group-overflow-menu {
   position: absolute;
   top: 4.5rem;
   right: 0.3rem;
@@ -108,7 +108,7 @@
   text-align: left;
 }
 
-.directory-overflow-menu::after {
+.group-overflow-menu::after {
   content: '';
   position: absolute;
   top: -0.9rem;
@@ -120,7 +120,7 @@
   width: 0;
 }
 
-.directory-overflow-menu > a {
+.group-overflow-menu > a {
   color: #fff;
   font-size: 2rem;
   display: block;
@@ -128,16 +128,16 @@
   text-decoration: none;
 }
 
-.directory-overflow-menu > a > img {
+.group-overflow-menu > a > img {
   height: 2rem;
   padding-right: 1rem;
   margin-bottom: -0.3rem;
 }
 
-.directory-overflow-menu.hidden {
+.group-overflow-menu.hidden {
   transform: scale(0);
 }
 
-.directory-overflow-menu > a:hover {
+.group-overflow-menu > a:hover {
   background-color: #4d80a5;
 }

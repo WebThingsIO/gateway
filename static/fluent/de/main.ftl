@@ -413,8 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Eingaben sind fehlerhaft
 new-thing-saved = Gespeichert
 new-thing-done = Erledigt
-add-directory = Neuen Ordner hinzufügen
-new-directory-save = Erstellen
+add-group = Neue Gruppe hinzufügen
+new-group-save = Erstellen
 
 ## New Web Thing View
 
