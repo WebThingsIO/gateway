@@ -133,15 +133,9 @@ class Groups extends EventEmitter {
    * @param String id ID to give Group.
    * @param Object description Group description.
    */
-  async createGroup(
-    id: string,
-    description: GroupDescription
-  ): Promise<GroupDescription> {
+  async createGroup(id: string, description: GroupDescription): Promise<GroupDescription> {
     const group = new Group(id, description);
-    const groupDesc = await Database.createGroup(
-      group.getId(),
-      group.getDescription()
-    );
+    const groupDesc = await Database.createGroup(group.getId(), group.getDescription());
     this.groups.set(group.getId(), group);
     await this.setGroupLayoutIndex(group, Infinity);
     this.emit(Constants.GROUP_ADDED, group);
@@ -184,11 +178,7 @@ class Groups extends EventEmitter {
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setGroupLayoutIndex(
-    group: Group,
-    index: number,
-    emitModified = true
-  ): Promise<void> {
+  async setGroupLayoutIndex(group: Group, index: number, emitModified = true): Promise<void> {
     const groups = Array.from(this.groups.values());
 
     index = Math.min(groups.length - 1, Math.max(0, index));

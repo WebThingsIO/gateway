@@ -335,9 +335,7 @@ class Things extends EventEmitter {
    * @return {Promise} A promise which resolves with the description set.
    */
   async setThingLayoutIndex(thing: Thing, index: number, emitModified = true): Promise<void> {
-    const things = Array.from(this.things.values()).filter(
-      (t) => t.getGroup() == thing.getGroup()
-    );
+    const things = Array.from(this.things.values()).filter((t) => t.getGroup() == thing.getGroup());
 
     index = Math.min(things.length - 1, Math.max(0, index));
 
@@ -366,11 +364,7 @@ class Things extends EventEmitter {
    * @param {string} group_id ID of the group
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setThingGroup(
-    thing: Thing,
-    group_id: string | null,
-    emitModified = true
-  ): Promise<void> {
+  async setThingGroup(thing: Thing, group_id: string | null, emitModified = true): Promise<void> {
     if (!group_id) {
       group_id = null;
     }
@@ -378,8 +372,7 @@ class Things extends EventEmitter {
     await this.setThingLayoutIndex(thing, Infinity, false);
     await thing.setGroup(group_id);
     const index =
-      Array.from(this.things.values()).filter((t) => t.getGroup() == thing.getGroup())
-        .length - 1;
+      Array.from(this.things.values()).filter((t) => t.getGroup() == thing.getGroup()).length - 1;
     await thing.setLayoutIndex(index);
 
     if (emitModified) {

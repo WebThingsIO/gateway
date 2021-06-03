@@ -450,10 +450,7 @@ class API {
     return this.delete(`/groups/${encodeURIComponent(groupId)}`);
   }
 
-  updateGroup(
-    groupId: string,
-    updates: Record<string, unknown>
-  ): Promise<Record<string, unknown>> {
+  updateGroup(groupId: string, updates: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson(`/groups/${encodeURIComponent(groupId)}`, updates);
   }
 
