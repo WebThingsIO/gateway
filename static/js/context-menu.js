@@ -35,6 +35,7 @@ const ContextMenu = {
     this.customIcon = document.getElementById('edit-thing-custom-icon');
     this.customIconInput = document.getElementById('edit-thing-custom-icon-input');
     this.customIconLabel = document.getElementById('edit-thing-custom-icon-label');
+    this.showOnFloorplanCheckbox = document.getElementById('show-on-floorplan-checkbox');
     this.label = document.getElementById('edit-thing-label');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
@@ -223,6 +224,8 @@ const ContextMenu = {
     if (this.thingType.options.length > 0) {
       capability = this.thingType.options[this.thingType.selectedIndex].value;
     }
+
+    console.log('TODO', this.showOnFloorplanCheckbox.checked);
 
     const body = { title, selectedCapability: capability };
 
