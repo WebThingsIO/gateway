@@ -162,7 +162,7 @@
   display: inline-block;
   width: 3rem;
   height: 3rem;
-  background: url(/images/checkbox-sprite.png) no-repeat 0 0;
+  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
   background-size: 3rem auto;
   transform: translateY(25%);
   padding-left: 5px;
