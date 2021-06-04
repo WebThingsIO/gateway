@@ -450,7 +450,16 @@ describe('things/', function () {
   });
 
   it('set layout index of a thing', async () => {
-    await addDevice();
+    const TEST_THING_2 = JSON.parse(JSON.stringify(TEST_THING));
+    TEST_THING_2.id = 'test-2';
+    TEST_THING_2.title = 'test-2';
+    const TEST_THING_3 = JSON.parse(JSON.stringify(TEST_THING));
+    TEST_THING_3.id = 'test-3';
+    TEST_THING_3.title = 'test-3';
+    await addDevice(TEST_THING);
+    await addDevice(TEST_THING_2);
+    await addDevice(TEST_THING_3);
+
     const on = await chai
       .request(server)
       .patch(`${Constants.THINGS_PATH}/test-1`)
@@ -460,7 +469,18 @@ describe('things/', function () {
 
     expect(on.status).toEqual(200);
     expect(on.body).toHaveProperty('layoutIndex');
-    expect(on.body.layoutIndex).toEqual(15);
+    expect(on.body.layoutIndex).toEqual(2);
+
+    const on2 = await chai
+      .request(server)
+      .patch(`${Constants.THINGS_PATH}/test-2`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({ layoutIndex: 1 });
+
+    expect(on2.status).toEqual(200);
+    expect(on2.body).toHaveProperty('layoutIndex');
+    expect(on2.body.layoutIndex).toEqual(1);
   });
 
   it('lists 0 new things after creating thing', async () => {
