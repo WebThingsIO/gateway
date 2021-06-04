@@ -83,6 +83,7 @@ class Thing {
     }
 
     this.selectedCapability = description.selectedCapability;
+    this.floorplanVisibility = 'floorplanVisibility' in description !== false;
     this.layoutIndex = description.layoutIndex;
     this.iconHref = description.iconHref || '';
     this.baseIcon = opts.baseIcon || fluent.getMessage('thing-icons-thing-src');
@@ -737,6 +738,7 @@ class Thing {
       detail: {
         thingId: this.id,
         thingTitle: this.title,
+        floorplanVisibility: this.floorplanVisibility,
         thingIcon: this.baseIcon,
         action: 'edit',
         capabilities: this['@type'],

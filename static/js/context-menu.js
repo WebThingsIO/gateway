@@ -90,6 +90,7 @@ const ContextMenu = {
         this.saveButton.disabled = false;
         this.customIconInput.disabled = false;
         this.titleInput.value = e.detail.thingTitle;
+        this.showOnFloorplanCheckbox.checked = e.detail.floorplanVisibility;
         this.thingType.innerHTML = '';
 
         if (!e.detail.selectedCapability || e.detail.selectedCapability === 'Custom') {
@@ -225,9 +226,9 @@ const ContextMenu = {
       capability = this.thingType.options[this.thingType.selectedIndex].value;
     }
 
-    console.log('TODO', this.showOnFloorplanCheckbox.checked);
+    const floorplanVisibility = this.showOnFloorplanCheckbox.checked;
 
-    const body = { title, selectedCapability: capability };
+    const body = { title, floorplanVisibility, selectedCapability: capability };
 
     if (capability === 'Custom' && this.iconData) {
       body.iconData = this.iconData;

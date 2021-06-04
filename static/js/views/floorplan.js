@@ -84,6 +84,10 @@ const FloorplanScreen = {
     let y = this.ORIGIN_Y;
     things.forEach((description, thingId) => {
       App.gatewayModel.getThingModel(thingId).then((thingModel) => {
+        if (description.floorplanVisibility === false) {
+          return;
+        }
+
         if (!description.floorplanX || !description.floorplanY) {
           description.floorplanX = x;
           description.floorplanY = y;

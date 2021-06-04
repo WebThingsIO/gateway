@@ -381,8 +381,6 @@ function build(): express.Router {
     try {
       if (request.body.hasOwnProperty('floorplanX') && request.body.hasOwnProperty('floorplanY')) {
         description = await thing.setCoordinates(request.body.floorplanX, request.body.floorplanY);
-      } else if (request.body.hasOwnProperty('floorplanVisibility')) {
-        description = await thing.setFloorplanVisibility(request.body.floorplanVisibility);
       } else if (request.body.hasOwnProperty('layoutIndex')) {
         description = await thing.setLayoutIndex(request.body.layoutIndex);
       } else {
@@ -436,6 +434,10 @@ function build(): express.Router {
         response.status(500).send(`Failed to update thing ${thingId}: ${e}`);
         return;
       }
+    }
+
+    if (request.body.hasOwnProperty('floorplanVisibility')) {
+      await thing.setFloorplanVisibility(request.body.floorplanVisibility);
     }
 
     let description;
