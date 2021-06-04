@@ -2,11 +2,10 @@
   background: #5288af;
   border-radius: 5px;
   border: 1px solid #48779a;
-  margin: 12px 0px;
+  margin: 12px 0;
   min-width: 250px;
   min-height: 50px;
   max-height: 32px;
-  overflow: hidden;
   padding-left: 5px;
   padding-right: 5px;
   position: relative;
@@ -49,11 +48,11 @@
   width: 25px;
   border-radius: 50%;
   height: 25px;
-  background: no-repeat center/100% url(/images/overflow.svg);
+  background: no-repeat center/100% url('/images/overflow.svg');
 }
 
 .group div.bar button.foldIn {
-  background-image: url(/images/right-arrow.png);
+  background-image: url('/images/right-arrow.png');
   transform: rotate(90deg);
   background-size: 15px 15px;
   background-position: center;
@@ -113,7 +112,7 @@
   position: absolute;
   top: -0.9rem;
   right: 1rem;
-  border-width: 0rem 1rem 1rem;
+  border-width: 0 1rem 1rem;
   border-style: solid;
   border-color: #48779a transparent;
   display: block;
