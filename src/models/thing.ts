@@ -42,6 +42,7 @@ export interface ThingDescription {
   actions: Record<string, ActionSchema>;
   events: Record<string, EventSchema>;
   links: Link[];
+  floorplanVisibility: boolean;
   floorplanX: number;
   floorplanY: number;
   layoutIndex: number;
@@ -91,6 +92,8 @@ export default class Thing extends EventEmitter {
   private connected: boolean;
 
   private eventsDispatched: Event[];
+
+  private floorplanVisibility: boolean;
 
   private floorplanX: number;
 
@@ -166,6 +169,7 @@ export default class Thing extends EventEmitter {
         this.properties[propertyName] = property;
       }
     }
+    this.floorplanVisibility = description.floorplanVisibility;
     this.floorplanX = description.floorplanX;
     this.floorplanY = description.floorplanY;
     this.layoutIndex = description.layoutIndex;
@@ -309,6 +313,20 @@ export default class Thing extends EventEmitter {
 
   getProperties(): Record<string, PropertySchema> {
     return this.properties;
+  }
+
+  /**
+   * Set the visibility of a Thing on the floorplan.
+   *
+   * @param {boolean} visibility Whether or not to include in the floorplan view.
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  setFloorplanVisibility(visibility: boolean): Promise<ThingDescription> {
+    this.floorplanVisibility = visibility;
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      this.emit(Constants.MODIFIED);
+      return descr;
+    });
   }
 
   /**
@@ -537,6 +555,7 @@ export default class Thing extends EventEmitter {
       actions: this.actions,
       events: this.events,
       links: JSON.parse(JSON.stringify(this.links)),
+      floorplanVisibility: this.floorplanVisibility,
       floorplanX: this.floorplanX,
       floorplanY: this.floorplanY,
       layoutIndex: this.layoutIndex,
