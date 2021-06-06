@@ -435,12 +435,14 @@ describe('things/', function () {
 
   it('set floorplanVisibility of a thing', async () => {
     await addDevice();
+    const UPDATED_DESCRIPTION = JSON.parse(JSON.stringify(TEST_THING));
+    UPDATED_DESCRIPTION.floorplanVisibility = false;
     const on = await chai
       .request(server)
-      .patch(`${Constants.THINGS_PATH}/test-1`)
+      .put(`${Constants.THINGS_PATH}/test-1`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({ floorplanVisibility: false });
+      .send(UPDATED_DESCRIPTION);
 
     expect(on.status).toEqual(200);
     expect(on.body).toHaveProperty('floorplanVisibility');
