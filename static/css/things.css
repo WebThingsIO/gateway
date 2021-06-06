@@ -9,14 +9,32 @@
   padding: 7.6rem 0;
 }
 
-#things {
+#things-container {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
   max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#things {
   text-align: center;
   font-size: 1.6rem;
   color: #fff;
+  flex-direction: column;
+  margin: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#groups {
+  text-align: center;
+  font-size: 1.6rem;
+  flex-direction: column;
+  color: #fff;
+  display: flex;
+  margin: auto;
 }
 
 #add-button {
@@ -27,4 +45,16 @@
 
 #add-thing-back-button {
   background-color: transparent;
+}
+
+[draggable] {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.drag-target {
+  border: 0.2rem dashed white;
 }

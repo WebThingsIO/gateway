@@ -19,6 +19,7 @@ class GatewayModel extends Model {
     this.thingModels = new Map();
     this.things = new Map();
     this.connectedThings = new Map();
+    this.groups = new Map();
     this.onMessage = this.onMessage.bind(this);
     this.queue = Promise.resolve(true);
     this.connectWebSocket();
@@ -37,10 +38,12 @@ class GatewayModel extends Model {
     switch (event) {
       case Constants.REFRESH_THINGS:
         if (immediate) {
-          handler(this.things);
+          handler(this.things, this.groups);
         }
         break;
       case Constants.DELETE_THINGS:
+        break;
+      case Constants.DELETE_GROUPS:
         break;
       default:
         console.warn(`GatewayModel does not support event:${event}`);
@@ -130,7 +133,7 @@ class GatewayModel extends Model {
     }
 
     if (!skipEvent) {
-      return this.handleEvent(Constants.DELETE_THINGS, this.things);
+      return this.handleEvent(Constants.DELETE_THINGS, this.things, this.groups);
     }
   }
 
@@ -140,6 +143,11 @@ class GatewayModel extends Model {
     this.ws = new ReopeningWebSocket(wsHref);
     this.ws.addEventListener('open', this.refreshThings.bind(this));
     this.ws.addEventListener('message', this.onMessage);
+    const groupsHref = `${window.location.origin}/groups?jwt=${API.jwt}`;
+    const groupsWsHref = groupsHref.replace(/^http/, 'ws');
+    this.groupsWs = new ReopeningWebSocket(groupsWsHref);
+    this.groupsWs.addEventListener('open', this.refreshThings.bind(this));
+    this.groupsWs.addEventListener('message', this.onMessage);
   }
 
   onMessage(event) {
@@ -154,6 +162,12 @@ class GatewayModel extends Model {
         break;
       case 'thingModified':
         this.refreshThing(message.id);
+        break;
+      case 'groupAdded':
+      case 'groupModified':
+      case 'groupRemoved':
+      case 'layoutModified':
+        this.refreshThings();
         break;
       default:
         break;
@@ -177,10 +191,25 @@ class GatewayModel extends Model {
 
           removedIds.forEach((thingId) => this.handleRemove(thingId, true));
 
-          return this.handleEvent(Constants.REFRESH_THINGS, this.things);
+          return API.getGroups();
+        })
+        .then((groups) => {
+          const fetchedIds = new Set();
+          groups.forEach((description) => {
+            const groupId = decodeURIComponent(description.href.split('/').pop());
+            fetchedIds.add(groupId);
+            this.setGroup(groupId, description);
+          });
+
+          const removedIds = Array.from(this.groups.keys()).filter((id) => {
+            return !fetchedIds.has(id);
+          });
+
+          removedIds.forEach((groupId) => this.handleRemoveGroup(groupId, true));
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.groups);
         })
         .catch((e) => {
-          console.error(`Get things failed ${e}`);
+          console.error(`Get things or groups failed ${e}`);
         });
     });
   }
@@ -193,12 +222,87 @@ class GatewayModel extends Model {
             throw new Error(`Unavailable Thing Description: ${description}`);
           }
           this.setThing(thingId, description);
-          return this.handleEvent(Constants.REFRESH_THINGS, this.things);
+          return this.handleEvent(Constants.REFRESH_THINGS, this.things, this.groups);
         })
         .catch((e) => {
           console.error(`Get thing id:${thingId} failed ${e}`);
         });
     });
+  }
+
+  setGroup(groupId, description) {
+    this.groups.set(groupId, description);
+  }
+
+  getGroup(groupId) {
+    if (this.groups.has(groupId)) {
+      return Promise.resolve(this.groups.get(groupId));
+    }
+    return this.refreshThings().then(() => {
+      return this.groups.get(groupId);
+    });
+  }
+
+  /**
+   * Remove the group.
+   *
+   * @param {string} groupId - Id of the group
+   */
+  removeGroup(groupId) {
+    if (!this.groups.has(groupId)) {
+      return Promise.reject(`No group id:${groupId}`);
+    }
+    return this.addQueue(() => {
+      if (!this.groups.has(groupId)) {
+        throw new Error(`Group id:${groupId} already removed`);
+      }
+      return API.removeGroup(groupId).then(() => {
+        return this.handleEvent(Constants.DELETE_GROUPS, this.things, this.groups);
+      });
+    });
+  }
+
+  /**
+   * Add a new group.
+   *
+   * @param {string} title - title of the group
+   */
+  addGroup(title) {
+    return this.addQueue(() => {
+      return API.addGroup(title).then((group) => {
+        const groupId = decodeURIComponent(group.href.split('/').pop());
+        return groupId;
+      });
+    });
+  }
+
+  /**
+   * Update the group.
+   *
+   * @param {string} groupId - Id of the group
+   * @param {object} updates - contents of update
+   */
+  updateGroup(groupId, updates) {
+    if (!this.groups.has(groupId)) {
+      return Promise.reject(`No group id:${groupId}`);
+    }
+    return this.addQueue(() => {
+      if (!this.groups.has(groupId)) {
+        throw new Error(`Group id:${groupId} already updated`);
+      }
+      return API.updateGroup(groupId, updates).then(() => {
+        this.refreshThings();
+      });
+    });
+  }
+
+  handleRemoveGroup(groupId, skipEvent = false) {
+    if (this.groups.has(groupId)) {
+      this.groups.delete(groupId);
+    }
+    if (!skipEvent) {
+      return this.handleEvent(Constants.DELETE_GROUPS, this.things, this.groups);
+    }
   }
 }
 

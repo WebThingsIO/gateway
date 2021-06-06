@@ -22,6 +22,8 @@ let Menu;
 // eslint-disable-next-line prefer-const
 let ContextMenu;
 // eslint-disable-next-line prefer-const
+let GroupContextMenu;
+// eslint-disable-next-line prefer-const
 let SettingsScreen;
 // eslint-disable-next-line prefer-const
 let FloorplanScreen;
@@ -98,6 +100,7 @@ const App = {
 
     AddThingScreen.init();
     ContextMenu.init();
+    GroupContextMenu.init();
     ThingsScreen.init();
     SettingsScreen.init();
     FloorplanScreen.init();
@@ -478,6 +481,7 @@ ThingsScreen = require('./views/things');
 AddThingScreen = require('./views/add-thing');
 Menu = require('./views/menu');
 ContextMenu = require('./context-menu');
+GroupContextMenu = require('./group-context-menu');
 SettingsScreen = require('./views/settings');
 FloorplanScreen = require('./views/floorplan');
 Router = require('./router');

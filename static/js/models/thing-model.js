@@ -37,6 +37,9 @@ class ThingModel extends Model {
       this.id = decodeURIComponent(this.href.pathname.split('/').pop());
     }
 
+    // Parse group id of Thing
+    this.group_id = description.group_id;
+
     // Parse events URL
     for (const link of description.links) {
       switch (link.rel) {

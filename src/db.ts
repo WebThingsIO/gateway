@@ -19,7 +19,7 @@ import { PushSubscription } from 'web-push';
 
 const sqlite3 = verbose();
 
-const TABLES = ['users', 'jsonwebtokens', 'things', 'settings', 'pushSubscriptions'];
+const TABLES = ['users', 'jsonwebtokens', 'things', 'groups', 'settings', 'pushSubscriptions'];
 
 const DEBUG = false || process.env.NODE_ENV === 'test';
 
@@ -67,6 +67,9 @@ class Database {
   createTables(): void {
     // Create Things table
     this.db!.run('CREATE TABLE IF NOT EXISTS things (id TEXT PRIMARY KEY, description TEXT);');
+
+    // Create Groups table
+    this.db!.run('CREATE TABLE IF NOT EXISTS groups (id TEXT PRIMARY KEY, description TEXT);');
 
     // Create Users table
     this.db!.run(
@@ -194,6 +197,88 @@ class Database {
     return new Promise((resolve, reject) => {
       const db = this.db!;
       db.run('DELETE FROM things WHERE id = ?', [id], (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  /**
+   * Get all Groups stored in the database.
+   *
+   * @return Promise which resolves with a list of Group objects.
+   */
+  getGroups(): Promise<Record<string, unknown>[]> {
+    return this.all('SELECT id, description FROM groups').then((rows) => {
+      const groups = [];
+      for (const row of rows) {
+        const group = JSON.parse(<string>row.description);
+        group.id = row.id;
+        groups.push(group);
+      }
+
+      return groups;
+    });
+  }
+
+  /**
+   * Add a new Group to the Database.
+   *
+   * @param String id The ID to give the new Group.
+   * @param String description A serialised Group description.
+   */
+  createGroup<T>(id: string, description: T): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
+      db.run(
+        'INSERT INTO groups (id, description) VALUES (?, ?)',
+        [id, JSON.stringify(description)],
+        (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(description);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Update a Group in the Database.
+   *
+   * @param String id ID of the group to update.
+   * @param String description A serialised Group description.
+   */
+  updateGroup<T>(id: string, description: T): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
+      db.run(
+        'UPDATE groups SET description=? WHERE id=?',
+        [JSON.stringify(description), id],
+        (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(description);
+          }
+        }
+      );
+    });
+  }
+
+  /**
+   * Remove a Group from the Database.
+   *
+   * @param String id The ID of the Group to remove.
+   */
+  removeGroup(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const db = this.db!;
+      db.run('DELETE FROM groups WHERE id = ?', [id], (error) => {
         if (error) {
           reject(error);
         } else {

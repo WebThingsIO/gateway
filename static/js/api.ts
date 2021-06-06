@@ -366,6 +366,23 @@ class API {
     return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { layoutIndex: index });
   }
 
+  setThingGroup(thingId: string, groupId: string | null): Promise<Record<string, unknown>> {
+    groupId = groupId || '';
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, { group: groupId });
+  }
+
+  setThingGroupAndLayoutIndex(
+    thingId: string,
+    groupId: string | null,
+    index: number
+  ): Promise<Record<string, unknown>> {
+    groupId = groupId || '';
+    return this.patchJson(`/things/${encodeURIComponent(thingId)}`, {
+      group: groupId,
+      layoutIndex: index,
+    });
+  }
+
   setThingFloorplanPosition(
     thingId: string,
     x: number,
@@ -409,6 +426,32 @@ class API {
 
   updateThing(thingId: string, updates: Record<string, unknown>): Promise<Record<string, unknown>> {
     return this.putJson(`/things/${encodeURIComponent(thingId)}`, updates);
+  }
+
+  getGroups(): Promise<Record<string, unknown>> {
+    return this.getJson('/groups');
+  }
+
+  getGroup(groupId: string): Promise<Record<string, unknown>> {
+    return this.getJson(`/groups/${encodeURIComponent(groupId)}`);
+  }
+
+  setGroupLayoutIndex(groupId: string, index: number): Promise<Record<string, unknown>> {
+    return this.patchJson(`/groups/${encodeURIComponent(groupId)}`, {
+      layoutIndex: index,
+    });
+  }
+
+  async addGroup(description: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return (await this.postJson('/groups', description))!;
+  }
+
+  removeGroup(groupId: string): Promise<void> {
+    return this.delete(`/groups/${encodeURIComponent(groupId)}`);
+  }
+
+  updateGroup(groupId: string, updates: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return this.putJson(`/groups/${encodeURIComponent(groupId)}`, updates);
   }
 
   getPushKey(): Promise<Record<string, unknown>> {

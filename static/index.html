@@ -24,7 +24,10 @@
         </div>
         <div id="thing-title-right-flex"></div>
       </div>
-      <div id="things"></div>
+      <div id="things-container">
+        <div id="things"></div>
+        <div id="groups"></div>
+      </div>
       <button id="add-button" class="icon-button" data-l10n-id="add-things"></button>
     </section>
 
@@ -774,6 +777,11 @@
             </a>
           </span>
         </p>
+        <div id="add-group">
+          <div id="add-group-label" data-l10n-id="add-group"></div>
+          <input id="add-group-title-input" />
+          <button id="add-group-add-button" data-l10n-id="new-group-save"></button>
+        </div>
         <div id="new-things"></div>
         <p id="add-by-url">
           <a id="add-by-url-anchor" href="#" class="hidden" data-l10n-id="add-thing-add-by-url"></a>
@@ -871,6 +879,39 @@
           <button
             id="remove-thing-button"
             class="context-menu-button danger"
+            data-l10n-id="context-menu-remove"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group Context Menu -->
+    <div id="group-context-menu" class="hidden dialog">
+      <button
+        id="group-context-menu-back-button"
+        class="back-button icon-button"
+        data-l10n-id="back-button"
+      ></button>
+      <div id="group-context-menu-heading">
+        <span id="group-context-menu-heading-text"></span>
+      </div>
+      <div id="group-context-menu-content">
+        <div id="group-context-menu-content-edit" class="hidden">
+          <div id="edit-group-metadata">
+            <input type="text" id="edit-group-title" />
+            <span id="edit-group-spacer"></span>
+            <span id="edit-group-label" class="hidden"></span>
+          </div>
+          <button
+            id="edit-group-save-button"
+            class="edit-group-button text-button"
+            data-l10n-id="context-menu-save"
+          ></button>
+        </div>
+        <div id="group-context-menu-content-remove" class="hidden">
+          <button
+            id="remove-group-button"
+            class="group-context-menu-button danger"
             data-l10n-id="context-menu-remove"
           ></button>
         </div>

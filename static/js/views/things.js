@@ -19,6 +19,9 @@ const EventList = require('./event-list');
 const fluent = require('../fluent');
 const Icons = require('../icons');
 const { createThingFromCapability } = require('../schema-impl/capability/capabilities');
+const Group = require('./group');
+const API = require('../api').default;
+const Utils = require('../utils');
 
 const ThingsScreen = {
   /**
@@ -26,6 +29,7 @@ const ThingsScreen = {
    */
   init: function () {
     this.thingsElement = document.getElementById('things');
+    this.groupsElement = document.getElementById('groups');
     this.thingTitleElement = document.getElementById('thing-title');
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
@@ -35,6 +39,11 @@ const ThingsScreen = {
     this.addButton.addEventListener('click', AddThingScreen.show.bind(AddThingScreen));
     this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
+
+    this.thingsElement.ondragover = this.handleDragOver.bind(this);
+    this.thingsElement.ondragenter = this.handleDragEnter.bind(this);
+    this.thingsElement.ondragleave = this.handleDragLeave.bind(this);
+    this.thingsElement.ondrop = this.handleDrop.bind(this);
   },
 
   renderThing: function (thingModel, description, format) {
@@ -94,15 +103,23 @@ const ThingsScreen = {
     }
   },
 
-  refreshThings: function (things) {
+  refreshThings: function (things, groups) {
     let thing;
     while (typeof (thing = this.things.pop()) !== 'undefined') {
       thing.cleanup();
     }
-    if (things.size === 0) {
+    if (things.size === 0 && groups.size === 0) {
       this.thingsElement.innerHTML = fluent.getMessage('no-things');
     } else {
       this.thingsElement.innerHTML = '';
+    }
+    this.groupsElement.innerHTML = '';
+    if (groups.size !== 0) {
+      groups.forEach((description) => {
+        new Group(description);
+      });
+    }
+    if (things.size !== 0) {
       things.forEach((description, thingId) => {
         App.gatewayModel.getThingModel(thingId).then((thingModel) => {
           this.renderThing(thingModel, description);
@@ -131,17 +148,18 @@ const ThingsScreen = {
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThings);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThings);
-
     this.refreshThing = () => {
       return App.gatewayModel
         .getThing(thingId)
         .then(async (description) => {
           if (!description) {
             this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+            this.groupsElement.innerHTML = '';
             return;
           }
 
           this.thingsElement.innerHTML = '';
+          this.groupsElement.innerHTML = '';
 
           const thingModel = await App.gatewayModel.getThingModel(thingId);
           const thing = this.renderThing(thingModel, description, Constants.ThingFormat.EXPANDED);
@@ -166,6 +184,7 @@ const ThingsScreen = {
         .catch((e) => {
           console.error(`Thing id ${thingId} not found ${e}`);
           this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+          this.groupsElement.innerHTML = '';
         });
     };
 
@@ -184,6 +203,7 @@ const ThingsScreen = {
       .getThing(thingId)
       .then((description) => {
         this.thingsElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
 
         if (
           !description.hasOwnProperty('actions') ||
@@ -191,6 +211,7 @@ const ThingsScreen = {
           !description.actions[actionName].hasOwnProperty('input')
         ) {
           this.thingsElement.innerHTML = fluent.getMessage('action-not-found');
+          this.groupsElement.innerHTML = '';
           return;
         }
 
@@ -219,6 +240,7 @@ const ThingsScreen = {
         document.getElementById('thing-title-title').innerText = description.title;
 
         this.thingsElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
         new ActionInputForm(
           href,
           actionName,
@@ -229,6 +251,7 @@ const ThingsScreen = {
       .catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+        this.groupsElement.innerHTML = '';
       });
   },
 
@@ -245,6 +268,7 @@ const ThingsScreen = {
       .getThing(thingId)
       .then(async (description) => {
         this.thingsElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
         if (!description.hasOwnProperty('events')) {
           this.thingsElement.innerHTML = fluent.getMessage('events-not-found');
           return;
@@ -269,11 +293,67 @@ const ThingsScreen = {
         document.getElementById('thing-title-title').innerText = description.title;
 
         this.thingsElement.innerHTML = '';
+        this.groupsElement.innerHTML = '';
         this.eventList = new EventList(thingModel, description);
       })
       .catch((e) => {
         console.error(`Thing id ${thingId} not found ${e}`);
         this.thingsElement.innerHTML = fluent.getMessage('thing-not-found');
+        this.groupsElement.innerHTML = '';
+      });
+  },
+
+  handleDragOver(e) {
+    e.preventDefault();
+
+    if (
+      this.groupsElement.childNodes.length === 0 ||
+      !Array.from(e.dataTransfer.types).includes('application/thing')
+    ) {
+      return;
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    this.thingsElement.classList.add('drag-target');
+  },
+
+  handleDragEnter(e) {
+    e.preventDefault();
+  },
+
+  handleDragLeave(e) {
+    e.preventDefault();
+    this.thingsElement.classList.remove('drag-target');
+  },
+
+  handleDrop(e) {
+    e.preventDefault();
+
+    if (
+      this.groupsElement.childNodes.length === 0 ||
+      !Array.from(e.dataTransfer.types).includes('application/thing')
+    ) {
+      return;
+    }
+
+    e.stopPropagation();
+
+    const dragNode = document.getElementById(e.dataTransfer.getData('text'));
+    if (!dragNode) {
+      return;
+    }
+
+    dragNode.parentNode.removeChild(dragNode);
+
+    this.thingsElement.appendChild(dragNode);
+
+    const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
+    API.setThingGroup(dragNodeId, null)
+      .then(() => {
+        App.gatewayModel.refreshThings();
+      })
+      .catch((e) => {
+        console.error(`Error trying to change group of thing ${dragNodeId}: ${e}`);
       });
   },
 };

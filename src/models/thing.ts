@@ -50,6 +50,7 @@ export interface ThingDescription {
   iconData: IconData;
   security: string;
   securityDefinitions: SecurityDefinition;
+  group_id: string | null;
 }
 
 interface IconData {
@@ -103,6 +104,8 @@ export default class Thing extends EventEmitter {
   private links: Link[];
 
   private iconHref: string | null;
+
+  private group_id: string | null;
 
   /**
    * Thing constructor.
@@ -289,6 +292,8 @@ export default class Thing extends EventEmitter {
     } else if (description.iconData) {
       this.setIcon(description.iconData, false);
     }
+
+    this.group_id = description.group_id || null;
   }
 
   getId(): string {
@@ -301,6 +306,10 @@ export default class Thing extends EventEmitter {
 
   getLayoutIndex(): number {
     return this.layoutIndex;
+  }
+
+  getGroup(): string | null {
+    return this.group_id;
   }
 
   getHref(): string {
@@ -336,7 +345,6 @@ export default class Thing extends EventEmitter {
   setLayoutIndex(index: number): Promise<ThingDescription> {
     this.layoutIndex = index;
     return Database.updateThing(this.id, this.getDescription()).then((descr) => {
-      this.emit(Constants.MODIFIED);
       return descr;
     });
   }
@@ -444,6 +452,19 @@ export default class Thing extends EventEmitter {
   }
 
   /**
+   * Set the group for a Thing in the overview.
+   *
+   * @param {string} group_id ID of the group
+   * @return {Promise} A promise which resolves with the description set.
+   */
+  setGroup(group_id: string | null): Promise<ThingDescription> {
+    this.group_id = group_id;
+    return Database.updateThing(this.id, this.getDescription()).then((descr) => {
+      return descr;
+    });
+  }
+
+  /**
    * Dispatch an event to all listeners subscribed to the Thing
    * @param {Event} event
    */
@@ -542,6 +563,7 @@ export default class Thing extends EventEmitter {
       layoutIndex: this.layoutIndex,
       selectedCapability: this.selectedCapability,
       iconHref: this.iconHref,
+      group_id: this.group_id,
     } as ThingDescription;
 
     if (typeof reqHost !== 'undefined') {

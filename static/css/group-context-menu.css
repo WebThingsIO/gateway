@@ -1,0 +1,99 @@
+#group-context-menu {
+  text-align: center;
+}
+
+#group-context-menu-heading {
+  line-height: 9.6rem;
+}
+
+#group-context-menu-heading-text {
+  font-size: 1.6rem;
+}
+
+#group-context-menu-content {
+  text-align: center;
+  position: relative;
+  top: calc(50% - 3.8rem);
+  transform: translateY(-50%);
+}
+
+#group-context-menu-heading .hidden,
+#group-context-menu-content .hidden {
+  display: none;
+}
+
+.group-context-menu-button {
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1.6rem;
+  width: 60%;
+  min-width: 15rem;
+  height: 6rem;
+}
+
+.group-context-menu-button.danger {
+  background-color: #f55;
+}
+
+#group-context-menu-back-button {
+  background-color: transparent;
+}
+
+#group-context-menu-content-edit {
+  background-color: #597285;
+  width: 50%;
+  min-width: 28rem;
+  max-width: 65rem;
+  margin: 1rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  border-radius: 0.5rem;
+}
+
+#edit-group-metadata {
+  flex: 1;
+  padding: 1rem 1rem 0 1rem;
+  text-align: left;
+}
+
+#edit-group-title {
+  display: block;
+  width: calc(100% - 1rem);
+}
+
+.edit-group-button {
+  height: 4rem;
+  background-color: #7f93a1;
+  margin: 1.25rem 0;
+}
+
+.edit-group-button:disabled,
+.edit-group-button:disabled:hover,
+.edit-group-button:hover:active {
+  background-color: #597285;
+}
+
+#edit-group-label {
+  display: block;
+  text-align: left;
+  color: #ccc;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+
+#edit-group-label.error {
+  color: orange;
+}
+
+@media only screen and (max-width: 800px) {
+  #edit-group-spacer {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  #edit-group-metadata {
+    padding-bottom: 1rem;
+  }
+}
