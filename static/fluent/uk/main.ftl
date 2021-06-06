@@ -420,6 +420,8 @@ new-thing-password =
 new-thing-credentials-error = Неправильні дані
 new-thing-saved = Збережено
 new-thing-done = Готово
+add-group = Додати нову групу
+new-group-save = Створити
 
 ## New Web Thing View
 
