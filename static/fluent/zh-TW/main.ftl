@@ -406,6 +406,8 @@ new-thing-password =
 new-thing-credentials-error = 帳號密碼不正確
 new-thing-saved = 已儲存
 new-thing-done = 完成
+add-group = 新增群組
+new-group-save = 建立
 
 ## New Web Thing View
 
