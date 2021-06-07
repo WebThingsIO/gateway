@@ -415,6 +415,8 @@ new-thing-password =
 new-thing-credentials-error = Unjildige kombinaasje brûkersnamme/wachtwurd
 new-thing-saved = Bewarre
 new-thing-done = Dien
+add-group = Nije groep tafoegje
+new-group-save = Oanmeitsje
 
 ## New Web Thing View
 
@@ -581,8 +583,6 @@ connecting-skipped =
 
 ## Creating Wi-Fi Network Page
 
-    Ferbyn mei { $ssid } en it ynstelde wachtwurd,
-    navigearje dêrnei nei { $gateway-link } of { $ip-link } yn jo webbrowser.
 
 ## UI Updates
 
