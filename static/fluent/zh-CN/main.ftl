@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = 凭据不正确
 new-thing-saved = 已保存
 new-thing-done = 完成
+add-group = 新建群组
+new-group-save = 创建
 
 ## New Web Thing View
 
