@@ -249,6 +249,7 @@ add-thing-cancel = 取消
 context-menu-choose-icon = 选择图标...
 context-menu-save = 保存
 context-menu-remove = 移除
+context-menu-show-on-floorplan = 要显示在楼层平面图中？
 
 ## Capabilities
 
