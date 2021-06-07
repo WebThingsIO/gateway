@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Felaktiga inloggningsuppgifter
 new-thing-saved = Sparad
 new-thing-done = Klar
+add-group = Lägg till ny grupp
+new-group-save = Skapa
 
 ## New Web Thing View
 
