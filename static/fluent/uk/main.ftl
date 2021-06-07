@@ -249,6 +249,7 @@ add-thing-cancel = Скасувати
 context-menu-choose-icon = Вибрати піктограму…
 context-menu-save = Зберегти
 context-menu-remove = Вилучити
+context-menu-show-on-floorplan = Показати у вигляді плану поверху?
 
 ## Capabilities
 
