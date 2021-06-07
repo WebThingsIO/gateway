@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Credentiales incorrecte
 new-thing-saved = Salvate
 new-thing-done = Facite
+add-group = Adder un nove gruppo
+new-group-save = Crear
 
 ## New Web Thing View
 
