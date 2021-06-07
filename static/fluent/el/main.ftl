@@ -249,6 +249,7 @@ add-thing-cancel = Ακύρωση
 context-menu-choose-icon = Επιλογή εικονιδίου…
 context-menu-save = Αποθήκευση
 context-menu-remove = Αφαίρεση
+context-menu-show-on-floorplan = Εμφάνιση σε προβολή κάτοψης;
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = Λανθασμένα διαπιστευτήρια
 new-thing-saved = Αποθηκεύτηκε
 new-thing-done = Τέλος
+add-group = Προσθήκη νέας ομάδας
+new-group-save = Δημιουργία
 
 ## New Web Thing View
 
