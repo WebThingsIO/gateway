@@ -249,6 +249,7 @@ add-thing-cancel = Anuluj
 context-menu-choose-icon = Wybierz ikonę…
 context-menu-save = Zapisz
 context-menu-remove = Usuń
+context-menu-show-on-floorplan = Wyświetlać na planie pomieszczeń?
 
 ## Capabilities
 
@@ -420,6 +421,8 @@ new-thing-password =
 new-thing-credentials-error = Niepoprawne dane uwierzytelniające
 new-thing-saved = Zapisano
 new-thing-done = Gotowe
+add-group = Dodaj nową grupę
+new-group-save = Utwórz
 
 ## New Web Thing View
 
