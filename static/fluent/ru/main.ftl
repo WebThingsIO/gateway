@@ -249,6 +249,7 @@ add-thing-cancel = Отмена
 context-menu-choose-icon = Выберите значок…
 context-menu-save = Сохранить
 context-menu-remove = Удалить
+context-menu-show-on-floorplan = Показать на плане этажа?
 
 ## Capabilities
 
