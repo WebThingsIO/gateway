@@ -249,6 +249,7 @@ add-thing-cancel = Zrušit
 context-menu-choose-icon = Vyberte ikonu…
 context-menu-save = Uložit
 context-menu-remove = Odstranit
+context-menu-show-on-floorplan = Zobrazit v půdorysu?
 
 ## Capabilities
 
@@ -420,6 +421,8 @@ new-thing-password =
 new-thing-credentials-error = Nesprávné přihlašovací údaje
 new-thing-saved = Uloženo
 new-thing-done = Hotovo
+add-group = Přidat novou skupinu
+new-group-save = Vytvořit
 
 ## New Web Thing View
 
