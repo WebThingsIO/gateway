@@ -249,6 +249,7 @@ add-thing-cancel = Avbryt
 context-menu-choose-icon = Välj ikon…
 context-menu-save = Spara
 context-menu-remove = Ta bort
+context-menu-show-on-floorplan = Visa i planlösningsvy?
 
 ## Capabilities
 
