@@ -249,6 +249,7 @@ add-thing-cancel = Mégse
 context-menu-choose-icon = Válasszon ikont…
 context-menu-save = Mentés
 context-menu-remove = Eltávolítás
+context-menu-show-on-floorplan = Megjelenik az alaprajz nézetben?
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = Helytelen hitelesítő adatok
 new-thing-saved = Mentve
 new-thing-done = Kész
+add-group = Új csoport hozzáadása
+new-group-save = Létrehozás
 
 ## New Web Thing View
 
