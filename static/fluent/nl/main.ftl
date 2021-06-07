@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Ongeldige aanmeldgegevens
 new-thing-saved = Opgeslagen
 new-thing-done = Klaar
+add-group = Nieuwe groep toevoegen
+new-group-save = Aanmaken
 
 ## New Web Thing View
 
