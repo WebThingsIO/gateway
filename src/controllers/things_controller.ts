@@ -452,6 +452,10 @@ function build(): express.Router {
       }
     }
 
+    if (request.body.hasOwnProperty('floorplanVisibility')) {
+      await thing.setFloorplanVisibility(request.body.floorplanVisibility);
+    }
+
     let description;
     try {
       description = await thing.setTitle(title);

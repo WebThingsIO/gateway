@@ -249,6 +249,7 @@ add-thing-cancel = Abbrechen
 context-menu-choose-icon = Symbol auswählen…
 context-menu-save = Speichern
 context-menu-remove = Löschen
+context-menu-show-on-floorplan = Im Raumplan anzeigen?
 
 ## Capabilities
 

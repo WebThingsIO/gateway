@@ -433,6 +433,22 @@ describe('things/', function () {
     expect(err.status).toEqual(400);
   });
 
+  it('set floorplanVisibility of a thing', async () => {
+    await addDevice();
+    const UPDATED_DESCRIPTION = JSON.parse(JSON.stringify(TEST_THING));
+    UPDATED_DESCRIPTION.floorplanVisibility = false;
+    const on = await chai
+      .request(server)
+      .put(`${Constants.THINGS_PATH}/test-1`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send(UPDATED_DESCRIPTION);
+
+    expect(on.status).toEqual(200);
+    expect(on.body).toHaveProperty('floorplanVisibility');
+    expect(on.body.floorplanVisibility).toEqual(false);
+  });
+
   it('set x and y coordinates of a thing', async () => {
     await addDevice();
     const on = await chai

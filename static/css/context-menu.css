@@ -147,3 +147,27 @@
     padding-bottom: 1rem;
   }
 }
+
+.show-on-floorplan {
+  margin-bottom: 1.5rem;
+}
+
+.show-on-floorplan input {
+  position: absolute;
+  left: -1000em;
+}
+
+.show-on-floorplan input[type='checkbox'] + label::before {
+  content: '';
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  background: url('/images/checkbox-sprite.png') no-repeat 0 0;
+  background-size: 3rem auto;
+  transform: translateY(25%);
+  padding-left: 5px;
+}
+
+.show-on-floorplan input[type='checkbox']:checked + label::before {
+  background-position: 0 -3rem;
+}

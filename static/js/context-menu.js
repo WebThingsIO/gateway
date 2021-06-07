@@ -35,6 +35,7 @@ const ContextMenu = {
     this.customIcon = document.getElementById('edit-thing-custom-icon');
     this.customIconInput = document.getElementById('edit-thing-custom-icon-input');
     this.customIconLabel = document.getElementById('edit-thing-custom-icon-label');
+    this.showOnFloorplanCheckbox = document.getElementById('show-on-floorplan-checkbox');
     this.label = document.getElementById('edit-thing-label');
     this.removeButton = document.getElementById('remove-thing-button');
     this.logoutForm = document.getElementById('logout');
@@ -89,6 +90,7 @@ const ContextMenu = {
         this.saveButton.disabled = false;
         this.customIconInput.disabled = false;
         this.titleInput.value = e.detail.thingTitle;
+        this.showOnFloorplanCheckbox.checked = e.detail.floorplanVisibility;
         this.thingType.innerHTML = '';
 
         if (!e.detail.selectedCapability || e.detail.selectedCapability === 'Custom') {
@@ -224,7 +226,9 @@ const ContextMenu = {
       capability = this.thingType.options[this.thingType.selectedIndex].value;
     }
 
-    const body = { title, selectedCapability: capability };
+    const floorplanVisibility = this.showOnFloorplanCheckbox.checked;
+
+    const body = { title, floorplanVisibility, selectedCapability: capability };
 
     if (capability === 'Custom' && this.iconData) {
       body.iconData = this.iconData;
