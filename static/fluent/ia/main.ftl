@@ -249,6 +249,7 @@ add-thing-cancel = Cancellar
 context-menu-choose-icon = Elige icone…
 context-menu-save = Salvar
 context-menu-remove = Remover
+context-menu-show-on-floorplan = Monstrar un vista in planimetria?
 
 ## Capabilities
 
