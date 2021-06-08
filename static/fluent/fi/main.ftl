@@ -249,6 +249,7 @@ add-thing-cancel = Peruuta
 context-menu-choose-icon = Valitse kuvake…
 context-menu-save = Tallenna
 context-menu-remove = Poista
+context-menu-show-on-floorplan = Näytetäänkö pohjapiirrustuksen näkymässä?
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = Virheelliset kirjautumistiedot
 new-thing-saved = Tallennettu
 new-thing-done = Valmis
+add-group = Lisää uusi ryhmä
+new-group-save = Luo
 
 ## New Web Thing View
 
