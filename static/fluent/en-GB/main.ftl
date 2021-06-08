@@ -249,6 +249,7 @@ add-thing-cancel = Cancel
 context-menu-choose-icon = Choose icon…
 context-menu-save = Save
 context-menu-remove = Remove
+context-menu-show-on-floorplan = Show in floorplan view?
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = Incorrect credentials
 new-thing-saved = Saved
 new-thing-done = Done
+add-group = Add new group
+new-group-save = Create
 
 ## New Web Thing View
 
