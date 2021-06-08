@@ -249,6 +249,7 @@ add-thing-cancel = Cancelar
 context-menu-choose-icon = Escolher ícone…
 context-menu-save = Guardar
 context-menu-remove = Remover
+context-menu-show-on-floorplan = Mostrar na vista planta plana?
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = Credenciais incorretas
 new-thing-saved = Guardada
 new-thing-done = Concluído
+add-group = Adicionar um grupo
+new-group-save = Criar
 
 ## New Web Thing View
 
