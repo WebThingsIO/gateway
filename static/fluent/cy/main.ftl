@@ -249,6 +249,7 @@ add-thing-cancel = Diddymu
 context-menu-choose-icon = Dewis eicon...
 context-menu-save = Cadw
 context-menu-remove = Tynnu
+context-menu-show-on-floorplan = Dangos yng ngolwg y cynllun lawr?
 
 ## Capabilities
 
@@ -441,6 +442,8 @@ new-thing-password =
 new-thing-credentials-error = Manylion anghywir
 new-thing-saved = Wedi'u Cadw
 new-thing-done = Gorffen
+add-group = Ychwanegu grŵp newydd
+new-group-save = Creu
 
 ## New Web Thing View
 
