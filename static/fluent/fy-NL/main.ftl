@@ -251,6 +251,7 @@ add-thing-cancel = Annulearje
 context-menu-choose-icon = Kies piktogram…
 context-menu-save = Bewarje
 context-menu-remove = Fuortsmite
+context-menu-show-on-floorplan = Yn plattegrûn toane?
 
 ## Capabilities
 
