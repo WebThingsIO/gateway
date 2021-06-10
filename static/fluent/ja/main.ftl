@@ -249,6 +249,7 @@ add-thing-cancel = キャンセル
 context-menu-choose-icon = アイコンを選択…
 context-menu-save = 保存
 context-menu-remove = 削除
+context-menu-show-on-floorplan = 平面図で表示しますか？
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = 認証情報が正しくありません
 new-thing-saved = 保存しました
 new-thing-done = 完了
+add-group = 新しいグループを追加
+new-group-save = 作成
 
 ## New Web Thing View
 
