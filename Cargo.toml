@@ -1,0 +1,9 @@
+[package]
+name = "gateway"
+version = "2.0.0-alpha.1"
+authors = ["WebThingsIO"]
+edition = "2018"
+repository = "https://github.com/WebThingsIO/gateway"
+license = "MPL-2.0"
+
+[dependencies]
