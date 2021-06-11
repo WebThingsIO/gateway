@@ -12,6 +12,12 @@ describe('internal-logs/', () => {
   beforeEach(async () => {
     jwt = await createUser(server, TEST_USER);
     fs.writeFileSync(path.join(UserProfile.logDir, 'test.log'), 'hello, world!');
+
+    // clean up folder from previous logs
+    const regex = /^run-app\.log\./;
+    fs.readdirSync(UserProfile.logDir)
+      .filter((f) => regex.test(f))
+      .map((f) => fs.unlinkSync(path.join(UserProfile.logDir, f)));
   });
 
   it('GET internal-logs index', async () => {
@@ -55,7 +61,7 @@ describe('internal-logs/', () => {
       });
     expect(res.status).toEqual(200);
     expect(res.type).toBe('application/zip');
-    expect(Object.keys(res.body.files).length).toEqual(2);
+    expect(Object.keys(res.body.files).length).toEqual(1);
     const file = res.body.file('logs/test.log');
     expect(file).toBeTruthy();
     const data = await file.async('text');
