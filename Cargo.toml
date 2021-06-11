@@ -18,3 +18,7 @@ dirs = "1.0.5"
 version = "0.4.10"
 default-features = false
 features = ["json"]
+
+[dev-dependencies]
+rusty-fork = "0.3.0"
+serial_test = "0.4.0"

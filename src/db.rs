@@ -1,8 +1,7 @@
 use rusqlite::OptionalExtension;
 use rusqlite::{params, Connection};
 use serde_json;
-use std::ops::Deref;
-use std::sync::Mutex;
+use std::{ops::Deref, sync::Mutex};
 
 use crate::model::Thing;
 use crate::user_config;
@@ -99,39 +98,56 @@ fn create_tables(conn: &Connection) {
 
 #[cfg(test)]
 mod tests {
+    extern crate rusty_fork;
+    extern crate serial_test;
     use super::*;
+    use rusty_fork::rusty_fork_test;
+    use serial_test::serial;
+    use std::{env, fs};
 
-    #[test]
-    fn test_create_things() {
-        let db = Db::new();
-        db.create_thing("test1", serde_json::json!({})).unwrap();
-        db.create_thing("test2", serde_json::json!({})).unwrap();
-        let things = db.get_things().unwrap();
-        assert_eq!(things.len(), 2);
-        assert_eq!(
-            things[0],
-            Thing {
-                id: "test1".to_owned()
-            }
-        );
-        assert_eq!(
-            things[1],
-            Thing {
-                id: "test2".to_owned()
-            }
-        );
+    fn setup() {
+        let dir = env::temp_dir().join(".webthingsio_db_tests");
+        fs::remove_dir_all(&dir);
+        env::set_var("WEBTHINGS_HOME", dir);
     }
 
-    #[test]
-    fn test_get_thing() {
-        let db = Db::new();
-        db.create_thing("test", serde_json::json!({})).unwrap();
-        let thing = db.get_thing("test").unwrap().unwrap();
-        assert_eq!(
-            thing,
-            Thing {
-                id: "test".to_owned()
-            }
-        );
+    rusty_fork_test! {
+        #[test]
+        #[serial]
+        fn test_create_things() {
+            setup();
+            let db = Db::new();
+            db.create_thing("test1", serde_json::json!({})).unwrap();
+            db.create_thing("test2", serde_json::json!({})).unwrap();
+            let things = db.get_things().unwrap();
+            assert_eq!(things.len(), 2);
+            assert_eq!(
+                things[0],
+                Thing {
+                    id: "test1".to_owned()
+                }
+            );
+            assert_eq!(
+                things[1],
+                Thing {
+                    id: "test2".to_owned()
+                }
+            );
+        }
+
+        #[test]
+        #[serial]
+        fn test_get_thing() {
+            setup();
+            let db = Db::new();
+            db.create_thing("test", serde_json::json!({})).unwrap();
+            let thing = db.get_thing("test").unwrap().unwrap();
+            assert_eq!(
+                thing,
+                Thing {
+                    id: "test".to_owned()
+                }
+            );
+        }
     }
 }
