@@ -108,6 +108,8 @@ export default class Plugin {
 
   private stderrReadline?: readline.Interface;
 
+  private unloding = false;
+
   constructor(
     private pluginId: string,
     private addonManager: AddonManager,
@@ -323,6 +325,10 @@ export default class Plugin {
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
         const data = msg.data as AdapterAddedNotificationMessageData;
+        if (this.unloding) {
+          console.warn('Adapter', data.adapterId, 'added during unloading');
+          return;
+        }
         const adapter = new AdapterProxy(
           this.addonManager,
           data.adapterId,
@@ -862,6 +868,7 @@ export default class Plugin {
 
   unload(): void {
     this.restart = false;
+    this.unloding = true;
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
   }
 

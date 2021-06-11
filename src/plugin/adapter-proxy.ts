@@ -104,8 +104,8 @@ export default class AdapterProxy extends Adapter {
    */
   unload(): Promise<void> {
     if (this.unloadCompletedPromise) {
-      console.error('AdapterProxy: unload already in progress');
-      return Promise.reject();
+      console.warn('AdapterProxy: unload already in progress');
+      return this.unloadCompletedPromise.getPromise();
     }
     this.unloadCompletedPromise = new Deferred();
     this.sendMsg(MessageType.ADAPTER_UNLOAD_REQUEST, {
