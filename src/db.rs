@@ -106,7 +106,7 @@ mod tests {
     use std::{env, fs};
 
     fn setup() {
-        let dir = env::temp_dir().join(".webthingsio_db_tests");
+        let dir = env::temp_dir().join(".webthingsio");
         fs::remove_dir_all(&dir);
         env::set_var("WEBTHINGS_HOME", dir);
     }
