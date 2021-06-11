@@ -16,10 +16,17 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
+          override: true
+          components: rustfmt, clippy
       - name: Build source
         uses: actions-rs/cargo@v1
         with:
           command: build
+      - name: Check formatting
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features
       - name: Test source
         uses: actions-rs/cargo@v1
         with:
