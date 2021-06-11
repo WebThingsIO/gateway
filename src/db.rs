@@ -5,12 +5,14 @@ use std::ops::Deref;
 use std::sync::Mutex;
 
 use crate::model::Thing;
+use crate::user_config;
 
 pub struct Db(Mutex<Connection>);
 
 impl Db {
     pub fn new() -> Self {
-        let conn = Connection::open_in_memory().unwrap();
+        let conn = Connection::open(user_config::CONFIG_DIR.join("db.sqlite3"))
+            .expect("Open database file");
         create_tables(&conn);
         let db = Self(Mutex::new(conn));
         db

@@ -1,10 +1,10 @@
 use rocket::{http::Status, response::status, Route, State};
-use rocket_contrib::json::JsonValue;
+use rocket_contrib::{json, json::JsonValue};
 
 use crate::db::Db;
 
 pub fn routes() -> Vec<Route> {
-    routes![get_things, get_thing,]
+    routes![get_things, get_thing]
 }
 
 #[get("/things")]

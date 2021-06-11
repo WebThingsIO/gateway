@@ -11,6 +11,8 @@ rocket = "0.4.10"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 rusqlite = "0.25.3"
+lazy_static = "1.4.0"
+dirs = "1.0.5"
 
 [dependencies.rocket_contrib]
 version = "0.4.10"
