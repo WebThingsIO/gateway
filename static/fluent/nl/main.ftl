@@ -249,6 +249,7 @@ add-thing-cancel = Annuleren
 context-menu-choose-icon = Pictogram kiezen…
 context-menu-save = Opslaan
 context-menu-remove = Verwijderen
+context-menu-show-on-floorplan = In plattegrondweergave tonen?
 
 ## Capabilities
 
