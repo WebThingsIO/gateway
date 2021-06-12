@@ -249,6 +249,7 @@ add-thing-cancel = Cancelar
 context-menu-choose-icon = Elegir icono…
 context-menu-save = Guardar
 context-menu-remove = Eliminar
+context-menu-show-on-floorplan = ¿Mostrar en vista de planta?
 
 ## Capabilities
 
