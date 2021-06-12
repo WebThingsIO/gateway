@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Feil innloggingsopplysningar
 new-thing-saved = Lagra
 new-thing-done = Ferdig
+add-group = Legg til ny gruppe
+new-group-save = Opprett
 
 ## New Web Thing View
 
