@@ -867,6 +867,7 @@ export default class Plugin {
   }
 
   unload(): void {
+    console.log("Unloading plugin",this.pluginId)
     this.restart = false;
     this.unloding = true;
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
