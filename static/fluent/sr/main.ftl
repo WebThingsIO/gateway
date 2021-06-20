@@ -249,6 +249,7 @@ add-thing-cancel = Откажи
 context-menu-choose-icon = Изабери иконицу…
 context-menu-save = Сачувај
 context-menu-remove = Уклони
+context-menu-show-on-floorplan = Приказати у приказу тлоцрта?
 
 ## Capabilities
 
@@ -420,6 +421,8 @@ new-thing-password =
 new-thing-credentials-error = Неисправни акредитиви
 new-thing-saved = Сачувано
 new-thing-done = Готово
+add-group = Додај нову групу
+new-group-save = Направи
 
 ## New Web Thing View
 
