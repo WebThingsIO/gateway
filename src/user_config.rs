@@ -19,4 +19,9 @@ lazy_static! {
         DIR_BUILDER.create(&path).unwrap();
         path
     };
+    pub static ref ADDONS_DIR: PathBuf = {
+        let path = BASE_DIR.join("addons");
+        DIR_BUILDER.create(&path).unwrap();
+        path
+    };
 }

@@ -7,18 +7,29 @@ extern crate lazy_static;
 extern crate rocket_contrib;
 extern crate rusqlite;
 
+mod addon;
+mod addon_manager;
+mod addon_manifest;
+mod addon_utils;
 mod db;
+mod ipc_socket;
 mod model;
+mod plugin;
+mod plugin_server;
 mod router;
 mod user_config;
 
 use rocket::Rocket;
 
-use db::Db;
+use crate::addon_manager::AddonManager;
+use crate::db::Db;
 
 fn rocket() -> Rocket {
+    let mut addon_manager = AddonManager::new().expect("Setting up Addon manager");
+    addon_manager.load_addons().expect("Loading Add-Ons");
     rocket::ignite()
         .manage(Db::new())
+        // TODO: Manage addon_manager
         .mount("/", router::routes())
 }
 
@@ -39,7 +50,7 @@ mod test {
 
     fn setup() {
         let dir = env::temp_dir().join(".webthingsio");
-        fs::remove_dir_all(&dir);
+        fs::remove_dir_all(&dir); // We really don't want to handle this result, since we don't care if the directory never existed
         env::set_var("WEBTHINGS_HOME", dir);
     }
 

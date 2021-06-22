@@ -13,6 +13,10 @@ serde = { version = "1.0", features = ["derive"] }
 rusqlite = "0.25.3"
 lazy_static = "1.4.0"
 dirs = "1.0.5"
+semver = "1.0.3"
+futures = "0.3"
+tungstenite = "0.13.0"
+regex = "1.5.4"
 
 [dependencies.rocket_contrib]
 version = "0.4.10"
