@@ -134,11 +134,11 @@ export default class PluginServer extends EventEmitter {
    *
    * Loads a plugin by launching a separate process.
    */
-  loadPlugin(pluginPath: string, id: string, exec: string): void {
+  loadPlugin(pluginPath: string, id: string, exec: string): Promise<void> {
     const plugin = this.registerPlugin(id);
     plugin.setExec(exec);
     plugin.setExecPath(pluginPath);
-    plugin.start();
+    return plugin.start();
   }
 
   /**
