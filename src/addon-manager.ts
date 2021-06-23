@@ -678,7 +678,7 @@ export class AddonManager extends EventEmitter {
 
     // Load the add-on
     console.log(`Loading add-on: ${manifest.id}`);
-    this.pluginServer!.loadPlugin(addonPath, <string>manifest.id, <string>manifest.exec);
+    await this.pluginServer!.loadPlugin(addonPath, <string>manifest.id, <string>manifest.exec);
   }
 
   /**
