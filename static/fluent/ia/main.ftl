@@ -78,7 +78,7 @@ network-settings-wifi-password =
     .placeholder = Contrasigno
 network-settings-show-password = Monstrar contrasigno
 network-settings-connect = Connecter
-wireless-connected = Connexe
+wireless-connected = Connectite
 wireless-icon =
     .alt = Rete Wi-Fi
 network-settings-changing = Cambio parametros de rete. Isto pote prender un minuta.
@@ -589,7 +589,7 @@ ellipsis = …
 event-log = Registro eventos
 edit = Rediger
 remove = Remover
-disconnected = Disconnexe
+disconnected = Disconnectite
 processing = Processante…
 submit = Inviar
 
