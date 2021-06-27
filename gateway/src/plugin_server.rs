@@ -1,20 +1,18 @@
 use std::{collections::HashMap, error::Error, path::PathBuf};
 
-use crate::{addon_utils, ipc_socket::IPCSocket, plugin::Plugin};
+use crate::{addon_utils, ipc_socket, plugin::Plugin};
 
 pub struct PluginServer {
-    ipc_socket: IPCSocket,
     plugins: HashMap<String, Plugin>,
 }
 
 impl PluginServer {
     pub fn new() -> Result<Self, Box<dyn Error>> {
-        let ipc_socket = IPCSocket::new()?;
+        ipc_socket::start(|msg, _ws| {
+            println!("{:?}", msg);
+        })?;
         let plugins = HashMap::new();
-        Ok(Self {
-            ipc_socket,
-            plugins,
-        })
+        Ok(Self { plugins })
     }
 
     pub fn load_plugin(&mut self, path: &PathBuf, exec: String) -> Result<(), Box<dyn Error>> {

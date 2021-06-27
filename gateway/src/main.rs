@@ -7,6 +7,9 @@ extern crate lazy_static;
 extern crate rocket_contrib;
 extern crate rusqlite;
 
+#[macro_use]
+mod message_types;
+
 mod addon;
 mod addon_manager;
 mod addon_manifest;
