@@ -1,37 +1,41 @@
 use std::{
     error::Error,
     io::{BufRead, BufReader},
+    net::TcpStream,
     path::PathBuf,
     process::{Command, Stdio},
+    sync::{Mutex, Weak},
     thread,
 };
 
 use regex::Regex;
+use tungstenite::WebSocket;
 
-use crate::user_config;
+use crate::{messages::Message, user_config};
 
+#[derive(Debug)]
 pub struct Plugin {
     id: String,
-    exec: String,
-    exec_path: PathBuf,
+    exec: Option<String>,
+    exec_path: Option<PathBuf>,
     log_prefix: String,
+    pub ws: Weak<Mutex<WebSocket<TcpStream>>>,
 }
 
 impl Plugin {
-    pub fn new(id: String, exec: String, exec_path: PathBuf) -> Self {
+    pub fn new(id: String) -> Self {
         let log_prefix = id.to_owned();
         Self {
             id: id,
-            exec,
-            exec_path,
+            exec: None,
+            exec_path: None,
             log_prefix,
+            ws: Weak::new(),
         }
     }
 
-    pub fn start(&self) -> Result<(), Box<dyn Error>> {
+    pub fn start(&self, exec: String, exec_path: PathBuf) -> Result<(), Box<dyn Error>> {
         let id = self.id.to_owned();
-        let exec = self.exec.to_owned();
-        let exec_path = self.exec_path.to_owned();
         let log_prefix = self.log_prefix.to_owned();
 
         thread::spawn(move || {
@@ -48,7 +52,7 @@ impl Plugin {
                 .stdout(Stdio::piped())
                 .stderr(Stdio::piped())
                 .spawn()
-                .expect(&format!("Start plugin {}\n Command: {}", id, exec,));
+                .expect(&format!("Start plugin {}\n Command: {}", id, exec));
 
             let stdout = child.stdout.take().expect("Capture standard output");
             let reader = BufReader::new(stdout);
@@ -72,6 +76,11 @@ impl Plugin {
         });
 
         Ok(())
+    }
+
+    pub fn on_msg(&self, msg: Message) {
+        println!("Plugin handling message: {:?}", msg);
+        // TODO
     }
 }
 

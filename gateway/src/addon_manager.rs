@@ -1,9 +1,15 @@
-use std::{collections::HashMap, error::Error, fs, path::PathBuf};
+use std::{
+    collections::HashMap,
+    error::Error,
+    fs,
+    path::PathBuf,
+    sync::{Arc, Mutex},
+};
 
 use crate::{addon::Addon, addon_utils, plugin_server::PluginServer, user_config};
 
 pub struct AddonManager {
-    plugin_server: PluginServer,
+    plugin_server: Arc<Mutex<PluginServer>>,
     installed_addons: HashMap<String, Addon>,
 }
 
@@ -51,15 +57,18 @@ impl AddonManager {
         // TODO: Create data path
 
         println!("Loading add-on {}", addon.manifest.id);
-        self.plugin_server.load_plugin(
-            &path,
-            addon
-                .manifest
-                .gateway_specific_settings
-                .webthings
-                .exec
-                .to_owned(),
-        )?;
+        self.plugin_server
+            .lock()
+            .expect("Lock plugin server")
+            .load_plugin(
+                &path,
+                addon
+                    .manifest
+                    .gateway_specific_settings
+                    .webthings
+                    .exec
+                    .to_owned(),
+            )?;
 
         Ok(())
     }

@@ -7,15 +7,13 @@ extern crate lazy_static;
 extern crate rocket_contrib;
 extern crate rusqlite;
 
-#[macro_use]
-mod message_types;
-
 mod addon;
 mod addon_manager;
 mod addon_manifest;
 mod addon_utils;
 mod db;
 mod ipc_socket;
+mod messages;
 mod model;
 mod plugin;
 mod plugin_server;
