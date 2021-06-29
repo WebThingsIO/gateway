@@ -6,8 +6,7 @@ use std::{
 };
 
 use tungstenite::{self, protocol::WebSocket, server::accept};
-
-use crate::messages::Message;
+use webthings_gateway_ipc_types::Message;
 
 pub fn start<F>(callback: F) -> Result<(), Box<dyn Error>>
 where

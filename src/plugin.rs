@@ -10,8 +10,9 @@ use std::{
 
 use regex::Regex;
 use tungstenite::WebSocket;
+use webthings_gateway_ipc_types::Message;
 
-use crate::{messages::Message, user_config};
+use crate::user_config;
 
 #[derive(Debug)]
 pub struct Plugin {

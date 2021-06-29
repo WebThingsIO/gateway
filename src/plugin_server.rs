@@ -7,16 +7,11 @@ use std::{
 };
 
 use tungstenite::{self, WebSocket};
-
-use crate::{
-    addon_utils, ipc_socket,
-    messages::{
-        Message, MessageBase, PluginRegisterResponseData, PluginRegisterResponseDataPreferences,
-        PluginRegisterResponseDataPreferencesUnits,
-        PluginRegisterResponseDataPreferencesUnitsUserProfile,
-    },
-    plugin::Plugin,
+use webthings_gateway_ipc_types::{
+    Message, MessageBase, PluginRegisterResponseMessageData, Preferences, Units, UserProfile,
 };
+
+use crate::{addon_utils, ipc_socket, plugin::Plugin};
 
 pub struct PluginServer {
     plugins: HashMap<String, Plugin>,
@@ -66,16 +61,16 @@ impl PluginServer {
             plugin.ws = ws.clone();
 
             // TODO: Read fields from settings
-            let response: Message = PluginRegisterResponseData {
+            let response: Message = PluginRegisterResponseMessageData {
                 gateway_version: env!("CARGO_PKG_VERSION").to_owned(),
                 plugin_id: id.to_owned(),
-                preferences: PluginRegisterResponseDataPreferences {
+                preferences: Preferences {
                     language: "en-US".to_owned(),
-                    units: PluginRegisterResponseDataPreferencesUnits {
+                    units: Units {
                         temperature: "degree celsius".to_owned(),
                     },
                 },
-                user_profile: PluginRegisterResponseDataPreferencesUnitsUserProfile {
+                user_profile: UserProfile {
                     addons_dir: "".to_owned(),
                     base_dir: "".to_owned(),
                     config_dir: "".to_owned(),
