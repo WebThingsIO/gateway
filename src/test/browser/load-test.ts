@@ -3,6 +3,7 @@ import { waitForExpect } from '../expect-utils';
 import { getBrowser } from './browser-common';
 import AddonManager from '../../addon-manager';
 
+const DEFAULT_CLICKABLE_TIMEOUT = 5000;
 describe('basic browser tests', () => {
   afterEach(async () => {
     try {
@@ -29,10 +30,11 @@ describe('basic browser tests', () => {
     await confirmPassword.setValue('rosebud');
 
     const createUserButton = await browser.$('#create-user-button');
+    await createUserButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await createUserButton.click();
 
     const menuButton = await browser.$('#menu-button');
-    await menuButton.waitForExist({ timeout: 5000 });
+    await menuButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
 
     await waitForExpect(async () => {
       const newUrl = await browser.getUrl();
@@ -53,8 +55,8 @@ describe('basic browser tests', () => {
     }
 
     await menuButton.click();
-
     const settingsMenuItem = await browser.$('#settings-menu-item');
+    await settingsMenuItem.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await settingsMenuItem.click();
 
     // wait fadeout menu-scrim
@@ -76,15 +78,17 @@ describe('basic browser tests', () => {
     );
 
     const addonSettingsLink = await browser.$('#addon-settings-link');
+    await addonSettingsLink.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await addonSettingsLink.click();
 
     const discoverAddonsButton = await browser.$('#discover-addons-button');
+    await discoverAddonsButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await discoverAddonsButton.click();
 
     const addonInstallVirtualThingsAdapter = await browser.$(
       '#addon-install-virtual-things-adapter'
     );
-    await addonInstallVirtualThingsAdapter.waitForExist({ timeout: 5000 });
+    await addonInstallVirtualThingsAdapter.waitForClickable({ timeout: 10000 });
     await addonInstallVirtualThingsAdapter.click();
 
     // virtual-things-adapter is ~10MB, so it might take some time to install
@@ -92,11 +96,13 @@ describe('basic browser tests', () => {
     await addonDiscoverySettingsAdded.waitForExist({ timeout: 30000 });
 
     const settingsBackButton = await browser.$('#settings-back-button');
+    await settingsBackButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await settingsBackButton.click();
     await settingsBackButton.click();
     await menuButton.click();
 
     const thingsMenuItem = await browser.$('#things-menu-item');
+    await thingsMenuItem.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await thingsMenuItem.click();
 
     // wait fadeout menu-scrim
@@ -118,7 +124,7 @@ describe('basic browser tests', () => {
     );
 
     const addButton = await browser.$('#add-button');
-    await addButton.waitForDisplayed({ timeout: 5000 });
+    await addButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await addButton.click();
 
     const newThingVirtualThings2SaveButton = await browser.$(
@@ -127,10 +133,13 @@ describe('basic browser tests', () => {
     const newThingVirtualThings9SaveButton = await browser.$(
       '#new-thing-virtual-things-9 > .new-thing-save-button'
     );
+    await newThingVirtualThings2SaveButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
+    await newThingVirtualThings9SaveButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await newThingVirtualThings2SaveButton.click();
     await newThingVirtualThings9SaveButton.click();
 
     const addThingBackButton = await browser.$('#add-thing-back-button');
+    await addThingBackButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await addThingBackButton.click();
 
     let things: ElementArray | null = null;
@@ -138,15 +147,17 @@ describe('basic browser tests', () => {
       things = await browser.$$('.thing');
       expect(things!.length).toBe(2);
     });
-
+    await things![0].waitForDisplayed({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await things![0].click();
 
     let link = await things![0].$('.thing-details-link');
+    await link.waitForClickable({ timeout: 10000 });
     await link.click();
     let detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-2')).toBeTruthy();
 
     const backButton = await browser.$('#back-button');
+    await backButton.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await backButton.click();
 
     const webthingCustomCapability = await browser.$('webthing-custom-capability');
@@ -155,6 +166,7 @@ describe('basic browser tests', () => {
     things = await browser.$$('.thing');
     expect(things!.length).toBe(2);
     link = await things![1].$('.thing-details-link');
+    await link.waitForClickable({ timeout: DEFAULT_CLICKABLE_TIMEOUT });
     await link.click();
     detailUrl = await browser.getUrl();
     expect(detailUrl.endsWith('/things/virtual-things-9')).toBeTruthy();
