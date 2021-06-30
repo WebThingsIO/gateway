@@ -1,42 +1,44 @@
 use std::{
     error::Error,
-    net::TcpListener,
-    sync::{Arc, Mutex},
+    net::{TcpListener, TcpStream},
+    sync::{Arc, Mutex, Weak},
     thread,
 };
 
-use tungstenite::server::accept;
+use tungstenite::{self, protocol::WebSocket, server::accept};
+use webthings_gateway_ipc_types::Message;
 
-pub struct IPCSocket {
-    server: Arc<Mutex<TcpListener>>,
-}
+pub fn start<F>(callback: F) -> Result<(), Box<dyn Error>>
+where
+    F: FnMut(Message, Weak<Mutex<WebSocket<TcpStream>>>) + Send + Sync + 'static,
+{
+    let server = TcpListener::bind("127.0.0.1:9500")?; // TODO: configurable port
 
-impl IPCSocket {
-    pub fn new() -> Result<Self, Box<dyn Error>> {
-        let server = TcpListener::bind("127.0.0.1:9500").unwrap();
-        let server = Arc::new(Mutex::new(server));
-        let server_clone = server.clone();
-
-        thread::spawn(move || {
-            for stream in server.lock().unwrap().incoming() {
-                thread::spawn(move || {
-                    let mut websocket = accept(stream.unwrap()).unwrap();
-                    loop {
-                        let msg = websocket.read_message().unwrap();
-
-                        println!("Received plugin message: {}", msg);
-
-                        // TODO: Handle messages
-                        if msg.is_binary() || msg.is_text() {
-                            websocket.write_message(msg).unwrap();
-                        }
+    let callback = Arc::new(Mutex::new(callback));
+    thread::spawn(move || {
+        for stream in server.incoming() {
+            let callback = callback.clone();
+            thread::spawn(move || {
+                let websocket = Arc::new(Mutex::new(
+                    accept(stream.expect("Get connection stream"))
+                        .expect("Setup websocket connection"),
+                ));
+                loop {
+                    let mut websocket_mut = websocket
+                        .lock()
+                        .expect("Acquire read handle for web socket");
+                    let msg = websocket_mut.read_message().expect("Receive message");
+                    if let tungstenite::Message::Text(msg) = msg {
+                        (callback.lock().expect("Lock callback"))(
+                            msg.parse::<Message>().unwrap(),
+                            Arc::downgrade(&websocket), // FIXME: Build abstraction for this websocket, so the outer world needn't care about tungstenite::Message but only know messages::Message
+                        );
+                    } else {
+                        panic!("Expected text message");
                     }
-                });
-            }
-        });
-
-        Ok(Self {
-            server: server_clone,
-        })
-    }
+                }
+            });
+        }
+    });
+    Ok(())
 }
