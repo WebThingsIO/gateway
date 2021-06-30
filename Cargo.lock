@@ -3,16 +3,6 @@
 version = 3
 
 [[package]]
-name = "Inflector"
-version = "0.11.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3"
-dependencies = [
- "lazy_static",
- "regex",
-]
-
-[[package]]
 name = "aead"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -541,7 +531,6 @@ dependencies = [
  "rocket_contrib",
  "rusqlite",
  "rusty-fork",
- "schemafy",
  "semver",
  "serde",
  "serde_json",
@@ -765,14 +754,14 @@ checksum = "dd25036021b0de88a0aff6b850051563c6516d0bf53f8638938edbb9de732736"
 
 [[package]]
 name = "jsonschema_code_generator"
-version = "0.2.1"
-source = "git+https://github.com/tim-hellhake/jsonschema_code_generator?rev=3e2883c#3e2883c94e235fe6db7d6a1d7151d8f4f89fe20f"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aed3c73abc6734676b3ed76c670a1173ff59f1e6fb3222b98e3dfdb2424aeb96"
 dependencies = [
  "convert_case",
  "proc-macro2 1.0.27",
  "quote 1.0.9",
  "serde",
- "serde_derive",
  "serde_json",
  "serde_repr",
 ]
@@ -1400,48 +1389,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "schemafy"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8aea5ba40287dae331f2c48b64dbc8138541f5e97ee8793caa7948c1f31d86d5"
-dependencies = [
- "Inflector",
- "schemafy_core",
- "schemafy_lib",
- "serde",
- "serde_derive",
- "serde_json",
- "serde_repr",
- "syn 1.0.73",
-]
-
-[[package]]
-name = "schemafy_core"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41781ae092f4fd52c9287efb74456aea0d3b90032d2ecad272bd14dbbcb0511b"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "schemafy_lib"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e953db32579999ca98c451d80801b6f6a7ecba6127196c5387ec0774c528befa"
-dependencies = [
- "Inflector",
- "proc-macro2 1.0.27",
- "quote 1.0.9",
- "schemafy_core",
- "serde",
- "serde_derive",
- "serde_json",
- "syn 1.0.73",
-]
-
-[[package]]
 name = "scopeguard"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1850,12 +1797,12 @@ checksum = "fd6fbd9a79829dd1ad0cc20627bf1ed606756a7f77edff7b66b7064f9cb327c6"
 [[package]]
 name = "webthings-gateway-ipc-types"
 version = "1.0.0-alpha.1"
-source = "git+https://github.com/tim-hellhake/webthings-gateway-ipc-types.git#9a0d070df9d031d6ebded292c65c32478399d9e9"
+source = "git+https://github.com/tim-hellhake/webthings-gateway-ipc-types.git#f50869cbb195549c5393a74128f3a026bd8fec59"
 dependencies = [
+ "convert_case",
  "jsonschema_code_generator",
  "os_pipe",
  "serde",
- "serde_derive",
  "serde_json",
 ]
 
