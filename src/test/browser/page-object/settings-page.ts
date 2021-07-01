@@ -11,6 +11,7 @@ class SettingSection extends Section {
     const el = this.rootElement!;
     const href = await el.getAttribute('href');
     const id = await el.getAttribute('id');
+    await el.waitForClickable();
     await el.click();
 
     switch (id) {
