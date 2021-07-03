@@ -15,6 +15,8 @@ async fn route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, A
 }
 
 pub async fn start() -> Result<(), Box<dyn Error>> {
+    println!("Starting addon socket");
+
     HttpServer::new(|| App::new().route("/", web::get().to(route)))
         .bind("127.0.0.1:9500")?
         .run()

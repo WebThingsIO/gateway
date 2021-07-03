@@ -11,10 +11,38 @@ use std::{
 use crate::{addon::Addon, addon_utils, user_config};
 use crate::addon_instance::AddonInstance;
 use regex::Regex;
+use actix::{Actor, Context};
+use actix::prelude::*;
 
 pub struct AddonManager {
     installed_addons: HashMap<String, Addon>,
     running_addons: HashMap<String, AddonInstance>,
+}
+
+impl Actor for AddonManager {
+    type Context = Context<Self>;
+
+    fn started(&mut self, _ctx: &mut Context<Self>) {
+        println!("AddonManager started");
+    }
+
+    fn stopped(&mut self, _ctx: &mut Context<Self>) {
+        println!("AddonManager stopped");
+    }
+}
+
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct LoadAddons();
+
+impl Handler<LoadAddons> for AddonManager {
+    type Result = ();
+
+    fn handle(&mut self, _msg: LoadAddons, _ctx: &mut Context<Self>) -> Self::Result {
+        println!("Received LoadAddons message");
+        self.load_addons().expect("Loading addons");
+        println!("Finished loading addons");
+    }
 }
 
 impl AddonManager {

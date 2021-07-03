@@ -20,25 +20,30 @@ mod addon_socket;
 
 use rocket::Rocket;
 
-use crate::addon_manager::AddonManager;
+use crate::addon_manager::{AddonManager, LoadAddons};
 use crate::db::Db;
 use std::error::Error;
-use actix::System;
+use actix::{System, Actor};
 use std::thread;
 
 fn rocket() -> Rocket {
-    let mut addon_manager = AddonManager::new();
-    addon_manager.load_addons().expect("Loading Add-Ons");
     rocket::ignite()
         .manage(Db::new())
         // TODO: Manage addon_manager
         .mount("/", router::routes())
 }
 
+async fn init() -> Result<(), Box<dyn Error>>  {
+    let address = AddonManager::new().start();
+    address.send(LoadAddons()).await?;
+    addon_socket::start().await?;
+    Ok(())
+}
+
 fn main() -> () {
     thread::spawn(|| {
-        let mut system = System::new("ipc");
-        system.block_on(addon_socket::start()).expect("Starting ipc");
+        let mut system = System::new("web");
+        system.block_on(init()).expect("Blocking on web thread");
     });
     rocket().launch();
 }
