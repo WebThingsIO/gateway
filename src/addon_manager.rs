@@ -3,16 +3,14 @@ use std::{
     error::Error,
     fs,
     path::PathBuf,
-    sync::{Arc, Mutex},
     io::{BufRead, BufReader},
     process::{Command, Stdio},
     thread,
 };
 
-use crate::{addon::Addon, addon_utils, user_config, ipc_socket};
+use crate::{addon::Addon, addon_utils, user_config};
 use crate::addon_instance::AddonInstance;
 use regex::Regex;
-use webthings_gateway_ipc_types::MessageBase;
 
 pub struct AddonManager {
     installed_addons: HashMap<String, Addon>,
@@ -20,37 +18,11 @@ pub struct AddonManager {
 }
 
 impl AddonManager {
-    pub fn start() -> Result<Arc<Mutex<Self>>, Box<dyn Error>> {
-        let addon_manager = Arc::new(Mutex::new(Self {
+    pub fn new() -> Self {
+        Self {
             installed_addons: HashMap::new(),
             running_addons: HashMap::new(),
-        }));
-
-        let addon_manager_clone = addon_manager.clone();
-
-        ipc_socket::start(move |msg, ws| {
-            let id = msg.plugin_id().to_string();
-            let addon_manager = addon_manager_clone
-                .lock()
-                .expect("Lock plugin server");
-            let addon = addon_manager.running_addons.get(&id);
-
-            match addon {
-                Some(addon) => {
-                    match addon.on_msg(msg, ws) {
-                        Ok(()) => {},
-                        Err(err) => {
-                            eprintln!("Addon instance {} failed to handle message {}", id, err)
-                        }
-                    }
-                }
-                None => {
-                    eprintln!("Received msg {:?} for unknown addon instance {}", msg, id);
-                }
-            }
-        })?;
-
-        Ok(addon_manager)
+        }
     }
 
     pub fn load_addons(&mut self) -> Result<(), Box<dyn Error>> {

@@ -12,27 +12,34 @@ mod addon_manager;
 mod addon_manifest;
 mod addon_utils;
 mod db;
-mod ipc_socket;
 mod model;
 mod router;
 mod user_config;
 mod addon_instance;
+mod addon_socket;
 
 use rocket::Rocket;
 
 use crate::addon_manager::AddonManager;
 use crate::db::Db;
+use std::error::Error;
+use actix::System;
+use std::thread;
 
 fn rocket() -> Rocket {
-    let addon_manager = AddonManager::start().expect("Setting up Addon manager");
-    addon_manager.lock().expect("Lock addon manager").load_addons().expect("Loading Add-Ons");
+    let mut addon_manager = AddonManager::new();
+    addon_manager.load_addons().expect("Loading Add-Ons");
     rocket::ignite()
         .manage(Db::new())
         // TODO: Manage addon_manager
         .mount("/", router::routes())
 }
 
-fn main() {
+fn main() -> () {
+    thread::spawn(|| {
+        let mut system = System::new("ipc");
+        system.block_on(addon_socket::start()).expect("Starting ipc");
+    });
     rocket().launch();
 }
 

@@ -15,9 +15,11 @@ lazy_static = "1.4.0"
 dirs = "1.0.5"
 semver = "1.0.3"
 futures = "0.3"
-tungstenite = "0.13.0"
 regex = "1.5.4"
 webthings-gateway-ipc-types = "1.0.0-alpha.2"
+actix = "0.10"
+actix-web = "3"
+actix-web-actors = "3.0.0"
 
 [dependencies.rocket_contrib]
 version = "0.4.10"
