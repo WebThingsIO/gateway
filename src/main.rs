@@ -14,10 +14,9 @@ mod addon_utils;
 mod db;
 mod ipc_socket;
 mod model;
-mod plugin;
-mod plugin_server;
 mod router;
 mod user_config;
+mod addon_instance;
 
 use rocket::Rocket;
 
@@ -25,8 +24,8 @@ use crate::addon_manager::AddonManager;
 use crate::db::Db;
 
 fn rocket() -> Rocket {
-    let mut addon_manager = AddonManager::new().expect("Setting up Addon manager");
-    addon_manager.load_addons().expect("Loading Add-Ons");
+    let addon_manager = AddonManager::start().expect("Setting up Addon manager");
+    addon_manager.lock().expect("Lock addon manager").load_addons().expect("Loading Add-Ons");
     rocket::ignite()
         .manage(Db::new())
         // TODO: Manage addon_manager

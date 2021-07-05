@@ -4,21 +4,53 @@ use std::{
     fs,
     path::PathBuf,
     sync::{Arc, Mutex},
+    io::{BufRead, BufReader},
+    process::{Command, Stdio},
+    thread,
 };
 
-use crate::{addon::Addon, addon_utils, plugin_server::PluginServer, user_config};
+use crate::{addon::Addon, addon_utils, user_config, ipc_socket};
+use crate::addon_instance::AddonInstance;
+use regex::Regex;
+use webthings_gateway_ipc_types::MessageBase;
 
 pub struct AddonManager {
-    plugin_server: Arc<Mutex<PluginServer>>,
     installed_addons: HashMap<String, Addon>,
+    running_addons: HashMap<String, AddonInstance>,
 }
 
 impl AddonManager {
-    pub fn new() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
-            plugin_server: PluginServer::new()?,
+    pub fn start() -> Result<Arc<Mutex<Self>>, Box<dyn Error>> {
+        let addon_manager = Arc::new(Mutex::new(Self {
             installed_addons: HashMap::new(),
-        })
+            running_addons: HashMap::new(),
+        }));
+
+        let addon_manager_clone = addon_manager.clone();
+
+        ipc_socket::start(move |msg, ws| {
+            let id = msg.plugin_id().to_string();
+            let addon_manager = addon_manager_clone
+                .lock()
+                .expect("Lock plugin server");
+            let addon = addon_manager.running_addons.get(&id);
+
+            match addon {
+                Some(addon) => {
+                    match addon.on_msg(msg, ws) {
+                        Ok(()) => {},
+                        Err(err) => {
+                            eprintln!("Addon instance {} failed to handle message {}", id, err)
+                        }
+                    }
+                }
+                None => {
+                    eprintln!("Received msg {:?} for unknown addon instance {}", msg, id);
+                }
+            }
+        })?;
+
+        Ok(addon_manager)
     }
 
     pub fn load_addons(&mut self) -> Result<(), Box<dyn Error>> {
@@ -36,6 +68,8 @@ impl AddonManager {
     fn load_addon(&mut self, path: PathBuf) -> Result<(), Box<dyn Error>> {
         let package_id = addon_utils::package_id(&path)?;
         let manifest = addon_utils::load_manifest(&path)?;
+        let id = manifest.id.clone();
+        let exec = manifest.gateway_specific_settings.webthings.exec.clone();
         let addon = Addon::new(manifest);
         self.installed_addons.insert(package_id.to_owned(), addon);
         let addon = self.installed_addons.get(package_id).unwrap();
@@ -57,18 +91,49 @@ impl AddonManager {
         // TODO: Create data path
 
         println!("Loading add-on {}", addon.manifest.id);
-        self.plugin_server
-            .lock()
-            .expect("Lock plugin server")
-            .load_plugin(
-                &path,
-                addon
-                    .manifest
-                    .gateway_specific_settings
-                    .webthings
-                    .exec
-                    .to_owned(),
-            )?;
+        self.start_addon(path, id.clone(), exec)?;
+        self.running_addons.insert(id, AddonInstance::new());
+
+        Ok(())
+    }
+
+    pub fn start_addon(&self, path: PathBuf, id: String, exec: String) -> Result<(), Box<dyn Error>> {
+        thread::spawn(move || {
+            let exec_cmd = format(
+                &exec,
+                &id,
+                &path.to_str().expect("Convert exec_path to string"),
+            );
+
+            let args: Vec<_> = exec_cmd.split_ascii_whitespace().collect();
+            let mut child = Command::new(args[0])
+                .args(&args[1..])
+                .env("WEBTHINGS_HOME", user_config::BASE_DIR.as_os_str())
+                .stdout(Stdio::piped())
+                .stderr(Stdio::piped())
+                .spawn()
+                .expect(&format!("Start plugin {}\n Command: {}", id, exec));
+
+            let stdout = child.stdout.take().expect("Capture standard output");
+            let reader = BufReader::new(stdout);
+            reader
+                .lines()
+                .filter_map(|line| line.ok())
+                .for_each(|line| println!("{} {}", id, line));
+
+            let stderr = child.stderr.take().expect("Capture standard error");
+            let reader = BufReader::new(stderr);
+            reader
+                .lines()
+                .filter_map(|line| line.ok())
+                .for_each(|line| eprintln!("{} {}", id, line));
+
+            let code = child.wait().expect("Obtain exit code");
+
+            println!("Plugin: {} died, code = {}", id, code);
+
+            // TODO: Handling plugin exit
+        });
 
         Ok(())
     }
@@ -76,4 +141,13 @@ impl AddonManager {
     pub fn unload_addons(&mut self) {
         // TODO
     }
+}
+
+// FIXME: Find a better way to do this
+fn format(s: &str, name: &str, path: &str) -> String {
+    let re = Regex::new("\\{name\\}").unwrap();
+    let result = re.replace_all(s, name).to_string();
+    let re = Regex::new("\\{path\\}").unwrap();
+    let result = re.replace_all(&result, path).to_string();
+    result
 }
