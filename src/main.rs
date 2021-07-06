@@ -22,7 +22,6 @@ use rocket::Rocket;
 
 use crate::addon_manager::{AddonManager, LoadAddons};
 use crate::db::Db;
-use std::error::Error;
 use actix::{System, Actor};
 use std::thread;
 
@@ -33,19 +32,24 @@ fn rocket() -> Rocket {
         .mount("/", router::routes())
 }
 
-async fn init() -> Result<(), Box<dyn Error>>  {
-    let address = AddonManager::new().start();
-    address.send(LoadAddons()).await?;
-    addon_socket::start().await?;
-    Ok(())
-}
-
 fn main() -> () {
-    thread::spawn(|| {
-        let mut system = System::new("web");
-        system.block_on(init()).expect("Blocking on web thread");
+    let system = System::new("default");
+
+    let address = AddonManager::new().start();
+
+    actix::spawn(async move {
+        addon_socket::start().await.expect("Starting addon socket");
     });
-    rocket().launch();
+
+    actix::spawn(async move {
+        address.send(LoadAddons()).await.expect("Sending LoadAddons message ");
+    });
+
+    thread::spawn(||{
+        rocket().launch();
+    });
+
+    system.run().expect("Running system");
 }
 
 #[cfg(test)]
