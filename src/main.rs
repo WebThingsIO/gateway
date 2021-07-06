@@ -8,21 +8,21 @@ extern crate rocket_contrib;
 extern crate rusqlite;
 
 mod addon;
+mod addon_instance;
 mod addon_manager;
 mod addon_manifest;
+mod addon_socket;
 mod addon_utils;
 mod db;
 mod model;
 mod router;
 mod user_config;
-mod addon_instance;
-mod addon_socket;
 
 use rocket::Rocket;
 
 use crate::addon_manager::{AddonManager, LoadAddons};
 use crate::db::Db;
-use actix::{System, Actor};
+use actix::{Actor, System};
 use std::thread;
 
 fn rocket() -> Rocket {
@@ -42,10 +42,13 @@ fn main() -> () {
     });
 
     actix::spawn(async move {
-        address.send(LoadAddons()).await.expect("Sending LoadAddons message ");
+        address
+            .send(LoadAddons())
+            .await
+            .expect("Sending LoadAddons message ");
     });
 
-    thread::spawn(||{
+    thread::spawn(|| {
         rocket().launch();
     });
 

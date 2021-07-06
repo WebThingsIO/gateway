@@ -3,10 +3,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
-
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web, Error as ActixError};
-use actix_web_actors::ws;
 use crate::addon_instance::AddonInstance;
+use actix_web::{web, App, Error as ActixError, HttpRequest, HttpResponse, HttpServer};
+use actix_web_actors::ws;
 use std::error::Error;
 
 async fn route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, ActixError> {
