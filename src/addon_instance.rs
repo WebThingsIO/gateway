@@ -6,7 +6,6 @@
 use actix::{Actor, StreamHandler};
 use actix_web_actors::ws;
 use std::error::Error;
-
 use webthings_gateway_ipc_types::{
     Message, MessageBase, PluginRegisterResponseMessageData, Preferences, Units, UserProfile,
 };

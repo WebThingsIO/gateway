@@ -1,10 +1,9 @@
+use crate::model::Thing;
+use crate::user_config;
 use rusqlite::OptionalExtension;
 use rusqlite::{params, Connection};
 use serde_json;
 use std::{ops::Deref, sync::Mutex};
-
-use crate::model::Thing;
-use crate::user_config;
 
 pub struct Db(Mutex<Connection>);
 
