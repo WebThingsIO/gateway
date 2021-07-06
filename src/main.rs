@@ -12,28 +12,44 @@ mod addon_manager;
 mod addon_manifest;
 mod addon_utils;
 mod db;
-mod ipc_socket;
 mod model;
 mod router;
 mod user_config;
 mod addon_instance;
+mod addon_socket;
 
 use rocket::Rocket;
 
-use crate::addon_manager::AddonManager;
+use crate::addon_manager::{AddonManager, LoadAddons};
 use crate::db::Db;
+use actix::{System, Actor};
+use std::thread;
 
 fn rocket() -> Rocket {
-    let addon_manager = AddonManager::start().expect("Setting up Addon manager");
-    addon_manager.lock().expect("Lock addon manager").load_addons().expect("Loading Add-Ons");
     rocket::ignite()
         .manage(Db::new())
         // TODO: Manage addon_manager
         .mount("/", router::routes())
 }
 
-fn main() {
-    rocket().launch();
+fn main() -> () {
+    let system = System::new("default");
+
+    let address = AddonManager::new().start();
+
+    actix::spawn(async move {
+        addon_socket::start().await.expect("Starting addon socket");
+    });
+
+    actix::spawn(async move {
+        address.send(LoadAddons()).await.expect("Sending LoadAddons message ");
+    });
+
+    thread::spawn(||{
+        rocket().launch();
+    });
+
+    system.run().expect("Running system");
 }
 
 #[cfg(test)]

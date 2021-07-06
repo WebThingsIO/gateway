@@ -5,24 +5,51 @@
  */
 
 use std::error::Error;
-use std::net::TcpStream;
-use std::sync::{Mutex, Weak};
-
-use tungstenite::WebSocket;
+use actix::{Actor, StreamHandler};
+use actix_web_actors::ws;
 
 use webthings_gateway_ipc_types::{Message, MessageBase, PluginRegisterResponseMessageData, Preferences, Units, UserProfile};
 
-pub struct AddonInstance {}
+pub struct AddonInstance {
+    id: Option<String>,
+}
+
+impl Actor for AddonInstance {
+    type Context = ws::WebsocketContext<Self>;
+}
+
+impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for AddonInstance {
+    fn handle(
+        &mut self,
+        msg: Result<ws::Message, ws::ProtocolError>,
+        ctx: &mut Self::Context,
+    ) {
+        match msg {
+            Ok(ws::Message::Ping(msg)) => ctx.pong(&msg),
+            Ok(ws::Message::Text(text)) => {
+                let msg = text.parse::<Message>().unwrap();
+                match self.on_msg(msg, ctx) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        eprintln!("Addon instance {:?} failed to handle message {}", self.id, err)
+                    }
+                }
+            }
+            Ok(ws::Message::Binary(bin)) => ctx.binary(bin),
+            _ => (),
+        }
+    }
+}
 
 impl AddonInstance {
     pub fn new() -> Self {
-        Self {}
+        Self {id: None}
     }
 
     pub fn on_msg(
         &self,
         msg: Message,
-        ws: Weak<Mutex<WebSocket<TcpStream>>>,
+        ctx: &mut ws::WebsocketContext<Self>,
     ) -> Result<(), Box<dyn Error>> {
         println!("Received {:?}", msg);
 
@@ -52,13 +79,7 @@ impl AddonInstance {
                 .into();
 
             println!("Sending {:?}", &response);
-            ws.upgrade()
-                .expect("Upgrade websocket")
-                .lock()
-                .expect("Acquire websocket handle")
-                .write_message(tungstenite::Message::Text(serde_json::to_string(
-                    &response,
-                )?))?;
+            ctx.text(serde_json::to_string(&response)?);
         } else {
             println!("Received message: {:?}", msg);
         }
