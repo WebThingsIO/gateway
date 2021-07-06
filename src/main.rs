@@ -15,13 +15,16 @@ mod addon_socket;
 mod addon_utils;
 mod db;
 mod model;
+mod process_manager;
 mod router;
 mod user_config;
 
 use rocket::Rocket;
 
-use crate::addon_manager::{AddonManager, LoadAddons};
-use crate::db::Db;
+use crate::{
+    addon_manager::{AddonManager, LoadAddons},
+    db::Db,
+};
 use actix::{Actor, System};
 use std::thread;
 
@@ -35,11 +38,11 @@ fn rocket() -> Rocket {
 fn main() -> () {
     let system = System::new("default");
 
-    let address = AddonManager::new().start();
-
     actix::spawn(async move {
         addon_socket::start().await.expect("Starting addon socket");
     });
+
+    let address = AddonManager::new().start();
 
     actix::spawn(async move {
         address

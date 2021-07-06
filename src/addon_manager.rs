@@ -1,20 +1,16 @@
-use std::{
-    collections::HashMap,
-    error::Error,
-    fs,
-    path::PathBuf,
-    io::{BufRead, BufReader},
-    process::{Command, Stdio},
-    thread,
+use crate::{
+    addon::Addon,
+    addon_instance::AddonInstance,
+    addon_utils,
+    process_manager::{ProcessManager, StartAddon},
+    user_config,
 };
-
-use crate::{addon::Addon, addon_utils, user_config};
-use crate::addon_instance::AddonInstance;
-use regex::Regex;
-use actix::{Actor, Context};
 use actix::prelude::*;
+use actix::{Actor, Context};
+use std::{collections::HashMap, error::Error, fs, path::PathBuf};
 
 pub struct AddonManager {
+    process_manager: Addr<ProcessManager>,
     installed_addons: HashMap<String, Addon>,
     running_addons: HashMap<String, AddonInstance>,
 }
@@ -47,9 +43,11 @@ impl Handler<LoadAddons> for AddonManager {
 
 impl AddonManager {
     pub fn new() -> Self {
+        let process_manager = ProcessManager::new().start();
         Self {
             installed_addons: HashMap::new(),
             running_addons: HashMap::new(),
+            process_manager,
         }
     }
 
@@ -91,49 +89,12 @@ impl AddonManager {
         // TODO: Create data path
 
         println!("Loading add-on {}", addon.manifest.id);
-        self.start_addon(path, id.clone(), exec)?;
-        self.running_addons.insert(id, AddonInstance::new());
-
-        Ok(())
-    }
-
-    pub fn start_addon(&self, path: PathBuf, id: String, exec: String) -> Result<(), Box<dyn Error>> {
-        thread::spawn(move || {
-            let exec_cmd = format(
-                &exec,
-                &id,
-                &path.to_str().expect("Convert exec_path to string"),
-            );
-
-            let args: Vec<_> = exec_cmd.split_ascii_whitespace().collect();
-            let mut child = Command::new(args[0])
-                .args(&args[1..])
-                .env("WEBTHINGS_HOME", user_config::BASE_DIR.as_os_str())
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn()
-                .expect(&format!("Start plugin {}\n Command: {}", id, exec));
-
-            let stdout = child.stdout.take().expect("Capture standard output");
-            let reader = BufReader::new(stdout);
-            reader
-                .lines()
-                .filter_map(|line| line.ok())
-                .for_each(|line| println!("{} {}", id, line));
-
-            let stderr = child.stderr.take().expect("Capture standard error");
-            let reader = BufReader::new(stderr);
-            reader
-                .lines()
-                .filter_map(|line| line.ok())
-                .for_each(|line| eprintln!("{} {}", id, line));
-
-            let code = child.wait().expect("Obtain exit code");
-
-            println!("Plugin: {} died, code = {}", id, code);
-
-            // TODO: Handling plugin exit
+        self.process_manager.do_send(StartAddon {
+            path,
+            id: id.clone(),
+            exec,
         });
+        self.running_addons.insert(id, AddonInstance::new());
 
         Ok(())
     }
@@ -141,13 +102,4 @@ impl AddonManager {
     pub fn unload_addons(&mut self) {
         // TODO
     }
-}
-
-// FIXME: Find a better way to do this
-fn format(s: &str, name: &str, path: &str) -> String {
-    let re = Regex::new("\\{name\\}").unwrap();
-    let result = re.replace_all(s, name).to_string();
-    let re = Regex::new("\\{path\\}").unwrap();
-    let result = re.replace_all(&result, path).to_string();
-    result
 }

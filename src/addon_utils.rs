@@ -1,8 +1,7 @@
+use crate::addon_manifest::Manifest;
 use semver::Version;
 use serde_json;
 use std::{error::Error, fs::File, path::PathBuf};
-
-use crate::addon_manifest::Manifest;
 
 const MANIFEST_VERSION: i32 = 1;
 
