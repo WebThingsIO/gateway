@@ -23,7 +23,7 @@ use rocket::Rocket;
 
 use crate::{
     addon_manager::{AddonManager, LoadAddons},
-    db::Db,
+    db::Db
 };
 use actix::{Actor, System};
 use std::thread;
