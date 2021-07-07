@@ -3,32 +3,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
-use crate::{addon_instance::AddonInstance, addon_manager::AddonManager};
-use actix::Addr;
+use crate::addon_instance::AddonInstance;
 use actix_web::{web, App, Error as ActixError, HttpRequest, HttpResponse, HttpServer};
 use actix_web_actors::ws;
 use std::error::Error;
 
-async fn route(
-    data: web::Data<Addr<AddonManager>>,
-    req: HttpRequest,
-    stream: web::Payload,
-) -> Result<HttpResponse, ActixError> {
+async fn route(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, ActixError> {
     println!("Incoming websocket connection from {:?}", req.peer_addr());
-    ws::start(AddonInstance::new(data.get_ref().clone()), &req, stream)
+    ws::start(AddonInstance::new(), &req, stream)
 }
 
-pub async fn start(addon_manager: Addr<AddonManager>) -> Result<(), Box<dyn Error>> {
+pub async fn start() -> Result<(), Box<dyn Error>> {
     println!("Starting addon socket");
 
-    HttpServer::new(move || {
-        App::new()
-            .app_data(web::Data::new(addon_manager.clone()))
-            .route("/", web::get().to(route))
-    })
-    .bind("127.0.0.1:9500")?
-    .run()
-    .await?;
+    HttpServer::new(|| App::new().route("/", web::get().to(route)))
+        .bind("127.0.0.1:9500")?
+        .run()
+        .await?;
 
     Ok(())
 }

@@ -10,9 +10,8 @@ use std::{
     thread,
 };
 
-pub struct ProcessManager {
-    addon_manager: Addr<AddonManager>,
-}
+#[derive(Default)]
+pub struct ProcessManager;
 
 impl Actor for ProcessManager {
     type Context = Context<Self>;
@@ -23,6 +22,14 @@ impl Actor for ProcessManager {
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
         println!("ProcessManager stopped");
+    }
+}
+
+impl actix::Supervised for ProcessManager {}
+
+impl SystemService for ProcessManager {
+    fn service_started(&mut self, _ctx: &mut Context<Self>) {
+        println!("ProcessManager service started");
     }
 }
 
@@ -39,7 +46,7 @@ impl Handler<StartAddon> for ProcessManager {
 
     fn handle(&mut self, msg: StartAddon, _ctx: &mut Context<Self>) -> Self::Result {
         let StartAddon { exec, id, path } = msg;
-        let addon_manager = self.addon_manager.clone();
+        let addon_manager = AddonManager::from_registry().clone();
         thread::spawn(move || {
             let exec_cmd = format(
                 &exec,
@@ -76,12 +83,6 @@ impl Handler<StartAddon> for ProcessManager {
 
             addon_manager.do_send(AddonStopped(id));
         });
-    }
-}
-
-impl ProcessManager {
-    pub fn new(addon_manager: Addr<AddonManager>) -> Self {
-        Self { addon_manager }
     }
 }
 

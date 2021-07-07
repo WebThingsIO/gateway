@@ -9,8 +9,8 @@ use actix::prelude::*;
 use actix::{Actor, Context};
 use std::{collections::HashMap, error::Error, fs, path::PathBuf};
 
+#[derive(Default)]
 pub struct AddonManager {
-    process_manager: Option<Addr<ProcessManager>>,
     installed_addons: HashMap<String, Addon>,
     running_addons: HashMap<String, Addr<AddonInstance>>,
 }
@@ -18,13 +18,20 @@ pub struct AddonManager {
 impl Actor for AddonManager {
     type Context = Context<Self>;
 
-    fn started(&mut self, ctx: &mut Context<Self>) {
+    fn started(&mut self, _ctx: &mut Context<Self>) {
         println!("AddonManager started");
-        self.process_manager = Some(ProcessManager::new(ctx.address()).start());
     }
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
         println!("AddonManager stopped");
+    }
+}
+
+impl actix::Supervised for AddonManager {}
+
+impl SystemService for AddonManager {
+    fn service_started(&mut self, _ctx: &mut Context<Self>) {
+        println!("AddonManager service started");
     }
 }
 
@@ -67,14 +74,6 @@ impl Handler<AddonStopped> for AddonManager {
 }
 
 impl AddonManager {
-    pub fn new() -> Self {
-        Self {
-            installed_addons: HashMap::new(),
-            running_addons: HashMap::new(),
-            process_manager: None,
-        }
-    }
-
     pub fn load_addons(&mut self) -> Result<(), Box<dyn Error>> {
         let entries: Result<Vec<_>, _> = fs::read_dir(user_config::ADDONS_DIR.clone())?.collect();
         let entries: Result<Vec<_>, Box<dyn Error>> = entries?
@@ -113,17 +112,7 @@ impl AddonManager {
         // TODO: Create data path
 
         println!("Loading add-on {}", addon.manifest.id);
-        self.process_manager
-            .as_ref()
-            .clone()
-            .unwrap()
-            // this can never be None since we can only receive a LoadAddons message after we started,
-            // and we initialize the process manager immediately after we started
-            .do_send(StartAddon {
-                path,
-                id: id.clone(),
-                exec,
-            });
+        ProcessManager::from_registry().do_send(StartAddon { path, id, exec });
 
         Ok(())
     }

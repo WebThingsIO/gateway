@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
-use actix::{Actor, Addr, AsyncContext, StreamHandler};
+use actix::{Actor, Addr, AsyncContext, StreamHandler, SystemService};
 use actix_web_actors::ws;
 use std::error::Error;
 use webthings_gateway_ipc_types::{
@@ -12,9 +12,7 @@ use webthings_gateway_ipc_types::{
 
 use crate::addon_manager::{AddonManager, AddonRunning};
 
-pub struct AddonInstance {
-    addon_manager: Addr<AddonManager>,
-}
+pub struct AddonInstance;
 
 impl Actor for AddonInstance {
     type Context = ws::WebsocketContext<Self>;
@@ -41,8 +39,8 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for AddonInstance {
 }
 
 impl AddonInstance {
-    pub fn new(addon_manager: Addr<AddonManager>) -> Self {
-        Self { addon_manager }
+    pub fn new() -> Self {
+        Self
     }
 
     pub fn on_msg(
@@ -55,8 +53,7 @@ impl AddonInstance {
         if let Message::PluginRegisterRequest(msg) = msg {
             let id = msg.plugin_id();
 
-            self.addon_manager
-                .do_send(AddonRunning(id.to_owned(), ctx.address()));
+            AddonManager::from_registry().do_send(AddonRunning(id.to_owned(), ctx.address()));
 
             // TODO: Read fields from settings
             let response: Message = PluginRegisterResponseMessageData {
