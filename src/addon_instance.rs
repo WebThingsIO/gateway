@@ -3,15 +3,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.*
  */
-use actix::{Actor, StreamHandler};
+use actix::{Actor, Addr, AsyncContext, StreamHandler};
 use actix_web_actors::ws;
 use std::error::Error;
 use webthings_gateway_ipc_types::{
     Message, MessageBase, PluginRegisterResponseMessageData, Preferences, Units, UserProfile,
 };
 
+use crate::addon_manager::{AddonManager, AddonRunning};
+
 pub struct AddonInstance {
-    id: Option<String>,
+    addon_manager: Addr<AddonManager>,
 }
 
 impl Actor for AddonInstance {
@@ -24,13 +26,11 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for AddonInstance {
             Ok(ws::Message::Ping(msg)) => ctx.pong(&msg),
             Ok(ws::Message::Text(text)) => {
                 let msg = text.parse::<Message>().unwrap();
+                let id = msg.plugin_id().to_owned();
                 match self.on_msg(msg, ctx) {
                     Ok(()) => {}
                     Err(err) => {
-                        eprintln!(
-                            "Addon instance {:?} failed to handle message {}",
-                            self.id, err
-                        )
+                        eprintln!("Addon instance {:?} failed to handle message {}", id, err)
                     }
                 }
             }
@@ -41,8 +41,8 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for AddonInstance {
 }
 
 impl AddonInstance {
-    pub fn new() -> Self {
-        Self { id: None }
+    pub fn new(addon_manager: Addr<AddonManager>) -> Self {
+        Self { addon_manager }
     }
 
     pub fn on_msg(
@@ -54,6 +54,9 @@ impl AddonInstance {
 
         if let Message::PluginRegisterRequest(msg) = msg {
             let id = msg.plugin_id();
+
+            self.addon_manager
+                .do_send(AddonRunning(id.to_owned(), ctx.address()));
 
             // TODO: Read fields from settings
             let response: Message = PluginRegisterResponseMessageData {

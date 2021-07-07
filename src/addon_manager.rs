@@ -12,7 +12,7 @@ use std::{collections::HashMap, error::Error, fs, path::PathBuf};
 pub struct AddonManager {
     process_manager: Addr<ProcessManager>,
     installed_addons: HashMap<String, Addon>,
-    running_addons: HashMap<String, AddonInstance>,
+    running_addons: HashMap<String, Addr<AddonInstance>>,
 }
 
 impl Actor for AddonManager {
@@ -38,6 +38,19 @@ impl Handler<LoadAddons> for AddonManager {
         println!("Received LoadAddons message");
         self.load_addons().expect("Loading addons");
         println!("Finished loading addons");
+    }
+}
+
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct AddonRunning(pub String, pub Addr<AddonInstance>);
+
+impl Handler<AddonRunning> for AddonManager {
+    type Result = ();
+
+    fn handle(&mut self, msg: AddonRunning, _ctx: &mut Context<Self>) -> Self::Result {
+        println!("Received addon running message");
+        self.running_addons.insert(msg.0, msg.1);
     }
 }
 
@@ -94,7 +107,6 @@ impl AddonManager {
             id: id.clone(),
             exec,
         });
-        self.running_addons.insert(id, AddonInstance::new());
 
         Ok(())
     }

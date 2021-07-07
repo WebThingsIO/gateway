@@ -38,11 +38,14 @@ fn rocket() -> Rocket {
 fn main() -> () {
     let system = System::new("default");
 
-    actix::spawn(async move {
-        addon_socket::start().await.expect("Starting addon socket");
-    });
-
     let address = AddonManager::new().start();
+    let address_clone = address.clone();
+
+    actix::spawn(async move {
+        addon_socket::start(address_clone)
+            .await
+            .expect("Starting addon socket");
+    });
 
     actix::spawn(async move {
         address
