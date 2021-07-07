@@ -49,7 +49,7 @@ fn main() -> () {
 
     actix::spawn(async move {
         address
-            .send(LoadAddons())
+            .send(LoadAddons)
             .await
             .expect("Sending LoadAddons message ");
     });

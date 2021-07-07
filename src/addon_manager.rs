@@ -10,7 +10,7 @@ use actix::{Actor, Context};
 use std::{collections::HashMap, error::Error, fs, path::PathBuf};
 
 pub struct AddonManager {
-    process_manager: Addr<ProcessManager>,
+    process_manager: Option<Addr<ProcessManager>>,
     installed_addons: HashMap<String, Addon>,
     running_addons: HashMap<String, Addr<AddonInstance>>,
 }
@@ -18,8 +18,9 @@ pub struct AddonManager {
 impl Actor for AddonManager {
     type Context = Context<Self>;
 
-    fn started(&mut self, _ctx: &mut Context<Self>) {
+    fn started(&mut self, ctx: &mut Context<Self>) {
         println!("AddonManager started");
+        self.process_manager = Some(ProcessManager::new(ctx.address()).start());
     }
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
@@ -29,7 +30,7 @@ impl Actor for AddonManager {
 
 #[derive(Message)]
 #[rtype(result = "()")]
-pub struct LoadAddons();
+pub struct LoadAddons;
 
 impl Handler<LoadAddons> for AddonManager {
     type Result = ();
@@ -49,18 +50,28 @@ impl Handler<AddonRunning> for AddonManager {
     type Result = ();
 
     fn handle(&mut self, msg: AddonRunning, _ctx: &mut Context<Self>) -> Self::Result {
-        println!("Received addon running message");
         self.running_addons.insert(msg.0, msg.1);
+    }
+}
+
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct AddonStopped(pub String);
+
+impl Handler<AddonStopped> for AddonManager {
+    type Result = ();
+
+    fn handle(&mut self, msg: AddonStopped, _ctx: &mut Context<Self>) -> Self::Result {
+        self.running_addons.remove(&msg.0);
     }
 }
 
 impl AddonManager {
     pub fn new() -> Self {
-        let process_manager = ProcessManager::new().start();
         Self {
             installed_addons: HashMap::new(),
             running_addons: HashMap::new(),
-            process_manager,
+            process_manager: None,
         }
     }
 
@@ -102,11 +113,17 @@ impl AddonManager {
         // TODO: Create data path
 
         println!("Loading add-on {}", addon.manifest.id);
-        self.process_manager.do_send(StartAddon {
-            path,
-            id: id.clone(),
-            exec,
-        });
+        self.process_manager
+            .as_ref()
+            .clone()
+            .unwrap()
+            // this can never be None since we can only receive a LoadAddons message after we started,
+            // and we initialize the process manager immediately after we started
+            .do_send(StartAddon {
+                path,
+                id: id.clone(),
+                exec,
+            });
 
         Ok(())
     }
