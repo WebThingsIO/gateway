@@ -4,7 +4,6 @@
 extern crate rocket;
 #[macro_use]
 extern crate lazy_static;
-extern crate rocket_contrib;
 extern crate rusqlite;
 
 mod addon;
@@ -19,40 +18,45 @@ mod process_manager;
 mod router;
 mod user_config;
 
-use rocket::Rocket;
-
 use crate::{
     addon_manager::{AddonManager, LoadAddons},
     db::Db,
 };
 use actix::{System, SystemService};
-use std::thread;
+use rocket::{Build, Rocket};
 
-fn rocket() -> Rocket {
-    rocket::ignite()
+fn rocket() -> Rocket<Build> {
+    rocket::build()
         .manage(Db::new())
         .mount("/", router::routes())
 }
 
-fn main() -> () {
-    let system = System::new("default");
+#[rocket::main]
+async fn main() {
+    tokio::spawn(async {
+        let system = System::new("default");
 
-    actix::spawn(async move {
-        addon_socket::start().await.expect("Starting addon socket");
+        actix::spawn(async {
+            addon_socket::start().await.expect("Starting addon socket");
+        });
+
+        actix::spawn(async {
+            AddonManager::from_registry()
+                .send(LoadAddons)
+                .await
+                .expect("Sending LoadAddons message ");
+        });
+
+        system.run().expect("Running system");
     });
 
-    actix::spawn(async move {
-        AddonManager::from_registry()
-            .send(LoadAddons)
-            .await
-            .expect("Sending LoadAddons message ");
-    });
-
-    thread::spawn(|| {
-        rocket().launch();
-    });
-
-    system.run().expect("Running system");
+    rocket()
+        .ignite()
+        .await
+        .expect("Ignite rocket")
+        .launch()
+        .await
+        .expect("Ignite rocket");
 }
 
 #[cfg(test)]
@@ -60,8 +64,7 @@ mod test {
     extern crate rusty_fork;
     extern crate serial_test;
     use super::*;
-    use rocket::http::Status;
-    use rocket::local::Client;
+    use rocket::{http::Status, local::blocking::Client};
     use rusty_fork::rusty_fork_test;
     use serial_test::serial;
     use std::{env, fs};
@@ -77,17 +80,17 @@ mod test {
         #[serial]
         fn get_things() {
             setup();
-            let client = Client::new(rocket()).expect("Valid rocket instance");
-            let mut response = client.get("/things").dispatch();
+            let client = Client::tracked(rocket()).expect("Valid rocket instance");
+            let response = client.get("/things").dispatch();
             assert_eq!(response.status(), Status::Ok);
-            assert_eq!(response.body_string(), Some("[]".into()));
+            assert_eq!(response.into_string(), Some("[]".into()));
         }
 
         #[test]
         #[serial]
         fn get_thing() {
             setup();
-            let client = Client::new(rocket()).expect("Valid rocket instance");
+            let client = Client::tracked(rocket()).expect("Valid rocket instance");
             let response = client.get("/thing/test").dispatch();
             assert_eq!(response.status(), Status::NotFound);
         }
