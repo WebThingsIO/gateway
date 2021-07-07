@@ -1,24 +1,26 @@
-use crate::db::Db;
-use rocket::{http::Status, response::status, Route, State};
-use rocket_contrib::{json, json::JsonValue};
+use crate::{db::Db, model::Thing};
+use rocket::{http::Status, response::status, serde::json::Json, Route, State};
 
 pub fn routes() -> Vec<Route> {
     routes![get_things, get_thing]
 }
 
 #[get("/things")]
-fn get_things(db: State<Db>) -> Result<JsonValue, status::Custom<&'static str>> {
+fn get_things(db: &State<Db>) -> Result<Json<Vec<Thing>>, status::Custom<&'static str>> {
     match db.get_things() {
         Err(e) => {
             println!("Error during db.get_things: {:?}", e);
             Err(status::Custom(Status::InternalServerError, "Err"))
         }
-        Ok(t) => Ok(json!(t)),
+        Ok(t) => Ok(Json(t)),
     }
 }
 
 #[get("/thing/<thing_id>")]
-fn get_thing(db: State<Db>, thing_id: String) -> Result<Option<JsonValue>, status::Custom<String>> {
+fn get_thing(
+    db: &State<Db>,
+    thing_id: String,
+) -> Result<Option<Json<Thing>>, status::Custom<String>> {
     match db.get_thing(&thing_id) {
         Err(e) => {
             println!("Error during db.get_things: {:?}", e);
@@ -29,7 +31,7 @@ fn get_thing(db: State<Db>, thing_id: String) -> Result<Option<JsonValue>, statu
         }
         Ok(t) => {
             if let Some(t) = t {
-                Ok(Some(json!(t)))
+                Ok(Some(Json(t)))
             } else {
                 Err(status::Custom(
                     Status::NotFound,

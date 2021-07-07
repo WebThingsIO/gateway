@@ -7,7 +7,6 @@ repository = "https://github.com/WebThingsIO/gateway"
 license = "MPL-2.0"
 
 [dependencies]
-rocket = "0.4.10"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 rusqlite = "0.25.3"
@@ -20,10 +19,10 @@ webthings-gateway-ipc-types = "1.0.0-alpha.2"
 actix = "0.10"
 actix-web = "3"
 actix-web-actors = "3.0.0"
+tokio = "1.8.1"
 
-[dependencies.rocket_contrib]
-version = "0.4.10"
-default-features = false
+[dependencies.rocket]
+version = "0.5.0-rc.1"
 features = ["json"]
 
 [dev-dependencies]
