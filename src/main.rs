@@ -25,13 +25,12 @@ use crate::{
     addon_manager::{AddonManager, LoadAddons},
     db::Db,
 };
-use actix::{Actor, System};
+use actix::{System, SystemService};
 use std::thread;
 
 fn rocket() -> Rocket {
     rocket::ignite()
         .manage(Db::new())
-        // TODO: Manage addon_manager
         .mount("/", router::routes())
 }
 
@@ -42,11 +41,9 @@ fn main() -> () {
         addon_socket::start().await.expect("Starting addon socket");
     });
 
-    let address = AddonManager::new().start();
-
     actix::spawn(async move {
-        address
-            .send(LoadAddons())
+        AddonManager::from_registry()
+            .send(LoadAddons)
             .await
             .expect("Sending LoadAddons message ");
     });

@@ -9,10 +9,10 @@ use actix::prelude::*;
 use actix::{Actor, Context};
 use std::{collections::HashMap, error::Error, fs, path::PathBuf};
 
+#[derive(Default)]
 pub struct AddonManager {
-    process_manager: Addr<ProcessManager>,
     installed_addons: HashMap<String, Addon>,
-    running_addons: HashMap<String, AddonInstance>,
+    running_addons: HashMap<String, Addr<AddonInstance>>,
 }
 
 impl Actor for AddonManager {
@@ -27,9 +27,17 @@ impl Actor for AddonManager {
     }
 }
 
+impl actix::Supervised for AddonManager {}
+
+impl SystemService for AddonManager {
+    fn service_started(&mut self, _ctx: &mut Context<Self>) {
+        println!("AddonManager service started");
+    }
+}
+
 #[derive(Message)]
 #[rtype(result = "()")]
-pub struct LoadAddons();
+pub struct LoadAddons;
 
 impl Handler<LoadAddons> for AddonManager {
     type Result = ();
@@ -41,16 +49,31 @@ impl Handler<LoadAddons> for AddonManager {
     }
 }
 
-impl AddonManager {
-    pub fn new() -> Self {
-        let process_manager = ProcessManager::new().start();
-        Self {
-            installed_addons: HashMap::new(),
-            running_addons: HashMap::new(),
-            process_manager,
-        }
-    }
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct AddonRunning(pub String, pub Addr<AddonInstance>);
 
+impl Handler<AddonRunning> for AddonManager {
+    type Result = ();
+
+    fn handle(&mut self, msg: AddonRunning, _ctx: &mut Context<Self>) -> Self::Result {
+        self.running_addons.insert(msg.0, msg.1);
+    }
+}
+
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct AddonStopped(pub String);
+
+impl Handler<AddonStopped> for AddonManager {
+    type Result = ();
+
+    fn handle(&mut self, msg: AddonStopped, _ctx: &mut Context<Self>) -> Self::Result {
+        self.running_addons.remove(&msg.0);
+    }
+}
+
+impl AddonManager {
     pub fn load_addons(&mut self) -> Result<(), Box<dyn Error>> {
         let entries: Result<Vec<_>, _> = fs::read_dir(user_config::ADDONS_DIR.clone())?.collect();
         let entries: Result<Vec<_>, Box<dyn Error>> = entries?
@@ -89,12 +112,7 @@ impl AddonManager {
         // TODO: Create data path
 
         println!("Loading add-on {}", addon.manifest.id);
-        self.process_manager.do_send(StartAddon {
-            path,
-            id: id.clone(),
-            exec,
-        });
-        self.running_addons.insert(id, AddonInstance::new());
+        ProcessManager::from_registry().do_send(StartAddon { path, id, exec });
 
         Ok(())
     }

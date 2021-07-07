@@ -1,3 +1,4 @@
+use crate::addon_manager::{AddonManager, AddonStopped};
 use crate::user_config;
 use actix::prelude::*;
 use actix::{Actor, Context};
@@ -9,6 +10,7 @@ use std::{
     thread,
 };
 
+#[derive(Default)]
 pub struct ProcessManager;
 
 impl Actor for ProcessManager {
@@ -20,6 +22,14 @@ impl Actor for ProcessManager {
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
         println!("ProcessManager stopped");
+    }
+}
+
+impl actix::Supervised for ProcessManager {}
+
+impl SystemService for ProcessManager {
+    fn service_started(&mut self, _ctx: &mut Context<Self>) {
+        println!("ProcessManager service started");
     }
 }
 
@@ -36,6 +46,7 @@ impl Handler<StartAddon> for ProcessManager {
 
     fn handle(&mut self, msg: StartAddon, _ctx: &mut Context<Self>) -> Self::Result {
         let StartAddon { exec, id, path } = msg;
+        let addon_manager = AddonManager::from_registry().clone();
         thread::spawn(move || {
             let exec_cmd = format(
                 &exec,
@@ -70,14 +81,8 @@ impl Handler<StartAddon> for ProcessManager {
 
             println!("Addon: {} died, code = {}", id, code);
 
-            // TODO: Handling addon exit
+            addon_manager.do_send(AddonStopped(id));
         });
-    }
-}
-
-impl ProcessManager {
-    pub fn new() -> Self {
-        Self
     }
 }
 
