@@ -249,6 +249,7 @@ add-thing-cancel = Sefsex
 context-menu-choose-icon = Fren tignit…
 context-menu-save = Sekles
 context-menu-remove = Kkes
+context-menu-show-on-floorplan = Sken deg teskant n uɣawas?
 
 ## Capabilities
 
@@ -413,6 +414,8 @@ new-thing-password =
 new-thing-credentials-error = Yir Inekcam
 new-thing-saved = Yettwasekles
 new-thing-done = Immed
+add-group = Rnu agraw amaynut
+new-group-save = Rnu
 
 ## New Web Thing View
 
