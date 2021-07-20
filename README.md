@@ -56,9 +56,8 @@ $ sudo apt install \
     libudev-dev \
     libusb-1.0-0-dev \
     pkg-config \
-    python-pip \
+    python-six \
     python3-pip
-$ sudo -H python2 -m pip install six
 $ sudo -H python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
 ```
 
