@@ -324,6 +324,10 @@ export default class Thing extends EventEmitter {
     return this.properties;
   }
 
+  getEvents(): Record<string, EventSchema> {
+    return this.events;
+  }
+
   /**
    * Set the visibility of a Thing on the floorplan.
    *
