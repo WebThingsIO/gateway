@@ -10,8 +10,8 @@ describe('plugins/', () => {
 
     const plugin = new Plugin(
       'plugin-start-test',
-      (null as unknown) as AddonManager,
-      (null as unknown) as PluginServer,
+      null as unknown as AddonManager,
+      null as unknown as PluginServer,
       true
     );
     plugin.setExec('node -e process.exit(42);');
@@ -35,8 +35,8 @@ describe('plugins/', () => {
   it('Test the plugin start mechanism (bad exec)', async () => {
     const plugin = new Plugin(
       'plugin-start-test',
-      (null as unknown) as AddonManager,
-      (null as unknown) as PluginServer,
+      null as unknown as AddonManager,
+      null as unknown as PluginServer,
       true
     );
     plugin.setExec('./something-that-doesnt-exist');
@@ -55,8 +55,8 @@ describe('plugins/', () => {
   it('Test the plugin restart mechanism', async () => {
     const plugin = new Plugin(
       'plugin-start-test',
-      (null as unknown) as AddonManager,
-      (null as unknown) as PluginServer,
+      null as unknown as AddonManager,
+      null as unknown as PluginServer,
       true
     );
     plugin.setExec('node -e process.exit(42);');

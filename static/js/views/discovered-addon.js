@@ -166,9 +166,8 @@ class DiscoveredAddon {
               document.getElementById('media-modal-text').innerText = data;
             })
             .catch(() => {
-              document.getElementById('media-modal-text').innerText = fluent.getMessage(
-                'failed-read-file'
-              );
+              document.getElementById('media-modal-text').innerText =
+                fluent.getMessage('failed-read-file');
             });
         }
       });

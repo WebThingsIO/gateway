@@ -123,9 +123,11 @@ describe('things/', function () {
     return res;
   }
 
-  function makeDescr(
-    id: string
-  ): { id: string; title: string; properties: Record<string, unknown> } {
+  function makeDescr(id: string): {
+    id: string;
+    title: string;
+    properties: Record<string, unknown>;
+  } {
     return {
       id: id,
       title: id,
