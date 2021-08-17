@@ -316,12 +316,12 @@ smoke = Καπνός
 ## Domain Setup
 
 tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτό τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
-check-email-for-token = Παρακαλούμε ελέγξτε το email σας για το token ανάκτησης και επικολλήστε το παραπάνω.
+check-email-for-token = Παρακαλούμε ελέγξτε το email σας για το διακριτικό ανάκτησης και επικολλήστε το παραπάνω.
 reclaim-failed = Δεν ήταν δυνατή η ανάκτηση του τομέα.
 subdomain-already-used = Αυτό ο υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε επιλέξτε έναν διαφορετικό.
 invalid-subdomain = Μη έγκυρος υποτομέας.
 invalid-email = Μη έγκυρη διεύθυνση email.
-invalid-reclamation-token = Μη έγκυρο token ανάκτησης.
+invalid-reclamation-token = Μη έγκυρο διακριτικό ανάκτησης.
 domain-success = Επιτυχία! Παρακαλούμε περιμένετε όσο σας ανακατευθύνουμε…
 issuing-error = Σφάλμα κατά την έκδοση πιστοποιητικού. Παρακαλούμε προσπαθήστε ξανά.
 redirecting = Ανακατεύθυνση…
@@ -522,7 +522,7 @@ tunnel-setup-input-subdomain =
 tunnel-setup-email-opt-in = Να ενημερώνομαι για ειδήσεις σχετικά με το WebThings.
 tunnel-setup-agree-privacy-policy = Συμφωνώ με την <a data-l10n-name="tunnel-setup-privacy-policy-link">Πολιτική απορρήτου</a> και τους <a data-l10n-name="tunnel-setup-tos-link">Όρους υπηρεσίας</a> του WebThings.
 tunnel-setup-input-reclamation-token =
-    .placeholder = Token ανάκτησης
+    .placeholder = Διακριτικό ανάκτησης
 tunnel-setup-error = Προέκυψε σφάλμα κατά τη ρύθμιση του υποτομέα.
 tunnel-setup-create = Δημιουργία
 tunnel-setup-skip = Παράλειψη
@@ -545,11 +545,11 @@ authorize-deny = Άρνηση
 
 ## Local Token Page
 
-local-token-title = Τοπική υπηρεσία token — { -webthings-gateway-brand }
-local-token-header = Τοπική υπηρεσία token
-local-token-your-token = Το τοπικό σας token είναι αυτό <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
+local-token-title = Τοπική υπηρεσία διακριτικών — { -webthings-gateway-brand }
+local-token-header = Τοπική υπηρεσία διακριτικών
+local-token-your-token = Το τοπικό σας διακριτικό είναι αυτό το <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
 local-token-use-it = Χρησιμοποιήστε το για ασφαλή επικοινωνία με την πύλη, με <a data-l10n-name="local-token-bearer-type">Εξουσιοδότηση τύπου Bearer</a>.
-local-token-copy-token = Αντιγραφή token
+local-token-copy-token = Αντιγραφή διακριτικού
 
 ## Wi-Fi Setup Page
 
