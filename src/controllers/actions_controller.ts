@@ -20,7 +20,7 @@ function build(): express.Router {
   /**
    * Handle creating a new action.
    */
-  controller.post('/', async (request, response) => {
+  controller.post('/', async (request: express.Request, response: express.Response) => {
     const keys = Object.keys(request.body);
     if (keys.length != 1) {
       const err = 'Incorrect number of parameters.';
@@ -70,7 +70,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of actions.
    */
-  controller.get('/', (request, response) => {
+  controller.get('/', (request: express.Request, response: express.Response) => {
     if (request.params.thingId) {
       response.status(200).json(Actions.getByThing(request.params.thingId));
     } else {
@@ -81,7 +81,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of actions.
    */
-  controller.get('/:actionName', (request, response) => {
+  controller.get('/:actionName', (request: express.Request, response: express.Response) => {
     const actionName = request.params.actionName;
     if (request.params.thingId) {
       response.status(200).json(Actions.getByThing(request.params.thingId, actionName));
@@ -93,7 +93,7 @@ function build(): express.Router {
   /**
    * Handle creating a new action.
    */
-  controller.post('/:actionName', async (request, response) => {
+  controller.post('/:actionName', async (request: express.Request, response: express.Response) => {
     const actionName = request.params.actionName;
 
     const keys = Object.keys(request.body);
@@ -165,33 +165,36 @@ function build(): express.Router {
   /**
    * Handle cancelling an action.
    */
-  controller.delete('/:actionName/:actionId', async (request, response) => {
-    const actionName = request.params.actionName;
-    const actionId = request.params.actionId;
-    const thingId = request.params.thingId;
+  controller.delete(
+    '/:actionName/:actionId',
+    async (request: express.Request, response: express.Response) => {
+      const actionName = request.params.actionName;
+      const actionId = request.params.actionId;
+      const thingId = request.params.thingId;
 
-    if (thingId) {
+      if (thingId) {
+        try {
+          await AddonManager.removeAction(thingId, actionId, actionName);
+        } catch (e) {
+          console.error('Removing action', actionId, 'failed');
+          console.error(e);
+          response.status(400).send(e);
+          return;
+        }
+      }
+
       try {
-        await AddonManager.removeAction(thingId, actionId, actionName);
+        Actions.remove(actionId);
       } catch (e) {
         console.error('Removing action', actionId, 'failed');
         console.error(e);
-        response.status(400).send(e);
+        response.status(404).send(e);
         return;
       }
-    }
 
-    try {
-      Actions.remove(actionId);
-    } catch (e) {
-      console.error('Removing action', actionId, 'failed');
-      console.error(e);
-      response.status(404).send(e);
-      return;
+      response.sendStatus(204);
     }
-
-    response.sendStatus(204);
-  });
+  );
 
   return controller;
 }

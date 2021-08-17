@@ -17,7 +17,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of events.
    */
-  controller.get('/', (request, response) => {
+  controller.get('/', (request: express.Request, response: express.Response) => {
     if (request.params.thingId) {
       response.status(200).json(Events.getByThing(request.params.thingId));
     } else {
@@ -28,7 +28,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of events.
    */
-  controller.get('/:eventName', (request, response) => {
+  controller.get('/:eventName', (request: express.Request, response: express.Response) => {
     const eventName = request.params.eventName;
 
     if (request.params.thingId) {

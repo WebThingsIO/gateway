@@ -91,9 +91,7 @@ class Elements {
      * @return element
      */
     this[name] = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const rootElement: { $: (this: any, selector: string) => Promise<WebdriverIO.Element> } =
-        this.rootElement || this.browser;
+      const rootElement = this.rootElement || this.browser;
       return await rootElement.$(selector);
     };
 
@@ -140,9 +138,7 @@ export class Page extends Elements {
      * @return Section
      */
     this[name] = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const rootElement: { $: (this: any, selector: string) => Promise<WebdriverIO.Element> } =
-        this.rootElement || this.browser;
+      const rootElement = this.rootElement || this.browser;
       const e = await rootElement.$(selector);
       return new section(this.browser, e, selector);
     };
