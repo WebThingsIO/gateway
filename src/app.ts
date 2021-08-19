@@ -273,7 +273,12 @@ function createApp(isSecure: boolean): express.Application {
       extended: false,
     })
   );
-  app.use(bodyParser.json({ limit: '1mb' }));
+  app.use(
+    bodyParser.json({
+      limit: '1mb',
+      strict: false,
+    })
+  );
 
   // Use fileUpload to handle multi-part uploads
   app.use(fileUpload());

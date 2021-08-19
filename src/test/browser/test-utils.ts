@@ -63,7 +63,7 @@ export async function getProperty<T>(id: string, property: string): Promise<T> {
     .get(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
     .set(...headerAuth(jwt));
-  return res.body[property];
+  return res.body;
 }
 
 export async function setProperty<T>(id: string, property: string, value: T): Promise<T> {
@@ -72,9 +72,10 @@ export async function setProperty<T>(id: string, property: string, value: T): Pr
     .keepOpen()
     .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
     .set('Accept', 'application/json')
+    .type('json')
     .set(...headerAuth(jwt))
-    .send({ [property]: value });
-  return res.body[property];
+    .send(JSON.stringify(value));
+  return res.body;
 }
 
 export function escapeHtmlForIdClass(text: string): string {

@@ -355,8 +355,7 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('power');
-    expect(res.body.power).toEqual(false);
+    expect(res.body).toEqual(false);
   });
 
   it('fail to GET a nonexistent property of a thing', async () => {
@@ -385,8 +384,9 @@ describe('things/', function () {
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({});
+      .send();
     expect(err.status).toEqual(400);
   });
 
@@ -395,8 +395,9 @@ describe('things/', function () {
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ abc: true });
+      .send('foo');
     expect(err.status).toEqual(400);
   });
 
@@ -406,24 +407,24 @@ describe('things/', function () {
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ power: true });
+      .send(JSON.stringify(true));
 
     expect(on.status).toEqual(200);
-    expect(on.body).toHaveProperty('power');
-    expect(on.body.power).toEqual(true);
+    expect(on.body).toEqual(true);
 
     // Flip it back to off...
     const off = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ power: false });
+      .send(JSON.stringify(false));
 
     expect(off.status).toEqual(200);
-    expect(off.body).toHaveProperty('power');
-    expect(off.body.power).toEqual(false);
+    expect(off.body).toEqual(false);
   });
 
   it('fail to set x and y coordinates of a non-existent thing', async () => {
@@ -754,8 +755,9 @@ describe('things/', function () {
         .request(server)
         .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
         .set('Accept', 'application/json')
+        .type('json')
         .set(...headerAuth(jwt))
-        .send({ power: true }),
+        .send(JSON.stringify(true)),
     ]);
     expect(res.status).toEqual(200);
     expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
@@ -782,8 +784,7 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(on.status).toEqual(200);
-    expect(on.body).toHaveProperty('power');
-    expect(on.body.power).toEqual(true);
+    expect(on.body).toEqual(true);
 
     await webSocketClose(ws);
   });
@@ -865,23 +866,26 @@ describe('things/', function () {
         .request(server)
         .put(`${Constants.THINGS_PATH}/${otherThingId}/properties/power`)
         .set('Accept', 'application/json')
+        .type('json')
         .set(...headerAuth(jwt))
-        .send({ power: true })
+        .send(JSON.stringify(true))
         .then(() => {
           return chai
             .request(server)
             .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
             .set('Accept', 'application/json')
+            .type('json')
             .set(...headerAuth(jwt))
-            .send({ power: true });
+            .send(JSON.stringify(true));
         })
         .then(() => {
           return chai
             .request(server)
             .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
             .set('Accept', 'application/json')
+            .type('json')
             .set(...headerAuth(jwt))
-            .send({ power: false });
+            .send(JSON.stringify(false));
         }),
       webSocketRead(ws, 4),
     ]);
@@ -1445,15 +1449,15 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('readOnlyProp');
-    expect(res.body.readOnlyProp).toEqual(true);
+    expect(res.body).toEqual(true);
 
     const err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/readOnlyProp`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ readOnlyProp: false });
+      .send(JSON.stringify(false));
     expect(err.status).toEqual(400);
 
     res = await chai
@@ -1463,8 +1467,7 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('readOnlyProp');
-    expect(res.body.readOnlyProp).toEqual(true);
+    expect(res.body).toEqual(true);
   });
 
   it('fail to set invalid number property value', async () => {
@@ -1477,15 +1480,15 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('minMaxProp');
-    expect(res.body.minMaxProp).toEqual(15);
+    expect(res.body).toEqual(15);
 
     let err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ minMaxProp: 0 });
+      .send(JSON.stringify(0));
     expect(err.status).toEqual(400);
 
     res = await chai
@@ -1495,15 +1498,15 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('minMaxProp');
-    expect(res.body.minMaxProp).toEqual(15);
+    expect(res.body).toEqual(15);
 
     err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ minMaxProp: 30 });
+      .send(JSON.stringify(30));
     expect(err.status).toEqual(400);
 
     res = await chai
@@ -1513,8 +1516,7 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('minMaxProp');
-    expect(res.body.minMaxProp).toEqual(15);
+    expect(res.body).toEqual(15);
 
     res = await chai
       .request(server)
@@ -1523,15 +1525,15 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('multipleProp');
-    expect(res.body.multipleProp).toEqual(10);
+    expect(res.body).toEqual(10);
 
     err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ multipleProp: 3 });
+      .send(JSON.stringify(3));
     expect(err.status).toEqual(400);
 
     res = await chai
@@ -1541,15 +1543,15 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('multipleProp');
-    expect(res.body.multipleProp).toEqual(10);
+    expect(res.body).toEqual(10);
 
     res = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ multipleProp: 30 });
+      .send(JSON.stringify(30));
     expect(res.status).toEqual(200);
 
     res = await chai
@@ -1559,8 +1561,7 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('multipleProp');
-    expect(res.body.multipleProp).toEqual(30);
+    expect(res.body).toEqual(30);
   });
 
   it('fail to set invalid enum property value', async () => {
@@ -1573,15 +1574,15 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('enumProp');
-    expect(res.body.enumProp).toEqual('val2');
+    expect(res.body).toEqual('val2');
 
     const err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/enumProp`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ enumProp: 'val0' });
+      .send(JSON.stringify('val0'));
     expect(err.status).toEqual(400);
 
     res = await chai
@@ -1591,7 +1592,6 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('enumProp');
-    expect(res.body.enumProp).toEqual('val2');
+    expect(res.body).toEqual('val2');
   });
 });

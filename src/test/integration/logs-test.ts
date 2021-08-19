@@ -79,8 +79,9 @@ describe('logs/', function () {
       .request(server)
       .put(`${Constants.THINGS_PATH}/${thingId}/properties/${propId}`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ [propId]: value });
+      .send(JSON.stringify(value));
     expect(res.status).toEqual(200);
 
     // sleep just a bit to allow events to fire in the gateway

@@ -324,9 +324,7 @@ function build(): express.Router {
     const propertyName = request.params.propertyName;
     try {
       const value = await Things.getThingProperty(thingId, propertyName);
-      const result: Record<string, unknown> = {};
-      result[propertyName] = value;
-      response.status(200).json(result);
+      response.status(200).json(value);
     } catch (err) {
       response.status(err.code).send(err.message);
     }
@@ -338,20 +336,18 @@ function build(): express.Router {
   controller.put('/:thingId/properties/:propertyName', async (request, response) => {
     const thingId = request.params.thingId;
     const propertyName = request.params.propertyName;
-    if (!request.body || typeof request.body[propertyName] === 'undefined') {
-      response.status(400).send('Invalid property name');
+    if (typeof request.body === 'undefined') {
+      response.sendStatus(400);
       return;
     }
-    const value = request.body[propertyName];
+    const value = request.body;
     try {
+      // Note: updatedValue may differ from value
       const updatedValue = await Things.setThingProperty(thingId, propertyName, value);
-      const result = {
-        [propertyName]: updatedValue,
-      };
-      response.status(200).json(result);
-    } catch (e) {
-      console.error('Error setting property:', e);
-      response.status(e.code || 500).send(e.message);
+      response.status(200).json(updatedValue);
+    } catch (err) {
+      console.error('Error setting property:', err);
+      response.status(err.code || 500).send(err.message);
     }
   });
 

@@ -193,9 +193,6 @@ class ThingModel extends Model {
     }
 
     const property = this.propertyDescriptions[name];
-    const payload = {
-      [name]: value,
-    };
 
     let href;
     for (const link of property.links) {
@@ -205,9 +202,11 @@ class ThingModel extends Model {
       }
     }
 
-    return API.putJson(href, payload)
+    return API.putJson(href, value)
       .then((json) => {
-        this.onPropertyStatus(json);
+        const result = {};
+        result[name] = json;
+        this.onPropertyStatus(result);
       })
       .catch((error) => {
         console.error(error);

@@ -453,8 +453,9 @@ describe('rules engine', () => {
       .request(server)
       .put(`${Constants.THINGS_PATH}/${thingLight1.id}/properties/on`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ on: true });
+      .send(JSON.stringify(true));
 
     res = await chai
       .request(server)
@@ -463,7 +464,7 @@ describe('rules engine', () => {
       .set(...headerAuth(jwt));
 
     expect(res.status).toEqual(200);
-    expect(res.body.on).toEqual(false);
+    expect(res.body).toEqual(false);
 
     await deleteRule(ruleId);
   });
@@ -511,8 +512,9 @@ describe('rules engine', () => {
         .request(server)
         .put(`${Constants.THINGS_PATH}/${thingLight2.id}/properties/hue`)
         .set('Accept', 'application/json')
+        .type('json')
         .set(...headerAuth(jwt))
-        .send({ hue: 150 }),
+        .send(JSON.stringify(150)),
       webSocketRead(ws, 7),
     ]);
     expect(resPut.status).toEqual(200);
@@ -533,8 +535,9 @@ describe('rules engine', () => {
         .request(server)
         .put(`${Constants.THINGS_PATH}/${thingLight2.id}/properties/hue`)
         .set('Accept', 'application/json')
+        .type('json')
         .set(...headerAuth(jwt))
-        .send({ hue: 0 }),
+        .send(JSON.stringify(0)),
       webSocketRead(ws, 1),
     ]);
     expect(resPut.status).toEqual(200);
@@ -558,7 +561,7 @@ describe('rules engine', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    return res.body.on;
+    return res.body;
   }
 
   async function setOn(lightId: string, on: boolean): Promise<void> {
@@ -566,8 +569,9 @@ describe('rules engine', () => {
       .request(server)
       .put(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ on });
+      .send(JSON.stringify(on));
     expect(res.status).toEqual(200);
   }
 
@@ -676,8 +680,9 @@ describe('rules engine', () => {
       .request(server)
       .put(`${Constants.THINGS_PATH}/light3/properties/color`)
       .set('Accept', 'application/json')
+      .type('json')
       .set(...headerAuth(jwt))
-      .send({ color: '#00ff77' });
+      .send(JSON.stringify('#00ff77'));
     expect(res.status).toEqual(200);
 
     await waitForExpect(async () => {
