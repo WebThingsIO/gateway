@@ -116,15 +116,11 @@ function build(): express.Router {
     }
 
     // Subscribe to events from the specified Thing
-    if (thing) {
-      thing.addEventSubscription(onEvent);
-    }
+    thing.addEventSubscription(onEvent);
 
     // Unsubscribe from events if the connection is closed
     response.on('close', function () {
-      if (thing) {
-        thing.removeEventSubscription(onEvent);
-      }
+      thing!.removeEventSubscription(onEvent);
     });
   }
 

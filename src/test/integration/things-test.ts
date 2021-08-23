@@ -1035,17 +1035,12 @@ describe('things/', function () {
     expect(res.body[0].a).toHaveProperty('timestamp');
   });
 
-  it('should be able to subscribe to events using EventSource', async () => {
+  it('should be able to subscribe to an event using EventSource', async () => {
     await addDevice(EVENT_THING);
-    if (!httpServer.address()) {
-      httpServer.listen();
-      await e2p(httpServer, 'listening');
-    }
-    const addr = <AddressInfo>httpServer.address()!;
+    const address = <AddressInfo>httpServer.address();
 
-    // Test event subscription
-    let eventSourceURL =
-      `http://127.0.0.1:${addr.port}${Constants.THINGS_PATH}/` +
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}/` +
       `${EVENT_THING.id}/events/overheated?jwt=${jwt}`;
     const eventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
     await e2p(eventSource, 'open');
@@ -1057,10 +1052,14 @@ describe('things/', function () {
     expect(event.type).toEqual('overheated');
     expect(JSON.parse(event.data)).toEqual(101);
     eventSource.close();
+  });
 
-    // Test events subscription
-    eventSourceURL =
-      `http://127.0.0.1:${addr.port}${Constants.THINGS_PATH}/` +
+  it('should be able to subscribe to all events on a thing using EventSource', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}/` +
       `${EVENT_THING.id}/events?jwt=${jwt}`;
     const eventsSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
     await e2p(eventsSource, 'open');
@@ -1072,10 +1071,14 @@ describe('things/', function () {
     expect(event2.type).toEqual('overheated');
     expect(JSON.parse(event2.data)).toEqual(101);
     eventsSource.close();
+  });
 
-    // Test non-existent thing errors
-    eventSourceURL =
-      `http://127.0.0.1:${addr.port}${Constants.THINGS_PATH}` +
+  it('should not be able to subscribe events on a thing that doesnt exist', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}` +
       `/non-existent-thing/events/overheated?jwt=${jwt}`;
     const thinglessEventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
     thinglessEventSource.onerror = jest.fn();
@@ -1083,10 +1086,14 @@ describe('things/', function () {
     await e2p(thinglessEventSource, 'error');
     expect(thinglessEventSource.onopen).not.toBeCalled();
     expect(thinglessEventSource.onerror).toBeCalled();
+  });
 
-    // Test non-existent event errors
-    eventSourceURL =
-      `http://127.0.0.1:${addr.port}${Constants.THINGS_PATH}` +
+  it('should not be able to subscribe to an event that doesnt exist', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}` +
       `${EVENT_THING.id}/events/non-existentevent?jwt=${jwt}`;
     const eventlessEventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
     eventlessEventSource.onerror = jest.fn();
@@ -1094,9 +1101,6 @@ describe('things/', function () {
     await e2p(eventlessEventSource, 'error');
     expect(eventlessEventSource.onopen).not.toBeCalled();
     expect(eventlessEventSource.onerror).toBeCalled();
-
-    // Clean up
-    httpServer.close();
   });
 
   // eslint-disable-next-line @typescript-eslint/quotes
