@@ -1,8 +1,10 @@
-import { server, chai, mockAdapter } from '../common';
+import { server, httpServer, chai, mockAdapter } from '../common';
 import { TEST_USER, createUser, headerAuth } from '../user';
 import e2p from 'event-to-promise';
 import { webSocketOpen, webSocketRead, webSocketSend, webSocketClose } from '../websocket-util';
 import WebSocket from 'ws';
+import EventSource from 'eventsource';
+import { AddressInfo } from 'net';
 import * as Constants from '../../constants';
 import Event from '../../models/event';
 import Events from '../../models/events';
@@ -53,6 +55,18 @@ const VALIDATION_THING = {
       maximum: 600,
       value: 10,
       multipleOf: 5,
+    },
+  },
+};
+
+const EVENT_THING = {
+  id: 'event-thing1',
+  title: 'Event Thing',
+  '@context': 'https://webthings.io/schemas',
+  events: {
+    overheated: {
+      type: 'number',
+      unit: 'degree celsius',
     },
   },
 };
@@ -1019,6 +1033,74 @@ describe('things/', function () {
     expect(res.body[0].a).toHaveProperty('data');
     expect(res.body[0].a.data).toBe('just a cool event');
     expect(res.body[0].a).toHaveProperty('timestamp');
+  });
+
+  it('should be able to subscribe to an event using EventSource', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}/` +
+      `${EVENT_THING.id}/events/overheated?jwt=${jwt}`;
+    const eventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
+    await e2p(eventSource, 'open');
+    const overheatedEvent = new Event('overheated', 101, EVENT_THING.id);
+    const [, event] = await Promise.all([
+      Events.add(overheatedEvent),
+      e2p(eventSource, 'overheated'),
+    ]);
+    expect(event.type).toEqual('overheated');
+    expect(JSON.parse(event.data)).toEqual(101);
+    eventSource.close();
+  });
+
+  it('should be able to subscribe to all events on a thing using EventSource', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}/` +
+      `${EVENT_THING.id}/events?jwt=${jwt}`;
+    const eventsSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
+    await e2p(eventsSource, 'open');
+    const overheatedEvent2 = new Event('overheated', 101, EVENT_THING.id);
+    const [, event2] = await Promise.all([
+      Events.add(overheatedEvent2),
+      e2p(eventsSource, 'overheated'),
+    ]);
+    expect(event2.type).toEqual('overheated');
+    expect(JSON.parse(event2.data)).toEqual(101);
+    eventsSource.close();
+  });
+
+  it('should not be able to subscribe events on a thing that doesnt exist', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}` +
+      `/non-existent-thing/events/overheated?jwt=${jwt}`;
+    const thinglessEventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
+    thinglessEventSource.onerror = jest.fn();
+    thinglessEventSource.onopen = jest.fn();
+    await e2p(thinglessEventSource, 'error');
+    expect(thinglessEventSource.onopen).not.toBeCalled();
+    expect(thinglessEventSource.onerror).toBeCalled();
+  });
+
+  it('should not be able to subscribe to an event that doesnt exist', async () => {
+    await addDevice(EVENT_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}` +
+      `${EVENT_THING.id}/events/non-existentevent?jwt=${jwt}`;
+    const eventlessEventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
+    eventlessEventSource.onerror = jest.fn();
+    eventlessEventSource.onopen = jest.fn();
+    await e2p(eventlessEventSource, 'error');
+    expect(eventlessEventSource.onopen).not.toBeCalled();
+    expect(eventlessEventSource.onerror).toBeCalled();
   });
 
   // eslint-disable-next-line @typescript-eslint/quotes

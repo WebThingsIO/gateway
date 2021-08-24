@@ -113,11 +113,12 @@ class Router {
         request.url = APP_PREFIX + request.url;
         next();
 
-        // If request won't accept HTML but will accept JSON,
-        // or is a WebSocket request, or is multipart/form-data
+        // If request won't accept HTML but will accept JSON or an event stream,
+        // or is a WebSocket request, or is multipart/form-data,
         // treat it as an API request
       } else if (
         (!request.accepts('html') && request.accepts('json')) ||
+        (!request.accepts('html') && request.accepts('text/event-stream')) ||
         request.headers['content-type'] === 'application/json' ||
         request.get('Upgrade') === 'websocket' ||
         request.is('multipart/form-data') ||
