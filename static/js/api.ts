@@ -84,6 +84,20 @@ class API {
     });
   }
 
+  putJsonWithEmptyResponse(url: string, data: unknown): Promise<void> {
+    const opts = {
+      method: 'PUT',
+      headers: this.headers('application/json'),
+      body: JSON.stringify(data),
+    };
+
+    return fetch(url, opts).then((res) => {
+      if (!res.ok) {
+        throw new Error(`${res.status}`);
+      }
+    });
+  }
+
   patchJson(url: string, data: Record<string, unknown>): Promise<Record<string, unknown>> {
     const opts = {
       method: 'PATCH',
