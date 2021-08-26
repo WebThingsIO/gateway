@@ -71,8 +71,9 @@ export async function setProperty(id: string, property: string, value: unknown):
     .request(server)
     .keepOpen()
     .put(`${Constants.THINGS_PATH}/${id}/properties/${property}`)
+    .type('json')
     .set(...headerAuth(jwt))
-    .send(value);
+    .send(JSON.stringify(value));
 }
 
 export function escapeHtmlForIdClass(text: string): string {
