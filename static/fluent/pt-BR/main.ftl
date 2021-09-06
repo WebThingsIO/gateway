@@ -64,8 +64,8 @@ network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
 network-settings-wifi-image =
-    .alt = Wi-Fi
-network-settings-wifi = Wi-Fi
+    .alt = WiFi
+network-settings-wifi = WiFi
 network-settings-configure = Configurar
 network-settings-ip-address = Endereço IP
 network-settings-dhcp = Automático (DHCP)
@@ -80,10 +80,10 @@ network-settings-show-password = Mostrar senha
 network-settings-connect = Conectar
 wireless-connected = Conectado
 wireless-icon =
-    .alt = Rede Wi-Fi
+    .alt = Rede WiFi
 network-settings-changing = Alterando as configurações de rede. Isso pode demorar um pouco.
 failed-ethernet-configure = Falha ao configurar ethernet.
-failed-wifi-configure = Falha ao configurar Wi-Fi.
+failed-wifi-configure = Falha ao configurar WiFi.
 
 ## User Settings
 
@@ -474,7 +474,7 @@ authorizations = Autorizações
 developer = Desenvolvedor
 network = Rede
 ethernet = Ethernet
-wifi = Wi-Fi
+wifi = WiFi
 icon = Ícone
 
 ## Errors
@@ -553,24 +553,24 @@ local-token-copy-token = Copiar token
 
 ## Wi-Fi Setup Page
 
-wifi-setup-title = Configuração de Wi-Fi — { -webthings-gateway-brand }
-wifi-setup-header = Conectar a uma rede Wi-Fi?
+wifi-setup-title = Configuração de WiFi — { -webthings-gateway-brand }
+wifi-setup-header = Conectar a uma rede WiFi?
 wifi-setup-input-password =
     .placeholder = Senha
 wifi-setup-show-password = Mostrar senha
 wifi-setup-connect =
     .value = Conectar
 wifi-setup-network-icon =
-    .alt = Rede Wi-Fi
+    .alt = Rede WiFi
 wifi-setup-skip = Pular
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Conectando ao Wi-Fi — { -webthings-gateway-brand }
-connecting-header = Conectando ao Wi-Fi…
+connecting-title = Conectando a um WiFi — { -webthings-gateway-brand }
+connecting-header = Conectando a um WiFi…
 connecting-connect = Verifique se está conectado à mesma rede e acesse { $gateway-link } no seu navegador web para continuar a configuração.
 connecting-warning = Nota: Se você não conseguir carregar { $domain }, procure o endereço IP do gateway no seu roteador.
-connecting-header-skipped = Wi-Fi não foi configurado
+connecting-header-skipped = Não foi feita a configuração de WiFi
 connecting-skipped = O gateway está sendo iniciado agora. Acesse { $gateway-link } no seu navegador web, conectado na mesma rede do gateway, para continuar a configuração.
 
 ## Creating Wi-Fi Network Page
