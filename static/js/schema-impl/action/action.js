@@ -60,7 +60,7 @@ class ActionDetail {
   handleClick() {
     const input = {};
     if (typeof this.input === 'undefined') {
-      API.postJson(this.href, { [this.name]: { input } }).catch((e) => {
+      API.postJson(this.href, input).catch((e) => {
         console.error(`Error performing action "${this.name}": ${e}`);
       });
     } else {

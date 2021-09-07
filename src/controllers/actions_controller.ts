@@ -95,47 +95,26 @@ function build(): express.Router {
    */
   controller.post('/:actionName', async (request, response) => {
     const actionName = request.params.actionName;
-
-    const keys = Object.keys(request.body);
-    if (keys.length != 1) {
-      const err = 'Incorrect number of parameters.';
-      console.log(err, request.body);
-      response.status(400).send(err);
-      return;
-    }
-
-    if (actionName !== keys[0]) {
-      const err = `Action name must be ${actionName}`;
-      console.log(err, request.body);
-      response.status(400).send(err);
-      return;
-    }
-
-    if (!Object.prototype.hasOwnProperty.call(request.body[actionName], 'input')) {
-      response.status(400).send('Missing input');
-      return;
-    }
-
-    const actionParams = request.body[actionName].input;
+    const input = request.body;
     const thingId = request.params.thingId;
     let action = null;
 
     if (thingId) {
       try {
         const thing = await Things.getThing(thingId);
-        action = new Action(actionName, actionParams, thing);
+        action = new Action(actionName, input, thing);
       } catch (e) {
         console.error('Thing does not exist', thingId, e);
-        response.status(404).send(e);
         return;
+        response.status(404).send(e);
       }
     } else {
-      action = new Action(actionName, actionParams);
+      action = new Action(actionName, input);
     }
 
     try {
       if (thingId) {
-        await AddonManager.requestAction(thingId, action.getId(), actionName, actionParams);
+        await AddonManager.requestAction(thingId, action.getId(), actionName, input);
       }
       await Actions.add(action);
 

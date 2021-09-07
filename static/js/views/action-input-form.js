@@ -242,14 +242,7 @@ class ActionInputForm {
       }
     }
 
-    let body;
-    if (input) {
-      body = { [this.name]: { input } };
-    } else {
-      body = { [this.name]: { input: {} } };
-    }
-
-    API.postJson(this.href, body)
+    API.postJson(this.href, input)
       .then(() => {
         window.history.back();
       })

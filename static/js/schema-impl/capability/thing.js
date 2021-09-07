@@ -297,33 +297,34 @@ class Thing {
     if (format === Constants.ThingFormat.EXPANDED) {
       // Parse actions
       if (description.actions) {
-        let href;
-        for (const link of description.links) {
-          if (link.rel === 'actions') {
-            href = link.href;
-            break;
-          }
-        }
+        for (const name in description.actions) {
+          const action = description.actions[name];
 
-        if (href) {
-          for (const name in description.actions) {
-            const action = description.actions[name];
-
-            let detail;
-            switch (action['@type']) {
-              case 'LockAction':
-                detail = new LockActionDetail(this, name, action, href);
-                break;
-              case 'UnlockAction':
-                detail = new UnlockActionDetail(this, name, action, href);
-                break;
-              default:
-                detail = new ActionDetail(this, name, action, href);
-                break;
+          let href;
+          for (const link of description.actions[name].links) {
+            if (link.rel === 'action') {
+              href = link.href;
+              break;
             }
-
-            this.displayedActions[name] = { detail };
           }
+
+          if (!href) {
+            continue;
+          }
+
+          let detail;
+          switch (action['@type']) {
+            case 'LockAction':
+              detail = new LockActionDetail(this, name, action, href);
+              break;
+            case 'UnlockAction':
+              detail = new UnlockActionDetail(this, name, action, href);
+              break;
+            default:
+              detail = new ActionDetail(this, name, action, href);
+              break;
+          }
+          this.displayedActions[name] = { detail };
         }
       }
 

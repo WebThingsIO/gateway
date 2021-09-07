@@ -324,6 +324,10 @@ export default class Thing extends EventEmitter {
     return this.properties;
   }
 
+  getActions(): Record<string, ActionSchema> {
+    return this.actions;
+  }
+
   getEvents(): Record<string, EventSchema> {
     return this.events;
   }

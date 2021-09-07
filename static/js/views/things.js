@@ -216,8 +216,8 @@ const ThingsScreen = {
         }
 
         let href;
-        for (const link of description.links) {
-          if (link.rel === 'actions') {
+        for (const link of description.actions[actionName].links) {
+          if (link.rel === 'action') {
             href = link.href;
             break;
           }
