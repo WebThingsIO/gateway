@@ -89,19 +89,6 @@ describe('actions/', () => {
     expect(err.status).toEqual(400);
   });
 
-  it('should fail to create a new action (wrong name)', async () => {
-    const descr = {
-      potato: {},
-    };
-    const err = await chai
-      .request(server)
-      .post(`${Constants.ACTIONS_PATH}/pair`)
-      .set(...headerAuth(jwt))
-      .set('Accept', 'application/json')
-      .send(descr);
-    expect(err.status).toEqual(400);
-  });
-
   it('should fail when plugin rejects requestAction', async () => {
     const { id } = thingLight;
     await addDevice(thingLight);
@@ -185,11 +172,7 @@ describe('actions/', () => {
 
   it('should list and retrieve the new action by name', async () => {
     const descr = {
-      pair: {
-        input: {
-          timeout: 60,
-        },
-      },
+      timeout: 60,
     };
 
     const pair = await chai
