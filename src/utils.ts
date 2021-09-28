@@ -68,3 +68,17 @@ export function getGatewayUserAgent(): string {
 
   return `${primary} ${secondary}${tertiary}`;
 }
+
+export function isWebthingsThingDescription(thingDescription: {
+  '@context': string | string[];
+}): boolean {
+  if (typeof thingDescription['@context'] === 'string') {
+    return thingDescription['@context'] === 'https://webthings.io/schemas';
+  }
+
+  if (Array.isArray(thingDescription['@context'])) {
+    return thingDescription['@context'].includes('https://webthings.io/schemas');
+  }
+
+  return false;
+}
