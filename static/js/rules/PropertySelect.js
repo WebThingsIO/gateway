@@ -2,6 +2,7 @@ const fluent = require('../fluent');
 const RuleUtils = require('./RuleUtils');
 const Units = require('../units');
 const Utils = require('../utils');
+const Constants = require('../constants');
 
 function propertyEqual(a, b) {
   if (!a && !b) {
@@ -373,8 +374,12 @@ class PropertySelect {
         continue;
       }
 
-      property.id = RuleUtils.extractProperty(forms[0].href);
-      property.thing = RuleUtils.extractThing(forms[0].href);
+      property.id = RuleUtils.extractProperty(
+        Utils.selectFormHref(forms, Constants.WoTOperation.READ_PROPERTY)
+      );
+      property.thing = RuleUtils.extractThing(
+        Utils.selectFormHref(forms, Constants.WoTOperation.READ_PROPERTY)
+      );
       delete property.forms;
 
       const name = property.title || Utils.capitalize(property.name);

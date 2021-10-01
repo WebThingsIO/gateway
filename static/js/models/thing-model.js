@@ -11,6 +11,7 @@ const API = require('../api').default;
 const App = require('../app');
 const Model = require('./model');
 const Constants = require('../constants');
+const Utils = require('../utils');
 
 class ThingModel extends Model {
   constructor(description, ws) {
@@ -194,7 +195,7 @@ class ThingModel extends Model {
 
     const property = this.propertyDescriptions[name];
 
-    const href = property.forms[0].href;
+    const href = Utils.selectFormHref(property.forms, Constants.WoTOperation.READ_PROPERTY);
 
     return API.putJson(href, value)
       .then((json) => {
@@ -216,7 +217,7 @@ class ThingModel extends Model {
     if (typeof this.propertiesHref === 'undefined') {
       const urls = Object.values(this.propertyDescriptions).map((v) => {
         if (v.forms) {
-          return v.forms[0].href;
+          return Utils.selectFormHref(v.forms, Constants.WoTOperation.WRITE_PROPERTY);
         }
       });
       const requests = urls.map((u) => API.getJson(u));

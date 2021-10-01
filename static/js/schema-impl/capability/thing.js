@@ -167,13 +167,7 @@ class Thing {
           }
         }
 
-        let href;
-        for (const form of property.forms) {
-          if (!form.op || form.op === Constants.WoTOperation.READ_PROPERTY) {
-            href = form.href;
-            break;
-          }
-        }
+        const href = Utils.selectFormHref(property.forms, Constants.WoTOperation.READ_PROPERTY);
 
         if (!href) {
           continue;
@@ -300,13 +294,7 @@ class Thing {
         for (const name in description.actions) {
           const action = description.actions[name];
 
-          let href;
-          for (const form of description.actions[name].forms) {
-            if (!form.op || form.op === Constants.WoTOperation.INVOKE_ACTION) {
-              href = form.href;
-              break;
-            }
-          }
+          const href = Utils.selectFormHref(action.forms, Constants.WoTOperation.INVOKE_ACTION);
 
           if (!href) {
             continue;

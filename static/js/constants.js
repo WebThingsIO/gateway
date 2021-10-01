@@ -14,7 +14,8 @@ module.exports.ThingFormat = {
 };
 
 module.exports.WoTOperation = {
-  READ_PROPERTY: 'readyproperty',
+  READ_PROPERTY: 'readproperty',
+  WRITE_PROPERTY: 'writeproperty',
   INVOKE_ACTION: 'invokeaction',
   READ_ALL_PROPERTIES: 'readallproperties',
   SUBSCRIBE_ALL_EVENTS: 'subscribeallevents',
