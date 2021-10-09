@@ -24,7 +24,7 @@ import AddonManager from '../addon-manager';
 import { WithJWT } from '../jwt-middleware';
 import { Any } from 'gateway-addon/lib/schema';
 import { Property } from 'gateway-addon';
-import { isWebthingsThingDescription } from '../utils';
+import { isW3CThingDescription } from '../utils';
 
 interface SetPropertyMessage {
   messageType: 'setProperty';
@@ -235,12 +235,12 @@ function build(): express.Router {
     if (description.hasOwnProperty('webthingUrl')) {
       webthing = true;
       try {
-        if (isThingUrlInstalled && isWebthingsThingDescription(description)) {
+        if (isThingUrlInstalled && !isW3CThingDescription(description)) {
           await loadThingInThingUrlAdapter(description);
           adapterToBeReloaded = 'thing-url-adapter';
         } else if (isWotAdapterInstalled) {
           // thing-url-adapter is not installed or the ThingDescription was
-          // recognized as a webthings.io format.
+          // recognized as a w3c thing description.
           await loadThingInWotAdpater(description);
           adapterToBeReloaded = 'wot-adapter';
         }

@@ -69,15 +69,21 @@ export function getGatewayUserAgent(): string {
   return `${primary} ${secondary}${tertiary}`;
 }
 
-export function isWebthingsThingDescription(thingDescription: {
+export function isW3CThingDescription(thingDescription: {
   '@context': string | string[];
 }): boolean {
   if (typeof thingDescription['@context'] === 'string') {
-    return thingDescription['@context'] === 'https://webthings.io/schemas';
+    return (
+      thingDescription['@context'] === 'https://www.w3.org/2019/wot/td/v1' ||
+      thingDescription['@context'] === 'http://www.w3.org/ns/td'
+    );
   }
 
   if (Array.isArray(thingDescription['@context'])) {
-    return thingDescription['@context'].includes('https://webthings.io/schemas');
+    return (
+      thingDescription['@context'].includes('https://www.w3.org/2019/wot/td/v1') ||
+      thingDescription['@context'].includes('http://www.w3.org/ns/td')
+    );
   }
 
   return false;
