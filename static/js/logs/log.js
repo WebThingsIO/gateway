@@ -368,9 +368,18 @@ class Log {
     if (min >= 0 && min - 3 * margin < 0) {
       min = margin;
     }
+
+    let minPadded = min - margin;
+    let maxPadded = max + margin;
+    // If the max and min are far enough apart then make the bounds of the
+    // graph integers
+    if (max - min > 6) {
+      minPadded = Math.floor(minPadded);
+      maxPadded = Math.floor(maxPadded);
+    }
     return {
-      min: min - margin,
-      max: max + margin,
+      min: minPadded,
+      max: maxPadded,
     };
   }
 
