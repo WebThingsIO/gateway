@@ -22,9 +22,9 @@ class ImageDetail {
     this.id = `image-${Utils.escapeHtmlForIdClass(this.name)}`;
 
     this.imageHref = null;
-    for (const link of property.links) {
-      if (link.rel === 'alternate' && link.mediaType && link.mediaType.startsWith('image/')) {
-        this.imageHref = link.href;
+    for (const form of property.forms) {
+      if (form.contentType && form.contentType.startsWith('image/')) {
+        this.imageHref = form.href;
         break;
       }
     }

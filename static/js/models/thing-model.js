@@ -11,6 +11,7 @@ const API = require('../api').default;
 const App = require('../app');
 const Model = require('./model');
 const Constants = require('../constants');
+const Utils = require('../utils');
 
 class ThingModel extends Model {
   constructor(description, ws) {
@@ -18,6 +19,7 @@ class ThingModel extends Model {
     this.properties = {};
     this.events = [];
     this.connected = false;
+    this.base = App.ORIGIN;
 
     this.updateFromDescription(description);
 
@@ -30,7 +32,7 @@ class ThingModel extends Model {
 
   updateFromDescription(description) {
     this.title = description.title;
-
+    this.base = description.base ?? App.ORIGIN;
     // Parse base URL of Thing
     if (description.href) {
       this.href = new URL(description.href, App.ORIGIN);
@@ -40,14 +42,14 @@ class ThingModel extends Model {
     // Parse group id of Thing
     this.group_id = description.group_id;
 
-    // Parse events URL
-    for (const link of description.links) {
-      switch (link.rel) {
-        case 'events':
-          this.eventsHref = new URL(link.href, App.ORIGIN);
+    // Parse properties and events URLs
+    for (const form of description.forms) {
+      switch (form.op) {
+        case Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS:
+          this.eventsHref = new URL(form.href, this.base);
           break;
-        case 'properties':
-          this.propertiesHref = new URL(link.href, App.ORIGIN);
+        case Constants.WoTOperation.READ_ALL_PROPERTIES:
+          this.propertiesHref = new URL(form.href, this.base);
           break;
         default:
           break;
@@ -194,13 +196,11 @@ class ThingModel extends Model {
 
     const property = this.propertyDescriptions[name];
 
-    let href;
-    for (const link of property.links) {
-      if (!link.rel || link.rel === 'property') {
-        href = link.href;
-        break;
-      }
-    }
+    const href = Utils.selectFormHref(
+      property.forms,
+      Constants.WoTOperation.READ_PROPERTY,
+      this.base
+    );
 
     return API.putJson(href, value)
       .then((json) => {
@@ -221,10 +221,8 @@ class ThingModel extends Model {
     let getPropertiesPromise;
     if (typeof this.propertiesHref === 'undefined') {
       const urls = Object.values(this.propertyDescriptions).map((v) => {
-        for (const link of v.links) {
-          if (!link.rel || link.rel === 'property') {
-            return link.href;
-          }
+        if (v.forms) {
+          return Utils.selectFormHref(v.forms, Constants.WoTOperation.WRITE_PROPERTY, this.base);
         }
       });
       const requests = urls.map((u) => API.getJson(u));

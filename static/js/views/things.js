@@ -215,13 +215,11 @@ const ThingsScreen = {
           return;
         }
 
-        let href;
-        for (const link of description.actions[actionName].links) {
-          if (link.rel === 'action') {
-            href = link.href;
-            break;
-          }
-        }
+        const href = Utils.selectFormHref(
+          description.actions[actionName].forms,
+          Constants.WoTOperation.INVOKE_ACTION,
+          description.base ?? App.ORIGIN
+        );
 
         const icon = Icons.capabilityToIcon(description.selectedCapability);
         const iconEl = document.getElementById('thing-title-icon');

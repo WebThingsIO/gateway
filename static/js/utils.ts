@@ -7,6 +7,7 @@
  */
 
 import * as Fluent from './fluent';
+import Constants from './constants';
 
 /**
  * @param {String} str
@@ -263,4 +264,40 @@ export function adjustInputValue(value: number, schema: Record<string, unknown>)
   }
 
   return value;
+}
+
+type WoTOperation = keyof typeof Constants.WoTOperation;
+type WoTFormOperation = WoTOperation | WoTOperation[] | undefined;
+/**
+ * Finds the gateway api endpoint for a specific operation.
+ * It uses the assumption that gateway enpoints are pushed to
+ * the form array as the last element.
+ *
+ * @param {Array} forms The list of forms.
+ * @param {string} operation
+ * @returns {string | undefined} the href of the select form or undefined if not found.
+ */
+export function selectFormHref(
+  forms: Array<{ href: string; op: WoTFormOperation }>,
+  operation: WoTOperation,
+  base?: string
+): string | undefined {
+  return [...forms].reverse().find((selectedForm) => {
+    try {
+      const { protocol } = new URL(selectedForm.href, base);
+
+      return (
+        (protocol === 'http:' || protocol === 'https:') &&
+        (!selectedForm.op || selectedForm.op === operation || selectedForm.op?.includes(operation))
+      );
+    } catch (error) {
+      if (error instanceof TypeError) {
+        // URL is relative and no base was given or not well formatted
+        return (
+          !selectedForm.op || selectedForm.op === operation || selectedForm.op?.includes(operation)
+        );
+      }
+      throw error;
+    }
+  })?.href;
 }

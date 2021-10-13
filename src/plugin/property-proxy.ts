@@ -81,8 +81,8 @@ export default class PropertyProxy extends Property<Any> {
     if (Array.isArray(propertyDict.enum)) {
       this.setEnum(propertyDict.enum);
     }
-    if (Array.isArray(propertyDict.links)) {
-      this.setLinks(propertyDict.links);
+    if (Array.isArray(propertyDict.forms)) {
+      this.setForms(propertyDict.forms);
     }
 
     while (this.propertyChangedPromises.length > 0) {

@@ -2,6 +2,7 @@ const fluent = require('../fluent');
 const RuleUtils = require('./RuleUtils');
 const Units = require('../units');
 const Utils = require('../utils');
+const Constants = require('../constants');
 
 function propertyEqual(a, b) {
   if (!a && !b) {
@@ -368,14 +369,18 @@ class PropertySelect {
         property.name = propName;
       }
 
-      const links = property.links.filter((l) => !l.rel || l.rel === 'property');
-      if (links.length === 0) {
+      const forms = property.forms || [];
+      if (forms.length === 0) {
         continue;
       }
 
-      property.id = RuleUtils.extractProperty(links[0].href);
-      property.thing = RuleUtils.extractThing(links[0].href);
-      delete property.links;
+      property.id = RuleUtils.extractProperty(
+        Utils.selectFormHref(forms, Constants.WoTOperation.READ_PROPERTY)
+      );
+      property.thing = RuleUtils.extractThing(
+        Utils.selectFormHref(forms, Constants.WoTOperation.READ_PROPERTY)
+      );
+      delete property.forms;
 
       const name = property.title || Utils.capitalize(property.name);
       if (role === 'trigger') {

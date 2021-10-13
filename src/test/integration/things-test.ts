@@ -81,9 +81,8 @@ const piDescr = {
       '@type': 'OnOffProperty',
       type: 'boolean',
       value: true,
-      links: [
+      forms: [
         {
-          rel: 'alternate',
           href: '/properties/power',
           proxy: true,
         },
@@ -93,9 +92,8 @@ const piDescr = {
   actions: {
     reboot: {
       description: 'Reboot the device',
-      links: [
+      forms: [
         {
-          rel: 'alternate',
           href: '/actions/reboot',
           proxy: true,
         },
@@ -105,9 +103,8 @@ const piDescr = {
   events: {
     reboot: {
       description: 'Going down for reboot',
-      links: [
+      forms: [
         {
-          rel: 'alternate',
           href: '/events/reboot',
           proxy: true,
         },
@@ -207,27 +204,24 @@ describe('things/', function () {
     expect(res.body.title).toEqual(thingDescr.title);
 
     // Fix up links
-    delete thingDescr.properties.power.links[0].proxy;
+    delete thingDescr.properties.power.forms[0].proxy;
     // eslint-disable-next-line max-len
-    thingDescr.properties.power.links[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.properties.power.links[0].href}`;
-    thingDescr.properties.power.links.push({
-      rel: 'property',
+    thingDescr.properties.power.forms[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.properties.power.forms[0].href}`;
+    thingDescr.properties.power.forms.push({
       href: `${Constants.THINGS_PATH}/${thingDescr.id}${Constants.PROPERTIES_PATH}/power`,
     });
 
-    delete thingDescr.actions.reboot.links[0].proxy;
+    delete thingDescr.actions.reboot.forms[0].proxy;
     // eslint-disable-next-line max-len
-    thingDescr.actions.reboot.links[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.actions.reboot.links[0].href}`;
-    thingDescr.actions.reboot.links.push({
-      rel: 'action',
+    thingDescr.actions.reboot.forms[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.actions.reboot.forms[0].href}`;
+    thingDescr.actions.reboot.forms.push({
       href: `${Constants.THINGS_PATH}/${thingDescr.id}${Constants.ACTIONS_PATH}/reboot`,
     });
 
-    delete thingDescr.events.reboot.links[0].proxy;
+    delete thingDescr.events.reboot.forms[0].proxy;
     // eslint-disable-next-line max-len
-    thingDescr.events.reboot.links[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.events.reboot.links[0].href}`;
-    thingDescr.events.reboot.links.push({
-      rel: 'event',
+    thingDescr.events.reboot.forms[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.events.reboot.forms[0].href}`;
+    thingDescr.events.reboot.forms.push({
       href: `${Constants.THINGS_PATH}/${thingDescr.id}${Constants.EVENTS_PATH}/reboot`,
     });
 
