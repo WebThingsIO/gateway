@@ -279,18 +279,20 @@ type WoTFormOperation = WoTOperation | WoTOperation[] | undefined;
  */
 export function selectFormHref(
   forms: Array<{ href: string; op: WoTFormOperation }>,
-  operation: WoTOperation
+  operation: WoTOperation,
+  base?: string
 ): string | undefined {
   return [...forms].reverse().find((selectedForm) => {
     try {
-      const { protocol } = new URL(selectedForm.href);
+      const { protocol } = new URL(selectedForm.href, base);
+
       return (
-        protocol === 'http:' &&
+        (protocol === 'http:' || protocol === 'https:') &&
         (!selectedForm.op || selectedForm.op === operation || selectedForm.op?.includes(operation))
       );
     } catch (error) {
       if (error instanceof TypeError) {
-        // URL is relative or not well formatted
+        // URL is relative and no base was given or not well formatted
         return (
           !selectedForm.op || selectedForm.op === operation || selectedForm.op?.includes(operation)
         );

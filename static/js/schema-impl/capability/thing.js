@@ -119,7 +119,7 @@ class Thing {
         }
       }
     }
-
+    this.base = description.base ?? App.ORIGIN;
     // Parse base URL of Thing
     if (description.href) {
       this.href = new URL(description.href, App.ORIGIN);
@@ -167,7 +167,11 @@ class Thing {
           }
         }
 
-        const href = Utils.selectFormHref(property.forms, Constants.WoTOperation.READ_PROPERTY);
+        const href = Utils.selectFormHref(
+          property.forms,
+          Constants.WoTOperation.READ_PROPERTY,
+          this.base
+        );
 
         if (!href) {
           continue;
@@ -294,7 +298,11 @@ class Thing {
         for (const name in description.actions) {
           const action = description.actions[name];
 
-          const href = Utils.selectFormHref(action.forms, Constants.WoTOperation.INVOKE_ACTION);
+          const href = Utils.selectFormHref(
+            action.forms,
+            Constants.WoTOperation.INVOKE_ACTION,
+            this.base
+          );
 
           if (!href) {
             continue;

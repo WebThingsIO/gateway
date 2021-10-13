@@ -216,8 +216,9 @@ const ThingsScreen = {
         }
 
         const href = Utils.selectFormHref(
-          description.actions[actionName],
-          Constants.WoTOperation.INVOKE_ACTION
+          description.actions[actionName].forms,
+          Constants.WoTOperation.INVOKE_ACTION,
+          description.base ?? App.ORIGIN
         );
 
         const icon = Icons.capabilityToIcon(description.selectedCapability);

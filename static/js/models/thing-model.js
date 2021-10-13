@@ -19,6 +19,7 @@ class ThingModel extends Model {
     this.properties = {};
     this.events = [];
     this.connected = false;
+    this.base = App.ORIGIN;
 
     this.updateFromDescription(description);
 
@@ -31,7 +32,7 @@ class ThingModel extends Model {
 
   updateFromDescription(description) {
     this.title = description.title;
-
+    this.base = description.base ?? App.ORIGIN;
     // Parse base URL of Thing
     if (description.href) {
       this.href = new URL(description.href, App.ORIGIN);
@@ -45,10 +46,10 @@ class ThingModel extends Model {
     for (const form of description.forms) {
       switch (form.op) {
         case Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS:
-          this.eventsHref = new URL(form.href, App.ORIGIN);
+          this.eventsHref = new URL(form.href, this.base);
           break;
         case Constants.WoTOperation.READ_ALL_PROPERTIES:
-          this.propertiesHref = new URL(form.href, App.ORIGIN);
+          this.propertiesHref = new URL(form.href, this.base);
           break;
         default:
           break;
@@ -195,7 +196,11 @@ class ThingModel extends Model {
 
     const property = this.propertyDescriptions[name];
 
-    const href = Utils.selectFormHref(property.forms, Constants.WoTOperation.READ_PROPERTY);
+    const href = Utils.selectFormHref(
+      property.forms,
+      Constants.WoTOperation.READ_PROPERTY,
+      this.base
+    );
 
     return API.putJson(href, value)
       .then((json) => {
@@ -217,7 +222,7 @@ class ThingModel extends Model {
     if (typeof this.propertiesHref === 'undefined') {
       const urls = Object.values(this.propertyDescriptions).map((v) => {
         if (v.forms) {
-          return Utils.selectFormHref(v.forms, Constants.WoTOperation.WRITE_PROPERTY);
+          return Utils.selectFormHref(v.forms, Constants.WoTOperation.WRITE_PROPERTY, this.base);
         }
       });
       const requests = urls.map((u) => API.getJson(u));
