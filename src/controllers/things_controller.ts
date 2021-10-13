@@ -24,6 +24,7 @@ import AddonManager from '../addon-manager';
 import { WithJWT } from '../jwt-middleware';
 import { Any } from 'gateway-addon/lib/schema';
 import { Property } from 'gateway-addon';
+import { isW3CThingDescription } from '../utils';
 
 interface SetPropertyMessage {
   messageType: 'setProperty';
@@ -225,22 +226,24 @@ function build(): express.Router {
     } catch (_e) {
       // Do nothing, this is what we want.
     }
-
+    const isWotAdapterInstalled = AddonManager.isAddonInstalled('wot-adapter');
+    const isThingUrlInstalled = AddonManager.isAddonInstalled('thing-url-adapter');
     // If we're adding a native webthing, we need to update the config for
-    // thing-url-adapter so that it knows about it.
+    // thing-url-adapter or wot-adpater so that it knows about it.
     let webthing = false;
+    let adapterToBeReloaded = 'thing-url-adapter';
     if (description.hasOwnProperty('webthingUrl')) {
       webthing = true;
-
-      const key = 'addons.config.thing-url-adapter';
       try {
-        const config = <Record<string, unknown>>await Settings.getSetting(key);
-        if (typeof config === 'undefined') {
-          throw new Error('Setting is undefined.');
+        if (isThingUrlInstalled && !isW3CThingDescription(description)) {
+          await loadThingInThingUrlAdapter(description);
+          adapterToBeReloaded = 'thing-url-adapter';
+        } else if (isWotAdapterInstalled) {
+          // thing-url-adapter is not installed or the ThingDescription was
+          // recognized as a w3c thing description.
+          await loadThingInWotAdpater(description);
+          adapterToBeReloaded = 'wot-adapter';
         }
-
-        (<string[]>config.urls).push(description.webthingUrl);
-        await Settings.setSetting(key, config);
       } catch (e) {
         console.error('Failed to update settings for thing-url-adapter');
         console.error(e);
@@ -261,13 +264,13 @@ function build(): express.Router {
       response.status(500).send(error);
     }
 
-    // If this is a web thing, we need to restart thing-url-adapter.
+    // If this is a web thing, we need to restart the adpater
     if (webthing) {
       try {
-        await AddonManager.unloadAddon('thing-url-adapter', true);
-        await AddonManager.loadAddon('thing-url-adapter');
+        await AddonManager.unloadAddon(adapterToBeReloaded, true);
+        await AddonManager.loadAddon(adapterToBeReloaded);
       } catch (e) {
-        console.error('Failed to restart thing-url-adapter');
+        console.error(`Failed to restart ${adapterToBeReloaded}`);
         console.error(e);
       }
     }
@@ -814,6 +817,28 @@ function build(): express.Router {
   }
 
   return controller;
+}
+
+async function loadThingInThingUrlAdapter(description: { webthingUrl: string }): Promise<void> {
+  const key = 'addons.config.thing-url-adapter';
+  const config = <Record<string, unknown>>await Settings.getSetting(key);
+  if (typeof config === 'undefined') {
+    throw new Error('Setting is undefined.');
+  }
+
+  (<string[]>config.urls).push(description.webthingUrl as string);
+  await Settings.setSetting(key, config);
+}
+
+async function loadThingInWotAdpater(description: { webthingUrl: string }): Promise<void> {
+  const key = 'addons.config.wot-adapter';
+  const config = <Record<string, unknown>>await Settings.getSetting(key);
+  if (typeof config === 'undefined') {
+    throw new Error('Setting is undefined.');
+  }
+  config.endpoints ??= [];
+  (<{ url: string }[]>config.endpoints).push({ url: description.webthingUrl });
+  await Settings.setSetting(key, config);
 }
 
 export default build;

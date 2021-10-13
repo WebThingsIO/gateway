@@ -146,11 +146,16 @@ const AddThingScreen = {
   show: function () {
     this.addByUrlAnchor.classList.add('hidden');
     SettingsScreen.fetchInstalledAddonList(true).then(() => {
-      if (SettingsScreen.installedAddons.has('thing-url-adapter')) {
-        const addon = SettingsScreen.installedAddons.get('thing-url-adapter');
-        if (addon.enabled) {
-          this.addByUrlAnchor.classList.remove('hidden');
-        }
+      const wotAdapterEnabled =
+        SettingsScreen.installedAddons.has('wot-adapter') &&
+        SettingsScreen.installedAddons.get('wot-adapter').enabled;
+
+      const urlAdapterEnabled =
+        SettingsScreen.installedAddons.has('thing-url-adapter') &&
+        SettingsScreen.installedAddons.get('thing-url-adapter').enabled;
+
+      if (wotAdapterEnabled || urlAdapterEnabled) {
+        this.addByUrlAnchor.classList.remove('hidden');
       }
     });
 
