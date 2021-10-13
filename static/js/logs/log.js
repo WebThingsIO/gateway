@@ -418,12 +418,15 @@ class Log {
   }
 
   determineBounds() {
-    if (this.hasOwnProperty('valueMin')) {
-      return;
-    }
     const bounds = this.valueBounds();
-    this.valueMin = bounds.min;
-    this.valueMax = bounds.max;
+    if (this.hasOwnProperty('valueMin')) {
+      this.valueMin = Math.min(this.valueMin, bounds.min);
+      this.valueMax = Math.max(this.valueMax, bounds.max);
+    } else {
+      this.valueMin = bounds.min;
+      this.valueMax = bounds.max;
+    }
+
     // Preserve 3 significant figures (not using toPrecision since that does
     // scientific notation)
     const lowestPowerOf10ToPreserve = Math.pow(
