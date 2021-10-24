@@ -2,7 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import GlobToRegExp from 'glob-to-regexp';
 import path from 'path';
-import { APIRequest } from 'gateway-addon';
+import { APIRequest, APIResponse } from 'gateway-addon';
 import UserProfile from '../user-profile';
 import * as jwtMiddleware from '../jwt-middleware';
 import AddonManager from '../addon-manager';
@@ -38,7 +38,10 @@ function build(): express.Router {
     });
 
     try {
-      const rsp = await apiHandler.handleRequest(req);
+      const rsp = Object.assign(
+        new APIResponse(),
+        await apiHandler.handleRequest(req)
+      );
       response.status(rsp.getStatus());
 
       if (
