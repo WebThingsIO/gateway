@@ -38,10 +38,7 @@ function build(): express.Router {
     });
 
     try {
-      const rsp = Object.assign(
-        new APIResponse(),
-        await apiHandler.handleRequest(req)
-      );
+      const rsp = Object.assign(new APIResponse(), await apiHandler.handleRequest(req));
       response.status(rsp.getStatus());
 
       if (
