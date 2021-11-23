@@ -346,8 +346,8 @@ function build(): express.Router {
     const value = request.body;
     try {
       // Note: updatedValue may differ from value
-      const updatedValue = await Things.setThingProperty(thingId, propertyName, value);
-      response.status(200).json(updatedValue);
+      await Things.setThingProperty(thingId, propertyName, value);
+      response.sendStatus(204);
     } catch (err) {
       console.error('Error setting property:', err);
       response.status(err.code || 500).send(err.message);

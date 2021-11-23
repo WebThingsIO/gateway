@@ -169,7 +169,8 @@ describe('Thing', () => {
     expect(stringId).toEqual(`string-${escapeHtmlForIdClass('spaced string')}`);
   });
 
-  it('should reset property value when setProperty is rejected', async () => {
+  // TODO: Fix or remove test case (https://github.com/WebThingsIO/gateway/issues/2906)
+  it.skip('should reset property value when setProperty is rejected', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'UnknownThing',

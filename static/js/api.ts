@@ -79,8 +79,24 @@ class API {
       if (!res.ok) {
         throw new Error(`${res.status}`);
       }
-
       return res.json();
+    });
+  }
+
+  putJsonWithEmptyResponse(url: string, data: Record<string, unknown>): Promise<void> {
+    const opts = {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${this.jwt}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+
+    return fetch(url, opts).then((res) => {
+      if (!res.ok) {
+        throw new Error(`${res.status}`);
+      }
     });
   }
 
