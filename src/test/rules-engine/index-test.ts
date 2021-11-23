@@ -452,7 +452,6 @@ describe('rules engine', () => {
     res = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/${thingLight1.id}/properties/on`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(true));
@@ -511,13 +510,12 @@ describe('rules engine', () => {
       chai
         .request(server)
         .put(`${Constants.THINGS_PATH}/${thingLight2.id}/properties/hue`)
-        .set('Accept', 'application/json')
         .type('json')
         .set(...headerAuth(jwt))
         .send(JSON.stringify(150)),
       webSocketRead(ws, 7),
     ]);
-    expect(resPut.status).toEqual(200);
+    expect(resPut.status).toEqual(204);
 
     expect(Array.isArray(messages)).toBeTruthy();
     expect(messages.length).toEqual(7);
@@ -534,13 +532,12 @@ describe('rules engine', () => {
       chai
         .request(server)
         .put(`${Constants.THINGS_PATH}/${thingLight2.id}/properties/hue`)
-        .set('Accept', 'application/json')
         .type('json')
         .set(...headerAuth(jwt))
         .send(JSON.stringify(0)),
       webSocketRead(ws, 1),
     ]);
-    expect(resPut.status).toEqual(200);
+    expect(resPut.status).toEqual(204);
 
     expect(Array.isArray(messages)).toBeTruthy();
     expect(messages.length).toEqual(1);
@@ -568,11 +565,10 @@ describe('rules engine', () => {
     const res = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/${lightId}/properties/on`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(on));
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
   }
 
   it('creates and simulates an off rule', async () => {
@@ -679,11 +675,10 @@ describe('rules engine', () => {
     res = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/light3/properties/color`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify('#00ff77'));
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
 
     await waitForExpect(async () => {
       expect(await getOn(thingLight3.id)).toEqual(true);

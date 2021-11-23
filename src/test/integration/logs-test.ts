@@ -82,7 +82,7 @@ describe('logs/', function () {
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(value));
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
 
     // sleep just a bit to allow events to fire in the gateway
     await sleep(200);

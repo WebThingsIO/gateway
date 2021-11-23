@@ -175,7 +175,9 @@ class ThingModel extends Model {
    *
    * @param {string} name - name of the property
    * @param {*} value - value of the property
-   * @return {Promise} which resolves to the property set.
+   * @return {Promise} which resolves with the provided value
+   *   (Note that the value is only returned for backwards compatibility and
+   *   might not reflect the actual remote property value set)
    */
   setProperty(name, value) {
     if (!this.propertyDescriptions.hasOwnProperty(name)) {
@@ -202,10 +204,10 @@ class ThingModel extends Model {
       this.base
     );
 
-    return API.putJson(href, value)
-      .then((json) => {
+    return API.putJsonWithEmptyResponse(href, value)
+      .then(() => {
         const result = {};
-        result[name] = json;
+        result[name] = value;
         this.onPropertyStatus(result);
       })
       .catch((error) => {

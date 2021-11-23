@@ -377,7 +377,6 @@ describe('things/', function () {
     const err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send();
@@ -388,7 +387,6 @@ describe('things/', function () {
     const err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send('foo');
@@ -396,29 +394,46 @@ describe('things/', function () {
   });
 
   it('set a property of a thing', async () => {
+    // Set it to true
     await addDevice();
     const on = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(true));
 
-    expect(on.status).toEqual(200);
-    expect(on.body).toEqual(true);
+    expect(on.status).toEqual(204);
 
-    // Flip it back to off...
+    // Check that it was set to true
+    const readOn = await chai
+      .request(server)
+      .get(`${Constants.THINGS_PATH}/test-1/properties/power`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(readOn.status).toEqual(200);
+    expect(readOn.body).toEqual(true);
+
+    // Set it back to false
     const off = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/test-1/properties/power`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(false));
 
-    expect(off.status).toEqual(200);
-    expect(off.body).toEqual(false);
+    expect(off.status).toEqual(204);
+
+    // Check that it was set to false
+    const readOff = await chai
+      .request(server)
+      .get(`${Constants.THINGS_PATH}/test-1/properties/power`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(readOff.status).toEqual(200);
+    expect(readOff.body).toEqual(false);
   });
 
   it('fail to set x and y coordinates of a non-existent thing', async () => {
@@ -748,12 +763,11 @@ describe('things/', function () {
       chai
         .request(server)
         .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
-        .set('Accept', 'application/json')
         .type('json')
         .set(...headerAuth(jwt))
         .send(JSON.stringify(true)),
     ]);
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
     expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
     expect((<Record<string, unknown>>messages[2].data).power).toEqual(true);
 
@@ -859,7 +873,6 @@ describe('things/', function () {
       chai
         .request(server)
         .put(`${Constants.THINGS_PATH}/${otherThingId}/properties/power`)
-        .set('Accept', 'application/json')
         .type('json')
         .set(...headerAuth(jwt))
         .send(JSON.stringify(true))
@@ -867,7 +880,6 @@ describe('things/', function () {
           return chai
             .request(server)
             .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
-            .set('Accept', 'application/json')
             .type('json')
             .set(...headerAuth(jwt))
             .send(JSON.stringify(true));
@@ -876,7 +888,6 @@ describe('things/', function () {
           return chai
             .request(server)
             .put(`${Constants.THINGS_PATH}/${TEST_THING.id}/properties/power`)
-            .set('Accept', 'application/json')
             .type('json')
             .set(...headerAuth(jwt))
             .send(JSON.stringify(false));
@@ -884,7 +895,7 @@ describe('things/', function () {
       webSocketRead(ws, 4),
     ]);
 
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
 
     expect(messages[2].messageType).toEqual(Constants.PROPERTY_STATUS);
     expect((<Record<string, unknown>>messages[2].data).power).toEqual(true);
@@ -1448,7 +1459,6 @@ describe('things/', function () {
     const err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/readOnlyProp`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(false));
@@ -1479,7 +1489,6 @@ describe('things/', function () {
     let err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(0));
@@ -1497,7 +1506,6 @@ describe('things/', function () {
     err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/minMaxProp`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(30));
@@ -1524,7 +1532,6 @@ describe('things/', function () {
     err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(3));
@@ -1542,11 +1549,10 @@ describe('things/', function () {
     res = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/multipleProp`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify(30));
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(204);
 
     res = await chai
       .request(server)
@@ -1573,7 +1579,6 @@ describe('things/', function () {
     const err = await chai
       .request(server)
       .put(`${Constants.THINGS_PATH}/validation-1/properties/enumProp`)
-      .set('Accept', 'application/json')
       .type('json')
       .set(...headerAuth(jwt))
       .send(JSON.stringify('val0'));
