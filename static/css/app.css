@@ -149,7 +149,7 @@ input[type='email'] {
   user-select: none;
   outline: 0;
   z-index: 100;
-  cursor: default;
+  cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
@@ -277,7 +277,7 @@ h6 {
 #back-button {
   top: 2rem;
   left: 2rem;
-  z-index: 0;
+  z-index: 2;
 }
 
 #menu-button.menu-shown {
@@ -363,6 +363,7 @@ h6 {
   font-size: 1.6rem;
   color: #fff;
   overflow: auto;
+  z-index:4;
 }
 
 .dialog.hidden {
