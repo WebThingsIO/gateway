@@ -436,6 +436,54 @@ describe('things/', function () {
     expect(readOff.body).toEqual(false);
   });
 
+  it('set multiple properties of a thing', async () => {
+    // Set properties
+    await addDevice();
+    const setProperties = await chai
+      .request(server)
+      .put(`${Constants.THINGS_PATH}/test-1/properties`)
+      .type('json')
+      .set(...headerAuth(jwt))
+      .send(
+        JSON.stringify({
+          power: true,
+          percent: 42,
+        })
+      );
+
+    expect(setProperties.status).toEqual(204);
+
+    // Check that the properties were set
+    const getProperties = await chai
+      .request(server)
+      .get(`${Constants.THINGS_PATH}/test-1/properties`)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+
+    expect(getProperties.status).toEqual(200);
+    expect(getProperties.body.power).toEqual(true);
+    expect(getProperties.body.percent).toEqual(42);
+  });
+
+  it('fail to set multiple properties of a thing', async () => {
+    // Set properties
+    await addDevice();
+    const setProperties = await chai
+      .request(server)
+      .put(`${Constants.THINGS_PATH}/test-1/properties`)
+      .type('json')
+      .set(...headerAuth(jwt))
+      .send(
+        JSON.stringify({
+          power: true,
+          percent: 42,
+          invalidpropertyname: true,
+        })
+      );
+
+    expect(setProperties.status).toEqual(500);
+  });
+
   it('fail to set x and y coordinates of a non-existent thing', async () => {
     const err = await chai
       .request(server)

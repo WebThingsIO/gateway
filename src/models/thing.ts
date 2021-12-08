@@ -143,9 +143,15 @@ export default class Thing extends EventEmitter {
     this.eventsDispatched = [];
     this.forms = [];
 
+    let hasWriteableProperties = false;
+
     if (description.properties) {
       for (const propertyName in description.properties) {
         const property = description.properties[propertyName];
+
+        if (!(property.hasOwnProperty('readOnly') && property.readOnly == true)) {
+          hasWriteableProperties = true;
+        }
 
         if (property.hasOwnProperty('href')) {
           delete property.href;
@@ -177,9 +183,22 @@ export default class Thing extends EventEmitter {
 
       // If there are properties, add a top level form for them
       if (Object.keys(description.properties).length > 0) {
+        let ops;
+        // If there are writable properties then add readallproperties and
+        // writemultipleproperties operations as an array
+        if (hasWriteableProperties) {
+          ops = [
+            Constants.WoTOperation.READ_ALL_PROPERTIES,
+            Constants.WoTOperation.WRITE_MULTIPLE_PROPERTIES,
+          ];
+        } else {
+          // Otherwise just add readallproperties operation as a string
+          ops = Constants.WoTOperation.READ_ALL_PROPERTIES;
+        }
+
         this.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}`,
-          op: Constants.WoTOperation.READ_ALL_PROPERTIES,
+          op: ops,
         });
       }
     }
@@ -698,9 +717,14 @@ export default class Thing extends EventEmitter {
     this.forms = [];
     // Update properties
     this.properties = {};
+    let hasWriteableProperties = false;
     if (description.properties) {
       for (const propertyName in description.properties) {
         const property = description.properties[propertyName];
+
+        if (!(property.hasOwnProperty('readOnly') && property.readOnly == true)) {
+          hasWriteableProperties = true;
+        }
 
         if (property.hasOwnProperty('href')) {
           delete property.href;
@@ -730,9 +754,22 @@ export default class Thing extends EventEmitter {
 
       // If there are properties, add a top level form for them
       if (Object.keys(description.properties).length > 0) {
+        let ops;
+        // If there are writable properties then add readallproperties and
+        // writemultipleproperties operations as an array
+        if (hasWriteableProperties) {
+          ops = [
+            Constants.WoTOperation.READ_ALL_PROPERTIES,
+            Constants.WoTOperation.WRITE_MULTIPLE_PROPERTIES,
+          ];
+        } else {
+          // Otherwise just add readallproperties operation as a string
+          ops = Constants.WoTOperation.READ_ALL_PROPERTIES;
+        }
+
         this.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}`,
-          op: Constants.WoTOperation.READ_ALL_PROPERTIES,
+          op: ops,
         });
       }
     }
