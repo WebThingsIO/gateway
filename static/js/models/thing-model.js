@@ -44,15 +44,20 @@ class ThingModel extends Model {
 
     // Parse properties and events URLs
     for (const form of description.forms) {
-      switch (form.op) {
-        case Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS:
-          this.eventsHref = new URL(form.href, this.base);
-          break;
-        case Constants.WoTOperation.READ_ALL_PROPERTIES:
-          this.propertiesHref = new URL(form.href, this.base);
-          break;
-        default:
-          break;
+      const op = form.op;
+
+      // Properties URL
+      if (
+        (typeof op === 'string' && op === Constants.WoTOperation.READ_ALL_PROPERTIES) ||
+        (Array.isArray(op) && op.includes(Constants.WoTOperation.READ_ALL_PROPERTIES))
+      ) {
+        this.propertiesHref = new URL(form.href, this.base);
+        // Events URL
+      } else if (
+        (typeof op === 'string' && op === Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS) ||
+        (Array.isArray(op) && op.includes(Constants.WoTOperation.SUBSCRIBE_ALL_EVENTS))
+      ) {
+        this.eventsHref = new URL(form.href, this.base);
       }
     }
 

@@ -320,6 +320,32 @@ function build(): express.Router {
   });
 
   /**
+   * Set multiple properties of a Thing.
+   */
+  controller.put('/:thingId/properties', async (request, response) => {
+    const thingId = request.params.thingId;
+    if (!(typeof request.body === 'object') || request.body === null) {
+      response.sendStatus(400);
+      return;
+    }
+    // An array of promises to set each property
+    const promises = [];
+    for (const propertyName of Object.keys(request.body)) {
+      promises.push(Things.setThingProperty(thingId, propertyName, request.body[propertyName]));
+    }
+    Promise.all(promises)
+      .then(() => {
+        // Respond with success code if all properties set successfully
+        response.sendStatus(204);
+      })
+      .catch((err) => {
+        // Otherwise send an error response
+        console.error('Error setting property:', err);
+        response.sendStatus(500);
+      });
+  });
+
+  /**
    * Get a property of a Thing.
    */
   controller.get('/:thingId/properties/:propertyName', async (request, response) => {
@@ -345,7 +371,6 @@ function build(): express.Router {
     }
     const value = request.body;
     try {
-      // Note: updatedValue may differ from value
       await Things.setThingProperty(thingId, propertyName, value);
       response.sendStatus(204);
     } catch (err) {

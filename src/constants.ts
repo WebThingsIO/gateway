@@ -84,6 +84,7 @@ export enum LogSeverity {
 
 export enum WoTOperation {
   READ_ALL_PROPERTIES = 'readallproperties',
+  WRITE_MULTIPLE_PROPERTIES = 'writemultipleproperties',
   SUBSCRIBE_ALL_EVENTS = 'subscribeallevents',
   UNSUBSCRIBE_ALL_EVENTS = 'unsubscribeallevents',
   QUERY_ALL_ACTIONS = 'queryallactions',
