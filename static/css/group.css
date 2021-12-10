@@ -16,10 +16,6 @@
   max-height: 100000px;
 }
 
-.group .thing {
-  opacity: 1;
-}
-
 .group:not(.open) .thing {
   opacity: 0;
 }
