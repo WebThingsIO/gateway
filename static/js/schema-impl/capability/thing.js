@@ -104,7 +104,7 @@ class Thing {
     this.uiHref = null;
     if (description.links) {
       for (const link of description.links) {
-        if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+        if (link.rel === 'alternate' && link.type === 'text/html') {
           if (link.href.startsWith('/proxy/')) {
             this.uiHref = `${link.href}?jwt=${API.jwt}`;
           } else if (

@@ -213,7 +213,7 @@ export default class Thing extends EventEmitter {
 
     const uiLink = {
       rel: 'alternate',
-      mediaType: 'text/html',
+      type: 'text/html',
       href: this.href,
     };
 
@@ -223,7 +223,15 @@ export default class Thing extends EventEmitter {
 
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+
+        // For backwards compatibility
+        if(link.mediaType) {
+          console.warn('The mediaType member of Link is deprecated, please use type instead');
+          link.type = link.mediaType;
+          delete link.mediaType;
+        }
+
+        if (link.rel === 'alternate' && link.type === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
             uiLink.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
@@ -811,11 +819,11 @@ export default class Thing extends EventEmitter {
 
     let uiLink: Link = {
       rel: 'alternate',
-      mediaType: 'text/html',
+      type: 'text/html',
       href: this.href,
     };
     for (const link of this.links) {
-      if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+      if (link.rel === 'alternate' && link.type === 'text/html') {
         uiLink = link;
         break;
       }
@@ -828,7 +836,15 @@ export default class Thing extends EventEmitter {
     // Update the UI href
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-        if (link.rel === 'alternate' && link.mediaType === 'text/html') {
+
+        // For backwards compatibility
+        if(link.mediaType) {
+          console.warn('The mediaType member of Link is deprecated, please use type instead');
+          link.type = link.mediaType;
+          delete link.mediaType;
+        }
+
+        if (link.rel === 'alternate' && link.type === 'text/html') {
           if (link.proxy) {
             delete link.proxy;
             uiLink.href = `${Constants.PROXY_PATH}/${encodeURIComponent(this.id)}${link.href}`;
