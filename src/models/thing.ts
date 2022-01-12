@@ -223,9 +223,8 @@ export default class Thing extends EventEmitter {
 
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-
         // For backwards compatibility
-        if(link.mediaType) {
+        if (link.mediaType) {
           console.warn('The mediaType member of Link is deprecated, please use type instead');
           link.type = link.mediaType;
           delete link.mediaType;
@@ -836,9 +835,8 @@ export default class Thing extends EventEmitter {
     // Update the UI href
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
-
         // For backwards compatibility
-        if(link.mediaType) {
+        if (link.mediaType) {
           console.warn('The mediaType member of Link is deprecated, please use type instead');
           link.type = link.mediaType;
           delete link.mediaType;
