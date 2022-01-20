@@ -132,9 +132,6 @@ describe('actions/', () => {
     expect(res.body.length).toEqual(1);
     expect(res.body[0]).toHaveProperty('pair');
     expect(res.body[0].pair).toHaveProperty('href');
-    expect(res.body[0].pair).toHaveProperty('input');
-    expect(res.body[0].pair.input).toHaveProperty('timeout');
-    expect(res.body[0].pair.input.timeout).toEqual(60);
     expect(res.body[0].pair).toHaveProperty('status');
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
@@ -148,9 +145,6 @@ describe('actions/', () => {
     expect(res.body.length).toEqual(1);
     expect(res.body[0]).toHaveProperty('pair');
     expect(res.body[0].pair).toHaveProperty('href');
-    expect(res.body[0].pair).toHaveProperty('input');
-    expect(res.body[0].pair.input).toHaveProperty('timeout');
-    expect(res.body[0].pair.input.timeout).toEqual(60);
     expect(res.body[0].pair).toHaveProperty('status');
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
@@ -163,9 +157,6 @@ describe('actions/', () => {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('pair');
     expect(res.body.pair).toHaveProperty('href');
-    expect(res.body.pair).toHaveProperty('input');
-    expect(res.body.pair.input).toHaveProperty('timeout');
-    expect(res.body.pair.input.timeout).toEqual(60);
     expect(res.body.pair).toHaveProperty('status');
     expect(res.body.pair).toHaveProperty('timeRequested');
   });
@@ -194,9 +185,6 @@ describe('actions/', () => {
     expect(res.body.length).toEqual(1);
     expect(res.body[0]).toHaveProperty('pair');
     expect(res.body[0].pair).toHaveProperty('href');
-    expect(res.body[0].pair).toHaveProperty('input');
-    expect(res.body[0].pair.input).toHaveProperty('timeout');
-    expect(res.body[0].pair.input.timeout).toEqual(60);
     expect(res.body[0].pair).toHaveProperty('status');
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
@@ -210,9 +198,6 @@ describe('actions/', () => {
     expect(res.body.length).toEqual(1);
     expect(res.body[0]).toHaveProperty('pair');
     expect(res.body[0].pair).toHaveProperty('href');
-    expect(res.body[0].pair).toHaveProperty('input');
-    expect(res.body[0].pair.input).toHaveProperty('timeout');
-    expect(res.body[0].pair.input.timeout).toEqual(60);
     expect(res.body[0].pair).toHaveProperty('status');
     expect(res.body[0].pair).toHaveProperty('timeRequested');
 
@@ -225,9 +210,6 @@ describe('actions/', () => {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('pair');
     expect(res.body.pair).toHaveProperty('href');
-    expect(res.body.pair).toHaveProperty('input');
-    expect(res.body.pair.input).toHaveProperty('timeout');
-    expect(res.body.pair.input.timeout).toEqual(60);
     expect(res.body.pair).toHaveProperty('status');
     expect(res.body.pair).toHaveProperty('timeRequested');
   });
@@ -347,10 +329,10 @@ describe('actions/', () => {
 
     let res = await chai
       .request(server)
-      .post(Constants.ACTIONS_PATH)
+      .post(`${Constants.ACTIONS_PATH}/unpair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({ unpair: { input: { id: thingId } } });
+      .send({ id: thingId });
     expect(res.status).toEqual(201);
 
     res = await chai
@@ -360,9 +342,6 @@ describe('actions/', () => {
       .set(...headerAuth(jwt));
     expect(Array.isArray(res.body)).toBeTruthy();
     expect(res.body[0]).toHaveProperty('unpair');
-    expect(res.body[0].unpair).toHaveProperty('input');
-    expect(res.body[0].unpair.input).toHaveProperty('id');
-    expect(res.body[0].unpair.input.id).toBe('test-nonexistent');
     expect(res.body[0].unpair).toHaveProperty('href');
     expect(res.body[0].unpair).toHaveProperty('status');
     expect(res.body[0].unpair.status).toEqual('completed');

@@ -89,6 +89,14 @@ export enum WoTOperation {
   UNSUBSCRIBE_ALL_EVENTS = 'unsubscribeallevents',
   QUERY_ALL_ACTIONS = 'queryallactions',
 }
+
+export enum ActionStatusValues {
+  PENDING = 'pending',
+  RUNNING = 'running',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
 export interface LogMessage {
   severity: LogSeverity;
   message: string;

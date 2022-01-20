@@ -144,17 +144,20 @@ class Actions extends EventEmitter {
     }
 
     // Only update the action status if it's being handled internally
-    action.updateStatus('pending');
+    action.updateStatus(Constants.ActionStatusValues.RUNNING);
 
     switch (action.getName()) {
       case 'pair':
         AddonManager.addNewThing((<Record<string, number>>action.getInput()!).timeout)
           .then(() => {
-            action.updateStatus('completed');
+            action.updateStatus(Constants.ActionStatusValues.COMPLETED);
           })
           .catch((error: unknown) => {
-            action.setError(`${error}`);
-            action.updateStatus('error');
+            action.setError({
+              type: 'https://webthings.io/errors/pair-failed',
+              title: 'Failed to pair device',
+            });
+            action.updateStatus(Constants.ActionStatusValues.FAILED);
             console.error('Thing was not added');
             console.error(error);
           });
@@ -166,11 +169,14 @@ class Actions extends EventEmitter {
             console.log('unpair: thing:', thingId, 'was unpaired');
             Things.removeThing(thingId)
               .then(() => {
-                action.updateStatus('completed');
+                action.updateStatus(Constants.ActionStatusValues.COMPLETED);
               })
               .catch((error: unknown) => {
-                action.setError(`${error}`);
-                action.updateStatus('error');
+                action.setError({
+                  type: 'https://webthings.io/errors/unpair-failed',
+                  title: 'Failed to unpair device',
+                });
+                action.updateStatus(Constants.ActionStatusValues.FAILED);
                 console.error('unpair of thing:', thingId, 'failed.');
                 console.error(error);
               });
@@ -178,10 +184,12 @@ class Actions extends EventEmitter {
 
           AddonManager.removeThing(thingId).then(_finally, _finally);
         } else {
-          const msg = 'unpair missing "id" parameter.';
-          action.setError(msg);
-          action.updateStatus('error');
-          console.error(msg);
+          action.setError({
+            type: 'https://webthings.io/errors/unpair-failed-missing-id',
+            title: 'Failed to unpair device because device ID not provided',
+          });
+          action.updateStatus(Constants.ActionStatusValues.FAILED);
+          console.error('unpair missing "id" parameter.');
         }
         break;
       }
@@ -212,7 +220,10 @@ class Actions extends EventEmitter {
       throw new Error(`Invalid action id: ${id}`);
     }
 
-    if (action.getStatus() === 'pending') {
+    if (
+      action.getStatus() === Constants.ActionStatusValues.PENDING ||
+      action.getStatus() === Constants.ActionStatusValues.RUNNING
+    ) {
       if (action.getThingId()) {
         Things.getThing(action.getThingId()!)
           .then((thing) => {
