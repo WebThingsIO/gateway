@@ -103,9 +103,9 @@ const RuleScreen = {
     const scrollRight = document.getElementById('rule-parts-list-scroll-right');
 
     scrollLeft.addEventListener('click', this.onScrollLeftClick);
-    scrollLeft.addEventListener('touchstart', this.onScrollLeftClick);
+    scrollLeft.addEventListener('touchstart', this.onScrollLeftClick, { passive: true });
     scrollRight.addEventListener('click', this.onScrollRightClick);
-    scrollRight.addEventListener('touchstart', this.onScrollRightClick);
+    scrollRight.addEventListener('touchstart', this.onScrollRightClick, { passive: true });
 
     this.onWindowResize = this.onWindowResize.bind(this);
     window.addEventListener('resize', this.onWindowResize);
