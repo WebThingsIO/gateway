@@ -134,7 +134,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-html": "^6.1.1",
     "event-to-promise": "^0.8.0",
-    "eventsource": "^1.1.0",
+    "eventsource": "^2.0.2",
     "highlight.js": "^10.6.0",
     "html-webpack-plugin": "^5.2.0",
     "image-minimizer-webpack-plugin": "^2.2.0",
