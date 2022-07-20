@@ -45,7 +45,7 @@ settings-add-ons = Додатки
 settings-adapters = Перехідники
 settings-localization = Локалізація
 settings-updates = Оновлення
-settings-authorizations = Дозволені зʼєднання
+settings-authorizations = Дозволені з'єднання
 settings-experiments = Експерименти
 settings-developer = Розробник
 
@@ -120,7 +120,7 @@ adapter-settings-no-adapters = Перехідників немає.
 
 ## Authorization Settings
 
-authorization-settings-no-authorizations = Немає дозволених зʼєднань.
+authorization-settings-no-authorizations = Немає дозволених з'єднань.
 
 ## Experiment Settings
 
@@ -180,7 +180,7 @@ rules-scroll-left =
     .alt = Прокрутити ліворуч
 rules-scroll-right =
     .alt = Прокрутити праворуч
-rules-delete-prompt = Перетягніть пристрій сюди, щоб відʼєднати
+rules-delete-prompt = Перетягніть пристрій сюди, щоб від'єднати
 rules-delete-dialog = Ви дійсно хочете вилучити це правило назавжди?
 rules-delete-cancel =
     .value = Скасувати
@@ -477,7 +477,7 @@ addon-discovery = Відкрийте для себе нові додатки
 experiments = Експерименти
 localization = Локалізація
 updates = Оновлення
-authorizations = Дозволені зʼєднання
+authorizations = Дозволені з'єднання
 developer = Розробник
 network = Мережа
 ethernet = Ethernet
@@ -537,8 +537,8 @@ tunnel-setup-time-sync = Чекаємо встановлення системн�
 
 ## Authorize Page
 
-authorize-title = Запит дозволу на зʼєднання — { -webthings-gateway-brand }
-authorize-authorization-request = Запит дозволу на зʼєднання
+authorize-title = Запит дозволу на з'єднання — { -webthings-gateway-brand }
+authorize-authorization-request = Запит дозволу на з'єднання
 # Use <<name>> to indicate where the name of the requester should be placed and <<function>> for the monitor/monitor-and-control selector
 authorize-prompt = <<name>> хоче отримати доступ до вашого шлюзу на <<function>> пристроях.
 # Use <<domain>> to indicate where the domain should be placed
@@ -555,13 +555,13 @@ authorize-deny = Заборонити
 local-token-title = Локальна служба токенів — { -webthings-gateway-brand }
 local-token-header = Локальна служба токенів
 local-token-your-token = Вашим локальним токеном є цей <a data-l10n-name="local-token-jwt">JSON Web Token</a>:
-local-token-use-it = Застосовуйте його для безпечного звʼязку зі шлюзом, <a data-l10n-name="local-token-bearer-type">надавши дозвіл на зʼєднання цьому типу носія</a>.
+local-token-use-it = Застосовуйте його для безпечного зв'язку зі шлюзом, <a data-l10n-name="local-token-bearer-type">надавши дозвіл на з'єднання цьому типу носія</a>.
 local-token-copy-token = Копіювати маркер
 
 ## Wi-Fi Setup Page
 
 wifi-setup-title = Налаштування Wi-Fi — { -webthings-gateway-brand }
-wifi-setup-header = Зʼєднатися з мережею Wi-Fi?
+wifi-setup-header = З'єднатися з мережею Wi-Fi?
 wifi-setup-input-password =
     .placeholder = Пароль
 wifi-setup-show-password = Показати пароль
@@ -573,12 +573,12 @@ wifi-setup-skip = Пропустити
 
 ## Connecting to Wi-Fi Page
 
-connecting-title = Зʼєднання з Wi-Fi — { -webthings-gateway-brand }
-connecting-header = Зʼєднання з Wi-Fi…
-connecting-connect = Переконайтеся, що ви зʼєднані з однаковою мережею та перейдіть до { $gateway-link } у своєму браузері, щоб продовжити налаштування.
+connecting-title = З'єднання з Wi-Fi — { -webthings-gateway-brand }
+connecting-header = З'єднання з Wi-Fi…
+connecting-connect = Переконайтеся, що ви з'єднані з однаковою мережею та перейдіть до { $gateway-link } у своєму браузері, щоб продовжити налаштування.
 connecting-warning = Примітка. Якщо ви не можете завантажити { $domain }, знайдіть IP-адресу шлюзу на вашому маршрутизаторі.
 connecting-header-skipped = Налаштування Wi-Fi пропущено
-connecting-skipped = Зараз шлюз запускається. Перейдіть до { $gateway-link } у вашому браузері, зʼєднавшись з тією ж мережею, що і шлюз, щоб продовжити налаштування.
+connecting-skipped = Зараз шлюз запускається. Перейдіть до { $gateway-link } у вашому браузері, з'єднавшись з тією ж мережею, що і шлюз, щоб продовжити налаштування.
 
 ## Creating Wi-Fi Network Page
 
