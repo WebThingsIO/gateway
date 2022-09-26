@@ -52,6 +52,7 @@
     "gateway-addon": "^1.0.1-alpha.1",
     "glob-to-regexp": "^0.4.1",
     "http-proxy": "^1.18.1",
+    "@types/jest": "^27.0.1",
     "ip-regex": "^4.3.0",
     "jsonwebtoken": "^8.5.1",
     "minipass": "^3.3.5",
