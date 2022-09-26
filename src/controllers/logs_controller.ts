@@ -63,8 +63,8 @@ function build(): express.Router {
         descr: normalizedDescr,
       });
     } catch (e) {
-      console.error('Failed to register log:', e);
-      response.status(500).send(`Error registering: ${e.message}`);
+      console.error('Failed to register log:', (e as Error).message);
+      response.status(500).send(`Error registering: ${(e as Error).message}`);
     }
   });
 

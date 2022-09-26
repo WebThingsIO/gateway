@@ -65,7 +65,7 @@ function build(): express.Router {
   const cacheDuration = 60 * 1000;
 
   function cacheLatestInsert(response: express.Response, value: { version: string | null }): void {
-    cacheLatest.tag = response.get('etag');
+    cacheLatest.tag = response.get('etag') || null;
     cacheLatest.time = Date.now();
     cacheLatest.value = value;
   }

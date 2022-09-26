@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 import Events from '../models/events';
 
 function build(): express.Router {
@@ -17,7 +17,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of events.
    */
-  controller.get('/', (request, response) => {
+  controller.get('/', (request: Request, response: Response) => {
     if (request.params.thingId) {
       response.status(200).json(Events.getByThing(request.params.thingId));
     } else {
@@ -28,7 +28,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of events.
    */
-  controller.get('/:eventName', (request, response) => {
+  controller.get('/:eventName', (request: Request, response: Response) => {
     const eventName = request.params.eventName;
 
     if (request.params.thingId) {

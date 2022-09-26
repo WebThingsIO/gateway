@@ -251,7 +251,7 @@ function build(): express.Router {
         localDomain: domain,
         update: false,
         enabled: state,
-        error: err.message,
+        error: (err as Error).message,
       };
       response.status(400).json(localDomainSettings);
     }

@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 import Action from '../models/action';
 import Actions from '../models/actions';
 import Things from '../models/things';
@@ -20,7 +20,7 @@ function build(): express.Router {
   /**
    * Handle creating a new action.
    */
-  controller.post('/', async (request, response) => {
+  controller.post('/', async (request: Request, response: Response) => {
     const keys = Object.keys(request.body);
     if (keys.length != 1) {
       const err = 'Incorrect number of parameters.';
@@ -70,7 +70,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of actions.
    */
-  controller.get('/', (request, response) => {
+  controller.get('/', (request: Request, response: Response) => {
     if (request.params.thingId) {
       response.status(200).json(Actions.getByThing(request.params.thingId));
     } else {
@@ -81,7 +81,7 @@ function build(): express.Router {
   /**
    * Handle getting a list of actions.
    */
-  controller.get('/:actionName', (request, response) => {
+  controller.get('/:actionName', (request: Request, response: Response) => {
     const actionName = request.params.actionName;
     if (request.params.thingId) {
       response.status(200).json(Actions.getByThing(request.params.thingId, actionName));
@@ -93,7 +93,7 @@ function build(): express.Router {
   /**
    * Handle creating a new action.
    */
-  controller.post('/:actionName', async (request, response) => {
+  controller.post('/:actionName', async (request: Request, response: Response) => {
     const actionName = request.params.actionName;
 
     const keys = Object.keys(request.body);
@@ -165,7 +165,7 @@ function build(): express.Router {
   /**
    * Handle cancelling an action.
    */
-  controller.delete('/:actionName/:actionId', async (request, response) => {
+  controller.delete('/:actionName/:actionId', async (request: Request, response: Response) => {
     const actionName = request.params.actionName;
     const actionId = request.params.actionId;
     const thingId = request.params.thingId;

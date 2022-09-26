@@ -24,6 +24,7 @@ import AddonManager from '../addon-manager';
 import { WithJWT } from '../jwt-middleware';
 import { Any } from 'gateway-addon/lib/schema';
 import { Property } from 'gateway-addon';
+import { HttpErrorWithCode } from '../errors';
 
 interface SetPropertyMessage {
   messageType: 'setProperty';
@@ -322,7 +323,7 @@ function build(): express.Router {
       result[propertyName] = value;
       response.status(200).json(result);
     } catch (err) {
-      response.status(err.code).send(err.message);
+      response.status((err as HttpErrorWithCode).code).send((err as HttpErrorWithCode).message);
     }
   });
 
@@ -345,7 +346,7 @@ function build(): express.Router {
       response.status(200).json(result);
     } catch (e) {
       console.error('Error setting property:', e);
-      response.status(e.code || 500).send(e.message);
+      response.status((e as HttpErrorWithCode).code || 500).send((e as HttpErrorWithCode).message);
     }
   });
 
