@@ -1,23 +1,22 @@
-<!DOCTYPE html>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#75AACF">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#75AACF" />
     <title data-l10n-id="local-token-title">Local Token Service - WebThings Gateway</title>
-    <link rel="manifest" href="/app.webmanifest">
+    <link rel="manifest" href="/app.webmanifest" />
     <link rel="icon" href="/images/icon.png" type="image/png" />
 
-    <link rel="stylesheet" type="text/css" href="/css/lib/highlight.css">
+    <link rel="stylesheet" type="text/css" href="/css/lib/highlight.css" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/thing.css" />
     <link rel="stylesheet" type="text/css" href="/css/local-token-service.css" />
   </head>
   <body class="hidden">
-    <img id="wordmark" src="/images/webthings-gateway-lockup.svg" data-l10n-id="wordmark"/>
+    <img id="wordmark" src="/images/webthings-gateway-lockup.svg" data-l10n-id="wordmark" />
 
     <!-- OAuth Authorization -->
     <section class="selected">
@@ -30,27 +29,35 @@
         <span data-l10n-id="local-token-your-token">
           <a href="https://jwt.io/" data-l10n-name="local-token-jwt"></a>
         </span>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <code id="token">{{token}}</code>
-        <br/>
-        <button id="copy-token-button" class="text-button" data-l10n-id="local-token-copy-token"></button>
-        <br/>
-        <br/>
+        <br />
+        <button
+          id="copy-token-button"
+          class="text-button"
+          data-l10n-id="local-token-copy-token"
+        ></button>
+        <br />
+        <br />
         <span data-l10n-id="local-token-use-it">
-          <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization"
-             data-l10n-name="local-token-bearer-type">
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization"
+            data-l10n-name="local-token-bearer-type"
+          >
           </a>
         </span>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <div class="code-example">
           <h3>Curl</h3>
           <pre>
             <code class="bash">
-curl -H "Authorization: Bearer {{token}}" \
-  -H "Accept: application/json" <span class="insecure">--insecure</span> \
-  <span class="origin">https://gateway.local</span>/things
+              curl -H "Authorization: Bearer
+              {{token}}" \ -H "Accept: application/json"
+              <span class="insecure">--insecure</span>
+              \
+              <span class="origin">https://gateway.local</span>/things
             </code>
           </pre>
         </div>
@@ -59,16 +66,10 @@ curl -H "Authorization: Bearer {{token}}" \
           <h3>JavaScript: Fetch API</h3>
           <pre>
             <code class="javascript">
-fetch('<span class="origin">https://gateway.local</span>/things', {
-  headers: {
-    Accept: 'application/json',
-    Authorization: 'Bearer {{token}}'
-  }
-}).then(res =&gt; {
-  return res.json();
-}).then(things =&gt; {
-  console.log(things);
-});
+              fetch('<span class="origin">https://gateway.local</span>/things', { headers: { Accept:
+              'application/json', Authorization: 'Bearer
+              {{token}}' } }).then(res =&gt; { return res.json(); }).then(things =&gt; {
+              console.log(things); });
             </code>
           </pre>
         </div>
@@ -77,14 +78,12 @@ fetch('<span class="origin">https://gateway.local</span>/things', {
           <h3>JavaScript: XMLHttpRequest</h3>
           <pre>
             <code class="javascript">
-var xhr = new XMLHttpRequest();
-xhr.addEventListener('load', function() {
-  console.log(this.responseText);
-});
-xhr.open('GET', '<span class="origin">https://gateway.local</span>/things');
-xhr.setRequestHeader('Accept', 'application/json');
-xhr.setRequestHeader('Authorization', 'Bearer {{token}}');
-xhr.send();
+              var xhr = new XMLHttpRequest(); xhr.addEventListener('load', function() {
+              console.log(this.responseText); }); xhr.open('GET', '<span
+                class="origin"
+              >https://gateway.local</span>/things'); xhr.setRequestHeader('Accept',
+              'application/json'); xhr.setRequestHeader('Authorization', 'Bearer
+              {{token}}'); xhr.send();
             </code>
           </pre>
         </div>
@@ -93,12 +92,11 @@ xhr.send();
           <h3>Python</h3>
           <pre>
             <code class="python">
-import requests
-r = requests.get('<span class="origin">https://gateway.local</span>/things', headers={
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {{token}}'
-}<span class="insecure">, verify=False</span>)
-print r.text
+              import requests r = requests.get('<span
+                class="origin"
+              >https://gateway.local</span>/things', headers={ 'Accept': 'application/json',
+              'Authorization': 'Bearer
+              {{token}}' }<span class="insecure">, verify=False</span>) print r.text
             </code>
           </pre>
         </div>
@@ -107,40 +105,26 @@ print r.text
           <h3>Rust</h3>
           <pre>
             <code class="rust">
-<span class="insecure">
-let client = reqwest::Client::builder()
-    .danger_disable_hostname_verification()
-    .build().unwrap();
-</span><span class="secure">
-let client = reqwest::Client::new();
-</span>
+              <span class="insecure">
+                let client = reqwest::Client::builder() .danger_disable_hostname_verification()
+                .build().unwrap();
+              </span><span class="secure">
+                let client = reqwest::Client::new();
+              </span>
 
-let text = client.get("<span class="origin">https://gateway.local</span>/things")
-    .header(reqwest::header::Accept::json())
-    .header(
-        reqwest::header::Authorization(
-            reqwest::header::Bearer {
-                token: "{{token}}".to_string()
-            }
-        )
-    )
-    .send().unwrap().text().unwrap();
+              let text = client.get("<span class="origin">https://gateway.local</span>/things")
+              .header(reqwest::header::Accept::json()) .header( reqwest::header::Authorization(
+              reqwest::header::Bearer { token: "{{token}}".to_string() } ) )
+              .send().unwrap().text().unwrap();
             </code>
           </pre>
         </div>
       </div>
     </section>
     <script>
-if ({{oauthPostToken}}) {
-  window.addEventListener("message", function(ev) {
-   if (ev.origin !== 'file://') {
-     return;
-   }
-   if (ev.data.message === "token") {
-      ev.source.postMessage({ message: { token: "{{token}}" }}, "*");
-    }
-  });
-}
+      if ({{oauthPostToken}}) { window.addEventListener("message", function(ev) { if (ev.origin !==
+      'file://') { return; } if (ev.data.message === "token") { ev.source.postMessage({ message: {
+      token: "{{token}}" }}, "*"); } }); }
     </script>
   </body>
 </html>

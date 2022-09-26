@@ -45,7 +45,7 @@ it('gets invalid user info', async () => {
   try {
     await userInfoById(server, jwt, 1000);
   } catch (err) {
-    expect(err.status).toBe(404);
+    expect((err as ChaiHttp.Response).status).toBe(404);
   }
 });
 
@@ -62,7 +62,7 @@ it('fails to create a user when missing data', async () => {
   try {
     await createUser(server, { email: 'fake@test.com' });
   } catch (err) {
-    expect(err.status).toEqual(400);
+    expect((err as ChaiHttp.Response).status).toEqual(400);
   }
 });
 
@@ -71,7 +71,7 @@ it('fails to create another user when not logged in', async () => {
   try {
     await createUser(server, TEST_USER_DIFFERENT);
   } catch (diff) {
-    expect(diff.status).toEqual(401);
+    expect((diff as ChaiHttp.Response).status).toEqual(401);
   }
 });
 
@@ -80,7 +80,7 @@ it('fails to create a duplicate user', async () => {
   try {
     await addUser(server, jwt, TEST_USER);
   } catch (again) {
-    expect(again.status).toEqual(400);
+    expect((again as ChaiHttp.Response).status).toEqual(400);
   }
 });
 
@@ -103,7 +103,7 @@ it('logs in as a user', async () => {
   try {
     await userInfo(server, loginJWT);
   } catch (stale) {
-    expect(stale.status).toEqual(401);
+    expect((stale as ChaiHttp.Response).status).toEqual(401);
   }
 
   // try to use a non-revoked jwt again.
@@ -116,7 +116,7 @@ it('edits an invalid user', async () => {
   try {
     await editUser(server, jwt, Object.assign({}, TEST_USER_UPDATE_1, { id: 0 }));
   } catch (rsp) {
-    expect(rsp.status).toEqual(404);
+    expect((rsp as ChaiHttp.Response).status).toEqual(404);
   }
 });
 
@@ -126,7 +126,7 @@ it('fails to edit a user when missing data', async () => {
   try {
     await editUser(server, jwt, { id: info.id });
   } catch (err) {
-    expect(err.status).toEqual(400);
+    expect((err as ChaiHttp.Response).status).toEqual(400);
   }
 });
 
@@ -140,7 +140,7 @@ it('fails to edit user with incorrect password', async () => {
       Object.assign({}, TEST_USER_UPDATE_1, { id: info.id, password: 'wrong' })
     );
   } catch (err) {
-    expect(err.status).toEqual(400);
+    expect((err as ChaiHttp.Response).status).toEqual(400);
   }
 });
 
@@ -180,12 +180,12 @@ it('deletes a user', async () => {
   try {
     await userInfo(server, jwt);
   } catch (rsp1) {
-    expect(rsp1.status).toBe(401);
+    expect((rsp1 as ChaiHttp.Response).status).toBe(401);
   }
   try {
     await loginUser(server, TEST_USER);
   } catch (rsp2) {
-    expect(rsp2.status).toBe(401);
+    expect((rsp2 as ChaiHttp.Response).status).toBe(401);
   }
 });
 
@@ -194,7 +194,7 @@ it('fails to log in with missing data', async () => {
   try {
     await loginUser(server, { email: TEST_USER.email });
   } catch (err) {
-    expect(err.status).toBe(400);
+    expect((err as ChaiHttp.Response).status).toBe(400);
   }
 });
 
@@ -203,7 +203,7 @@ it('fails to log in with incorrect password', async () => {
   try {
     await loginUser(server, Object.assign({}, TEST_USER, { password: 'wrong' }));
   } catch (err) {
-    expect(err.status).toBe(401);
+    expect((err as ChaiHttp.Response).status).toBe(401);
   }
 });
 
@@ -214,7 +214,7 @@ it('fails to enable MFA with wrong token', async () => {
   try {
     await enableMfa(server, jwt, Object.assign({}, TEST_USER, { id: info.id }), '000000');
   } catch (err) {
-    expect(err.status).toBe(401);
+    expect((err as ChaiHttp.Response).status).toBe(401);
   }
 });
 
@@ -227,8 +227,8 @@ it('fails to log in with missing MFA token', async () => {
   try {
     await loginUser(server, TEST_USER);
   } catch (err) {
-    expect(err.status).toBe(401);
-    expect(err.body.mfaRequired).toBe(true);
+    expect((err as ChaiHttp.Response).status).toBe(401);
+    expect((err as ChaiHttp.Response).body.mfaRequired).toBe(true);
   }
 });
 
@@ -241,8 +241,8 @@ it('fails to log in with incorrect MFA token', async () => {
   try {
     await loginUser(server, Object.assign({}, TEST_USER, { mfa: { totp: '000000' } }));
   } catch (err) {
-    expect(err.status).toBe(401);
-    expect(err.body.mfaRequired).toBe(true);
+    expect((err as ChaiHttp.Response).status).toBe(401);
+    expect((err as ChaiHttp.Response).body.mfaRequired).toBe(true);
   }
 });
 
@@ -269,8 +269,8 @@ it('fails to log in with incorrect MFA backup code', async () => {
     const totp = '0123456789';
     await loginUser(server, Object.assign({}, TEST_USER, { mfa: { totp } }));
   } catch (err) {
-    expect(err.status).toBe(401);
-    expect(err.body.mfaRequired).toBe(true);
+    expect((err as ChaiHttp.Response).status).toBe(401);
+    expect((err as ChaiHttp.Response).body.mfaRequired).toBe(true);
   }
 });
 
@@ -297,8 +297,8 @@ it('fails to log in twice with same MFA backup code', async () => {
   try {
     await loginUser(server, Object.assign({}, TEST_USER, { mfa: { totp: params.backupCodes[0] } }));
   } catch (err) {
-    expect(err.status).toBe(401);
-    expect(err.body.mfaRequired).toBe(true);
+    expect((err as ChaiHttp.Response).status).toBe(401);
+    expect((err as ChaiHttp.Response).body.mfaRequired).toBe(true);
   }
 });
 
@@ -351,7 +351,7 @@ it('resets rate limit after successful login', async () => {
     try {
       await loginUser(server, Object.assign({}, TEST_USER, { password: 'wrong' }));
     } catch (err) {
-      expect(err.status).toBe(401);
+      expect((err as ChaiHttp.Response).status).toBe(401);
     }
   }
 
@@ -362,7 +362,7 @@ it('resets rate limit after successful login', async () => {
     try {
       await loginUser(server, Object.assign({}, TEST_USER, { password: 'wrong' }));
     } catch (err) {
-      expect(err.status).toBe(401);
+      expect((err as ChaiHttp.Response).status).toBe(401);
     }
   }
 
@@ -370,6 +370,6 @@ it('resets rate limit after successful login', async () => {
     await loginUser(server, Object.assign({}, TEST_USER, { password: 'wrong' }));
   } catch (err) {
     // rate limit hit
-    expect(err.status).toBe(429);
+    expect((err as ChaiHttp.Response).status).toBe(429);
   }
 });

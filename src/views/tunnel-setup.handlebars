@@ -1,51 +1,73 @@
-<!DOCTYPE html>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title data-l10n-id="tunnel-setup-title">Choose Web Address - WebThings Gateway</title>
-    <link rel="manifest" href="../app.webmanifest">
+    <link rel="manifest" href="../app.webmanifest" />
     <link rel="icon" href="/images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/subdomain-form.css" />
   </head>
   <body>
-    <img id="wordmark" src="/images/webthings-gateway-lockup.svg" data-l10n-id="wordmark"/>
+    <img id="wordmark" src="/images/webthings-gateway-lockup.svg" data-l10n-id="wordmark" />
     <form id="create-subdomain-form" class="subdomain-form">
       <h1 data-l10n-id="tunnel-setup-welcome"></h1>
       <p data-l10n-id="tunnel-setup-choose-address"></p>
-      <input type="text" id="subdomain" data-l10n-id="tunnel-setup-input-subdomain" required autofocus /><div id="label-subdomain">.{{domain}}</div>
+      <input
+        type="text"
+        id="subdomain"
+        data-l10n-id="tunnel-setup-input-subdomain"
+        required
+        autofocus
+      /><div id="label-subdomain">.{{domain}}</div>
       <input type="email" id="email" data-l10n-id="user-settings-input-email" required />
       <div id="opt-in-group">
-        <input type="checkbox" id="opt-in" name="opt-in">
+        <input type="checkbox" id="opt-in" name="opt-in" />
         <label for="opt-in"></label>
         <div id="opt-in-info">
           <span data-l10n-id="tunnel-setup-email-opt-in"></span>
         </div>
       </div>
       <div id="agree-group">
-        <input type="checkbox" id="agree" name="agree">
+        <input type="checkbox" id="agree" name="agree" />
         <label for="agree"></label>
         <div id="agree-info">
           <span data-l10n-id="tunnel-setup-agree-privacy-policy">
-            <a data-l10n-name="tunnel-setup-privacy-policy-link" href="https://webthings.io/privacy"
-               target="_blank" rel="noopener"></a>
-            <a data-l10n-name="tunnel-setup-tos-link" href="https://webthings.io/legal"
-               target="_blank" rel="noopener"></a>
+            <a
+              data-l10n-name="tunnel-setup-privacy-policy-link"
+              href="https://webthings.io/privacy"
+              target="_blank"
+              rel="noopener"
+            ></a>
+            <a
+              data-l10n-name="tunnel-setup-tos-link"
+              href="https://webthings.io/legal"
+              target="_blank"
+              rel="noopener"
+            ></a>
           </span>
         </div>
       </div>
-      <input type="text" id="reclamation-token" data-l10n-id="tunnel-setup-input-reclamation-token" />
+      <input
+        type="text"
+        id="reclamation-token"
+        data-l10n-id="tunnel-setup-input-reclamation-token"
+      />
       <div id="ntp-warning" class="error hidden" data-l10n-id="tunnel-setup-time-sync"></div>
       <div id="error-reclaim" class="error hidden" data-l10n-id="tunnel-setup-reclaim-domain">
         <a href="#" data-l10n-name="tunnel-setup-reclaim-domain-click-here"></a>
       </div>
       <div id="error-setup" class="error hidden" data-l10n-id="tunnel-setup-error"></div>
       <div id="error-validation" class="error hidden"></div>
-      <button id="create-domain-button" type="button" data-l10n-id="tunnel-setup-create" disabled></button>
+      <button
+        id="create-domain-button"
+        type="button"
+        data-l10n-id="tunnel-setup-create"
+        disabled
+      ></button>
       <div>
         <a id="skip-subdomain-anchor" href="#" data-l10n-id="tunnel-setup-skip"></a>
       </div>

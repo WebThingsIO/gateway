@@ -134,7 +134,7 @@ async function loadAddon(addonPath: string, verbose: boolean): Promise<void> {
         });
       } catch (e) {
         console.error(e);
-        const message = `Failed to start add-on ${obj.name}: ${e
+        const message = `Failed to start add-on ${obj.name}: ${(e as Error)
           .toString()
           .replace(/^Error:\s+/, '')}`;
         fail(addonManagerProxy, message);

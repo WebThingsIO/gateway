@@ -366,7 +366,7 @@ class Things extends EventEmitter {
       console.error('Error getting value for thingId:', thingId, 'property:', propertyName);
       console.error(e);
 
-      throw new HttpErrorWithCode(e, 500);
+      throw new HttpErrorWithCode((e as Error).message, 500);
     }
   }
 
@@ -411,7 +411,7 @@ class Things extends EventEmitter {
         value
       );
 
-      throw new HttpErrorWithCode(e, 500);
+      throw new HttpErrorWithCode((e as Error).message, 500);
     }
   }
 

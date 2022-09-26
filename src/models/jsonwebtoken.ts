@@ -201,7 +201,7 @@ export default class JSONWebToken {
       });
     } catch (err) {
       // If this error is thrown we know the token is invalid.
-      if (err.name === 'JsonWebTokenError') {
+      if ((err as Error).name === 'JsonWebTokenError') {
         return null;
       }
       throw err;

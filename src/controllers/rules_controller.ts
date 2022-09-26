@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 import APIError from '../rules-engine/APIError';
 import Database from '../rules-engine/Database';
 import Engine from '../rules-engine/Engine';
@@ -38,7 +38,7 @@ class RulesController {
         const rule = await this.engine.getRule(id);
         res.send(rule.toDescription());
       } catch (e) {
-        res.status(404).send(new APIError('Engine failed to get rule', e).toString());
+        res.status(404).send(new APIError('Engine failed to get rule', e as Error).toString());
       }
     });
 
@@ -55,16 +55,16 @@ class RulesController {
         );
         res.send({});
       } catch (e) {
-        res.status(404).send(new APIError('Engine failed to update rule', e).toString());
+        res.status(404).send(new APIError('Engine failed to update rule', e as Error).toString());
       }
     });
 
-    this.controller.delete('/:id', async (req, res) => {
+    this.controller.delete('/:id', async (req: Request, res: Response) => {
       try {
         await this.engine.deleteRule(parseInt(req.params.id));
         res.send({});
       } catch (e) {
-        res.status(404).send(new APIError('Engine failed to delete rule', e).toString());
+        res.status(404).send(new APIError('Engine failed to delete rule', e as Error).toString());
       }
     });
   }
@@ -94,7 +94,7 @@ class RulesController {
     try {
       rule = Rule.fromDescription(req.body);
     } catch (e) {
-      res.status(400).send(new APIError('Invalid rule', e).toString());
+      res.status(400).send(new APIError('Invalid rule', e as Error).toString());
       return;
     }
     (<express.Request & WithRule>req).rule = rule;
