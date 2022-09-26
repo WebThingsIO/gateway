@@ -337,32 +337,30 @@ switch (Platform.getOS()) {
 function startGateway(): void {
   // if we have the certificates installed, we start https
   if (TunnelService.hasCertificates()) {
-    serverStartup.promise = TunnelService.userSkipped().then(
-      (skipped): Promise<unknown> => {
-        const promise = startHttpsGateway();
+    serverStartup.promise = TunnelService.userSkipped().then((skipped): Promise<unknown> => {
+      const promise = startHttpsGateway();
 
-        // if the user opted to skip the tunnel, but still has certificates, go
-        // ahead and start up the https server.
-        if (skipped) {
-          return promise;
-        }
-
-        // if they did not opt to skip, check if they have a tunnel token. if so,
-        // start the tunnel.
-        return promise.then((server) => {
-          if (!server) {
-            console.error('Failed to start HTTPS gateway');
-          } else {
-            TunnelService.hasTunnelToken().then((result) => {
-              if (result) {
-                TunnelService.setServerHandle(server!);
-                TunnelService.start();
-              }
-            });
-          }
-        });
+      // if the user opted to skip the tunnel, but still has certificates, go
+      // ahead and start up the https server.
+      if (skipped) {
+        return promise;
       }
-    );
+
+      // if they did not opt to skip, check if they have a tunnel token. if so,
+      // start the tunnel.
+      return promise.then((server) => {
+        if (!server) {
+          console.error('Failed to start HTTPS gateway');
+        } else {
+          TunnelService.hasTunnelToken().then((result) => {
+            if (result) {
+              TunnelService.setServerHandle(server!);
+              TunnelService.start();
+            }
+          });
+        }
+      });
+    });
   } else {
     serverStartup.promise = startHttpGateway();
   }

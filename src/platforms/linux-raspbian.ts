@@ -167,7 +167,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       try {
         data = fs.readFileSync('/etc/hostapd/hostapd.conf', 'utf8');
       } catch (err) {
-        if (err.code !== 'ENOENT') {
+        if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
           throw err;
         }
       }

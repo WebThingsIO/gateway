@@ -45,9 +45,8 @@ export default class DeviceProxy extends Device {
       (<{ pinPattern: string | null }>(<unknown>this)).pinPattern = null;
     }
 
-    (<{ credentialsRequired: boolean }>(
-      (<unknown>this)
-    )).credentialsRequired = !!deviceDict.credentialsRequired;
+    (<{ credentialsRequired: boolean }>(<unknown>this)).credentialsRequired =
+      !!deviceDict.credentialsRequired;
 
     for (const propertyName in deviceDict.properties) {
       const propertyDict = deviceDict.properties[propertyName];
