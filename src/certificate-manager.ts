@@ -109,8 +109,8 @@ export async function register(
     // Store the token in the db
     await Settings.setSetting('tunneltoken', jsonToken);
   } catch (e) {
-    console.error('Failed to subscribe:', e);
-    callback(e);
+    console.error('Failed to subscribe:', e as Error);
+    callback((e as Error).message);
     return;
   }
 
@@ -126,7 +126,7 @@ export async function register(
       console.log('Set email on server.');
     } catch (e) {
       console.error('Failed to set email on server:', e);
-      callback(e);
+      callback((e as Error).message);
       return;
     }
   }
@@ -216,7 +216,7 @@ export async function register(
     console.log('Wrote certificates to file system');
   } catch (e) {
     console.error('Failed to generate certificate:', e);
-    callback(e);
+    callback((e as Error).message);
     return;
   }
 

@@ -1,11 +1,10 @@
-<!DOCTYPE html>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title data-l10n-id="wifi-setup-title">Wi-Fi Setup - WebThings Gateway</title>
     <link rel="stylesheet" type="text/css" href="/css/wifi-setup.css" />
     <link rel="icon" href="/images/icon.png" type="image/png" />
@@ -15,35 +14,53 @@
       <div id="step1">
         <div id="maindiv">
           <h3 data-l10n-id="wifi-setup-header"></h3>
-          <br>
+          <br />
           {{#networks}}
-          <button data-ssid="{{{escapeQuotes ssid}}}" data-password-required="{{pwdRequired}}"
-            class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id="wifi-icon" src="{{icon}}" data-l10n-id="wifi-setup-network-icon">
-          </button>
+            <button
+              data-ssid="{{{escapeQuotes ssid}}}"
+              data-password-required="{{pwdRequired}}"
+              class="item ssid"
+            ><div id="text-ssid">{{ssid}}</div>
+              <img id="wifi-icon" src="{{icon}}" data-l10n-id="wifi-setup-network-icon" />
+            </button>
           {{/networks}}
-          <br>
-          <br>
+          <br />
+          <br />
           <button id="skip-button" class="item skip" data-l10n-id="wifi-setup-skip"></button>
         </div>
       </div>
       <div id="step2">
-        <input type="button" class="backbtn" id="back-button">
+        <input type="button" class="backbtn" id="back-button" />
         <div id="network-label">
-          <div id="div-wifi-icon-2"><img id="img-wifi-icon-2" src="/images/wifi.svg" data-l10n-id="wifi-setup-network-icon"></div>
+          <div id="div-wifi-icon-2"><img
+              id="img-wifi-icon-2"
+              src="/images/wifi.svg"
+              data-l10n-id="wifi-setup-network-icon"
+            /></div>
           <div id="div-wifi-text"><h3 id="selected-network"></h3></div>
         </div>
         <div id="maindiv2">
-          <input type="password" name="password" data-l10n-id="wifi-setup-input-password"
-                 class="item password" minlength="8">
-          <input id="showpassword" type="checkbox" class="showpassword-checkbox">
+          <input
+            type="password"
+            name="password"
+            data-l10n-id="wifi-setup-input-password"
+            class="item password"
+            minlength="8"
+          />
+          <input id="showpassword" type="checkbox" class="showpassword-checkbox" />
           <label for="showpassword" data-l10n-id="wifi-setup-show-password"></label>
-          <br>
-          <br>
-          <input type="submit" name="connect" data-l10n-id="wifi-setup-connect" class="item connect">
+          <br />
+          <br />
+          <input
+            type="submit"
+            name="connect"
+            data-l10n-id="wifi-setup-connect"
+            class="item connect"
+          />
         </div>
       </div>
-      <input id="ssid" name="ssid" type="hidden" value="">
-      <input id="skip" name="skip" type="hidden" value="">
+      <input id="ssid" name="ssid" type="hidden" value="" />
+      <input id="skip" name="skip" type="hidden" value="" />
       <img id="wordmark" data-l10n-id="wordmark" src="/images/webthings-gateway-lockup.svg" />
     </form>
   </body>

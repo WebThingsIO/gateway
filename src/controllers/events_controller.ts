@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 import Things from '../models/things';
 import Thing from '../models/thing';
 import Events from '../models/events';
@@ -20,7 +20,7 @@ function build(): express.Router {
   /**
    * Handle getting events of all types.
    */
-  controller.get('/', (request, response) => {
+  controller.get('/', (request: Request, response: Response) => {
     // Serve either an event stream or a log depending on requested content type
     if (request.accepts('text/event-stream')) {
       openEventStream(request, response);
@@ -32,7 +32,7 @@ function build(): express.Router {
   /**
    * Handle getting events of a specific type.
    */
-  controller.get('/:eventName', (request, response) => {
+  controller.get('/:eventName', (request: Request, response: Response) => {
     // Serve either an event stream or a log depending on requested content type
     if (request.accepts('text/event-stream')) {
       openEventStream(request, response);

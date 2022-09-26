@@ -1,21 +1,20 @@
-<!DOCTYPE html>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#75AACF">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#75AACF" />
     <title data-l10n-id="authorize-title">Authorization Request - WebThings Gateway</title>
-    <link rel="manifest" href="/app.webmanifest">
+    <link rel="manifest" href="/app.webmanifest" />
     <link rel="icon" href="/images/icon.png" type="image/png" />
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <link rel="stylesheet" type="text/css" href="/css/thing.css" />
     <link rel="stylesheet" type="text/css" href="/css/authorize.css" />
   </head>
   <body class="hidden">
-    <img id="wordmark" src="/images/webthings-gateway-lockup.svg" data-l10n-id="wordmark"/>
+    <img id="wordmark" src="/images/webthings-gateway-lockup.svg" data-l10n-id="wordmark" />
 
     <!-- OAuth Authorization -->
     <section id="authorize-view" class="selected">
@@ -29,7 +28,10 @@
           <b id="authorize-name">{{name}}</b>
           <span id="authorize-function" class="authorize-select-container">
             <select class="authorize-select">
-              <option id="authorize-readwrite" data-l10n-id="authorize-monitor-and-control"></option>
+              <option
+                id="authorize-readwrite"
+                data-l10n-id="authorize-monitor-and-control"
+              ></option>
               <option id="authorize-read" data-l10n-id="authorize-monitor"></option>
             </select>
           </span>
@@ -41,20 +43,26 @@
         </p>
         <ul id="authorize-things">
           <li class="authorize-all-things">
-            <input id="authorize-all-things" type="checkbox" class="generic-checkbox">
+            <input id="authorize-all-things" type="checkbox" class="generic-checkbox" />
             <label for="authorize-all-things" data-l10n-id="authorize-allow-all">
             </label>
           </li>
         </ul>
 
-        <input name="response_type" value="{{request.response_type}}" type="hidden">
-        <input name="client_id" value="{{request.client_id}}" type="hidden">
-        <input id="authorize-scope" name="scope" value="{{request.scope}}" type="hidden">
-        <input name="state" value="{{request.state}}" type="hidden">
-        <input name="redirect_uri" value="{{request.redirect_uri}}" type="hidden">
-        <input id="jwt" name="jwt" value="" type="hidden">
+        <input name="response_type" value="{{request.response_type}}" type="hidden" />
+        <input name="client_id" value="{{request.client_id}}" type="hidden" />
+        <input id="authorize-scope" name="scope" value="{{request.scope}}" type="hidden" />
+        <input name="state" value="{{request.state}}" type="hidden" />
+        <input name="redirect_uri" value="{{request.redirect_uri}}" type="hidden" />
+        <input id="jwt" name="jwt" value="" type="hidden" />
 
-        <input id="authorize-button" type="submit" data-l10n-id="authorize-allow" class="text-button" disabled>
+        <input
+          id="authorize-button"
+          type="submit"
+          data-l10n-id="authorize-allow"
+          class="text-button"
+          disabled
+        />
         <a id="cancel-button" href="/" class="text-button" data-l10n-id="authorize-deny"></a>
       </form>
     </section>

@@ -134,9 +134,11 @@ describe('things/', function () {
     return res;
   }
 
-  function makeDescr(
-    id: string
-  ): { id: string; title: string; properties: Record<string, unknown> } {
+  function makeDescr(id: string): {
+    id: string;
+    title: string;
+    properties: Record<string, unknown>;
+  } {
     return {
       id: id,
       title: id,
@@ -170,7 +172,7 @@ describe('things/', function () {
     try {
       await addDevice();
     } catch (err) {
-      expect(err.status).toEqual(400);
+      expect((err as ChaiHttp.Response).status).toEqual(400);
     }
   });
 

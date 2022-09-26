@@ -5,7 +5,8 @@
     {
       "files": "*.handlebars",
       "options": {
-        "singleQuote": false      }
+        "singleQuote": false
+      }
     }
   ]
 }
