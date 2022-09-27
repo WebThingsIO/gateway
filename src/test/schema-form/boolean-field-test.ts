@@ -71,6 +71,9 @@ describe('BooleanField', () => {
       },
     });
 
+    // Append the node to the DOM so that click events trigger a change
+    document.body.appendChild(node);
+
     node.querySelector('input')!.click();
 
     expect(schemaForm.formData).toEqual(true);

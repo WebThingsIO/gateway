@@ -486,6 +486,9 @@ describe('ArrayField', () => {
       it('should handle a change event', () => {
         const { schemaForm, node } = createSchemaForm({ schema });
 
+        // Append the node to the DOM so that click events trigger a change
+        document.body.appendChild(node);
+
         (<HTMLInputElement>node.querySelectorAll('[type=checkbox]')[0]).click();
         (<HTMLInputElement>node.querySelectorAll('[type=checkbox]')[2]).click();
 
