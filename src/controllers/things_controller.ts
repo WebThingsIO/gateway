@@ -376,8 +376,9 @@ function build(): express.Router {
       response.sendStatus(204);
     } catch (err) {
       console.error('Error setting property:', err);
-      response.status((err as HttpErrorWithCode).code || 500).send(
-        (err as HttpErrorWithCode).message);
+      response
+        .status((err as HttpErrorWithCode).code || 500)
+        .send((err as HttpErrorWithCode).message);
     }
   });
 
