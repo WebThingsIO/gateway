@@ -29,4 +29,6 @@ beforeEach(() => {
 
 afterEach(() => {
   (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox.restore();
+  // Clean up any nodes added to the DOM
+  document.body.innerHTML = '';
 });
