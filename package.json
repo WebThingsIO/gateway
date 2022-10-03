@@ -45,7 +45,7 @@
     "csv-parse": "^4.15.3",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
-    "express-handlebars": "^5.2.1",
+    "express-handlebars": "^5.3.1",
     "express-rate-limit": "^5.2.6",
     "express-ws": "^4.0.0",
     "find": "^0.3.0",
