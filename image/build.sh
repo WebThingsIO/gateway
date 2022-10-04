@@ -13,8 +13,8 @@ compgen -G "node_modules*" >/dev/null && rm -rf node_modules* || true
 _temp=$(mktemp -d)
 cp -a "${here}/.." "${_temp}"
 
-# get a fresh copy of pi-gen
-git clone https://github.com/RPi-Distro/pi-gen.git
+# clone the latest buster release from the pi-gen repo, currently 2022-09-22
+git clone --depth 1 --branch 2022-09-22-raspios-buster https://github.com/RPi-Distro/pi-gen.git
 
 # replace stage3 and add our config and the gateway source
 rm -rf pi-gen/stage3
@@ -32,9 +32,14 @@ else
   sed -i '' 's_FROM debian:buster_FROM i386/debian:buster_' Dockerfile
 fi
 
-# skip stage4 and stage5
-touch ./stage4/SKIP ./stage5/SKIP
-touch ./stage2/SKIP_IMAGES ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
+# skip stage4
+touch ./stage4/SKIP
+touch ./stage2/SKIP_IMAGES ./stage4/SKIP_IMAGES
+ 
+# skip stage5
+# Commented out because there is no stage5 on the 2022-09-22-raspios-buster branch
+#touch ./stage5/SKIP
+#touch ./stage5/SKIP_IMAGES
 
 # build it
 PRESERVE_CONTAINER=1 ./build-docker.sh
