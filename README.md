@@ -155,9 +155,9 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
   ```
   $ node --version
-  v12.19.0
+  v10.23.0
   $ npm --version
-  6.14.8
+  6.14.9
   ```
 
   Note: these versions might differ from the LTS version installed locally.
