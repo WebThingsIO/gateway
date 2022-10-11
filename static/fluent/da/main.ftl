@@ -249,6 +249,7 @@ add-thing-cancel = Annuller
 context-menu-choose-icon = Vælg ikon…
 context-menu-save = Gem
 context-menu-remove = Fjern
+context-menu-show-on-floorplan = Vis på plantegning?
 
 ## Capabilities
 
