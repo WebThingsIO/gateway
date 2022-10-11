@@ -413,6 +413,8 @@ new-thing-password =
 new-thing-credentials-error = Ugyldige loginoplysninger
 new-thing-saved = Gemt
 new-thing-done = Færdig
+add-group = Tilføj ny gruppe
+new-group-save = Opret
 
 ## New Web Thing View
 
