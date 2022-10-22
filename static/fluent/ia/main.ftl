@@ -33,7 +33,7 @@ add-things =
 
 ## Floorplan
 
-upload-floorplan = Cargamento del plano terren…
+upload-floorplan = Incargar un plano de etage…
 upload-floorplan-hint = (.svg recommendate)
 
 ## Top-Level Settings
