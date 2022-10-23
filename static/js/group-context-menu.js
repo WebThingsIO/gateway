@@ -22,6 +22,7 @@ const GroupContextMenu = {
     this.editContent = document.getElementById('group-context-menu-content-edit');
     this.removeContent = document.getElementById('group-context-menu-content-remove');
     this.backButton = document.getElementById('group-context-menu-back-button');
+    this.headingText = document.getElementById('group-context-menu-heading-text');
     this.saveButton = document.getElementById('edit-group-save-button');
     this.titleInput = document.getElementById('edit-group-title');
     this.removeButton = document.getElementById('remove-group-button');
@@ -38,6 +39,7 @@ const GroupContextMenu = {
    * Show Context Menu.
    */
   show: function (e) {
+    this.headingText.textContent = e.detail.groupTitle;
     this.groupId = e.detail.groupId;
     this.element.classList.remove('hidden');
 
@@ -46,6 +48,7 @@ const GroupContextMenu = {
 
     switch (e.detail.action) {
       case 'edit': {
+        this.headingText.classList.add('hidden');
         this.titleInput.disabled = false;
         this.saveButton.disabled = false;
         this.titleInput.value = e.detail.groupTitle;
@@ -53,6 +56,7 @@ const GroupContextMenu = {
         break;
       }
       case 'remove':
+        this.headingText.classList.remove('hidden');
         this.removeContent.classList.remove('hidden');
         break;
     }
@@ -63,6 +67,7 @@ const GroupContextMenu = {
    */
   hide: function () {
     this.element.classList.add('hidden');
+    this.headingText.textContent = '';
     this.groupId = '';
   },
 
