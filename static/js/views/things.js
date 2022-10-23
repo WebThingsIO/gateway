@@ -13,6 +13,7 @@
 const page = require('page');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
+const AddGroupScreen = require('./add-group');
 const App = require('../app');
 const Constants = require('../constants');
 const EventList = require('./event-list');
@@ -36,7 +37,8 @@ const ThingsScreen = {
     this.backButton = document.getElementById('back-button');
     this.backRef = '/things';
     this.backButton.addEventListener('click', () => page(this.backRef));
-    this.addButton.addEventListener('click', AddThingScreen.show.bind(AddThingScreen));
+    this.addButton.addEventListener('click', App.toggleOverflowMenu.bind(App));
+
     this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
 
@@ -73,6 +75,18 @@ const ThingsScreen = {
     }
 
     App.hideOverflowButton();
+
+    const menu = [
+      {
+        listener: AddThingScreen.show.bind(AddThingScreen),
+        name: fluent.getMessage('new-thing'),
+      },
+      {
+        listener: AddGroupScreen.show.bind(AddGroupScreen),
+        name: fluent.getMessage('new-group'),
+      },
+    ];
+    App.buildOverflowMenu(menu);
 
     if (thingId) {
       this.addButton.classList.add('hidden');

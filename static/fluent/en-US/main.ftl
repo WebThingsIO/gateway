@@ -30,6 +30,8 @@ thing-details =
     .aria-label = View Properties
 add-things =
     .aria-label = Add New Things
+new-thing = Add thing
+new-group = Add group
 
 ## Floorplan
 
