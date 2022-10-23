@@ -2,14 +2,6 @@
   text-align: center;
 }
 
-#group-context-menu-heading {
-  line-height: 9.6rem;
-}
-
-#group-context-menu-heading-text {
-  font-size: 1.6rem;
-}
-
 #group-context-menu-content {
   text-align: center;
   position: relative;
@@ -17,7 +9,6 @@
   transform: translateY(-50%);
 }
 
-#group-context-menu-heading .hidden,
 #group-context-menu-content .hidden {
   display: none;
 }
@@ -47,9 +38,16 @@
   max-width: 65rem;
   margin: 1rem auto;
   padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+#group-context-menu-content-heading {
+  text-align: center;
+}
+
+#group-context-menu-content-editcontent {
   display: flex;
   flex-direction: row;
-  border-radius: 0.5rem;
 }
 
 #edit-group-metadata {

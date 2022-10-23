@@ -416,6 +416,7 @@ new-thing-saved = Gespeichert
 new-thing-done = Erledigt
 add-group = Neue Gruppe hinzufügen
 new-group-save = Erstellen
+edit-group = Gruppe bearbeiten
 
 ## New Web Thing View
 
