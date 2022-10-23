@@ -66,7 +66,7 @@
   transform: rotate(-90deg);
 }
 
-.group.open.drag-target {
+.group.drag-target {
   border: 0.2rem dashed white;
 }
 

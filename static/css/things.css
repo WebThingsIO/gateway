@@ -11,32 +11,25 @@
 
 #things-container {
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
+  margin: auto;
+  width: calc(100% - 10rem);
 }
 
 #things {
   text-align: center;
   font-size: 1.6rem;
   color: #fff;
-  flex-direction: column;
-  margin: auto;
-  padding-left: 5px;
-  padding-right: 5px;
   min-height: 50px;
+  margin: auto;
   width: calc(100% - 10rem);
 }
 
 #groups {
   text-align: center;
   font-size: 1.6rem;
-  flex-direction: column;
   color: #fff;
-  display: flex;
   margin: auto;
+  width: calc(100% - 10rem);
 }
 
 #add-button {
