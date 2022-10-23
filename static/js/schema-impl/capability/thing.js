@@ -680,7 +680,7 @@ class Thing {
     e.stopPropagation();
 
     const dragNode = document.getElementById(e.dataTransfer.getData('text'));
-    if (!dragNode) {
+    if (!dragNode || dragNode == this.element) {
       return;
     }
 
