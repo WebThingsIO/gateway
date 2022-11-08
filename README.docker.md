@@ -96,8 +96,8 @@ http://&lt;host-ip-address&gt;:8080
 If you'd like to build an image yourself, run the following:
 
 ```shell
-git clone https://github.com/WebThingsIO/gateway-docker
-cd gateway-docker
+git clone https://github.com/WebThingsIO/gateway
+cd gateway
 docker build -t gateway .
 docker run \
     -d \
