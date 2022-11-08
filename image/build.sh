@@ -13,8 +13,10 @@ compgen -G "node_modules*" >/dev/null && rm -rf node_modules* || true
 _temp=$(mktemp -d)
 cp -a "${here}/.." "${_temp}"
 
-# clone the latest buster release from the pi-gen repo, currently 2022-09-22
-git clone --depth 1 --branch 2022-09-22-raspios-buster https://github.com/RPi-Distro/pi-gen.git
+# clone the buster branch from our fork of the pi-gen repo
+# Temporarily forked to enable setting capabilities inside chroot
+# See https://github.com/WebThingsIO/gateway/issues/2985
+git clone --branch buster https://github.com/WebThingsIO/pi-gen.git
 
 # replace stage3 and add our config and the gateway source
 rm -rf pi-gen/stage3
