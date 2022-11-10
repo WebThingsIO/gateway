@@ -7,6 +7,7 @@ on:
     paths:
       - README.docker.md
       - .github/workflows/dockerhub-description.yml
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,6 +18,6 @@ jobs:
         uses: peter-evans/dockerhub-description@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
-          password: ${{ secrets.DOCKER_HUB_REAL_PASSWORD }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: webthingsio/gateway
           readme-filepath: ./README.docker.md
