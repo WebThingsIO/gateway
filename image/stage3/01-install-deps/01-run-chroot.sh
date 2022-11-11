@@ -28,7 +28,6 @@ nvm_get_arch() {
 # Install node
 nvm install ${NODE_VERSION}
 nvm use ${NODE_VERSION}
-nvm install-latest-npm
 
 # Allow node to use the Bluetooth adapter
 sudo setcap cap_net_raw+eip $(eval readlink -f $(which node))
