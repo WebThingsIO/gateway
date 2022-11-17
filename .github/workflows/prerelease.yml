@@ -1,9 +1,10 @@
-name: Build and push release images
+name: Build and push pre-release images
 
 on:
   push:
     tags:
-    - '[0-9]+.[0-9]+.[0-9]+'
+    - '[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+'
+    - '[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
 
 jobs:
   create-release:
@@ -39,7 +40,7 @@ jobs:
           publish: true
           imageName: webthingsio/gateway
           platform: linux/amd64,linux/arm/v7,linux/arm64
-          tag: latest,${{ env.RELEASE_VERSION }}
+          tag: ${{ env.RELEASE_VERSION }}
           dockerUser: ${{ secrets.DOCKER_HUB_USER }}
           dockerPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
