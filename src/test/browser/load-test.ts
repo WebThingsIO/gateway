@@ -13,7 +13,7 @@ describe('basic browser tests', () => {
     }
   });
 
-  it('creates a user', async () => {
+  it.skip('creates a user', async () => {
     const browser = getBrowser();
 
     await browser.url('/');

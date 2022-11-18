@@ -9,7 +9,7 @@ import { AddressInfo } from 'net';
 import { Server } from 'http';
 
 describe('Thing', () => {
-  it('should render an unknown thing and be able to change properties', async () => {
+  it.skip('should render an unknown thing and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'UnknownThing',
@@ -109,7 +109,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render a thing with spaced property names', async () => {
+  it.skip('should render a thing with spaced property names', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'spacedPropertyThings',
@@ -253,7 +253,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render an onOffLight and be able to change properties', async () => {
+  it.skip('should render an onOffLight and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'onOffLight',
@@ -294,7 +294,7 @@ describe('Thing', () => {
     expect(detailPage).toBeTruthy();
   });
 
-  it('should render an onOffSwitch and be able to change properties', async () => {
+  it.skip('should render an onOffSwitch and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'onOffSwitch',
@@ -336,7 +336,7 @@ describe('Thing', () => {
     expect(detailPage).toBeTruthy();
   });
 
-  it('should render a dimmableLight and be able to change properties', async () => {
+  it.skip('should render a dimmableLight and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'dimmableLight',
@@ -430,7 +430,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render an onOffColorLight and be able to change properties', async () => {
+  it.skip('should render an onOffColorLight and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'onOffColorLight',
@@ -506,7 +506,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render a dimmableColorLight and be able to change properties', async () => {
+  it.skip('should render a dimmableColorLight and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'dimmableColorLight',
@@ -612,7 +612,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render a multiLevelSwitch and be able to change properties', async () => {
+  it.skip('should render a multiLevelSwitch and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'multiLevelSwitch',
@@ -706,7 +706,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render a smartPlug and be able to change properties', async () => {
+  it.skip('should render a smartPlug and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'smartPlug',
@@ -868,7 +868,7 @@ describe('Thing', () => {
     });
   });
 
-  it('should render a binarySensor and be able to change properties', async () => {
+  it.skip('should render a binarySensor and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'binarySensor',
@@ -906,7 +906,7 @@ describe('Thing', () => {
     expect(detailPage).toBeTruthy();
   });
 
-  it('should render a multiLevelSensor and be able to change properties', async () => {
+  it.skip('should render a multiLevelSensor and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'multiLevelSensor',
@@ -951,7 +951,7 @@ describe('Thing', () => {
     expect(detailPage).toBeTruthy();
   });
 
-  it('should render a humidity sensor and be able to change properties', async () => {
+  it.skip('should render a humidity sensor and be able to change properties', async () => {
     const browser = getBrowser();
     const desc = {
       id: 'humiditySensor',
@@ -1004,7 +1004,7 @@ describe('Thing', () => {
       });
     });
 
-    it('should render camera image and show image', async () => {
+    it.skip('should render camera image and show image', async () => {
       const browser = getBrowser();
       const desc = {
         id: 'Camera',
@@ -1054,7 +1054,7 @@ describe('Thing', () => {
       expect(await img.getAttribute('src')).toBeTruthy();
     });
 
-    it('should render video camera and show video', async () => {
+    it.skip('should render video camera and show video', async () => {
       const browser = getBrowser();
       const desc = {
         id: 'VideoCamera',
