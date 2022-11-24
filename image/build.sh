@@ -56,8 +56,15 @@ _image_name=${_image_name/.zip/}
 mv pi-gen/deploy/*.zip "gateway-${_version}.img.zip"
 shasum --algorithm 256 "gateway-${_version}.img.zip" > "gateway-${_version}.img.zip.sha256sum"
 
-# copy the built gateway out of the docker image
-docker cp "pigen_work:/pi-gen/work/${_image_name}/stage3/rootfs/home/pi/webthings/gateway" .
+# Unzip the gateway image to extract gateway directory for OTA update
+unzip gateway-${_version}.img.zip
+# Map partitions from image and read name of last partition which should be the Linux one
+_partition=$(sudo kpartx -av *-Raspbian.img | awk '{print $3}' | tail -n 1)
+# Mount the partition
+sudo mkdir -p /mnt/gateway-${_version}
+sudo mount /dev/mapper/${_partition} /mnt/gateway-${_version}
+# Copy the gateway folder out of the partition to the current directory
+cp -r /mnt/gateway-${_version}/home/pi/webthings/gateway .
 
 makeContentAddressedArchive() {
   base_name="$1"
@@ -73,5 +80,7 @@ makeContentAddressedArchive node_modules
 makeContentAddressedArchive gateway
 
 # clean up
-rm -rf gateway node_modules pi-gen
+sudo umount /mnt/gateway-${_version}
+sudo rm -rf /mnt/gateway-${_version}
+rm -rf gateway node_modules pi-gen *-Raspbian.img
 docker rm -v pigen_work
