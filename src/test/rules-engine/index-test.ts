@@ -625,9 +625,9 @@ describe('rules engine', () => {
         .set('Accept', 'application/json')
         .set(...headerAuth(jwt));
       expect(res.status).toEqual(200);
-      expect(Array.isArray(res.body)).toBeTruthy();
-      expect(res.body.length).toEqual(1);
-      expect(res.body[0]).toHaveProperty('blink');
+      expect(Object.keys(res.body).length).toEqual(1);
+      expect(res.body).toHaveProperty('blink');
+      expect(Array.isArray(res.body.blink));
     });
 
     // dispatch event get action

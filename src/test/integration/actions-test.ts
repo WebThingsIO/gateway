@@ -53,8 +53,7 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(0);
+    expect(Object.keys(res.body).length).toEqual(0);
 
     res = await chai
       .request(server)
@@ -128,12 +127,13 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('pair');
-    expect(res.body[0].pair).toHaveProperty('href');
-    expect(res.body[0].pair).toHaveProperty('status');
-    expect(res.body[0].pair).toHaveProperty('timeRequested');
+
+    expect(Object.keys(res.body).length).toEqual(1);
+    expect(res.body).toHaveProperty('pair');
+    expect(Array.isArray(res.body.pair));
+    expect(res.body.pair[0]).toHaveProperty('href');
+    expect(res.body.pair[0]).toHaveProperty('status');
+    expect(res.body.pair[0]).toHaveProperty('timeRequested');
 
     res = await chai
       .request(server)
@@ -155,10 +155,9 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('pair');
-    expect(res.body.pair).toHaveProperty('href');
-    expect(res.body.pair).toHaveProperty('status');
-    expect(res.body.pair).toHaveProperty('timeRequested');
+    expect(res.body).toHaveProperty('href');
+    expect(res.body).toHaveProperty('status');
+    expect(res.body).toHaveProperty('timeRequested');
   });
 
   it('should list and retrieve the new action by name', async () => {
@@ -181,12 +180,12 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('pair');
-    expect(res.body[0].pair).toHaveProperty('href');
-    expect(res.body[0].pair).toHaveProperty('status');
-    expect(res.body[0].pair).toHaveProperty('timeRequested');
+    expect(Object.keys(res.body).length).toEqual(1);
+    expect(res.body).toHaveProperty('pair');
+    expect(Array.isArray(res.body.pair));
+    expect(res.body.pair[0]).toHaveProperty('href');
+    expect(res.body.pair[0]).toHaveProperty('status');
+    expect(res.body.pair[0]).toHaveProperty('timeRequested');
 
     res = await chai
       .request(server)
@@ -208,10 +207,9 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('pair');
-    expect(res.body.pair).toHaveProperty('href');
-    expect(res.body.pair).toHaveProperty('status');
-    expect(res.body.pair).toHaveProperty('timeRequested');
+    expect(res.body).toHaveProperty('href');
+    expect(res.body).toHaveProperty('status');
+    expect(res.body).toHaveProperty('timeRequested');
   });
 
   it('should error retrieving a nonexistent action', async () => {
@@ -246,10 +244,9 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
+    expect(Object.keys(res.body).length).toEqual(1);
 
-    const actionHref = res.body[0].pair.href;
+    const actionHref = res.body.pair[0].href;
     res = await chai
       .request(server)
       .delete(actionHref)
@@ -262,8 +259,7 @@ describe('actions/', () => {
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(0);
+    expect(Object.keys(res.body).length).toEqual(0);
   });
 
   it('should error removing a nonexistent action', async () => {
@@ -299,8 +295,7 @@ describe('actions/', () => {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
+    expect(Object.keys(res.body).length).toEqual(1);
 
     res = await chai
       .request(server)
@@ -340,10 +335,12 @@ describe('actions/', () => {
       .get(Constants.ACTIONS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body[0]).toHaveProperty('unpair');
-    expect(res.body[0].unpair).toHaveProperty('href');
-    expect(res.body[0].unpair).toHaveProperty('status');
-    expect(res.body[0].unpair.status).toEqual('completed');
+
+    expect(Object.keys(res.body).length).toEqual(1);
+    expect(res.body).toHaveProperty('unpair');
+    expect(Array.isArray(res.body.unpair));
+    expect(res.body.unpair[0]).toHaveProperty('href');
+    expect(res.body.unpair[0]).toHaveProperty('status');
+    expect(res.body.unpair[0].status).toEqual('completed');
   });
 });

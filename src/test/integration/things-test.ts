@@ -1182,9 +1182,8 @@ describe('things/', function () {
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt));
         expect(res.status).toEqual(200);
-        expect(Array.isArray(res.body)).toBeTruthy();
-        expect(res.body.length).toEqual(1);
-        const actionHref = res.body[0].pair.href;
+        expect(Object.keys(res.body).length).toEqual(1);
+        const actionHref = res.body.pair[0].href;
 
         res = await chai
           .request(server)
@@ -1199,8 +1198,7 @@ describe('things/', function () {
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt));
 
-        expect(Array.isArray(res.body)).toBeTruthy();
-        expect(res.body.length).toEqual(0);
+        expect(Object.keys(res.body).length).toEqual(0);
 
         return actionHref;
       })(),
@@ -1274,11 +1272,11 @@ describe('things/', function () {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('reboot');
-    expect(res.body[0].reboot).toHaveProperty('href');
-    expect(res.body[0].reboot.href.startsWith(thingBase)).toBeTruthy();
+    expect(Object.keys(res.body).length).toEqual(1);
+    expect(res.body).toHaveProperty('reboot');
+    expect(Array.isArray(res.body.reboot));
+    expect(res.body.reboot[0]).toHaveProperty('href');
+    expect(res.body.reboot[0].href.startsWith(thingBase)).toBeTruthy();
 
     // Expect it to not show up in the root (Gateway's) actions route
     res = await chai
@@ -1287,8 +1285,7 @@ describe('things/', function () {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(0);
+    expect(Object.keys(res.body).length).toEqual(0);
   });
 
   it('fails to create an action on a nonexistent thing', async () => {
@@ -1361,11 +1358,10 @@ describe('things/', function () {
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0]).toHaveProperty('reboot');
-    expect(res.body[0].reboot).toHaveProperty('href');
-    expect(res.body[0].reboot.href.startsWith(thingBase)).toBeTruthy();
+    expect(Object.keys(res.body).length).toEqual(1);
+    expect(Array.isArray(res.body.reboot));
+    expect(res.body.reboot[0]).toHaveProperty('href');
+    expect(res.body.reboot[0].href.startsWith(thingBase)).toBeTruthy();
 
     await webSocketClose(ws);
   });
