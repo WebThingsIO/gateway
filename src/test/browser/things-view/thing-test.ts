@@ -14,7 +14,7 @@ describe('Thing', () => {
     const desc = {
       id: 'UnknownThing',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': [],
       properties: {
         numberProp: {
@@ -114,7 +114,7 @@ describe('Thing', () => {
     const desc = {
       id: 'spacedPropertyThings',
       title: 'battery sensor',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': [],
       properties: {
         'spaced number': {
@@ -175,7 +175,7 @@ describe('Thing', () => {
     const desc = {
       id: 'UnknownThing',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': [],
       properties: {
         rejectPropertyNum: {
@@ -258,7 +258,7 @@ describe('Thing', () => {
     const desc = {
       id: 'onOffLight',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['Light', 'OnOffSwitch'],
       properties: {
         power: {
@@ -299,7 +299,7 @@ describe('Thing', () => {
     const desc = {
       id: 'onOffSwitch',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['OnOffSwitch'],
       properties: {
         power: {
@@ -341,7 +341,7 @@ describe('Thing', () => {
     const desc = {
       id: 'dimmableLight',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['Light', 'OnOffSwitch'],
       properties: {
         power: {
@@ -435,7 +435,7 @@ describe('Thing', () => {
     const desc = {
       id: 'onOffColorLight',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['Light', 'ColorControl', 'OnOffSwitch'],
       properties: {
         power: {
@@ -511,7 +511,7 @@ describe('Thing', () => {
     const desc = {
       id: 'dimmableColorLight',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['Light', 'ColorControl', 'OnOffSwitch'],
       properties: {
         power: {
@@ -617,7 +617,7 @@ describe('Thing', () => {
     const desc = {
       id: 'multiLevelSwitch',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['MultiLevelSwitch', 'OnOffSwitch'],
       properties: {
         power: {
@@ -711,7 +711,7 @@ describe('Thing', () => {
     const desc = {
       id: 'smartPlug',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['SmartPlug', 'EnergyMonitor', 'MultiLevelSwitch', 'OnOffSwitch'],
       properties: {
         power: {
@@ -873,7 +873,7 @@ describe('Thing', () => {
     const desc = {
       id: 'binarySensor',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['BinarySensor'],
       properties: {
         active: {
@@ -911,7 +911,7 @@ describe('Thing', () => {
     const desc = {
       id: 'multiLevelSensor',
       title: 'foofoo',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['MultiLevelSensor'],
       properties: {
         active: {
@@ -956,7 +956,7 @@ describe('Thing', () => {
     const desc = {
       id: 'humiditySensor',
       title: 'Humidity',
-      '@context': 'https://webthings.io/schemas',
+      '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
       '@type': ['HumiditySensor'],
       properties: {
         humidity: {
@@ -1009,7 +1009,7 @@ describe('Thing', () => {
       const desc = {
         id: 'Camera',
         title: 'Camera',
-        '@context': 'https://webthings.io/schemas',
+        '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
         '@type': ['Camera'],
         properties: {
           photo: {
@@ -1059,7 +1059,7 @@ describe('Thing', () => {
       const desc = {
         id: 'VideoCamera',
         title: 'VideoCamera',
-        '@context': 'https://webthings.io/schemas',
+        '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
         '@type': ['VideoCamera'],
         properties: {
           video: {

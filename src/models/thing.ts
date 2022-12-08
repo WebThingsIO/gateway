@@ -34,7 +34,7 @@ export interface Router {
 export interface ThingDescription {
   id: string;
   title: string;
-  '@context': string;
+  '@context': string | string[];
   '@type': string[];
   description: string;
   base: string;
@@ -79,7 +79,7 @@ export default class Thing extends EventEmitter {
 
   private title: string;
 
-  private '@context': string;
+  private '@context': string | string[];
 
   private '@type': string[];
 
@@ -133,7 +133,11 @@ export default class Thing extends EventEmitter {
     // Parse the Thing Description
     this.id = id;
     this.title = description.title || (<Record<string, string>>(<unknown>description)).name || '';
-    this['@context'] = description['@context'] || 'https://webthings.io/schemas';
+    if (description['@context']) {
+      this['@context'] = Utils.standardizeContext(description['@context']);
+    } else {
+      this['@context'] = Constants.DEFAULT_CONTEXT;
+    }
     this['@type'] = description['@type'] || [];
     this.description = description.description || '';
     this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
@@ -707,7 +711,11 @@ export default class Thing extends EventEmitter {
     const oldDescription = JSON.stringify(this.getDescription());
 
     // Update @context
-    this['@context'] = description['@context'] || 'https://webthings.io/schemas';
+    if (description['@context']) {
+      this['@context'] = Utils.standardizeContext(description['@context']);
+    } else {
+      this['@context'] = Constants.DEFAULT_CONTEXT;
+    }
 
     // Update @type
     this['@type'] = description['@type'] || [];
