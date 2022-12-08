@@ -11,6 +11,7 @@ import fs from 'fs';
 import * as Platform from './platform';
 import pkg from './package.json';
 import { Event as EventSchema } from 'gateway-addon/lib/schema';
+import * as Constants from './constants';
 
 /**
  * Compute a SHA-256 checksum of a file.
@@ -75,19 +76,61 @@ export function isW3CThingDescription(thingDescription: {
 }): boolean {
   if (typeof thingDescription['@context'] === 'string') {
     return (
-      thingDescription['@context'] === 'https://www.w3.org/2019/wot/td/v1' ||
-      thingDescription['@context'] === 'http://www.w3.org/ns/td'
+      thingDescription['@context'] === Constants.WOT_TD_1_CONTEXT ||
+      thingDescription['@context'] === Constants.WOT_TD_1_1_CONTEXT ||
+      thingDescription['@context'] === Constants.WOT_TD_NS_CONTEXT
     );
   }
 
   if (Array.isArray(thingDescription['@context'])) {
     return (
-      thingDescription['@context'].includes('https://www.w3.org/2019/wot/td/v1') ||
-      thingDescription['@context'].includes('http://www.w3.org/ns/td')
+      thingDescription['@context'].includes(Constants.WOT_TD_1_CONTEXT) ||
+      thingDescription['@context'].includes(Constants.WOT_TD_1_1_CONTEXT) ||
+      thingDescription['@context'].includes(Constants.WOT_TD_NS_CONTEXT)
     );
   }
 
   return false;
+}
+
+/**
+ * Make sure the @context value of a Thing Description contains both
+ * W3C WoT TD 1.1 and WebThings contexts.
+ *
+ * @param context {(string|string[])} The non-standardised context value.
+ * @returns string[] The standardised context array.
+ */
+export function standardizeContext(context: string | string[]): string[] {
+  // If expected contexts already present then return null
+  if (
+    Array.isArray(context) &&
+    context.includes(Constants.WOT_TD_1_1_CONTEXT) &&
+    context.includes(Constants.WEBTHINGS_CONTEXT)
+  ) {
+    return context;
+  }
+
+  // If @context is a string, make it an array
+  if (typeof context === 'string') {
+    context = [context];
+  }
+
+  // Remove legacy iot.mozilla.org @context
+  if (context.includes(Constants.MOZ_IOT_CONTEXT)) {
+    context.splice(context.indexOf(Constants.MOZ_IOT_CONTEXT));
+  }
+
+  // If @context doesn't contain W3C TD 1.1 context then add it to the start
+  if (!context.includes(Constants.WOT_TD_1_1_CONTEXT)) {
+    context.unshift(Constants.WOT_TD_1_1_CONTEXT);
+  }
+
+  // If @context doesn't contain WebThings context then add it to the end
+  if (!context.includes(Constants.WEBTHINGS_CONTEXT)) {
+    context.push(Constants.WEBTHINGS_CONTEXT);
+  }
+
+  return context;
 }
 
 /**
