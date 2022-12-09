@@ -21,18 +21,19 @@ function build(): express.Router {
    * Handle creating a new action.
    */
   controller.post('/', async (request: Request, response: Response) => {
+    console.warn('Invoking an action without the action name in the URL is deprecated');
     const keys = Object.keys(request.body);
     if (keys.length != 1) {
       const err = 'Incorrect number of parameters.';
       console.log(err, request.body);
-      response.status(400).send(err);
+      response.status(400).send();
       return;
     }
 
     const actionName = keys[0];
 
     if (!Object.prototype.hasOwnProperty.call(request.body[actionName], 'input')) {
-      response.status(400).send('Missing input');
+      response.status(400).send();
       return;
     }
 
@@ -46,7 +47,7 @@ function build(): express.Router {
         action = new Action(actionName, actionParams, thing);
       } catch (e) {
         console.error('Thing does not exist', thingId, e);
-        response.status(404).send(e);
+        response.status(404).send();
         return;
       }
     } else {
@@ -58,12 +59,12 @@ function build(): express.Router {
         await AddonManager.requestAction(thingId, action.getId(), actionName, actionParams);
       }
       await Actions.add(action);
-
-      response.status(201).json({ [actionName]: action.getDescription() });
+      response.location(action.getDescription().href);
+      response.status(201).json(action.getDescription());
     } catch (e) {
       console.error('Creating action', actionName, 'failed');
       console.error(e);
-      response.status(400).send(e);
+      response.status(400).send();
     }
   });
 
@@ -105,8 +106,8 @@ function build(): express.Router {
         action = new Action(actionName, input, thing);
       } catch (e) {
         console.error('Thing does not exist', thingId, e);
+        response.status(404).send();
         return;
-        response.status(404).send(e);
       }
     } else {
       action = new Action(actionName, input);
@@ -117,12 +118,12 @@ function build(): express.Router {
         await AddonManager.requestAction(thingId, action.getId(), actionName, input);
       }
       await Actions.add(action);
-
-      response.status(201).json({ [actionName]: action.getDescription() });
+      response.location(action.getDescription().href);
+      response.status(201).json(action.getDescription());
     } catch (e) {
-      console.error('Creating action', actionName, 'failed');
+      console.error('Creating action', actionName, 'failed.');
       console.error(e);
-      response.status(400).send(e);
+      response.status(400).send();
     }
   });
 

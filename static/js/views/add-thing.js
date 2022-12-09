@@ -93,7 +93,7 @@ const AddThingScreen = {
 
     API.startPairing(timeout)
       .then((json) => {
-        this.actionUrl = json.pair.href;
+        this.actionUrl = json.href;
 
         this.pairingTimeout = setTimeout(() => {
           this.scanStatus.classList.add('hidden');

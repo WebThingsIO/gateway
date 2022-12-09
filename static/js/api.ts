@@ -483,13 +483,7 @@ class API {
   }
 
   async startPairing(timeout: number): Promise<Record<string, unknown>> {
-    return (await this.postJson('/actions', {
-      pair: {
-        input: {
-          timeout,
-        },
-      },
-    }))!;
+    return (await this.postJson('/actions/pair', { timeout }))!;
   }
 
   cancelPairing(actionUrl: string): Promise<void> {

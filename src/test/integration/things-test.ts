@@ -614,10 +614,10 @@ describe('things/', function () {
       (async () => {
         const res = await chai
           .request(server)
-          .post(Constants.ACTIONS_PATH)
+          .post(`${Constants.ACTIONS_PATH}/pair`)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
-          .send({ pair: { input: { timeout: 60 } } });
+          .send({ timeout: 60 });
 
         await mockAdapter().addDevice('test-4', makeDescr('test-4'));
         await mockAdapter().addDevice('test-5', makeDescr('test-5'));
@@ -642,10 +642,10 @@ describe('things/', function () {
     // send pair action
     let res = await chai
       .request(server)
-      .post(Constants.ACTIONS_PATH)
+      .post(`${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({ pair: { input: { timeout: 60 } } });
+      .send({ timeout: 60 });
     expect(res.status).toEqual(201);
 
     res = await chai
@@ -709,10 +709,10 @@ describe('things/', function () {
     // send pair action
     const pair = await chai
       .request(server)
-      .post(Constants.ACTIONS_PATH)
+      .post(`${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send({ pair: { input: { timeout: 60 } } });
+      .send({ timeout: 60 });
     expect(pair.status).toEqual(201);
 
     let res = await chai
@@ -750,10 +750,10 @@ describe('things/', function () {
     // send pair action
     const pair = await chai
       .request(server)
-      .post(Constants.ACTIONS_PATH)
+      .post(`${Constants.ACTIONS_PATH}/pair`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({ pair: { input: { timeout: 60 } } });
+      .send({ timeout: 60 });
     expect(pair.status).toEqual(201);
     await mockAdapter().removeDevice(thingId);
 
@@ -781,10 +781,10 @@ describe('things/', function () {
     mockAdapter().unpairDevice(thingId);
     let res = await chai
       .request(server)
-      .post(Constants.ACTIONS_PATH)
+      .post(`${Constants.ACTIONS_PATH}/pair`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt))
-      .send({ unpair: { input: { id: thingId } } });
+      .send({ id: thingId });
     expect(res.status).toEqual(201);
 
     res = await chai
@@ -1171,10 +1171,10 @@ describe('things/', function () {
       (async () => {
         await chai
           .request(server)
-          .post(Constants.ACTIONS_PATH)
+          .post(`${Constants.ACTIONS_PATH}/pair`)
           .set('Accept', 'application/json')
           .set(...headerAuth(jwt))
-          .send({ pair: { input: { timeout: 60 } } });
+          .send({ timeout: 60 });
 
         let res = await chai
           .request(server)
@@ -1210,7 +1210,7 @@ describe('things/', function () {
     expect(messages[2].messageType).toEqual(Constants.ACTION_STATUS);
     expect(
       (<Record<string, unknown>>(<Record<string, unknown>>messages[2].data).pair).status
-    ).toEqual('created');
+    ).toEqual('pending');
     expect(
       (<Record<string, unknown>>(<Record<string, unknown>>messages[2].data).pair).href
     ).toEqual(actionHref);
@@ -1218,7 +1218,7 @@ describe('things/', function () {
     expect(messages[3].messageType).toEqual(Constants.ACTION_STATUS);
     expect(
       (<Record<string, unknown>>(<Record<string, unknown>>messages[3].data).pair).status
-    ).toEqual('pending');
+    ).toEqual('running');
     expect(
       (<Record<string, unknown>>(<Record<string, unknown>>messages[3].data).pair).href
     ).toEqual(actionHref);
@@ -1260,18 +1260,12 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
 
-    const actionDescr = {
-      reboot: {
-        input: {},
-      },
-    };
-
     res = await chai
       .request(server)
-      .post(thingBase + Constants.ACTIONS_PATH)
+      .post(`${thingBase}${Constants.ACTIONS_PATH}/reboot`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send(actionDescr);
+      .send();
     expect(res.status).toEqual(201);
 
     res = await chai
@@ -1300,20 +1294,16 @@ describe('things/', function () {
   it('fails to create an action on a nonexistent thing', async () => {
     const thingBase = `${Constants.THINGS_PATH}/nonexistent-thing`;
 
-    const actionDescr = {
-      pair: {
-        input: {
-          timeout: 60,
-        },
-      },
+    const input = {
+      timeout: 60,
     };
 
     const err = await chai
       .request(server)
-      .post(thingBase + Constants.ACTIONS_PATH)
+      .post(`${thingBase}${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send(actionDescr);
+      .send(input);
     expect(err.status).toEqual(404);
   });
 
@@ -1329,20 +1319,16 @@ describe('things/', function () {
       .set(...headerAuth(jwt));
     expect(res.status).toEqual(200);
 
-    const actionDescr = {
-      pair: {
-        input: {
-          timeout: 60,
-        },
-      },
+    const input = {
+      timeout: 60,
     };
 
     const err = await chai
       .request(server)
-      .post(thingBase + Constants.ACTIONS_PATH)
+      .post(`${thingBase}${Constants.ACTIONS_PATH}/pair`)
       .set(...headerAuth(jwt))
       .set('Accept', 'application/json')
-      .send(actionDescr);
+      .send(input);
     expect(err.status).toEqual(400);
   });
 
@@ -1408,7 +1394,7 @@ describe('things/', function () {
     const created = messages[1];
     expect(created.messageType).toEqual(Constants.ACTION_STATUS);
     expect((<Record<string, unknown>>(<Record<string, unknown>>created.data).pair).status).toEqual(
-      'created'
+      'pending'
     );
 
     const err = messages[2];

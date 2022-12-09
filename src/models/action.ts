@@ -10,18 +10,18 @@
 
 import Actions from './actions';
 import * as Constants from '../constants';
+import { ProblemDetails } from '../errors';
 import { EventEmitter } from 'events';
 import { Utils } from 'gateway-addon';
 import { ActionDescription as AddonActionDescription, Any } from 'gateway-addon/lib/schema';
 import Thing from './thing';
 
 export interface ActionDescription {
-  input: Any;
   href: string;
   status: string;
   timeRequested: string;
   timeCompleted?: string;
-  error?: string;
+  error?: ProblemDetails;
 }
 
 export default class Action extends EventEmitter {
@@ -41,7 +41,7 @@ export default class Action extends EventEmitter {
 
   private timeCompleted: string | null;
 
-  private error: string;
+  private error: ProblemDetails | null;
 
   /**
    * Create a new Action
@@ -62,15 +62,14 @@ export default class Action extends EventEmitter {
       this.href = `${Constants.ACTIONS_PATH}/${name}/${this.id}`;
       this.thingId = null;
     }
-    this.status = 'created';
+    this.status = Constants.ActionStatusValues.PENDING;
     this.timeRequested = Utils.timestamp();
     this.timeCompleted = null;
-    this.error = '';
+    this.error = null;
   }
 
   getDescription(): ActionDescription {
     const description: ActionDescription = {
-      input: this.input,
       href: this.href,
       status: this.status,
       timeRequested: this.timeRequested,
@@ -96,7 +95,7 @@ export default class Action extends EventEmitter {
       return;
     }
 
-    if (newStatus === 'completed') {
+    if (newStatus === Constants.ActionStatusValues.COMPLETED) {
       this.timeCompleted = Utils.timestamp();
     }
 
@@ -145,7 +144,7 @@ export default class Action extends EventEmitter {
     return this.timeCompleted;
   }
 
-  setError(error: string): void {
+  setError(error: ProblemDetails): void {
     this.error = error;
   }
 }
