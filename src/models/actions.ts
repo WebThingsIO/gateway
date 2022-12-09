@@ -14,6 +14,10 @@ import { EventEmitter } from 'events';
 import Things from './things';
 import AddonManager from '../addon-manager';
 
+type ActionList = {
+  [name: string]: ActionDescription[];
+};
+
 class Actions extends EventEmitter {
   private actions: Record<string, Action>;
 
@@ -69,7 +73,7 @@ class Actions extends EventEmitter {
   /**
    * Get a list of all current actions.
    *
-   * @returns {Array} A list of current actions.
+   * @returns {Array<Action>} A list of current actions.
    */
   getAll(): Action[] {
     return Object.keys(this.actions).map((id) => {
@@ -78,20 +82,36 @@ class Actions extends EventEmitter {
   }
 
   /**
-   * Get only the actions which are not associated with a specific thing and
-   * therefore belong to the root Gateway
+   * Get all actions belonging to the gateway itself.
+   *
+   * @returns {ActionList} A list of actions.
    */
-  getGatewayActions(actionName?: string): { [name: string]: ActionDescription }[] {
+  getAllGatewayActions(): ActionList {
+    const actions: ActionList = {};
+    this.getAll()
+      .filter((action) => {
+        return !action.getThingId();
+      })
+      .forEach((action) => {
+        if (!actions[action.getName()]) {
+          actions[action.getName()] = [];
+        }
+        actions[action.getName()].push(action.getDescription());
+      });
+    return actions;
+  }
+
+  /**
+   * Get actions of a specific type but which are not associated with a specific
+   * Thing and therefore belong to the gateway itself.
+   */
+  getGatewayActions(actionName: string): { [name: string]: ActionDescription }[] {
     return this.getAll()
       .filter((action) => {
         return !action.getThingId();
       })
       .filter((action) => {
-        if (actionName) {
-          return actionName === action.getName();
-        }
-
-        return true;
+        return actionName === action.getName();
       })
       .map((action) => {
         return { [action.getName()]: action.getDescription() };
@@ -99,19 +119,36 @@ class Actions extends EventEmitter {
   }
 
   /**
-   * Get only the actions which are associated with a specific thing
+   * Get all actions for a given Thing.
+   *
+   * @param {string} thingId ID of thing.
+   * @returns {ActionList} A list of actions.
    */
-  getByThing(thingId: string, actionName?: string): { [name: string]: ActionDescription }[] {
+  getAllActionsByThing(thingId: string): ActionList {
+    const actions: ActionList = {};
+    this.getAll()
+      .filter((action) => {
+        return action.getThingId() === thingId;
+      })
+      .forEach((action) => {
+        if (!actions[action.getName()]) {
+          actions[action.getName()] = [];
+        }
+        actions[action.getName()].push(action.getDescription());
+      });
+    return actions;
+  }
+
+  /**
+   * Get actions of a specific type for a given thing.
+   */
+  getByThing(thingId: string, actionName: string): { [name: string]: ActionDescription }[] {
     return this.getAll()
       .filter((action) => {
         return action.getThingId() === thingId;
       })
       .filter((action) => {
-        if (actionName) {
-          return actionName === action.getName();
-        }
-
-        return true;
+        return actionName === action.getName();
       })
       .map((action) => {
         return { [action.getName()]: action.getDescription() };

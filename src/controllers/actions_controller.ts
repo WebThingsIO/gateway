@@ -69,20 +69,24 @@ function build(): express.Router {
   });
 
   /**
-   * Handle getting a list of actions.
+   * Handle getting a list of all actions.
    */
   controller.get('/', (request: Request, response: Response) => {
     if (request.params.thingId) {
-      response.status(200).json(Actions.getByThing(request.params.thingId));
+      response.status(200).json(Actions.getAllActionsByThing(request.params.thingId));
     } else {
-      response.status(200).json(Actions.getGatewayActions());
+      response.status(200).json(Actions.getAllGatewayActions());
     }
   });
 
   /**
-   * Handle getting a list of actions.
+   * Handle getting a list of actions for a given action name (deprecated).
    */
   controller.get('/:actionName', (request: Request, response: Response) => {
+    console.warn(
+      'Getting a list of actions by action name is deprecated, ' +
+        'please use the main /actions endpoint'
+    );
     const actionName = request.params.actionName;
     if (request.params.thingId) {
       response.status(200).json(Actions.getByThing(request.params.thingId, actionName));
@@ -134,11 +138,10 @@ function build(): express.Router {
     const actionId = request.params.actionId;
     const action = Actions.get(actionId);
     if (action) {
-      response.status(200).json({ [action.getName()]: action.getDescription() });
+      response.status(200).json(action.getDescription());
     } else {
-      const error = `Action "${actionId}" not found`;
-      console.error(error);
-      response.status(404).send(error);
+      console.error(`Action "${actionId}" not found`);
+      response.status(404).send();
     }
   });
 
