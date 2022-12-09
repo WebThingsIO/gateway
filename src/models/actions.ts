@@ -106,7 +106,6 @@ class Actions extends EventEmitter {
    * Thing and therefore belong to the gateway itself.
    */
   getGatewayActions(actionName: string): { [name: string]: ActionDescription }[] {
-    console.dir(this.getAll());
     return this.getAll()
       .filter((action) => {
         return !action.getThingId();
