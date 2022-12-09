@@ -10,6 +10,7 @@
 
 import Actions from './actions';
 import * as Constants from '../constants';
+import { ProblemDetails } from '../errors';
 import { EventEmitter } from 'events';
 import { Utils } from 'gateway-addon';
 import { ActionDescription as AddonActionDescription, Any } from 'gateway-addon/lib/schema';
@@ -20,7 +21,7 @@ export interface ActionDescription {
   status: string;
   timeRequested: string;
   timeCompleted?: string;
-  error?: Record<string, unknown>;
+  error?: ProblemDetails;
 }
 
 export default class Action extends EventEmitter {
@@ -40,7 +41,7 @@ export default class Action extends EventEmitter {
 
   private timeCompleted: string | null;
 
-  private error: Record<string, unknown> | null;
+  private error: ProblemDetails | null;
 
   /**
    * Create a new Action
@@ -143,7 +144,7 @@ export default class Action extends EventEmitter {
     return this.timeCompleted;
   }
 
-  setError(error: Record<string, unknown>): void {
+  setError(error: ProblemDetails): void {
     this.error = error;
   }
 }
