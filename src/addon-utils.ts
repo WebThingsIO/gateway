@@ -88,7 +88,6 @@ function validateManifestJson(manifest: Record<string, unknown>): string | null 
     gateway_specific_settings: {
       webthings: {
         primary_type: '',
-        exec: '',
       },
     },
     homepage_url: '',
@@ -123,7 +122,9 @@ function validateManifestJson(manifest: Record<string, unknown>): string | null 
   ) {
     // If we're not using in-process plugins, and this is not an extension,
     // then we also need the exec keyword to exist.
-    manifestTemplate.gateway_specific_settings.webthings.exec = '';
+    (<Record<string, unknown>>(
+      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
+    )).exec = '';
   }
 
   return validateObject('', manifest, manifestTemplate);
