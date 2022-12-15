@@ -113,152 +113,152 @@ jobs:
           asset_name: ${{ env.MODULES_TARBALL }}
           asset_content_type: application/zip
 
-  build-deb-packages:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image:
-          - "ubuntu:bionic"
-          - "arm64v8/ubuntu:bionic"
-          - "ubuntu:focal"
-          - "arm64v8/ubuntu:focal"
-          - "ubuntu:groovy"
-          - "arm64v8/ubuntu:groovy"
-          - "debian:buster"
-          - "arm64v8/debian:buster"
-          - "balenalib/raspberry-pi-debian:buster-20200405"
-        include:
-          - image: "ubuntu:bionic"
-            name: "ubuntu-bionic"
-            arch: "amd64"
-          - image: "arm64v8/ubuntu:bionic"
-            name: "ubuntu-bionic"
-            arch: "arm64"
-          - image: "ubuntu:focal"
-            name: "ubuntu-focal"
-            arch: "amd64"
-          - image: "arm64v8/ubuntu:focal"
-            name: "ubuntu-focal"
-            arch: "arm64"
-          - image: "ubuntu:groovy"
-            name: "ubuntu-groovy"
-            arch: "amd64"
-          - image: "arm64v8/ubuntu:groovy"
-            name: "ubuntu-groovy"
-            arch: "arm64"
-          - image: "debian:buster"
-            name: "debian-buster"
-            arch: "amd64"
-          - image: "arm64v8/debian:buster"
-            name: "debian-buster"
-            arch: "arm64"
-          - image: "balenalib/raspberry-pi-debian:buster-20200405"
-            name: "raspbian-buster"
-            arch: "armhf"
-    steps:
-      - name: Install qemu
-        run: |
-          sudo apt update
-          sudo apt install -y qemu qemu-user-static binfmt-support --no-install-recommends
-      - name: Setup qemu-user-static
-        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-      - name: Generate the source tarball
-        run: |
-          cd deb
-          ./generate-tarball.sh
-      - name: Build the Package
-        run: |
-          cd deb
-          docker pull ${{ matrix.image }}
-          docker create --name build -it ${{ matrix.image }} /build/build.sh
-          docker cp . build:/build
-          docker start -a build
-          docker cp -L build:/build/webthings-gateway.deb ./webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
-          docker rm build
-      - name: Download upload_url
-        uses: actions/download-artifact@v1
-        with:
-          name: upload_url
-      - name: Set upload_url
-        run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
-      - name: Upload .deb package
-        id: upload-release-asset-deb
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: deb/webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
-          asset_name: webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
-          asset_content_type: application/zip
+  # build-deb-packages:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       image:
+  #         - "ubuntu:bionic"
+  #         - "arm64v8/ubuntu:bionic"
+  #         - "ubuntu:focal"
+  #         - "arm64v8/ubuntu:focal"
+  #         - "ubuntu:groovy"
+  #         - "arm64v8/ubuntu:groovy"
+  #         - "debian:buster"
+  #         - "arm64v8/debian:buster"
+  #         - "balenalib/raspberry-pi-debian:buster-20200405"
+  #       include:
+  #         - image: "ubuntu:bionic"
+  #           name: "ubuntu-bionic"
+  #           arch: "amd64"
+  #         - image: "arm64v8/ubuntu:bionic"
+  #           name: "ubuntu-bionic"
+  #           arch: "arm64"
+  #         - image: "ubuntu:focal"
+  #           name: "ubuntu-focal"
+  #           arch: "amd64"
+  #         - image: "arm64v8/ubuntu:focal"
+  #           name: "ubuntu-focal"
+  #           arch: "arm64"
+  #         - image: "ubuntu:groovy"
+  #           name: "ubuntu-groovy"
+  #           arch: "amd64"
+  #         - image: "arm64v8/ubuntu:groovy"
+  #           name: "ubuntu-groovy"
+  #           arch: "arm64"
+  #         - image: "debian:buster"
+  #           name: "debian-buster"
+  #           arch: "amd64"
+  #         - image: "arm64v8/debian:buster"
+  #           name: "debian-buster"
+  #           arch: "arm64"
+  #         - image: "balenalib/raspberry-pi-debian:buster-20200405"
+  #           name: "raspbian-buster"
+  #           arch: "armhf"
+  #   steps:
+  #     - name: Install qemu
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install -y qemu qemu-user-static binfmt-support --no-install-recommends
+  #     - name: Setup qemu-user-static
+  #       run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  #     - name: Checkout the repository
+  #       uses: actions/checkout@v2
+  #     - name: Generate the source tarball
+  #       run: |
+  #         cd deb
+  #         ./generate-tarball.sh
+  #     - name: Build the Package
+  #       run: |
+  #         cd deb
+  #         docker pull ${{ matrix.image }}
+  #         docker create --name build -it ${{ matrix.image }} /build/build.sh
+  #         docker cp . build:/build
+  #         docker start -a build
+  #         docker cp -L build:/build/webthings-gateway.deb ./webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
+  #         docker rm build
+  #     - name: Download upload_url
+  #       uses: actions/download-artifact@v1
+  #       with:
+  #         name: upload_url
+  #     - name: Set upload_url
+  #       run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
+  #     - name: Upload .deb package
+  #       id: upload-release-asset-deb
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ env.UPLOAD_URL }}
+  #         asset_path: deb/webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
+  #         asset_name: webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.deb
+  #         asset_content_type: application/zip
 
-  build-rpm-packages:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image:
-          - "fedora:31"
-          - "arm64v8/fedora:31"
-          - "fedora:32"
-          - "arm64v8/fedora:32"
-          - "fedora:33"
-          - "arm64v8/fedora:33"
-        include:
-          - image: "fedora:31"
-            name: "fedora-31"
-            arch: "x86_64"
-          - image: "arm64v8/fedora:31"
-            name: "fedora-31"
-            arch: "aarch64"
-          - image: "fedora:32"
-            name: "fedora-32"
-            arch: "x86_64"
-          - image: "arm64v8/fedora:32"
-            name: "fedora-32"
-            arch: "aarch64"
-          - image: "fedora:33"
-            name: "fedora-33"
-            arch: "x86_64"
-          - image: "arm64v8/fedora:33"
-            name: "fedora-33"
-            arch: "aarch64"
-    steps:
-      - name: Install qemu
-        run: |
-          sudo apt update
-          sudo apt install -y qemu qemu-user-static binfmt-support --no-install-recommends
-      - name: Setup qemu-user-static
-        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-      - name: Generate the source tarball
-        run: |
-          cd rpm
-          ./generate-tarball.sh
-      - name: Build the Package
-        run: |
-          cd rpm
-          docker pull ${{ matrix.image }}
-          docker create --name build -it ${{ matrix.image }} /build/build.sh
-          docker cp . build:/build
-          docker start -a build
-          docker cp -L build:/build/webthings-gateway.rpm ./webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
-          docker rm build
-      - name: Download upload_url
-        uses: actions/download-artifact@v1
-        with:
-          name: upload_url
-      - name: Set upload_url
-        run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
-      - name: Upload .rpm package
-        id: upload-release-asset-rpm
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: rpm/webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
-          asset_name: webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
-          asset_content_type: application/zip
+  # build-rpm-packages:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       image:
+  #         - "fedora:31"
+  #         - "arm64v8/fedora:31"
+  #         - "fedora:32"
+  #         - "arm64v8/fedora:32"
+  #         - "fedora:33"
+  #         - "arm64v8/fedora:33"
+  #       include:
+  #         - image: "fedora:31"
+  #           name: "fedora-31"
+  #           arch: "x86_64"
+  #         - image: "arm64v8/fedora:31"
+  #           name: "fedora-31"
+  #           arch: "aarch64"
+  #         - image: "fedora:32"
+  #           name: "fedora-32"
+  #           arch: "x86_64"
+  #         - image: "arm64v8/fedora:32"
+  #           name: "fedora-32"
+  #           arch: "aarch64"
+  #         - image: "fedora:33"
+  #           name: "fedora-33"
+  #           arch: "x86_64"
+  #         - image: "arm64v8/fedora:33"
+  #           name: "fedora-33"
+  #           arch: "aarch64"
+  #   steps:
+  #     - name: Install qemu
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install -y qemu qemu-user-static binfmt-support --no-install-recommends
+  #     - name: Setup qemu-user-static
+  #       run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  #     - name: Checkout the repository
+  #       uses: actions/checkout@v2
+  #     - name: Generate the source tarball
+  #       run: |
+  #         cd rpm
+  #         ./generate-tarball.sh
+  #     - name: Build the Package
+  #       run: |
+  #         cd rpm
+  #         docker pull ${{ matrix.image }}
+  #         docker create --name build -it ${{ matrix.image }} /build/build.sh
+  #         docker cp . build:/build
+  #         docker start -a build
+  #         docker cp -L build:/build/webthings-gateway.rpm ./webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
+  #         docker rm build
+  #     - name: Download upload_url
+  #       uses: actions/download-artifact@v1
+  #       with:
+  #         name: upload_url
+  #     - name: Set upload_url
+  #       run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
+  #     - name: Upload .rpm package
+  #       id: upload-release-asset-rpm
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ env.UPLOAD_URL }}
+  #         asset_path: rpm/webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
+  #         asset_name: webthings-gateway-${{ matrix.name }}-${{ matrix.arch }}.rpm
+  #         asset_content_type: application/zip
