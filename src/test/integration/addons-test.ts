@@ -401,7 +401,7 @@ describe('addons', () => {
     const manifest: Record<string, unknown> = copyManifest(testManifestJson);
     (<Record<string, unknown>>(
       (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
-    )).strict_min_version = semver.inc(pkg.version, 'minor')!;
+    )).strict_min_version = semver.inc(pkg.version, 'major')!;
     expect(await loadSettingsAdapterWithManifestJson(manifest)).toBeTruthy();
   });
 
