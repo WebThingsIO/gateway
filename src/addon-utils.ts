@@ -235,21 +235,26 @@ function loadManifestJson(packageId: string): [Record<string, unknown>, Record<s
   let min = manifest.gateway_specific_settings.webthings.strict_min_version;
   let max = manifest.gateway_specific_settings.webthings.strict_max_version;
 
+  const gatewayVersion = semver.coerce(pkg.version);
+  if (gatewayVersion === null) {
+    throw new Error(`Unable to compare with non-semver gateway version ${pkg.version}`);
+  }
+
   if (typeof min === 'string' && min !== '*') {
     min = semver.coerce(min);
-    if (semver.lt(pkg.version, min)) {
+    if (semver.lt(gatewayVersion, min)) {
       throw new Error(
         // eslint-disable-next-line max-len
-        `Gateway version ${pkg.version} is lower than minimum version ${min} supported by add-on ${packageId}`
+        `Gateway version ${gatewayVersion} is lower than minimum version ${min} supported by add-on ${packageId}`
       );
     }
   }
   if (typeof max === 'string' && max !== '*') {
     max = semver.coerce(max);
-    if (semver.gt(pkg.version, max)) {
+    if (semver.gt(gatewayVersion, max)) {
       throw new Error(
         // eslint-disable-next-line max-len
-        `Gateway version ${pkg.version} is higher than maximum version ${max} supported by add-on ${packageId}`
+        `Gateway version ${gatewayVersion} is higher than maximum version ${max} supported by add-on ${packageId}`
       );
     }
   }
