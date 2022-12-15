@@ -82,7 +82,8 @@ function validateObject(
  * @returns {string|null} Error string, or null if no error.
  */
 function validateManifestJson(manifest: Record<string, unknown>): string | null {
-  const manifestTemplate = {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const manifestTemplate: Record<string, any> = {
     author: '',
     description: '',
     gateway_specific_settings: {
@@ -122,9 +123,7 @@ function validateManifestJson(manifest: Record<string, unknown>): string | null 
   ) {
     // If we're not using in-process plugins, and this is not an extension,
     // then we also need the exec keyword to exist.
-    (<Record<string, unknown>>(
-      (<Record<string, unknown>>manifest.gateway_specific_settings).webthings
-    )).exec = '';
+    manifestTemplate.gateway_specific_settings.webthings.exec = '';
   }
 
   return validateObject('', manifest, manifestTemplate);
