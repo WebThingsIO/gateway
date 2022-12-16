@@ -24,6 +24,7 @@ import {
 } from 'gateway-addon/lib/schema';
 import Action from './action';
 import Event from './event';
+import * as Utils from '../utils';
 
 export interface Router {
   addProxyServer: (thingId: string, server: string) => void;
@@ -296,11 +297,10 @@ export default class Thing extends EventEmitter {
     }
 
     for (const eventName in this.events) {
-      const event = this.events[eventName];
+      let event = this.events[eventName];
 
-      if (event.hasOwnProperty('href')) {
-        delete event.href;
-      }
+      // Move legacy event data schema to standard location and remove href if present
+      event = Utils.standardizeEventDescription(event);
 
       if (event.forms) {
         event.forms = event.forms.map((form) => {
@@ -805,11 +805,10 @@ export default class Thing extends EventEmitter {
     // Update events
     this.events = description.events || {};
     for (const eventName in this.events) {
-      const event = this.events[eventName];
+      let event = this.events[eventName];
 
-      if (event.hasOwnProperty('href')) {
-        delete event.href;
-      }
+      // Move legacy event data schema to standard location and remove href if present
+      event = Utils.standardizeEventDescription(event);
 
       if (event.forms) {
         event.forms = event.forms.map((form) => {

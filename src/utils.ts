@@ -10,6 +10,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import * as Platform from './platform';
 import pkg from './package.json';
+import { Event as EventSchema } from 'gateway-addon/lib/schema';
 
 /**
  * Compute a SHA-256 checksum of a file.
@@ -87,4 +88,53 @@ export function isW3CThingDescription(thingDescription: {
   }
 
   return false;
+}
+
+/**
+ * Convert event descriptions from the legacy format in the Web Thing API
+ * (https://webthings.io/api/#event-object) to the W3C WoT TD standard format
+ * (https://w3c.github.io/wot-thing-description/#eventaffordance).
+ *
+ * @param {EventSchema} description
+ * @returns {EventSchema}
+ */
+export function standardizeEventDescription(description: EventSchema): EventSchema {
+  if (description.hasOwnProperty('href')) {
+    delete description.href;
+    console.warn('The href member of event descriptions is deprecated');
+  }
+  description.data = description.data || {};
+  if (description.hasOwnProperty('type')) {
+    description.data.type = description.type;
+    delete description.type;
+    console.warn('The type member of event descriptions is deprecated, please use data.type');
+  }
+  if (description.hasOwnProperty('unit')) {
+    description.data.unit = description.unit;
+    delete description.unit;
+    console.warn('The unit member of event descriptions is deprecated, please use data.unit');
+  }
+  if (description.hasOwnProperty('minimum')) {
+    description.data.minimum = description.minimum;
+    delete description.minimum;
+    console.warn('The minimum member of event descriptions is deprecated, please use data.minimum');
+  }
+  if (description.hasOwnProperty('maximum')) {
+    description.data.maximum = description.maximum;
+    delete description.maximum;
+    console.warn('The maximum member of event descriptions is deprecated, please use data.maximum');
+  }
+  if (description.hasOwnProperty('multipleOf')) {
+    description.data.multipleOf = description.multipleOf;
+    delete description.multipleOf;
+    console.warn(
+      'The multipleOf member of event descriptions is deprecated, please use data.multipleOf'
+    );
+  }
+  if (description.hasOwnProperty('enum')) {
+    description.data.enum = description.enum;
+    delete description.enum;
+    console.warn('The enum member of event descriptions is deprecated, please use data.enum');
+  }
+  return description;
 }
