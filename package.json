@@ -53,7 +53,7 @@
     "glob-to-regexp": "^0.4.1",
     "http-proxy": "^1.18.1",
     "ip-regex": "^4.3.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "minipass": "^3.3.5",
     "mkdirp": "^1.0.4",
     "ncp": "^2.0.0",
