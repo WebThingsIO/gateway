@@ -55,7 +55,7 @@ else
         "$(< "${WEBTHINGS_HOME}/.node_version")" != "${_node_version}" ]]; then
     cd "${HOME}/webthings/gateway"
     mkdir -p "${WEBTHINGS_HOME}/config"
-    ./tools/update-addons.sh
+    # ./tools/update-addons.sh
     cd -
     echo "${_node_version}" > "${WEBTHINGS_HOME}/.node_version"
   fi
