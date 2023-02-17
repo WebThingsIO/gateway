@@ -206,10 +206,10 @@ class Log {
     }
     const onChange = () => {
       let newEnd = this.end.getTime();
-      let newStart = newEnd - this.weekDropdown.value;
+      let newStart = newEnd - parseInt(this.weekDropdown.value);
       if (newStart < this.logStart.getTime()) {
         newStart = this.logStart.getTime();
-        newEnd = newStart + this.weekDropdown.value;
+        newEnd = newStart + parseInt(this.weekDropdown.value);
       }
       this.start = new Date(newStart);
       this.end = new Date(newEnd);
