@@ -527,7 +527,7 @@ tunnel-setup-choose-address = Vyberte zabezpečenú webovú adresu vašej gatewa
 tunnel-setup-input-subdomain =
     .placeholder = subdoména
 tunnel-setup-email-opt-in = Informujte ma o novinkách o WebThings.
-tunnel-setup-agree-privacy-policy = Vyjadrite súhlas so <a data-l10n-name="tunnel-setup-privacy-policy-link">zásadami ochrany súkromia</a> a <a data-l10n-name="tunnel-setup-tos-link">podmienkami používania</a> WebThings.
+tunnel-setup-agree-privacy-policy = Vyjadrite súhlas so <a data-l10n-name="tunnel-setup-privacy-policy-link">Zásadami ochrany osobných údajov</a> a <a data-l10n-name="tunnel-setup-tos-link">Podmienkami používania služby</a> WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Token pre opätovné získanie
 tunnel-setup-error = Pri nastavovaní subdomény nastala chyba.
