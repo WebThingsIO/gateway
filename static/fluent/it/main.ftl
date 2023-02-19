@@ -520,7 +520,7 @@ tunnel-setup-choose-address = Scegli un indirizzo web sicuro per il tuo gateway:
 tunnel-setup-input-subdomain =
     .placeholder = sottodominio
 tunnel-setup-email-opt-in = Desidero ricevere aggiornamenti con le ultime novità su WebThings.
-tunnel-setup-agree-privacy-policy = Accetta l’<a data-l10n-name="tunnel-setup-privacy-policy-link">informativa sulla privacy</a> e i <a data-l10n-name="tunnel-setup-tos-link">termini di servizio</a> di WebThings.
+tunnel-setup-agree-privacy-policy = Accetta l’<a data-l10n-name="tunnel-setup-privacy-policy-link">informativa sulla privacy</a> e le <a data-l10n-name="tunnel-setup-tos-link">condizioni di utilizzo del servizio</a> di WebThings.
 tunnel-setup-input-reclamation-token =
     .placeholder = Token di recupero
 tunnel-setup-error = Si è verificato un errore durante l’impostazione del sottodominio.
