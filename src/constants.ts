@@ -84,8 +84,12 @@ export enum LogSeverity {
 
 // Thing description things
 export enum WoTOperation {
+  OBSERVE_PROPERTY = 'observeproperty',
+  UNOBSERVE_PROPERTY = 'unobserveproperty',
   READ_ALL_PROPERTIES = 'readallproperties',
   WRITE_MULTIPLE_PROPERTIES = 'writemultipleproperties',
+  OBSERVE_ALL_PROPERTIES = 'observeallproperties',
+  UNOBSERVE_ALL_PROPERTIES = 'unobserveallproperties',
   SUBSCRIBE_ALL_EVENTS = 'subscribeallevents',
   UNSUBSCRIBE_ALL_EVENTS = 'unsubscribeallevents',
   QUERY_ALL_ACTIONS = 'queryallactions',

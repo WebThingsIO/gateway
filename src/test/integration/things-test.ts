@@ -86,6 +86,12 @@ const piDescr = {
           href: '/properties/power',
           proxy: true,
         },
+        {
+          href: '/properties/power',
+          op: ['observeproperty', 'unobserveproperty'],
+          subprotocol: 'sse',
+          proxy: true,
+        },
       ],
     },
   },
@@ -211,6 +217,15 @@ describe('things/', function () {
     thingDescr.properties.power.forms[0].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.properties.power.forms[0].href}`;
     thingDescr.properties.power.forms.push({
       href: `${Constants.THINGS_PATH}/${thingDescr.id}${Constants.PROPERTIES_PATH}/power`,
+    });
+
+    delete thingDescr.properties.power.forms[1].proxy;
+    // eslint-disable-next-line max-len
+    thingDescr.properties.power.forms[1].href = `${Constants.PROXY_PATH}/${thingDescr.id}${thingDescr.properties.power.forms[1].href}`;
+    thingDescr.properties.power.forms.push({
+      href: `${Constants.THINGS_PATH}/${thingDescr.id}${Constants.PROPERTIES_PATH}/power`,
+      op: ['observeproperty', 'unobserveproperty'],
+      subprotocol: 'sse',
     });
 
     delete thingDescr.actions.reboot.forms[0].proxy;
