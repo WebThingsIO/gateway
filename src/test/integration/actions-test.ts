@@ -30,6 +30,54 @@ describe('actions/', () => {
     },
   };
 
+  const piDescr = {
+    id: 'pi-1',
+    title: 'pi-1',
+    '@context': 'https://webthings.io/schemas',
+    '@type': ['OnOffSwitch'],
+    properties: {
+      power: {
+        '@type': 'OnOffProperty',
+        type: 'boolean',
+        value: true,
+        forms: [
+          {
+            href: '/properties/power',
+            proxy: true,
+          },
+          {
+            href: '/properties/power',
+            op: ['observeproperty', 'unobserveproperty'],
+            subprotocol: 'sse',
+            proxy: true,
+          },
+        ],
+      },
+    },
+    actions: {
+      reboot: {
+        description: 'Reboot the device',
+        forms: [
+          {
+            href: '/actions/reboot',
+            proxy: true,
+          },
+        ],
+      },
+    },
+    events: {
+      reboot: {
+        description: 'Going down for reboot',
+        forms: [
+          {
+            href: '/events/reboot',
+            proxy: true,
+          },
+        ],
+      },
+    },
+  };
+
   async function addDevice(desc: Record<string, unknown>): Promise<ChaiHttp.Response> {
     const { id } = desc;
     const res = await chai
@@ -342,5 +390,46 @@ describe('actions/', () => {
     expect(res.body.unpair[0]).toHaveProperty('href');
     expect(res.body.unpair[0]).toHaveProperty('status');
     expect(res.body.unpair[0].status).toEqual('completed');
+  });
+
+  it('fails to create an action on a nonexistent thing', async () => {
+    const thingBase = `${Constants.THINGS_PATH}/nonexistent-thing`;
+
+    const input = {
+      timeout: 60,
+    };
+
+    const err = await chai
+      .request(server)
+      .post(`${thingBase}${Constants.ACTIONS_PATH}/pair`)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send(input);
+    expect(err.status).toEqual(404);
+  });
+
+  it('fails to create thing action which does not exist', async () => {
+    await addDevice(piDescr);
+
+    const thingBase = `${Constants.THINGS_PATH}/${piDescr.id}`;
+
+    const res = await chai
+      .request(server)
+      .get(thingBase)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(res.status).toEqual(200);
+
+    const input = {
+      timeout: 60,
+    };
+
+    const err = await chai
+      .request(server)
+      .post(`${thingBase}${Constants.ACTIONS_PATH}/pair`)
+      .set(...headerAuth(jwt))
+      .set('Accept', 'application/json')
+      .send(input);
+    expect(err.status).toEqual(400);
   });
 });
