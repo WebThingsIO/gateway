@@ -1,6 +1,10 @@
-import { server, chai, mockAdapter } from '../common';
+import { server, httpServer, chai, mockAdapter } from '../common';
+import EventSource from 'eventsource';
+import { AddressInfo } from 'net';
 import { TEST_USER, createUser, headerAuth } from '../user';
+import e2p from 'event-to-promise';
 import * as Constants from '../../constants';
+import Things from '../../models/things';
 
 const TEST_THING = {
   id: 'test-1',
@@ -380,5 +384,74 @@ describe('properties/', function () {
 
     expect(res.status).toEqual(200);
     expect(res.body).toEqual('val2');
+  });
+
+  it('should be able to observe a property using EventSource', async () => {
+    await addDevice(TEST_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const propertyURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}/` +
+      `${TEST_THING.id}/properties/percent?jwt=${jwt}`;
+    const eventSource = new EventSource(propertyURL) as EventTarget & EventSource;
+    await e2p(eventSource, 'open');
+
+    const [, event] = await Promise.all([
+      Things.setThingProperty(TEST_THING.id, 'percent', 50),
+      e2p(eventSource, 'percent'),
+    ]);
+    expect(event.type).toEqual('percent');
+    expect(JSON.parse(event.data)).toEqual(50);
+    eventSource.close();
+  });
+
+  it('should be able to observe to all properties on a thing using EventSource', async () => {
+    await addDevice(TEST_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const propertyURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}/` +
+      `${TEST_THING.id}/properties?jwt=${jwt}`;
+    const eventsSource = new EventSource(propertyURL) as EventTarget & EventSource;
+    await e2p(eventsSource, 'open');
+
+    const [, event] = await Promise.all([
+      Things.setThingProperty(TEST_THING.id, 'percent', 52),
+      e2p(eventsSource, 'percent'),
+    ]);
+
+    expect(event.type).toEqual('percent');
+    expect(JSON.parse(event.data)).toEqual(52);
+    eventsSource.close();
+  });
+
+  it('should not be able to observe properties on a thing that doesnt exist', async () => {
+    await addDevice(TEST_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const propertyURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}` +
+      `/non-existent-thing/properties/percent?jwt=${jwt}`;
+    const thinglessEventSource = new EventSource(propertyURL) as EventTarget & EventSource;
+    thinglessEventSource.onerror = jest.fn();
+    thinglessEventSource.onopen = jest.fn();
+    await e2p(thinglessEventSource, 'error');
+    expect(thinglessEventSource.onopen).not.toBeCalled();
+    expect(thinglessEventSource.onerror).toBeCalled();
+  });
+
+  it('should not be able to observe a property that doesnt exist', async () => {
+    await addDevice(TEST_THING);
+    const address = <AddressInfo>httpServer.address();
+
+    const eventSourceURL =
+      `http://127.0.0.1:${address.port}${Constants.THINGS_PATH}` +
+      `${TEST_THING.id}/properties/non-existentevent?jwt=${jwt}`;
+    const propertylessEventSource = new EventSource(eventSourceURL) as EventTarget & EventSource;
+    propertylessEventSource.onerror = jest.fn();
+    propertylessEventSource.onopen = jest.fn();
+    await e2p(propertylessEventSource, 'error');
+    expect(propertylessEventSource.onopen).not.toBeCalled();
+    expect(propertylessEventSource.onerror).toBeCalled();
   });
 });
