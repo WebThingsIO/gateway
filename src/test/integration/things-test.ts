@@ -31,6 +31,10 @@ const piDescr = {
   title: 'pi-1',
   '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
   '@type': ['OnOffSwitch'],
+  profile: [
+    'https://www.w3.org/2022/wot/profile/http-basic/v1',
+    'https://www.w3.org/2022/wot/profile/http-sse/v1',
+  ],
   properties: {
     power: {
       '@type': 'OnOffProperty',
