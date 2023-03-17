@@ -33,7 +33,7 @@ describe('actions/', () => {
   const piDescr = {
     id: 'pi-1',
     title: 'pi-1',
-    '@context': 'https://webthings.io/schemas',
+    '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
     '@type': ['OnOffSwitch'],
     properties: {
       power: {

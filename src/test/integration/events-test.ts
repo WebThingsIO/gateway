@@ -10,7 +10,7 @@ import Events from '../../models/events';
 const TEST_THING = {
   id: 'test-1',
   title: 'test-1',
-  '@context': 'https://webthings.io/schemas',
+  '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
   '@type': ['OnOffSwitch'],
   properties: {
     power: {
@@ -29,7 +29,7 @@ const TEST_THING = {
 const EVENT_THING = {
   id: 'event-thing1',
   title: 'Event Thing',
-  '@context': 'https://webthings.io/schemas',
+  '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
   events: {
     overheated: {
       type: 'number',
