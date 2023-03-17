@@ -100,12 +100,18 @@ export enum ActionStatusValues {
   COMPLETED = 'completed',
   FAILED = 'failed',
 }
+
+// Contexts
 export const MOZ_IOT_CONTEXT = 'https://iot.mozilla.org/schemas';
 export const WEBTHINGS_CONTEXT = 'https://webthings.io/schemas';
 export const WOT_TD_NS_CONTEXT = 'http://www.w3.org/ns/td';
 export const WOT_TD_1_CONTEXT = 'https://www.w3.org/2019/wot/td/v1';
 export const WOT_TD_1_1_CONTEXT = 'https://www.w3.org/2022/wot/td/v1.1';
 export const DEFAULT_CONTEXT = [WOT_TD_1_1_CONTEXT, WEBTHINGS_CONTEXT];
+
+// Profiles
+export const WOT_HTTP_BASIC_PROFILE = 'https://www.w3.org/2022/wot/profile/http-basic/v1';
+export const WOT_HTTP_SSE_PROFILE = 'https://www.w3.org/2022/wot/profile/http-sse/v1';
 
 export interface LogMessage {
   severity: LogSeverity;

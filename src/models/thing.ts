@@ -36,6 +36,7 @@ export interface ThingDescription {
   title: string;
   '@context': string | string[];
   '@type': string[];
+  profile: string | string[];
   description: string;
   base: string;
   baseHref: string;
@@ -82,6 +83,8 @@ export default class Thing extends EventEmitter {
   private '@context': string | string[];
 
   private '@type': string[];
+
+  private profile: string | string[];
 
   private description: string;
 
@@ -133,12 +136,32 @@ export default class Thing extends EventEmitter {
     // Parse the Thing Description
     this.id = id;
     this.title = description.title || (<Record<string, string>>(<unknown>description)).name || '';
+
+    // Set @context
     if (description['@context']) {
       this['@context'] = Utils.standardizeContext(description['@context']);
     } else {
       this['@context'] = Constants.DEFAULT_CONTEXT;
     }
+
+    // Set @type
     this['@type'] = description['@type'] || [];
+
+    // Set profile (based on which interaction affordances are exposed)
+    this.profile = [];
+    if (
+      Object.keys(description.properties ?? {}).length > 0 ||
+      Object.keys(description.actions ?? {}).length > 0
+    ) {
+      this.profile.push(Constants.WOT_HTTP_BASIC_PROFILE);
+    }
+    if (
+      Object.keys(description.properties ?? {}).length > 0 ||
+      Object.keys(description.events ?? {}).length > 0
+    ) {
+      this.profile.push(Constants.WOT_HTTP_SSE_PROFILE);
+    }
+
     this.description = description.description || '';
     this.href = `${Constants.THINGS_PATH}/${encodeURIComponent(this.id)}`;
     this.properties = {};
@@ -190,8 +213,8 @@ export default class Thing extends EventEmitter {
         this.properties[propertyName] = property;
       }
 
-      // If there are properties, add top level forms for them
-      if (Object.keys(description.properties).length > 0) {
+      // If there are properties, add a top level form for them
+      if (Object.keys(description.properties ?? {}).length > 0) {
         let ops;
         // If there are writable properties then add readallproperties and
         // writemultipleproperties operations as an array
@@ -627,6 +650,7 @@ export default class Thing extends EventEmitter {
       title: this.title,
       '@context': this['@context'],
       '@type': this['@type'],
+      profile: this.profile,
       description: this.description,
       href: this.href,
       properties: this.properties,
