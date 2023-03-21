@@ -163,8 +163,8 @@ function build(): express.Router {
         return;
       }
 
-      // Generate a timestamp ID for the property reading
-      const propertyReadingId = Date.now();
+      // Generate an ISO 8601 date time string as an ID
+      const propertyReadingId = new Date().toISOString();
 
       const propertyValue = await propertyReading.getValue();
 
