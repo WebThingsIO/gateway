@@ -243,6 +243,8 @@ const SettingsScreen = {
       this.elements.network.client.ethernet.gatewayLabel,
       this.elements.network.client.ethernet.gateway,
     ];
+    // we'll use these in /settings/network/ethernet screen if 'static' IP is configured
+    this.ethernetEls = ethernetEls;
     this.elements.network.client.ethernet.ip.addEventListener(
       'input',
       this.validateEthernet.bind(this)
@@ -865,17 +867,17 @@ const SettingsScreen = {
     this.hideNetworkElements();
     this.elements.network.main.classList.remove('hidden');
 
-    // set default values in case things go bad
-    this.elements.network.client.ethernet.netmask.value = '255.255.255.0';
-
     this.elements.network.client.ethernet.main.classList.remove('hidden');
 
     API.getLanSettings()
       .then((body) => {
         this.elements.network.client.ethernet.mode.value = body.mode || 'dhcp';
-        this.elements.network.client.ethernet.ip.value = body.ipdaddr || '';
-        this.elements.network.client.ethernet.netmask.value = body.netmask || '255.255.255.0';
-        this.elements.network.client.ethernet.gateway.value = body.gateway || '';
+        if (body.mode === 'static') {
+          this.ethernetEls.forEach((el) => el.classList.remove('hidden'));
+        }
+        this.elements.network.client.ethernet.ip.value = body.options.ipaddr || '';
+        this.elements.network.client.ethernet.netmask.value = body.options.netmask || '';
+        this.elements.network.client.ethernet.gateway.value = body.options.gateway || '';
       })
       .catch((e) => {
         console.error(`Failed to get ethernet config: ${e}`);
