@@ -422,7 +422,7 @@ new-group-save = 创建
 new-web-thing-url =
     .placeholder = 输入智能硬件 URL
 new-web-thing-label = 智能硬件
-loading = 正在载入...
+loading = 正在加载...
 new-web-thing-multiple = 发现多个智能硬件
 new-web-thing-from = 来自
 
@@ -579,7 +579,7 @@ connecting-skipped = 此刻正在启动网关。请保持与网关使用同一�
 ## UI Updates
 
 ui-update-available = 用户界面已做更新。
-ui-update-reload = 重新载入
+ui-update-reload = 重新加载
 ui-update-close = 关闭
 
 ## General Terms
