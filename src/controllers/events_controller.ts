@@ -106,8 +106,8 @@ function build(): express.Router {
         return;
       }
 
-      // Generate an ID for the event
-      const eventId = Date.now();
+      // Generate an ISO 8601 date time string as an ID
+      const eventId = new Date().toISOString();
 
       // Push event to client via event stream
       response.write(`id: ${eventId}\n`);

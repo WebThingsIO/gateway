@@ -177,16 +177,20 @@ export default class Thing extends EventEmitter {
           property.forms = [];
         }
 
-        // Give the property a URL
-        // Conservative approach do not remove provided forms
+        // Add forms for the property (does not remove forms provided by add-on)
         property.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+        });
+        property.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+          op: [Constants.WoTOperation.OBSERVE_PROPERTY, Constants.WoTOperation.UNOBSERVE_PROPERTY],
+          subprotocol: 'sse',
         });
 
         this.properties[propertyName] = property;
       }
 
-      // If there are properties, add a top level form for them
+      // If there are properties, add top level forms for them
       if (Object.keys(description.properties).length > 0) {
         let ops;
         // If there are writable properties then add readallproperties and
@@ -204,6 +208,15 @@ export default class Thing extends EventEmitter {
         this.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}`,
           op: ops,
+        });
+
+        this.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}`,
+          op: [
+            Constants.WoTOperation.OBSERVE_ALL_PROPERTIES,
+            Constants.WoTOperation.UNOBSERVE_ALL_PROPERTIES,
+          ],
+          subprotocol: 'sse',
         });
       }
     }
@@ -752,15 +765,20 @@ export default class Thing extends EventEmitter {
           property.forms = [];
         }
 
-        // Give the property a URL
-        // Conservative approach do not remove provided forms
+        // Add forms for the property (does not remove forms provided by add-on)
         property.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
         });
+        property.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}/${encodeURIComponent(propertyName)}`,
+          op: [Constants.WoTOperation.OBSERVE_PROPERTY, Constants.WoTOperation.UNOBSERVE_PROPERTY],
+          subprotocol: 'sse',
+        });
+
         this.properties[propertyName] = property;
       }
 
-      // If there are properties, add a top level form for them
+      // If there are properties add top level forms for them
       if (Object.keys(description.properties).length > 0) {
         let ops;
         // If there are writable properties then add readallproperties and
@@ -778,6 +796,15 @@ export default class Thing extends EventEmitter {
         this.forms.push({
           href: `${this.href}${Constants.PROPERTIES_PATH}`,
           op: ops,
+        });
+
+        this.forms.push({
+          href: `${this.href}${Constants.PROPERTIES_PATH}`,
+          op: [
+            Constants.WoTOperation.OBSERVE_ALL_PROPERTIES,
+            Constants.WoTOperation.UNOBSERVE_ALL_PROPERTIES,
+          ],
+          subprotocol: 'sse',
         });
       }
     }
