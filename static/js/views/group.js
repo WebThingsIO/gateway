@@ -62,11 +62,8 @@ class Group {
     bar.setAttribute('draggable', 'true');
     bar.setAttribute('data-layout-index', '-1');
 
-    const leftcontainer = document.createElement('DIV');
-    leftcontainer.setAttribute('class', 'leftcontainer');
-
-    const foldInButton = document.createElement('BUTTON');
-    foldInButton.setAttribute('class', 'foldIn');
+    const expandButton = document.createElement('BUTTON');
+    expandButton.setAttribute('class', 'expand-button');
     const cookie = `group-${this.id}-closed=1`;
     if (
       !document.cookie
@@ -76,7 +73,7 @@ class Group {
     ) {
       this.element.classList.add('open');
     }
-    foldInButton.addEventListener('click', () => {
+    expandButton.addEventListener('click', () => {
       document.cookie = `${cookie};expires=Thu, 01 Jan 1970 00:00:01 GMT`;
       if (this.element.classList.contains('open')) {
         this.element.classList.remove('open');
@@ -87,25 +84,23 @@ class Group {
         this.element.classList.add('open');
       }
     });
-    leftcontainer.appendChild(foldInButton);
+    bar.appendChild(expandButton);
 
     const title = document.createElement('DIV');
     title.setAttribute('class', 'title');
     title.innerText = this.title;
-    leftcontainer.appendChild(title);
+    bar.appendChild(title);
 
-    bar.appendChild(leftcontainer);
-
-    const editGroupButton = document.createElement('BUTTON');
-    editGroupButton.setAttribute('class', 'edit');
-    editGroupButton.addEventListener('click', () => {
+    const groupOverflowButton = document.createElement('BUTTON');
+    groupOverflowButton.setAttribute('class', 'overflow-button');
+    groupOverflowButton.addEventListener('click', () => {
       if (this.overflowMenu.classList.contains('hidden')) {
         this.overflowMenu.classList.remove('hidden');
       } else {
         this.overflowMenu.classList.add('hidden');
       }
     });
-    bar.appendChild(editGroupButton);
+    bar.appendChild(groupOverflowButton);
 
     this.buildOverflowMenu();
     bar.appendChild(this.overflowMenu);
@@ -114,13 +109,21 @@ class Group {
   }
 
   buildOverflowMenu() {
-    this.overflowMenu = document.createElement('DIV');
-    this.overflowMenu.setAttribute('class', 'group-overflow-menu hidden');
+    this.overflowMenu = document.createElement('menu');
+    this.overflowMenu.setAttribute('class', 'hidden overflow-menu below group-overflow-menu');
 
-    const editEntry = document.createElement('A');
-    editEntry.href = '#';
-    editEntry.innerHTML = `<img src="/images/edit-plain.svg">${fluent.getMessage('edit')}`;
-    editEntry.addEventListener('click', () => {
+    // Edit group menu item
+    const editItem = document.createElement('li');
+    editItem.classList.add('overflow-menu-item');
+    const editButton = document.createElement('button');
+    editItem.appendChild(editButton);
+    const editIcon = document.createElement('img');
+    editIcon.src = '/images/edit-plain.svg';
+    editButton.appendChild(editIcon);
+    const editLabel = document.createElement('span');
+    editLabel.textContent = fluent.getMessage('edit');
+    editButton.appendChild(editLabel);
+    editButton.addEventListener('click', () => {
       const newEvent = new CustomEvent('_groupcontextmenu', {
         detail: {
           groupId: this.id,
@@ -129,13 +132,22 @@ class Group {
         },
       });
       window.dispatchEvent(newEvent);
+      this.overflowMenu.classList.add('hidden');
     });
-    this.overflowMenu.appendChild(editEntry);
+    this.overflowMenu.appendChild(editItem);
 
-    const deleteEntry = document.createElement('A');
-    deleteEntry.href = '#';
-    deleteEntry.innerHTML = `<img src="/images/remove.svg">${fluent.getMessage('remove')}`;
-    deleteEntry.addEventListener('click', () => {
+    // Remove group menu item
+    const removeItem = document.createElement('li');
+    removeItem.classList.add('overflow-menu-item');
+    const removeButton = document.createElement('button');
+    removeItem.appendChild(removeButton);
+    const removeIcon = document.createElement('img');
+    removeIcon.src = '/images/remove.svg';
+    removeButton.appendChild(removeIcon);
+    const removeLabel = document.createElement('span');
+    removeLabel.textContent = fluent.getMessage('remove');
+    removeButton.appendChild(removeLabel);
+    removeButton.addEventListener('click', () => {
       const newEvent = new CustomEvent('_groupcontextmenu', {
         detail: {
           groupId: this.id,
@@ -144,8 +156,9 @@ class Group {
         },
       });
       window.dispatchEvent(newEvent);
+      this.overflowMenu.classList.add('hidden');
     });
-    this.overflowMenu.appendChild(deleteEntry);
+    this.overflowMenu.appendChild(removeItem);
   }
 
   handleDragStart(e) {

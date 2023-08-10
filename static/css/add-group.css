@@ -1,14 +1,14 @@
-#group-context-menu {
+#add-group-screen {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#group-context-menu.hidden {
+#add-group-screen.hidden {
   display: none;
 }
 
-#group-context-menu h1 {
+#add-group-screen h1 {
   position: fixed;
   top: 0;
   line-height: 9.6rem;
@@ -23,13 +23,12 @@
   text-overflow: ellipsis;
 }
 
-#group-context-menu h1 img {
+#add-group-screen h1 img {
   vertical-align: middle;
   margin-right: 0.3rem;
 }
 
-/* Edit Group Form */
-#edit-group-form {
+#add-group-form {
   width: calc(100% - 4rem);
   max-width: 48rem;
   padding: 4rem;
@@ -40,11 +39,7 @@
   border-radius: 0.5rem;
 }
 
-#edit-group-form.hidden {
-  display: none;
-}
-
-#edit-group-title-input {
+#add-group-title-input {
   height: 3.2rem;
   flex: 1;
   margin: 0;
@@ -52,7 +47,7 @@
   box-sizing: border-box;
 }
 
-#edit-group-save-button {
+#add-group-create-button {
   height: 3.2rem;
   font-size: 1.5rem;
   margin: 0 0 0 1rem;
@@ -61,42 +56,21 @@
   background-color: #7f93a1;
 }
 
-#edit-group-save-button:hover,
-#edit-group-save-button:active {
+#add-group-create-button:hover,
+#add-group-create-button:active {
   background-color: #97aebf;
 }
 
-/* Remove Group Form */
-#remove-group-form {
-  width: 100%;
-  text-align: center;
-}
-
-#remove-group-form.hidden {
-  display: none;
-}
-
-#remove-group-button {
-  border: none;
-  border-radius: 0.5rem;
-  color: white;
-  font-size: 1.6rem;
-  width: 60%;
-  min-width: 15rem;
-  height: 6rem;
-  background-color: #f55;
-}
-
 @media only screen and (max-width: 959px) {
-  #edit-group-form {
+  #add-group-form {
     flex-direction: column;
   }
 
-  #edit-group-title-input {
+  #add-group-title-input {
     flex: none;
   }
 
-  #edit-group-save-button {
+  #add-group-create-button {
     margin: 2rem auto 0 auto;
     width: 9rem;
   }

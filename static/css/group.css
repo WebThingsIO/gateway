@@ -1,69 +1,75 @@
 .group {
   background: #5288af;
-  border-radius: 5px;
-  border: 1px solid #48779a;
-  margin: 12px 0;
-  min-width: 250px;
-  min-height: 50px;
-  max-height: 32px;
-  padding-left: 5px;
-  padding-right: 5px;
-  position: relative;
-  overflow: inherit;
+  border-radius: 0.5rem;
+  margin: 2rem 5rem;
+  min-height: 5rem;
+  max-height: 3.2rem;
 }
 
 .group.open {
-  max-height: 100000px;
+  min-height: 24.4rem;
+  max-height: none;
 }
 
 .group:not(.open) .thing {
-  opacity: 0;
+  display: none;
 }
 
-.group div.bar {
+.group .bar {
+  display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  display: flex;
-  padding: 5px 10px;
+  padding: 0.5rem;
   position: relative;
+  height: 5rem;
+  box-sizing: border-box;
 }
 
-.group div.bar div.title {
+.group .bar .title {
+  flex: 1;
   color: white;
+  line-height: 4rem;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.group div.bar .leftcontainer {
-  display: flex;
-}
-
-.group div.bar button.edit {
+.group .bar .overflow-button {
+  width: 3.2rem;
+  height: 3.2rem;
+  margin: 0.4rem;
+  padding: 0;
+  background-image: url('/images/overflow-small.svg');
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 2.4rem;
+  background-position: center;
   border: none;
-  position: absolute;
-  top: 5px;
-  right: 1rem;
-  width: 25px;
-  border-radius: 50%;
-  height: 25px;
-  background: no-repeat center/100% url('/images/overflow.svg');
+  border-radius: 2.5rem;
 }
 
-.group div.bar button.foldIn {
-  background-image: url('/images/right-arrow.png');
-  transform: rotate(90deg);
-  background-size: 15px 15px;
+.group .bar .overflow-button:hover {
+  background-color: #78abce;
+}
+
+.group .bar .overflow-button:active {
+  background-color: #7dafd2;
+}
+
+.group .bar .expand-button {
+  background-image: url('/images/down-arrow.svg');
+  background-size: 2.4rem 2.4rem;
   background-position: center;
   background-repeat: no-repeat;
   border: none;
-  width: 25px;
-  margin-right: 5px;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin: 0.4rem;
   background-color: transparent;
-  height: 25px;
-  transition: transform 0.3s;
-  cursor: grab;
 }
 
-.group.open div.bar button.foldIn {
-  transform: rotate(-90deg);
+.group.open .bar .expand-button {
+  transform: rotate(-180deg);
 }
 
 .group.open.drag-target {
@@ -71,27 +77,35 @@
 }
 
 .drag-before::before {
+  display: block;
   content: '';
-  position: absolute;
+  position: relative;
   border-top: 0.2rem dashed white;
   width: 100%;
-  top: -14px;
+  top: -1rem;
   left: 0;
+  margin-bottom: -2px; /* Prevent it taking up space */
 }
 
 .drag-after::after {
+  display: block;
   content: '';
-  position: absolute;
+  position: relative;
   border-top: 0.2rem dashed white;
   width: 100%;
-  bottom: -14px;
+  bottom: -1rem;
   left: 0;
+  margin-bottom: -2px; /* Prevent it taking up space */
+}
+
+.group.open .bar:last-child {
+  margin-bottom: 19.2rem; /* Fill up an empty group */
 }
 
 .group-overflow-menu {
   position: absolute;
-  top: 4.5rem;
-  right: 0.3rem;
+  top: 3.8rem;
+  right: -0.25rem;
   background-color: #48779a;
   color: white;
   padding: 1rem 0;
@@ -101,38 +115,4 @@
   transform-origin: top right;
   z-index: 100;
   text-align: left;
-}
-
-.group-overflow-menu::after {
-  content: '';
-  position: absolute;
-  top: -0.9rem;
-  right: 1rem;
-  border-width: 0 1rem 1rem;
-  border-style: solid;
-  border-color: #48779a transparent;
-  display: block;
-  width: 0;
-}
-
-.group-overflow-menu > a {
-  color: #fff;
-  font-size: 2rem;
-  display: block;
-  padding: 0.4rem 1rem;
-  text-decoration: none;
-}
-
-.group-overflow-menu > a > img {
-  height: 2rem;
-  padding-right: 1rem;
-  margin-bottom: -0.3rem;
-}
-
-.group-overflow-menu.hidden {
-  transform: scale(0);
-}
-
-.group-overflow-menu > a:hover {
-  background-color: #4d80a5;
 }
