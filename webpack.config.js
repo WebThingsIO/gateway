@@ -122,6 +122,7 @@ const webpackWeb = {
       './static/css/things.css',
       './static/css/menu.css',
       './static/css/add-thing.css',
+      './static/css/add-group.css',
       './static/css/context-menu.css',
       './static/css/group-context-menu.css',
       './static/css/thing.css',

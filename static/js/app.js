@@ -18,6 +18,8 @@ let ThingsScreen;
 // eslint-disable-next-line prefer-const
 let AddThingScreen;
 // eslint-disable-next-line prefer-const
+let AddGroupScreen;
+// eslint-disable-next-line prefer-const
 let Menu;
 // eslint-disable-next-line prefer-const
 let ContextMenu;
@@ -99,6 +101,7 @@ const App = {
     });
 
     AddThingScreen.init();
+    AddGroupScreen.init();
     ContextMenu.init();
     GroupContextMenu.init();
     ThingsScreen.init();
@@ -479,6 +482,7 @@ API = require('./api').default;
 GatewayModel = require('./models/gateway-model');
 ThingsScreen = require('./views/things');
 AddThingScreen = require('./views/add-thing');
+AddGroupScreen = require('./views/add-group');
 Menu = require('./views/menu');
 ContextMenu = require('./context-menu');
 GroupContextMenu = require('./group-context-menu');

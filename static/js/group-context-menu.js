@@ -1,11 +1,14 @@
 /**
- * Context Menu.
+ * Group Context Menu.
  *
  * A menu of functions to perform on a Group.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * TODO: Re-factor this as two separate dialogs
+ *       https://github.com/WebThingsIO/gateway/issues/3098
  */
 'use strict';
 
@@ -19,20 +22,20 @@ const GroupContextMenu = {
    */
   init: function () {
     this.element = document.getElementById('group-context-menu');
-    this.editContent = document.getElementById('group-context-menu-content-edit');
-    this.removeContent = document.getElementById('group-context-menu-content-remove');
+    this.editForm = document.getElementById('edit-group-form');
+    this.removeForm = document.getElementById('remove-group-form');
     this.backButton = document.getElementById('group-context-menu-back-button');
     this.headingText = document.getElementById('group-context-menu-heading-text');
     this.saveButton = document.getElementById('edit-group-save-button');
-    this.titleInput = document.getElementById('edit-group-title');
+    this.titleInput = document.getElementById('edit-group-title-input');
     this.removeButton = document.getElementById('remove-group-button');
     this.groupId = '';
 
     // Add event listeners
     window.addEventListener('_groupcontextmenu', this.show.bind(this));
     this.backButton.addEventListener('click', this.hide.bind(this));
-    this.saveButton.addEventListener('click', this.handleEdit.bind(this));
-    this.removeButton.addEventListener('click', this.handleRemove.bind(this));
+    this.editForm.addEventListener('submit', this.handleEdit.bind(this));
+    this.removeForm.addEventListener('submit', this.handleRemove.bind(this));
   },
 
   /**
@@ -41,21 +44,20 @@ const GroupContextMenu = {
   show: function (e) {
     this.headingText.textContent = e.detail.groupTitle;
     this.groupId = e.detail.groupId;
+    this.editForm.classList.add('hidden');
+    this.removeForm.classList.add('hidden');
     this.element.classList.remove('hidden');
-
-    this.editContent.classList.add('hidden');
-    this.removeContent.classList.add('hidden');
 
     switch (e.detail.action) {
       case 'edit': {
         this.titleInput.disabled = false;
         this.saveButton.disabled = false;
         this.titleInput.value = e.detail.groupTitle;
-        this.editContent.classList.remove('hidden');
+        this.editForm.classList.remove('hidden');
         break;
       }
       case 'remove':
-        this.removeContent.classList.remove('hidden');
+        this.removeForm.classList.remove('hidden');
         break;
     }
   },
@@ -70,16 +72,14 @@ const GroupContextMenu = {
   },
 
   /**
-   * Handle click on edit option.
+   * Handle submission of edit form.
    */
-  handleEdit: function () {
+  handleEdit: function (event) {
+    event.preventDefault();
     this.titleInput.disabled = true;
     this.saveButton.disabled = true;
 
     const title = this.titleInput.value.trim();
-    if (title.length === 0) {
-      return;
-    }
 
     App.gatewayModel
       .updateGroup(this.groupId, { title })
@@ -98,9 +98,10 @@ const GroupContextMenu = {
   },
 
   /**
-   * Handle click on remove option.
+   * Handle submission of remove form.
    */
-  handleRemove: function () {
+  handleRemove: function (event) {
+    event.preventDefault();
     App.gatewayModel
       .removeGroup(this.groupId)
       .then(() => {

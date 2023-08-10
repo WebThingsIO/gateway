@@ -30,6 +30,8 @@ thing-details =
     .aria-label = View Properties
 add-things =
     .aria-label = Add New Things
+add-thing = Add thing
+add-group = Add group
 
 ## Floorplan
 
@@ -251,6 +253,10 @@ context-menu-save = Save
 context-menu-remove = Remove
 context-menu-show-on-floorplan = Show in floorplan view?
 
+## Group Context Menu
+edit-group-save =
+    .value = Save
+
 ## Capabilities
 
 OnOffSwitch = On/Off Switch
@@ -425,6 +431,13 @@ new-web-thing-label = Web Thing
 loading = Loading…
 new-web-thing-multiple = Multiple web things found
 new-web-thing-from = from
+
+## New Group Screen
+new-group-heading = New Group
+new-group-input = 
+    .placeholder = Enter group name
+new-group-save = 
+    .value = Create
 
 ## Empty div Messages
 

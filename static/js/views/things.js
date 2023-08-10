@@ -13,6 +13,7 @@
 const page = require('page');
 const ActionInputForm = require('./action-input-form');
 const AddThingScreen = require('./add-thing');
+const AddGroupScreen = require('./add-group');
 const App = require('../app');
 const Constants = require('../constants');
 const EventList = require('./event-list');
@@ -34,9 +35,14 @@ const ThingsScreen = {
     this.addButton = document.getElementById('add-button');
     this.menuButton = document.getElementById('menu-button');
     this.backButton = document.getElementById('back-button');
+    this.addThingMenu = document.getElementById('add-thing-menu');
+    this.addThingButton = document.getElementById('add-thing-button');
+    this.addGroupButton = document.getElementById('add-group-button');
     this.backRef = '/things';
     this.backButton.addEventListener('click', () => page(this.backRef));
-    this.addButton.addEventListener('click', AddThingScreen.show.bind(AddThingScreen));
+    this.addButton.addEventListener('click', this.toggleAddThingMenu.bind(this));
+    this.addThingButton.addEventListener('click', this.handleAddThingButtonClick.bind(this));
+    this.addGroupButton.addEventListener('click', this.handleAddGroupButtonClick.bind(this));
     this.refreshThings = this.refreshThings.bind(this);
     this.things = [];
 
@@ -115,9 +121,13 @@ const ThingsScreen = {
     }
     this.groupsElement.innerHTML = '';
     if (groups.size !== 0) {
+      this.groupsElement.classList.remove('hidden');
       groups.forEach((description) => {
         new Group(description);
       });
+    } else {
+      // Hide the groups div so it doesn't take up space
+      this.groupsElement.classList.add('hidden');
     }
     if (things.size !== 0) {
       things.forEach((description, thingId) => {
@@ -190,6 +200,33 @@ const ThingsScreen = {
 
     App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThing, true);
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThing);
+  },
+
+  /**
+   * Toggle the visibility of the add thing menu.
+   */
+  toggleAddThingMenu: function () {
+    if (this.addThingMenu.classList.contains('hidden')) {
+      this.addThingMenu.classList.remove('hidden');
+    } else {
+      this.addThingMenu.classList.add('hidden');
+    }
+  },
+
+  /**
+   * Handle a click on the add thing button in the add thing menu.
+   */
+  handleAddThingButtonClick: function () {
+    this.addThingMenu.classList.add('hidden');
+    AddThingScreen.show();
+  },
+
+  /**
+   * Handle a click on the add group button in the add thing menu.
+   */
+  handleAddGroupButtonClick: function () {
+    this.addThingMenu.classList.add('hidden');
+    AddGroupScreen.show();
   },
 
   /**

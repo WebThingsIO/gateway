@@ -189,90 +189,6 @@ h6 {
   left: 9.5rem;
 }
 
-#update-message-area {
-  position: fixed;
-  top: 2rem;
-  width: 33%;
-  left: calc(33% - 1rem);
-  background-color: rgba(76, 124, 160, 0.6);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  text-align: center;
-  color: white;
-  font-size: 2rem;
-  transform: translateY(0);
-  transition: transform 0.25s ease;
-  z-index: 100;
-}
-
-#update-message-area-text {
-  padding-bottom: 2rem;
-}
-
-#update-message-area > button {
-  height: 4rem;
-  background-color: #48779a;
-  font-size: 1.5rem;
-  margin: auto 0.5rem;
-}
-
-#update-message-area > button:hover,
-#update-message-area > button:active {
-  background-color: #658196;
-}
-
-#update-message-area-reload {
-  margin-right: 1rem;
-}
-
-#update-message-area.hidden {
-  transform: translateY(-100%) translateY(-4rem);
-}
-
-#message-area {
-  position: fixed;
-  bottom: 3rem;
-  width: 33%;
-  left: calc(33% - 1rem);
-  background-color: rgba(76, 124, 160, 0.6);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  text-align: center;
-  color: white;
-  font-size: 2rem;
-  transform: translateY(0);
-  transition: transform 0.25s ease;
-  z-index: 100;
-}
-
-#message-area.hidden {
-  transform: translateY(100%) translateY(4rem);
-}
-
-#message-area.disconnected {
-  background-color: #374956;
-  z-index: 10001;
-  color: #ccc;
-}
-
-@media only screen and (max-width: 730px) {
-  #update-message-area,
-  #message-area {
-    width: calc(100% - 10rem);
-    left: 3rem;
-  }
-}
-
-#message-area > a:link,
-#message-area > a:visited,
-#message-area > a:hover,
-#message-area > a:active {
-  color: white;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 #menu-button,
 #back-button {
   top: 2rem;
@@ -298,6 +214,92 @@ h6 {
   background: no-repeat center/100% url('/images/overflow.svg');
 }
 
+/** New Overflow Menu **/
+.overflow-menu {
+  display: block;
+  position: fixed;
+  width: 24rem;
+  padding: 1rem 0 1rem 0;
+  border-radius: 0.5rem;
+  background-color: #48779a;
+  color: #fff;
+}
+
+.overflow-menu.hidden {
+  display: none;
+}
+
+.overflow-menu.above ::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  right: 1.8rem;
+  border-width: 1rem 1rem 0;
+  border-style: solid;
+  border-color: #48779a transparent;
+  display: block;
+  width: 0;
+}
+
+.overflow-menu.below ::before {
+  content: '';
+  position: absolute;
+  top: -1rem;
+  right: 1.8rem;
+  border-width: 0 1rem 1rem;
+  border-style: solid;
+  border-color: #48779a transparent;
+  display: block;
+  width: 0;
+}
+
+.overflow-menu-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  list-style-type: none;
+}
+
+.overflow-menu-item:last-child {
+  border: none;
+}
+
+.overflow-menu-item button {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 4rem;
+  margin: 0;
+  padding: 0 1rem;
+  border-radius: 0;
+  border: none;
+  background-color: transparent;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.overflow-menu-item button:hover,
+.overflow-menu-item button:active {
+  background-color: #3a607c;
+}
+
+.overflow-menu-item button img {
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0.8rem;
+}
+
+.overflow-menu-item button span {
+  flex: 1;
+  text-align: left;
+  font-size: 1.6rem;
+  margin-left: 1rem;
+}
+
+/* Old Overflow Menu (to be deprecated) */
 #overflow-menu {
   position: fixed;
   bottom: 9rem;
@@ -564,4 +566,88 @@ body.hidden {
   padding: 4rem;
   color: white;
   background-color: #5288af;
+}
+
+#update-message-area {
+  position: fixed;
+  top: 2rem;
+  width: 33%;
+  left: calc(33% - 1rem);
+  background-color: rgba(76, 124, 160, 0.6);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  transform: translateY(0);
+  transition: transform 0.25s ease;
+  z-index: 100;
+}
+
+#update-message-area-text {
+  padding-bottom: 2rem;
+}
+
+#update-message-area > button {
+  height: 4rem;
+  background-color: #48779a;
+  font-size: 1.5rem;
+  margin: auto 0.5rem;
+}
+
+#update-message-area > button:hover,
+#update-message-area > button:active {
+  background-color: #658196;
+}
+
+#update-message-area-reload {
+  margin-right: 1rem;
+}
+
+#update-message-area.hidden {
+  transform: translateY(-100%) translateY(-4rem);
+}
+
+#message-area {
+  position: fixed;
+  bottom: 3rem;
+  width: 33%;
+  left: calc(33% - 1rem);
+  background-color: rgba(76, 124, 160, 0.6);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  transform: translateY(0);
+  transition: transform 0.25s ease;
+  z-index: 100;
+}
+
+#message-area.hidden {
+  transform: translateY(100%) translateY(4rem);
+}
+
+#message-area.disconnected {
+  background-color: #374956;
+  z-index: 10001;
+  color: #ccc;
+}
+
+@media only screen and (max-width: 730px) {
+  #update-message-area,
+  #message-area {
+    width: calc(100% - 10rem);
+    left: 3rem;
+  }
+}
+
+#message-area > a:link,
+#message-area > a:visited,
+#message-area > a:hover,
+#message-area > a:active {
+  color: white;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
