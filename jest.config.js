@@ -11,6 +11,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/src/',
+    '<rootDir>/test/browser/', // https://github.com/WebThingsIO/gateway/issues/3007
   ],
   transform: {
     '\\.js$': 'babel-jest',
