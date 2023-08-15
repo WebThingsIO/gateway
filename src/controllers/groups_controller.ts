@@ -153,7 +153,7 @@ function build(): express.Router {
     Things.getThingDescriptions(request.get('Host'), request.secure)
       .then((things) => {
         const filteredThings = Array.from(things.values()).filter((thing) => {
-          return thing.group_id == id;
+          return thing.groupId == id;
         });
         response.status(200).json(filteredThings);
       })

@@ -361,16 +361,16 @@ class Things extends EventEmitter {
    * Set the group for a Thing in the overview.
    *
    * @param {number} thing The thing.
-   * @param {string} group_id ID of the group
+   * @param {string} groupId ID of the group
    * @return {Promise} A promise which resolves with the description set.
    */
-  async setThingGroup(thing: Thing, group_id: string | null, emitModified = true): Promise<void> {
-    if (!group_id) {
-      group_id = null;
+  async setThingGroup(thing: Thing, groupId: string | null, emitModified = true): Promise<void> {
+    if (!groupId) {
+      groupId = null;
     }
 
     await this.setThingLayoutIndex(thing, Infinity, false);
-    await thing.setGroup(group_id);
+    await thing.setGroup(groupId);
     const index =
       Array.from(this.things.values()).filter((t) => t.getGroup() == thing.getGroup()).length - 1;
     await thing.setLayoutIndex(index);
@@ -384,19 +384,19 @@ class Things extends EventEmitter {
    * Set the group and layout index for a Thing in the overview.
    *
    * @param {number} thing The thing.
-   * @param {string} group_id ID of the group
+   * @param {string} groupId ID of the group
    * @param {number} index The new layout index.
    * @return {Promise} A promise which resolves with the description set.
    */
   async setThingGroupAndLayoutIndex(
     thing: Thing,
-    group_id: string | null,
+    groupId: string | null,
     index: number
   ): Promise<void> {
-    if (!group_id) {
-      group_id = null;
+    if (!groupId) {
+      groupId = null;
     }
-    await this.setThingGroup(thing, group_id, false);
+    await this.setThingGroup(thing, groupId, false);
     await this.setThingLayoutIndex(thing, index, false);
     this.emit(Constants.LAYOUT_MODIFIED);
   }
@@ -415,13 +415,13 @@ class Things extends EventEmitter {
       }
 
       const index = thing.getLayoutIndex();
-      const group_id = thing.getGroup();
+      const groupId = thing.getGroup();
 
       thing.remove();
       this.things.delete(id);
 
       Array.from(this.things.values())
-        .filter((t) => t.getGroup() == group_id)
+        .filter((t) => t.getGroup() == groupId)
         .forEach((t) => {
           if (t.getLayoutIndex() > index) {
             t.setLayoutIndex(t.getLayoutIndex() - 1);

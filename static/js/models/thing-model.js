@@ -40,7 +40,7 @@ class ThingModel extends Model {
     }
 
     // Parse group id of Thing
-    this.group_id = description.group_id;
+    this.groupId = description.groupId;
 
     // Parse properties and events URLs
     for (const form of description.forms) {
