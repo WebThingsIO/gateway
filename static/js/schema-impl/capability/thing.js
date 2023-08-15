@@ -95,8 +95,8 @@ class Thing {
       this.container = document.getElementById('floorplan');
       this.x = description.floorplanX;
       this.y = description.floorplanY;
-    } else if (this.model.group_id) {
-      this.container = document.querySelector(`#group-${this.model.group_id}`);
+    } else if (this.model.groupId) {
+      this.container = document.querySelector(`#group-${this.model.groupId}`);
     } else {
       this.container = document.getElementById('things');
     }
@@ -712,7 +712,7 @@ class Thing {
     }
 
     const dragNodeId = Utils.unescapeHtml(dragNode.id).replace(/^thing-/, '');
-    API.setThingGroupAndLayoutIndex(dragNodeId, this.model.group_id, dropIndex)
+    API.setThingGroupAndLayoutIndex(dragNodeId, this.model.groupId, dropIndex)
       .then(() => {
         App.gatewayModel.refreshThings();
       })
