@@ -257,7 +257,6 @@ h6 {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
   padding: 0;
   list-style-type: none;
 }
@@ -281,77 +280,41 @@ h6 {
   color: #fff;
 }
 
+/* Older overflow menus use anchors rather than buttons inside list items */
+a.overflow-menu-item {
+  width: 100%;
+  height: 4rem;
+  margin: 0;
+  padding: 0 1rem;
+  font-size: 1.6rem;
+  color: #fff;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
 .overflow-menu-item button:hover,
-.overflow-menu-item button:active {
+.overflow-menu-item button:active,
+a.overflow-menu-item:hover,
+a.overflow-menu-item:active {
   background-color: #3a607c;
 }
 
-.overflow-menu-item button img {
+.overflow-menu-item img {
   width: 1.6rem;
   height: 1.6rem;
   padding: 0.8rem;
+  margin-right: 0.5rem;
 }
 
 .overflow-menu-item button span {
   flex: 1;
   text-align: left;
   font-size: 1.6rem;
-  margin-left: 1rem;
 }
 
-/* Old Overflow Menu (to be deprecated) */
 #overflow-menu {
-  position: fixed;
   bottom: 9rem;
-  right: 3rem;
-  background-color: #5288af;
-  color: white;
-  padding: 1rem 0;
-  border-radius: 0.5rem;
-  transform: scale(1);
-  transition: transform 0.25s ease;
-  transform-origin: bottom right;
-}
-
-#overflow-menu::after {
-  content: '';
-  position: absolute;
-  bottom: -1rem;
-  right: 1rem;
-  border-width: 1rem 1rem 0;
-  border-style: solid;
-  border-color: #5288af transparent;
-  display: block;
-  width: 0;
-}
-
-#overflow-menu.hidden {
-  transform: scale(0);
-}
-
-#overflow-menu > a:link,
-#overflow-menu > a:visited,
-#overflow-menu > a:hover,
-#overflow-menu > a:active {
-  color: #fff;
-  font-size: 2rem;
-  display: block;
-  padding: 0.4rem 1rem;
-  text-decoration: none;
-}
-
-#overflow-menu > a:hover {
-  background-color: #4d80a5;
-}
-
-#overflow-menu > a:active {
-  background-color: #48779a;
-}
-
-#overflow-menu > a > img {
-  height: 2rem;
-  padding-right: 1rem;
-  margin-bottom: -0.3rem;
+  right: 2rem;
 }
 
 /* Dialog */
