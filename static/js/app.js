@@ -392,6 +392,7 @@ const App = {
 
     for (const link of links) {
       const element = document.createElement('a');
+      element.classList.add('overflow-menu-item');
       element.innerText = link.name;
 
       if (link.listener) {
