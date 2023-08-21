@@ -22,7 +22,7 @@ class GatewayModel extends Model {
     this.groups = new Map();
     this.onMessage = this.onMessage.bind(this);
     this.queue = Promise.resolve(true);
-    this.connectWebSocket();
+    this.connectWebSockets();
     return this;
   }
 
@@ -137,16 +137,27 @@ class GatewayModel extends Model {
     }
   }
 
-  connectWebSocket() {
+  connectWebSockets() {
     const thingsHref = `${window.location.origin}/things?jwt=${API.jwt}`;
     const wsHref = thingsHref.replace(/^http/, 'ws');
-    this.ws = new ReopeningWebSocket(wsHref);
-    this.ws.addEventListener('open', this.refreshThings.bind(this));
-    this.ws.addEventListener('message', this.onMessage);
     const groupsHref = `${window.location.origin}/groups?jwt=${API.jwt}`;
     const groupsWsHref = groupsHref.replace(/^http/, 'ws');
+
+    this.ws = new ReopeningWebSocket(wsHref);
     this.groupsWs = new ReopeningWebSocket(groupsWsHref);
-    this.groupsWs.addEventListener('open', this.refreshThings.bind(this));
+
+    // Wait for things and groups sockets to open before showing Things
+    const thingsReady = new Promise((resolve) => {
+      this.ws.addEventListener('open', resolve);
+    });
+    const groupsReady = new Promise((resolve) => {
+      this.groupsWs.addEventListener('open', resolve);
+    });
+    Promise.all([thingsReady, groupsReady]).then(() => {
+      this.refreshThings();
+    });
+
+    this.ws.addEventListener('message', this.onMessage);
     this.groupsWs.addEventListener('message', this.onMessage);
   }
 
