@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Προβολή ιδιοτήτων
 add-things =
     .aria-label = Προσθήκη νέων συσκευών
+add-thing = Προσθήκη πράγματος
+add-group = Προσθήκη νέας ομάδας
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Αποθήκευση
 context-menu-remove = Αφαίρεση
 context-menu-show-on-floorplan = Εμφάνιση σε προβολή κάτοψης;
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Αποθήκευση
+
 ## Capabilities
 
 OnOffSwitch = Διακόπτης λειτουργίας
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Λανθασμένα διαπιστευτήρια
 new-thing-saved = Αποθηκεύτηκε
 new-thing-done = Τέλος
-add-group = Προσθήκη νέας ομάδας
-new-group-save = Δημιουργία
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Αντικείμενο ιστού
 loading = Φόρτωση…
 new-web-thing-multiple = Βρέθηκαν πολλαπλά αντικείμενα ιστού
 new-web-thing-from = από
+
+## New Group Screen
+
+new-group-heading = Νέα ομάδα
+new-group-input =
+    .placeholder = Εισαγάγετε όνομα ομάδας
+new-group-save = Δημιουργία
 
 ## Empty div Messages
 
