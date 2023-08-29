@@ -30,7 +30,8 @@ thing-details =
     .aria-label = 查看属性
 add-things =
     .aria-label = 添加新硬件
-add-group = 新建群组
+add-thing = 添加设备
+add-group = 新建组
 
 ## Floorplan
 
@@ -432,6 +433,9 @@ new-web-thing-from = 来自
 
 ## New Group Screen
 
+new-group-heading = 新建组
+new-group-input =
+    .placeholder = 输入组名
 new-group-save = 创建
 
 ## Empty div Messages
