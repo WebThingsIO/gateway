@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Gweld Priodweddau
 add-things =
     .aria-label = Ychwanegu Pethau Newydd
+add-thing = Ychwanegu peth
+add-group = Ychwanegu grŵp newydd
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Cadw
 context-menu-remove = Tynnu
 context-menu-show-on-floorplan = Dangos yng ngolwg y cynllun lawr?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Cadw
+
 ## Capabilities
 
 OnOffSwitch = Switsh Ymlaen/Diffodd
@@ -442,8 +449,6 @@ new-thing-password =
 new-thing-credentials-error = Manylion anghywir
 new-thing-saved = Wedi'u Cadw
 new-thing-done = Gorffen
-add-group = Ychwanegu grŵp newydd
-new-group-save = Creu
 
 ## New Web Thing View
 
@@ -453,6 +458,13 @@ new-web-thing-label = Peth Gwe
 loading = Llwytho…
 new-web-thing-multiple = Wedi darganfod amryw o bethau gwe
 new-web-thing-from = o
+
+## New Group Screen
+
+new-group-heading = Grŵp Newydd
+new-group-input =
+    .placeholder = Rhowch enw'r grŵp
+new-group-save = Creu
 
 ## Empty div Messages
 
