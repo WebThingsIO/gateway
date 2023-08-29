@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Eigenschaften anzeigen
 add-things =
     .aria-label = Neue Dinge hinzufügen
+add-thing = Ding hinzufügen
+add-group = Neue Gruppe hinzufügen
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Speichern
 context-menu-remove = Löschen
 context-menu-show-on-floorplan = Im Raumplan anzeigen?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Speichern
+
 ## Capabilities
 
 OnOffSwitch = Ein/Aus-Schalter
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Eingaben sind fehlerhaft
 new-thing-saved = Gespeichert
 new-thing-done = Erledigt
-add-group = Neue Gruppe hinzufügen
-new-group-save = Erstellen
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Web Thing
 loading = Wird geladen…
 new-web-thing-multiple = Mehrere Web Things gefunden
 new-web-thing-from = von
+
+## New Group Screen
+
+new-group-heading = Neue Gruppe
+new-group-input =
+    .placeholder = Gruppennamen eingeben
+new-group-save = Erstellen
 
 ## Empty div Messages
 
@@ -577,8 +589,6 @@ connecting-skipped = Das Gateway wird jetzt neu gestartet. Navigieren Sie zu { $
 
 ## Creating Wi-Fi Network Page
 
-    Bitte Verbindung mit dem WLAN { $ssid } mit dem gerade vergebenen Passwort
-    aufbauen und im Webbrowser entweder { $gateway-link } oder { $ip-link } aufrufen.
 
 ## UI Updates
 
