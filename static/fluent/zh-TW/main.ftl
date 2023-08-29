@@ -30,6 +30,8 @@ thing-details =
     .aria-label = 檢視屬性
 add-things =
     .aria-label = 新增 Things
+add-thing = 新增 Thing
+add-group = 新增群組
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = 儲存
 context-menu-remove = 刪除
 context-menu-show-on-floorplan = 是否要在樓層規劃圖中顯示？
 
+## Group Context Menu
+
+edit-group-save =
+    .value = 儲存
+
 ## Capabilities
 
 OnOffSwitch = 二元開關
@@ -407,8 +414,6 @@ new-thing-password =
 new-thing-credentials-error = 帳號密碼不正確
 new-thing-saved = 已儲存
 new-thing-done = 完成
-add-group = 新增群組
-new-group-save = 建立
 
 ## New Web Thing View
 
@@ -418,6 +423,13 @@ new-web-thing-label = Web Thing
 loading = 載入中…
 new-web-thing-multiple = 找到多組 web things
 new-web-thing-from = 來自
+
+## New Group Screen
+
+new-group-heading = 新增群組
+new-group-input =
+    .placeholder = 請輸入群組名稱
+new-group-save = 建立
 
 ## Empty div Messages
 
