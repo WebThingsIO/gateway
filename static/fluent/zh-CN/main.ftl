@@ -30,6 +30,7 @@ thing-details =
     .aria-label = 查看属性
 add-things =
     .aria-label = 添加新硬件
+add-group = 新建群组
 
 ## Floorplan
 
@@ -251,6 +252,11 @@ context-menu-save = 保存
 context-menu-remove = 移除
 context-menu-show-on-floorplan = 要显示在楼层平面图中？
 
+## Group Context Menu
+
+edit-group-save =
+    .value = 保存
+
 ## Capabilities
 
 OnOffSwitch = 一个开关
@@ -414,8 +420,6 @@ new-thing-password =
 new-thing-credentials-error = 凭据不正确
 new-thing-saved = 已保存
 new-thing-done = 完成
-add-group = 新建群组
-new-group-save = 创建
 
 ## New Web Thing View
 
@@ -425,6 +429,10 @@ new-web-thing-label = 智能硬件
 loading = 正在加载...
 new-web-thing-multiple = 发现多个智能硬件
 new-web-thing-from = 来自
+
+## New Group Screen
+
+new-group-save = 创建
 
 ## Empty div Messages
 
