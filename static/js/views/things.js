@@ -145,7 +145,7 @@ const ThingsScreen = {
     App.gatewayModel.unsubscribe(Constants.REFRESH_THINGS, this.refreshThing);
     App.gatewayModel.unsubscribe(Constants.DELETE_THINGS, this.refreshThing);
     App.gatewayModel.subscribe(Constants.DELETE_THINGS, this.refreshThings);
-    App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThings, true);
+    App.gatewayModel.subscribe(Constants.REFRESH_THINGS, this.refreshThings);
   },
 
   /**
