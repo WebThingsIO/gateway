@@ -30,6 +30,7 @@ thing-details =
     .aria-label = Visa egenskaper
 add-things =
     .aria-label = Lägg till nya enheter
+add-group = Lägg till ny grupp
 
 ## Floorplan
 
@@ -251,6 +252,11 @@ context-menu-save = Spara
 context-menu-remove = Ta bort
 context-menu-show-on-floorplan = Visa i planlösningsvy?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Spara
+
 ## Capabilities
 
 OnOffSwitch = På/Av knapp
@@ -414,8 +420,6 @@ new-thing-password =
 new-thing-credentials-error = Felaktiga inloggningsuppgifter
 new-thing-saved = Sparad
 new-thing-done = Klar
-add-group = Lägg till ny grupp
-new-group-save = Skapa
 
 ## New Web Thing View
 
@@ -425,6 +429,13 @@ new-web-thing-label = Web Thing
 loading = Laddar…
 new-web-thing-multiple = Flera Web Things hittades
 new-web-thing-from = från
+
+## New Group Screen
+
+new-group-heading = Ny grupp
+new-group-input =
+    .placeholder = Ange gruppnamn
+new-group-save = Skapa
 
 ## Empty div Messages
 
