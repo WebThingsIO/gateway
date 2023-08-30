@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Eigenschappen tonen
 add-things =
     .aria-label = Nieuwe Things toevoegen
+add-thing = Thing toevoegen
+add-group = Nieuwe groep toevoegen
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Opslaan
 context-menu-remove = Verwijderen
 context-menu-show-on-floorplan = In plattegrondweergave tonen?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Opslaan
+
 ## Capabilities
 
 OnOffSwitch = Aan/Uit-schakelaar
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Ongeldige aanmeldgegevens
 new-thing-saved = Opgeslagen
 new-thing-done = Klaar
-add-group = Nieuwe groep toevoegen
-new-group-save = Aanmaken
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Web Thing
 loading = Laden…
 new-web-thing-multiple = Meerdere Web Things gevonden
 new-web-thing-from = van
+
+## New Group Screen
+
+new-group-heading = Nieuwe groep
+new-group-input =
+    .placeholder = Groepsnaam invoeren
+new-group-save = Aanmaken
 
 ## Empty div Messages
 
