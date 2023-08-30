@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Tulajdonságok megtekintése
 add-things =
     .aria-label = Új dolgok hozzáadása
+add-thing = Dolog hozzáadása
+add-group = Új csoport hozzáadása
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Mentés
 context-menu-remove = Eltávolítás
 context-menu-show-on-floorplan = Megjelenik az alaprajz nézetben?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Mentés
+
 ## Capabilities
 
 OnOffSwitch = Be/ki kapcsoló
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Helytelen hitelesítő adatok
 new-thing-saved = Mentve
 new-thing-done = Kész
-add-group = Új csoport hozzáadása
-new-group-save = Létrehozás
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Webes dolog
 loading = Betöltés…
 new-web-thing-multiple = Több webes dolog található
 new-web-thing-from = ettől:
+
+## New Group Screen
+
+new-group-heading = Új csoport
+new-group-input =
+    .placeholder = Adja meg a csoport nevét
+new-group-save = Létrehozás
 
 ## Empty div Messages
 
