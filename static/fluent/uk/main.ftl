@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Переглянути властивості
 add-things =
     .aria-label = Додати нові речі
+add-thing = Додати пристрій
+add-group = Додати нову групу
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Зберегти
 context-menu-remove = Вилучити
 context-menu-show-on-floorplan = Показати у вигляді плану поверху?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Зберегти
+
 ## Capabilities
 
 OnOffSwitch = Вимикач
@@ -421,8 +428,6 @@ new-thing-password =
 new-thing-credentials-error = Неправильні дані
 new-thing-saved = Збережено
 new-thing-done = Готово
-add-group = Додати нову групу
-new-group-save = Створити
 
 ## New Web Thing View
 
@@ -432,6 +437,13 @@ new-web-thing-label = Інтернет-річ
 loading = Завантаження…
 new-web-thing-multiple = Знайдено кілька інтернет-речей
 new-web-thing-from = з
+
+## New Group Screen
+
+new-group-heading = Нова група
+new-group-input =
+    .placeholder = Введіть назву групи
+new-group-save = Створити
 
 ## Empty div Messages
 
