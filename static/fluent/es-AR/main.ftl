@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Ver propiedades
 add-things =
     .aria-label = Agregar nuevos dispositivos
+add-thing = Agregar dispositivo
+add-group = Agregar nuevo grupo
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Guardar
 context-menu-remove = Eliminar
 context-menu-show-on-floorplan = ¿Mostrar en vista de planta?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Guardar
+
 ## Capabilities
 
 OnOffSwitch = Interruptor encendido/apagado
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Credenciales incorrectas
 new-thing-saved = Guardado
 new-thing-done = Listo
-add-group = Agregar nuevo grupo
-new-group-save = Crear
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Dispositivo web
 loading = Cargando…
 new-web-thing-multiple = Se encontraron múltiples dispositivos web
 new-web-thing-from = desde
+
+## New Group Screen
+
+new-group-heading = Nuevo grupo
+new-group-input =
+    .placeholder = Ingresar nombre de grupo
+new-group-save = Crear
 
 ## Empty div Messages
 
