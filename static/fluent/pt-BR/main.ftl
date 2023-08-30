@@ -17,7 +17,7 @@ wordmark =
 
 ## Menu Items
 
-things-menu-item = Coisas
+things-menu-item = Objetos
 rules-menu-item = Regras
 logs-menu-item = Logs
 floorplan-menu-item = Planta baixa
@@ -29,7 +29,9 @@ log-out-button = Sair
 thing-details =
     .aria-label = Ver propriedades
 add-things =
-    .aria-label = Adicionar coisas novas
+    .aria-label = Adicionar novos objetos
+add-thing = Adicionar objeto
+add-group = Adicionar novo grupo
 
 ## Floorplan
 
@@ -239,7 +241,7 @@ logs-server-remove-error = Erro no servidor: não foi possível remover log
 add-thing-scanning-icon =
     .alt = Procurando
 add-thing-scanning = Procurando novos dispositivos…
-add-thing-add-adapters-hint = Nenhuma coisa nova foi encontrada. Experimente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar algumas extensões</a>.
+add-thing-add-adapters-hint = Não foi encontrado nenhum novo objeto. Experimente <a data-l10n-name="add-thing-add-adapters-hint-anchor">adicionar algumas extensões</a>.
 add-thing-add-by-url = Adicionar por URL…
 add-thing-done = Pronto
 add-thing-cancel = Cancelar
@@ -250,6 +252,11 @@ context-menu-choose-icon = Escolher ícone…
 context-menu-save = Salvar
 context-menu-remove = Remover
 context-menu-show-on-floorplan = Mostrar em visão de planta baixa?
+
+## Group Context Menu
+
+edit-group-save =
+    .value = Salvar
 
 ## Capabilities
 
@@ -274,8 +281,8 @@ Alarm = Alarme
 Thermostat = Termostato
 Lock = Fechadura
 BarometricPressureSensor = Sensor de pressão barométrica
-Custom = Coisa personalizada
-Thing = Coisa
+Custom = Objeto personalizado
+Thing = Objeto
 AirQualitySensor = Sensor de qualidade do ar
 SmokeSensor = Sensor de fumaça
 
@@ -414,24 +421,29 @@ new-thing-password =
 new-thing-credentials-error = Credenciais incorretas
 new-thing-saved = Salvo
 new-thing-done = Pronto
-add-group = Adicionar novo grupo
-new-group-save = Criar
 
 ## New Web Thing View
 
 new-web-thing-url =
-    .placeholder = Digite a URL da web thing
-new-web-thing-label = Web Thing
+    .placeholder = Digite a URL do objeto web
+new-web-thing-label = Objeto web
 loading = Carregando…
-new-web-thing-multiple = Vários web things encontrados
+new-web-thing-multiple = Encontrados vários objetos web
 new-web-thing-from = de
+
+## New Group Screen
+
+new-group-heading = Novo grupo
+new-group-input =
+    .placeholder = Digite o nome do grupo
+new-group-save = Criar
 
 ## Empty div Messages
 
 no-things = Nenhum dispositivo ainda. Clique em + para procurar dispositivos disponíveis.
-thing-not-found = Coisa não encontrada.
+thing-not-found = Objeto não encontrado.
 action-not-found = Ação não encontrada.
-events-not-found = Esta coisa não tem eventos.
+events-not-found = Este objeto não tem eventos.
 
 ## Add-on Settings
 
@@ -538,7 +550,7 @@ authorize-prompt = <<name>> gostaria de acessar seu gateway para dispositivos de
 authorize-source = do <<domain>>
 authorize-monitor-and-control = monitorar e controlar
 authorize-monitor = monitorar
-authorize-allow-all = Permitir para todas as coisas
+authorize-allow-all = Permitir para todos os objetos
 authorize-allow =
     .value = Permitir
 authorize-deny = Negar
