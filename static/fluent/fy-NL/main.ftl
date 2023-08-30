@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Toan eigenskippen
 add-things =
     .aria-label = Nije Things tafoegje
+add-thing = Thing tafoegje
+add-group = Nije groep tafoegje
 
 ## Floorplan
 
@@ -253,6 +255,11 @@ context-menu-save = Bewarje
 context-menu-remove = Fuortsmite
 context-menu-show-on-floorplan = Yn plattegrûn toane?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Bewarje
+
 ## Capabilities
 
 OnOffSwitch = Oan-/Ut-skeakeler
@@ -416,8 +423,6 @@ new-thing-password =
 new-thing-credentials-error = Unjildige kombinaasje brûkersnamme/wachtwurd
 new-thing-saved = Bewarre
 new-thing-done = Dien
-add-group = Nije groep tafoegje
-new-group-save = Oanmeitsje
 
 ## New Web Thing View
 
@@ -427,6 +432,13 @@ new-web-thing-label = Web Thing
 loading = Lade…
 new-web-thing-multiple = Mear Web Things fûn
 new-web-thing-from = fan
+
+## New Group Screen
+
+new-group-heading = Nije groep
+new-group-input =
+    .placeholder = Groepsnamme ynfiere
+new-group-save = Oanmeitsje
 
 ## Empty div Messages
 
