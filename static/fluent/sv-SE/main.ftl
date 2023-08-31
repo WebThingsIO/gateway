@@ -30,6 +30,7 @@ thing-details =
     .aria-label = Visa egenskaper
 add-things =
     .aria-label = Lägg till nya enheter
+add-thing = Lägg till enhet
 add-group = Lägg till ny grupp
 
 ## Floorplan
