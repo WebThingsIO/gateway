@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Zobraziť vlastnosti
 add-things =
     .aria-label = Pridať nové veci
+add-thing = Pridať vec
+add-group = Pridať novú skupinu
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Uložiť
 context-menu-remove = Odstrániť
 context-menu-show-on-floorplan = Zobraziť v pôdoryse?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Uložiť
+
 ## Capabilities
 
 OnOffSwitch = Vypínač
@@ -421,8 +428,6 @@ new-thing-password =
 new-thing-credentials-error = Neplatné prihlasovacie údaje
 new-thing-saved = Uložené
 new-thing-done = Hotovo
-add-group = Pridať novú skupinu
-new-group-save = Vytvoriť
 
 ## New Web Thing View
 
@@ -432,6 +437,13 @@ new-web-thing-label = Webová vec
 loading = Načítavanie…
 new-web-thing-multiple = Bolo nájdených viacero webových vecí
 new-web-thing-from = od
+
+## New Group Screen
+
+new-group-heading = Nová skupina
+new-group-input =
+    .placeholder = Zadajte názov skupiny
+new-group-save = Vytvoriť
 
 ## Empty div Messages
 
