@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Смотреть свойства
 add-things =
     .aria-label = Добавить новые вещи
+add-thing = Добавить устройство
+add-group = Добавить новую группу
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Сохранить
 context-menu-remove = Удалить
 context-menu-show-on-floorplan = Показать на плане этажа?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Сохранить
+
 ## Capabilities
 
 OnOffSwitch = Выключатель (вкл/выкл)
@@ -421,8 +428,6 @@ new-thing-password =
 new-thing-credentials-error = Неверные учётные данные
 new-thing-saved = Сохранено
 new-thing-done = Готово
-add-group = Добавить новую группу
-new-group-save = Создать
 
 ## New Web Thing View
 
@@ -432,6 +437,13 @@ new-web-thing-label = Веб-вещь
 loading = Загрузка…
 new-web-thing-multiple = Найдено несколько веб-вещей
 new-web-thing-from = от
+
+## New Group Screen
+
+new-group-heading = Новая группа
+new-group-input =
+    .placeholder = Введите название группы
+new-group-save = Создать
 
 ## Empty div Messages
 
