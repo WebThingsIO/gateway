@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Vis egenskaber
 add-things =
     .aria-label = Tilføj nye ting
+add-thing = Tilføj ting
+add-group = Tilføj ny gruppe
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Gem
 context-menu-remove = Fjern
 context-menu-show-on-floorplan = Vis på plantegning?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Gem
+
 ## Capabilities
 
 OnOffSwitch = Tænd/Sluk-kontakt
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Ugyldige loginoplysninger
 new-thing-saved = Gemt
 new-thing-done = Færdig
-add-group = Tilføj ny gruppe
-new-group-save = Opret
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Web Thing
 loading = Indlæser…
 new-web-thing-multiple = Der blev fundet flere web things
 new-web-thing-from = Fra
+
+## New Group Screen
+
+new-group-heading = Ny gruppe
+new-group-input =
+    .placeholder = Indtast gruppenavn
+new-group-save = Opret
 
 ## Empty div Messages
 
