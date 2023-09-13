@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Näytä ominaisuudet
 add-things =
     .aria-label = Lisää uusia esineitä
+add-thing = Lisää asia
+add-group = Lisää uusi ryhmä
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Tallenna
 context-menu-remove = Poista
 context-menu-show-on-floorplan = Näytetäänkö pohjapiirrustuksen näkymässä?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Tallenna
+
 ## Capabilities
 
 OnOffSwitch = Päällä/pois -kytkin
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Virheelliset kirjautumistiedot
 new-thing-saved = Tallennettu
 new-thing-done = Valmis
-add-group = Lisää uusi ryhmä
-new-group-save = Luo
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Web-esine
 loading = Ladataan…
 new-web-thing-multiple = Useita web-esineitä löydetty
 new-web-thing-from = kohteesta
+
+## New Group Screen
+
+new-group-heading = Uusi ryhmä
+new-group-input =
+    .placeholder = Anna ryhmän nimi
+new-group-save = Luo
 
 ## Empty div Messages
 
