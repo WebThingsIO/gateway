@@ -30,7 +30,7 @@ thing-details =
     .aria-label = Näytä ominaisuudet
 add-things =
     .aria-label = Lisää uusia esineitä
-add-thing = Lisää asia
+add-thing = Lisää esine
 add-group = Lisää uusi ryhmä
 
 ## Floorplan
