@@ -30,6 +30,8 @@ thing-details =
     .aria-label = プロパティを表示
 add-things =
     .aria-label = 新しい Thing を追加
+add-thing = Thing を追加
+add-group = 新しいグループを追加
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = 保存
 context-menu-remove = 削除
 context-menu-show-on-floorplan = 平面図で表示しますか？
 
+## Group Context Menu
+
+edit-group-save =
+    .value = 保存
+
 ## Capabilities
 
 OnOffSwitch = On/Off スイッチ
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = 認証情報が正しくありません
 new-thing-saved = 保存しました
 new-thing-done = 完了
-add-group = 新しいグループを追加
-new-group-save = 作成
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Web Thing
 loading = 読み込み中…
 new-web-thing-multiple = 複数の Web Thing が見つかりました
 new-web-thing-from = 場所
+
+## New Group Screen
+
+new-group-heading = 新しいグループ
+new-group-input =
+    .placeholder = グループ名を入力してください
+new-group-save = 作成
 
 ## Empty div Messages
 
