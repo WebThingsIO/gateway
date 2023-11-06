@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Timezliyin n tsekant
 add-things =
     .aria-label = Rnu taɣawsa tamaynut
+add-thing = Rnu asentel
+add-group = Rnu agraw amaynut
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Sekles
 context-menu-remove = Kkes
 context-menu-show-on-floorplan = Sken deg teskant n uɣawas?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Sekles
+
 ## Capabilities
 
 OnOffSwitch = Taqeffalt seddu/seḥbes
@@ -414,8 +421,6 @@ new-thing-password =
 new-thing-credentials-error = Yir Inekcam
 new-thing-saved = Yettwasekles
 new-thing-done = Immed
-add-group = Rnu agraw amaynut
-new-group-save = Rnu
 
 ## New Web Thing View
 
@@ -425,6 +430,13 @@ new-web-thing-label = Taɣawsa Web
 loading = Asali…
 new-web-thing-multiple = Ddeqs n tɣawsiwin web i yettfwafen.
 new-web-thing-from = seg
+
+## New Group Screen
+
+new-group-heading = Agraw amaynut
+new-group-input =
+    .placeholder = Sekcem isem n ugraw
+new-group-save = Rnu
 
 ## Empty div Messages
 
