@@ -30,6 +30,8 @@ thing-details =
     .aria-label = Погледај својства
 add-things =
     .aria-label = Додај нове справице
+add-thing = Додај справицу
+add-group = Додај нову групу
 
 ## Floorplan
 
@@ -251,6 +253,11 @@ context-menu-save = Сачувај
 context-menu-remove = Уклони
 context-menu-show-on-floorplan = Приказати у приказу тлоцрта?
 
+## Group Context Menu
+
+edit-group-save =
+    .value = Сачувај
+
 ## Capabilities
 
 OnOffSwitch = Прекидач
@@ -421,8 +428,6 @@ new-thing-password =
 new-thing-credentials-error = Неисправни акредитиви
 new-thing-saved = Сачувано
 new-thing-done = Готово
-add-group = Додај нову групу
-new-group-save = Направи
 
 ## New Web Thing View
 
@@ -432,6 +437,13 @@ new-web-thing-label = Веб справица
 loading = Учитавам…
 new-web-thing-multiple = Нађено је више веб справица
 new-web-thing-from = из
+
+## New Group Screen
+
+new-group-heading = Нова група
+new-group-input =
+    .placeholder = Унеси име групе
+new-group-save = Направи
 
 ## Empty div Messages
 
