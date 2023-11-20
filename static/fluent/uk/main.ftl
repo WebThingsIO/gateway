@@ -335,8 +335,8 @@ redirecting = Перенаправлення…
 
 ## Booleans
 
-true = Істинно
-false = Не істинно
+true = True
+false = False
 
 ## Time
 
