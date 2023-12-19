@@ -183,13 +183,13 @@ rules-scroll-left =
 rules-scroll-right =
     .alt = Κύλιση προς τα δεξιά
 rules-delete-prompt = Εναποθέστε εδώ συσκευές για αποσύνδεση
-rules-delete-dialog = Θέλετε σίγουρα να διαγράψετε οριστικά αυτό τον κανόνα;
+rules-delete-dialog = Θέλετε σίγουρα να διαγράψετε οριστικά αυτόν τον κανόνα;
 rules-delete-cancel =
     .value = Ακύρωση
 rules-delete-confirm =
     .value = Αφαίρεση κανόνα
 rule-invalid = Μη έγκυρο
-rule-delete-prompt = Θέλετε σίγουρα να διαγράψετε οριστικά αυτό τον κανόνα;
+rule-delete-prompt = Θέλετε σίγουρα να διαγράψετε οριστικά αυτόν τον κανόνα;
 rule-delete-cancel-button =
     .value = Ακύρωση
 rule-delete-confirm-button =
@@ -322,7 +322,7 @@ smoke = Καπνός
 
 ## Domain Setup
 
-tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτό τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
+tunnel-setup-reclaim-domain = Φαίνεται ότι έχετε ήδη καταχωρίσει αυτόν τον υποτομέα. Για να τον ανακτήσετε, <a data-l10n-name="tunnel-setup-reclaim-domain-click-here">κάντε κλικ εδώ</a>.
 check-email-for-token = Παρακαλούμε ελέγξτε το email σας για το διακριτικό ανάκτησης και επικολλήστε το παραπάνω.
 reclaim-failed = Δεν ήταν δυνατή η ανάκτηση του τομέα.
 subdomain-already-used = Αυτό ο υποτομέας χρησιμοποιείται ήδη. Παρακαλούμε επιλέξτε έναν διαφορετικό.
