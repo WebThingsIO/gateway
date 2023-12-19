@@ -103,7 +103,7 @@ user-settings-mfa-enable = Ενεργοποίηση ελέγχου ταυτότ�
 user-settings-mfa-scan-code = Σαρώστε τον ακόλουθο κώδικα με οποιαδήποτε εφαρμογή ελέγχου ταυτότητας δύο παραγόντων.
 user-settings-mfa-secret = Αυτό είναι το νέο σας μυστικό TOTP, σε περίπτωση που ο παραπάνω κώδικας QR δεν λειτουργεί:
 user-settings-mfa-error = Ο κωδικός ελέγχου ταυτότητας ήταν εσφαλμένος.
-user-settings-mfa-enter-code = Εισάγετε τον κωδικό από την εφαρμογή ελέγχου ταυτότητάς σας παρακάτω.
+user-settings-mfa-enter-code = Εισαγάγετε τον κωδικό από την εφαρμογή ελέγχου ταυτότητάς σας παρακάτω.
 user-settings-mfa-verify = Επαλήθευση
 user-settings-mfa-regenerate-codes = Εκ νέου δημιουργία εφεδρικών κωδικών
 user-settings-mfa-backup-codes = Αυτοί είναι οι εφεδρικοί κωδικοί σας. Ο κάθε κωδικός μπορεί να χρησιμοποιηθεί μόνο μία φορά. Φυλάξτε τους σε ασφαλές μέρος.
@@ -514,7 +514,7 @@ login-title = Σύνδεση — { -webthings-gateway-brand }
 login-log-in = Σύνδεση
 login-wrong-credentials = Το όνομα χρήστη ή ο κωδικός πρόσβασης ήταν λάθος.
 login-wrong-totp = Ο κωδικός ελέγχου ταυτότητας ήταν εσφαλμένος.
-login-enter-totp = Εισάγετε τον κωδικό από την εφαρμογή ελέγχου ταυτότητάς σας.
+login-enter-totp = Εισαγάγετε τον κωδικό από την εφαρμογή ελέγχου ταυτότητάς σας.
 
 ## Create First User Page
 
