@@ -61,7 +61,7 @@ domain-settings-local-name =
 
 ## Network Settings
 
-network-settings-unsupported = Οι ρυθμίσεις δικτύου δεν υποστηρίζονται σε αυτή την πλατφόρμα.
+network-settings-unsupported = Οι ρυθμίσεις δικτύου δεν υποστηρίζονται σε αυτήν την πλατφόρμα.
 network-settings-ethernet-image =
     .alt = Ethernet
 network-settings-ethernet = Ethernet
@@ -144,7 +144,7 @@ localization-settings-units-temperature-fahrenheit = Φαρενάιτ (°F)
 update-settings-update-now = Ενημέρωση τώρα
 update-available = Νέα έκδοση διαθέσιμη.
 update-up-to-date = Το σύστημά σας είναι ενημερωμένο.
-updates-not-supported = Δεν υποστηρίζονται ενημερώσεις σε αυτή την πλατφόρμα.
+updates-not-supported = Δεν υποστηρίζονται ενημερώσεις σε αυτήν την πλατφόρμα.
 update-settings-enable-self-updates = Ενεργοποίηση αυτόματων ενημερώσεων
 last-update = Τελευταία ενημέρωση
 current-version = Τρέχουσα έκδοση
