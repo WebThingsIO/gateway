@@ -298,7 +298,7 @@ class Database {
         if (error) {
           reject(error);
         } else {
-          resolve(row);
+          resolve(<Record<string, unknown>>row);
         }
       });
     });
@@ -477,7 +477,7 @@ class Database {
         if (err) {
           reject(err);
         } else {
-          resolve(rows);
+          resolve(<Record<string, unknown>[]>rows);
         }
       });
     });
@@ -527,22 +527,14 @@ class Database {
    * @return {Promise<Array<PushSubscription>>}
    */
   getPushSubscriptions(): Promise<Record<string, unknown>[]> {
-    return new Promise((resolve, reject) => {
-      this.db!.all('SELECT id, subscription FROM pushSubscriptions', [], (err, rows) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const subs = [];
-        for (const row of rows) {
-          const sub = JSON.parse(row.subscription);
-          sub.id = row.id;
-          subs.push(sub);
-        }
-
-        resolve(subs);
-      });
+    return this.all('SELECT id, subscription FROM pushSubscriptions').then((rows) => {
+      const subs = [];
+      for (const row of rows) {
+        const sub = JSON.parse(<string>row.subscription);
+        sub.id = row.id;
+        subs.push(sub);
+      }
+      return subs;
     });
   }
 
