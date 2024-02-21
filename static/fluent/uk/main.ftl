@@ -603,7 +603,7 @@ ui-update-close = Закрити
 
 ## General Terms
 
-ok = Гаразд
+ok = OK
 ellipsis = …
 event-log = Журнал подій
 edit = Змінити
