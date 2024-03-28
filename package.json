@@ -43,7 +43,7 @@
     "config": "^3.3.4",
     "country-list": "^2.2.0",
     "csv-parse": "^4.15.3",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "express-fileupload": "^1.2.1",
     "express-handlebars": "^5.3.5",
     "express-rate-limit": "^5.2.6",
