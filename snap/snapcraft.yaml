@@ -1,0 +1,13 @@
+name: webthings-gateway
+base: core22
+version: '2.0'
+summary: WebThings Gateway
+description: |
+  A self-hosted web application for monitoring and controlling a building over
+  the web.
+grade: devel
+confinement: devmode
+
+parts:
+  webthings-gateway:
+    plugin: nil
