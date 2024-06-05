@@ -1,6 +1,6 @@
 name: webthings-gateway
 base: core22
-version: '2.0'
+version: 2.0.0
 summary: WebThings Gateway
 description: |
   A self-hosted web application for monitoring and controlling a building over
@@ -8,6 +8,103 @@ description: |
 grade: devel
 confinement: devmode
 
+apps:
+  webthings-gateway:
+    command: node build/gateway.js
+
 parts:
   webthings-gateway:
-    plugin: nil
+    plugin: npm
+    npm-include-node: true
+    npm-node-version: 10.24.1
+    source: .
+    build-packages:
+      - autoconf
+      - build-essential
+      - curl
+      - git
+      - libbluetooth-dev
+      - libboost-python-dev
+      - libboost-thread-dev
+      - libffi-dev
+      - libglib2.0-dev
+      - libpng-dev
+      - libudev-dev
+      - libusb-1.0-0-dev
+      - pkg-config
+      - python-six
+      - python3-pip
+      #- autoconf
+      #- automake
+      #- build-essential
+      #- git
+      #- libtool
+      #- pkg-config
+      #- python
+      #- python3
+      #- python3-pip
+      #- python3-setuptools
+    stage-packages:
+      - arping
+      - ffmpeg
+      - iputils-ping
+      - libcap2-bin
+      - lsb-release
+      - mosquitto
+      - net-tools
+      #- python
+      - python-six
+      - python3
+    override-build: |
+      # Install nvm to install node and npm
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+      # Re-initialise terminal session
+      . ~/.bashrc
+      # Install the version of node from .nvmrc
+      nvm install
+      nvm use
+
+      # Add the locally installed npm to our path.
+      # export makes it also propagate into the sub-shell.
+      # export PATH=$PATH:$(pwd)/../npm/bin
+
+      # Allow npm to run as root properly
+      # https://docs.npmjs.com/misc/config#unsafe-perm
+      npm config -g set unsafe-perm true
+
+      # Install node-gyp, as it didn't seem to get installed by `npm install`
+      # for some reason
+      npm install -g node-gyp
+
+      # Start a sub-shell so that the SUDO_* bits aren't propagated to the rest
+      # of the process unnecessarily.
+      (
+        # Make the subshell exit if one of the commands fails
+        set -e
+
+        # Unset the sudo environment variables to make git happy
+        # https://github.com/snapcore/snapcraft/commit/93fd2825733ea8725502d2ab62124be5179c6407
+        unset SUDO_UID
+        unset SUDO_GID
+
+        # Install all of the necessary node modules
+        CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm ci
+
+        # Run the webpack process now, rather than at each launch
+        ./node_modules/.bin/webpack
+
+        # Clean up a couple things
+        rm -rf ./node_modules/gifsicle
+        rm -rf ./node_modules/mozjpeg
+
+        # Remove all but production dependencies
+        npm prune --production
+      )
+
+      # Install Python library
+      pip3 install --system --install-option="--prefix=" --no-binary=":all:" -r ./requirements.txt
+
+      # Install things into the snap
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt
+      cp -r . $SNAPCRAFT_PART_INSTALL/opt/webthings-gateway
+      rm -rf $SNAPCRAFT_PART_INSTALL/opt/webthings-gateway/.git
