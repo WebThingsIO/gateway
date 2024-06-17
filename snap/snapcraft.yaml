@@ -19,7 +19,6 @@ parts:
     build-packages:
       - autoconf
       - build-essential
-      - curl
       - git
       - libbluetooth-dev
       - libboost-python-dev
@@ -32,6 +31,7 @@ parts:
       - pkg-config
       - python-six
       - python3-pip
+      - wget
     #stage-packages:
       #- arping
       #- ffmpeg
@@ -43,11 +43,14 @@ parts:
       #- python-six
       #- python3
     override-build: |
-      # Install nvm, node and npm
-      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-      export NVM_DIR="$HOME/.nvm"
-      . "$NVM_DIR/nvm.sh"
-      . "$NVM_DIR/bash_completion"
+      # Install node and npm
+      # Install node using nvm rather than the npm plugin so that override-build can be used
+      # Install nvm in the working directory rather than ~/.nvm due to permissions
+      mkdir -p nvm
+      # Use wget instead of curl because of https://github.com/nvm-sh/nvm/issues/2507
+      wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | NVM_DIR=`pwd`/nvm bash
+      # Run nvm.sh with --install because of https://github.com/nvm-sh/nvm/issues/1985
+      . nvm/nvm.sh --install
 
       # Allow npm to run as root
       npm config -g set unsafe-perm true
@@ -66,7 +69,7 @@ parts:
       npm prune --production
 
       # Install Python library
-      pip3 install -r /home/node/webthings/gateway/requirements.txt
+      pip3 install -r requirements.txt
 
       # Install things into the snap
       mkdir -p $SNAPCRAFT_PART_INSTALL/opt
