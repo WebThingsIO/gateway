@@ -1,25 +1,40 @@
 name: webthings-gateway
 base: core22
-version: 2.0.0
+version: '2.0.0'
 summary: WebThings Gateway
 description: |
   A self-hosted web application for monitoring and controlling a building over
   the web.
-grade: devel
-confinement: devmode
+
+grade: stable
+confinement: strict
 
 apps:
   webthings-gateway:
-    command: node build/gateway.js
+    command: bin/npm --prefix $SNAP/lib/node_modules/webthings-gateway run run-only
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
 
 parts:
+  python-deps:
+    plugin: python
+    source: https://github.com/WebThingsIO/gateway.git
+    python-requirements:
+      - requirements.txt
   webthings-gateway:
-    plugin: nil
-    source: .
+    plugin: npm
+    source: https://github.com/WebThingsIO/gateway.git
+    after: [ python-deps ]
+    npm-include-node: true
+    npm-node-version: 10.24.1
+    build-environment:
+      - npm_config_unsafe_perm: true
+      - NODE_ENV: dev
+      - CPPFLAGS: "$CPPFLAGS -DPNG_ARM_NEON_OPT=0"
     build-packages:
-      - autoconf
       - build-essential
-      - git
       - libbluetooth-dev
       - libboost-python-dev
       - libboost-thread-dev
@@ -28,50 +43,8 @@ parts:
       - libpng-dev
       - libudev-dev
       - libusb-1.0-0-dev
-      - pkg-config
-      - python-six
-      - python3-pip
-      - wget
-    #stage-packages:
-      #- arping
-      #- ffmpeg
-      #- iputils-ping
-      #- libcap2-bin
-      #- lsb-release
-      #- mosquitto
-      #- net-tools
-      #- python-six
-      #- python3
     override-build: |
-      # Install node and npm
-      # Install node using nvm rather than the npm plugin so that override-build can be used
-      # Install nvm in the working directory rather than ~/.nvm due to permissions
-      mkdir -p nvm
-      # Use wget instead of curl because of https://github.com/nvm-sh/nvm/issues/2507
-      wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | NVM_DIR=`pwd`/nvm bash
-      # Run nvm.sh with --install because of https://github.com/nvm-sh/nvm/issues/1985
-      . nvm/nvm.sh --install
-
-      # Allow npm to run as root
-      npm config -g set unsafe-perm true
-
-      # Install all of the necessary node modules
-      CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm ci
-
-      # Build
-      npm run build
-
-      # Clean up some dependencies
-      rm -rf ./node_modules/gifsicle
-      rm -rf ./node_modules/mozjpeg
-
-      # Remove all but production dependencies
-      npm prune --production
-
-      # Install Python library
-      pip3 install -r requirements.txt
-
-      # Install things into the snap
-      mkdir -p $SNAPCRAFT_PART_INSTALL/opt
-      cp -r . $SNAPCRAFT_PART_INSTALL/opt/webthings-gateway
-      rm -rf $SNAPCRAFT_PART_INSTALL/opt/webthings-gateway/.git
+      craftctl default
+      npm install --only-dev
+      npm run-script build
+      cp -av build $CRAFT_PART_INSTALL/lib/node_modules/webthings-gateway/
