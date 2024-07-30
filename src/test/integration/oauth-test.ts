@@ -162,6 +162,19 @@ describe('oauth/', function () {
     customCallbackHandler = customCallbackHandlerProvided || null;
   }
 
+  it('rejects request with no JWT', async () => {
+    setupOAuth();
+
+    // Try using the access token
+    const res = await chai
+      .request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json');
+    expect(res.status).toEqual(401);
+    expect(res.header).toHaveProperty('www-authenticate');
+    expect(res.get('WWW-Authenticate')).toEqual('Bearer');
+  });
+
   it('performs simple authorization', async () => {
     setupOAuth();
 
@@ -203,7 +216,9 @@ describe('oauth/', function () {
       .get(Constants.OAUTHCLIENTS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
-    expect(err.status).toEqual(401);
+    expect(err.status).toEqual(403);
+    expect(err.header).toHaveProperty('www-authenticate');
+    expect(err.get('www-authenticate')).toEqual(expect.stringContaining('insufficient_scope'));
 
     res = await chai
       .request(server)
@@ -488,7 +503,9 @@ describe('oauth/', function () {
       .delete(`${Constants.THINGS_PATH}/${TEST_THING.id}`)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
-    expect(err.status).toEqual(401);
+    expect(err.status).toEqual(403);
+    expect(err.header).toHaveProperty('www-authenticate');
+    expect(err.get('www-authenticate')).toEqual(expect.stringContaining('insufficient_scope'));
   });
 
   it('rejects use of authorization code as access token', async () => {
@@ -521,6 +538,8 @@ describe('oauth/', function () {
       .get(Constants.THINGS_PATH)
       .set('Accept', 'application/json')
       .set(...headerAuth(jwt));
-    expect(err.status).toEqual(401);
+    expect(err.status).toEqual(403);
+    expect(err.header).toHaveProperty('www-authenticate');
+    expect(err.get('www-authenticate')).toEqual(expect.stringContaining('insufficient_scope'));
   });
 });

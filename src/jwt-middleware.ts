@@ -101,6 +101,8 @@ export function middleware(): express.Handler {
     authenticate(req)
       .then((jwt) => {
         if (!jwt) {
+          // Send 401 with WWW-Authenticate header as per RFC 6750
+          res.set('WWW-Authenticate', 'Bearer');
           res.status(401).end();
           return;
         }
@@ -111,12 +113,21 @@ export function middleware(): express.Handler {
           scope = `${Constants.OAUTH_PATH}:${Constants.READWRITE}`;
         }
         if (!scopeAllowsRequest(scope, req)) {
-          res.status(401).send(`Token of role ${payload.role} used out of scope: ${scope}`);
+          // insufficient_scope error code as per RFC 6750
+          const wwwAuthenticate = `Bearer error="insufficient_scope", \
+            error_description="Token of role ${payload.role} used out of \
+            scope: ${scope}"`;
+          res.set('WWW-Authenticate', wwwAuthenticate);
+          res.status(403).end();
           return;
         }
         if (payload.role !== Constants.USER_TOKEN) {
           if (!payload.scope) {
-            res.status(400).send('Token must contain scope');
+            // invalid_request error code as per RFC 6750
+            const wwwAuthenticate = `Bearer error="invalid_request", \
+              error_description="Token must contain scope"`;
+            res.set('WWW-Authenticate', wwwAuthenticate);
+            res.status(400).end();
             return;
           }
         }
