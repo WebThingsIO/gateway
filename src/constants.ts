@@ -32,6 +32,7 @@ export const INTERNAL_LOGS_PATH = '/internal-logs';
 export const LOGS_PATH = '/logs';
 export const PUSH_PATH = '/push';
 export const PING_PATH = '/ping';
+export const WELL_KNOWN_PATH = '/.well-known';
 export const PROXY_PATH = '/proxy';
 export const EXTENSIONS_PATH = '/extensions';
 // Remember we end up in the build/* directory so these paths looks slightly
