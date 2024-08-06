@@ -30,6 +30,7 @@ import NotifiersController from './controllers/notifiers_controller';
 import OAuthClientsController from './controllers/oauthclients_controller';
 import OAuthController from './controllers/oauth_controller';
 import PingController from './controllers/ping_controller';
+import WellKnownController from './controllers/well-known_controller';
 import ProxyController, { WithProxyMethods } from './controllers/proxy_controller';
 import PushController from './controllers/push_controller';
 import RootController from './controllers/root_controller';
@@ -155,6 +156,7 @@ class Router {
     app.use(API_PREFIX + Constants.SETTINGS_PATH, nocache, SettingsController());
     app.use(API_PREFIX + Constants.USERS_PATH, nocache, UsersController());
     app.use(API_PREFIX + Constants.PING_PATH, nocache, PingController());
+    app.use(API_PREFIX + Constants.WELL_KNOWN_PATH, nocache, WellKnownController());
 
     // Authenticated API routes
     app.use(API_PREFIX + Constants.THINGS_PATH, nocache, auth, ThingsController());
