@@ -461,7 +461,7 @@ class Things extends EventEmitter {
       throw new HttpErrorWithCode('Thing not found', 404);
     }
 
-    if (!thing.properties.hasOwnProperty(propertyName)) {
+    if (!thing.properties || !thing.properties.hasOwnProperty(propertyName)) {
       throw new HttpErrorWithCode('Property not found', 404);
     }
 
