@@ -41,6 +41,7 @@ import GroupsController from './controllers/groups_controller';
 import UpdatesController from './controllers/updates_controller';
 import UploadsController from './controllers/uploads_controller';
 import UsersController from './controllers/users_controller';
+import APIRootController from './controllers/api_root_controller';
 
 const nocache = NoCache();
 const auth = jwtMiddleware.middleware();
@@ -88,8 +89,8 @@ class Router {
     app.use(Constants.UPLOADS_PATH, express.static(UserProfile.uploadsDir));
     app.use(Constants.EXTENSIONS_PATH, nocache, ExtensionsController());
     app.use((request, response, next) => {
-      if (request.path === '/' && request.accepts('html')) {
-        // We need this to hit RootController.
+      if (request.path === '/') {
+        // We need this to hit RootController or APIRootController.
         next();
       } else {
         staticHandler(request, response, next);
@@ -120,6 +121,7 @@ class Router {
       } else if (
         (!request.accepts('html') && request.accepts('json')) ||
         (!request.accepts('html') && request.accepts('text/event-stream')) ||
+        (!request.accepts('html') && request.accepts('application/td+json')) ||
         request.headers['content-type'] === 'application/json' ||
         request.get('Upgrade') === 'websocket' ||
         request.is('multipart/form-data') ||
@@ -152,6 +154,7 @@ class Router {
     app.use(`${APP_PREFIX}/*`, RootController());
 
     // Unauthenticated API routes
+    app.use(`${API_PREFIX}/`, nocache, APIRootController());
     app.use(API_PREFIX + Constants.LOGIN_PATH, nocache, LoginController());
     app.use(API_PREFIX + Constants.SETTINGS_PATH, nocache, SettingsController());
     app.use(API_PREFIX + Constants.USERS_PATH, nocache, UsersController());

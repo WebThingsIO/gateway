@@ -35,27 +35,27 @@ export interface ThingDescription {
   id: string;
   title: string;
   '@context': string | string[];
-  '@type': string[];
-  profile: string | string[];
-  description: string;
-  base: string;
-  baseHref: string;
-  href: string;
-  properties: Record<string, PropertySchema>;
-  actions: Record<string, ActionSchema>;
-  events: Record<string, EventSchema>;
-  links: Link[];
-  forms: Form[];
-  floorplanVisibility: boolean;
-  floorplanX: number;
-  floorplanY: number;
-  layoutIndex: number;
-  selectedCapability: string;
-  iconHref: string | null;
-  iconData: IconData;
+  '@type'?: string | string[];
+  profile?: string | string[];
+  description?: string;
+  base?: string;
+  baseHref?: string;
+  href?: string;
+  properties?: Record<string, PropertySchema>;
+  actions?: Record<string, ActionSchema>;
+  events?: Record<string, EventSchema>;
+  links?: Link[];
+  forms?: Form[];
+  floorplanVisibility?: boolean;
+  floorplanX?: number;
+  floorplanY?: number;
+  layoutIndex?: number;
+  selectedCapability?: string;
+  iconHref?: string | null;
+  iconData?: IconData;
   security: string;
   securityDefinitions: SecurityDefinition;
-  groupId: string | null;
+  groupId?: string | null;
 }
 
 interface IconData {
@@ -82,7 +82,7 @@ export default class Thing extends EventEmitter {
 
   private '@context': string | string[];
 
-  private '@type': string[];
+  private '@type': string | string[];
 
   private profile: string | string[];
 
@@ -100,15 +100,15 @@ export default class Thing extends EventEmitter {
 
   private eventsDispatched: Event[];
 
-  private floorplanVisibility: boolean;
+  private floorplanVisibility: boolean | undefined;
 
-  private floorplanX: number;
+  private floorplanX: number | undefined;
 
-  private floorplanY: number;
+  private floorplanY: number | undefined;
 
   private layoutIndex: number;
 
-  private selectedCapability: string;
+  private selectedCapability: string | undefined;
 
   private links: Link[];
 
@@ -267,7 +267,11 @@ export default class Thing extends EventEmitter {
     this.floorplanVisibility = description.floorplanVisibility;
     this.floorplanX = description.floorplanX;
     this.floorplanY = description.floorplanY;
-    this.layoutIndex = description.layoutIndex;
+    if (typeof description.layoutIndex === 'undefined') {
+      this.layoutIndex = Infinity;
+    } else {
+      this.layoutIndex = description.layoutIndex;
+    }
     this.selectedCapability = description.selectedCapability;
     this.links = [];
 
@@ -281,7 +285,7 @@ export default class Thing extends EventEmitter {
       router.addProxyServer(this.id, description.baseHref);
     }
 
-    if (description.hasOwnProperty('links')) {
+    if (description.hasOwnProperty('links') && typeof description.links != 'undefined') {
       for (const link of description.links) {
         // For backwards compatibility
         if (link.mediaType) {
@@ -673,6 +677,9 @@ export default class Thing extends EventEmitter {
         href: `${reqSecure ? 'wss' : 'ws'}://${reqHost}${this.href}`,
       };
 
+      if (typeof desc.links === 'undefined') {
+        desc.links = [];
+      }
       desc.links.push(wsLink);
 
       desc.id = `${reqSecure ? 'https' : 'http'}://${reqHost}${this.href}`;
@@ -928,6 +935,9 @@ export default class Thing extends EventEmitter {
     }
 
     // Update the UI href
+    if (typeof description.links === 'undefined') {
+      description.links = [];
+    }
     if (description.hasOwnProperty('links')) {
       for (const link of description.links) {
         // For backwards compatibility
