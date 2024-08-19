@@ -1,0 +1,50 @@
+name: webthings-gateway
+base: core22
+version: '2.0.0'
+summary: WebThings Gateway
+description: |
+  A self-hosted web application for monitoring and controlling a building over
+  the web.
+
+grade: stable
+confinement: strict
+
+apps:
+  webthings-gateway:
+    command: bin/npm --prefix $SNAP/lib/node_modules/webthings-gateway run run-only
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  python-deps:
+    plugin: python
+    source: https://github.com/WebThingsIO/gateway.git
+    python-requirements:
+      - requirements.txt
+  webthings-gateway:
+    plugin: npm
+    source: https://github.com/WebThingsIO/gateway.git
+    after: [ python-deps ]
+    npm-include-node: true
+    npm-node-version: 10.24.1
+    build-environment:
+      - npm_config_unsafe_perm: true
+      - NODE_ENV: dev
+      - CPPFLAGS: "$CPPFLAGS -DPNG_ARM_NEON_OPT=0"
+    build-packages:
+      - build-essential
+      - libbluetooth-dev
+      - libboost-python-dev
+      - libboost-thread-dev
+      - libffi-dev
+      - libglib2.0-dev
+      - libpng-dev
+      - libudev-dev
+      - libusb-1.0-0-dev
+    override-build: |
+      craftctl default
+      npm install --only-dev
+      npm run-script build
+      cp -av build $CRAFT_PART_INSTALL/lib/node_modules/webthings-gateway/
