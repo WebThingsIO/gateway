@@ -158,7 +158,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       mgmt = '';
     const options: Record<string, unknown> = {};
 
-    let proc = child_process.spawnSync('systemctl', ['is-active', 'hostapd.service']);
+    const proc = child_process.spawnSync('systemctl', ['is-active', 'hostapd.service']);
     if (proc.status === 0) {
       mode = 'ap';
       enabled = true;
@@ -212,13 +212,15 @@ class LinuxRaspbianPlatform extends BasePlatform {
       }
     } else {
       mode = 'sta';
-      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'status'], { encoding: 'utf8' });
+      const startProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'status'], {
+        encoding: 'utf8',
+      });
 
       if (proc.status !== 0) {
         return { enabled, mode, options };
       }
 
-      for (const line of proc.stdout.split('\n')) {
+      for (const line of startProc.stdout.split('\n')) {
         const [key, value] = line.split('=', 2);
         switch (key) {
           case 'wpa_state':
@@ -248,7 +250,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
         }
       }
 
-      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
+      const listProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
         encoding: 'utf8',
       });
       if (proc.status !== 0) {
@@ -256,7 +258,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
       }
 
       options.networks = [];
-      for (const line of proc.stdout.trim().split('\n')) {
+      for (const line of listProc.stdout.trim().split('\n')) {
         if (line.startsWith('network')) {
           continue;
         }
@@ -299,19 +301,24 @@ class LinuxRaspbianPlatform extends BasePlatform {
     }
 
     // First, remove existing networks
-    let proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
+    const listProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'list_networks'], {
       encoding: 'utf8',
     });
-    if (proc.status === 0) {
-      const networks = proc.stdout
+    if (listProc.status === 0) {
+      const networks = listProc.stdout
         .split('\n')
         .filter((l) => !l.startsWith('network'))
         .map((l) => l.split(' ')[0])
         .reverse();
 
       for (const id of networks) {
-        proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'remove_network', id]);
-        if (proc.status !== 0) {
+        const removeNetworkProc = child_process.spawnSync('wpa_cli', [
+          '-i',
+          'wlan0',
+          'remove_network',
+          id,
+        ]);
+        if (removeNetworkProc.status !== 0) {
           console.log('Failed to remove network with id:', id);
         }
       }
@@ -319,54 +326,58 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
     // Then, stop hostapd. It will either need to be off or reconfigured, so
     // this is valid in both modes.
-    proc = child_process.spawnSync('sudo', ['systemctl', 'stop', 'hostapd.service']);
-    if (proc.status !== 0) {
+    const stopProc = child_process.spawnSync('sudo', ['systemctl', 'stop', 'hostapd.service']);
+    if (stopProc.status !== 0) {
       return false;
     }
 
     if (!enabled) {
-      proc = child_process.spawnSync('sudo', ['systemctl', 'disable', 'hostapd.service']);
-      return proc.status === 0;
+      const disableProc = child_process.spawnSync('sudo', [
+        'systemctl',
+        'disable',
+        'hostapd.service',
+      ]);
+      return disableProc.status === 0;
     }
 
     // Make sure Wi-Fi isn't blocked by rfkill
     child_process.spawnSync('sudo', ['rfkill', 'unblock', 'wifi']);
 
     // Now, set the IP address back to a sane state
-    proc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', '0.0.0.0']);
-    if (proc.status !== 0) {
+    const configProc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', '0.0.0.0']);
+    if (configProc.status !== 0) {
       return false;
     }
 
     if (mode === 'sta') {
-      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'add_network'], {
+      const addProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'add_network'], {
         encoding: 'utf8',
       });
-      if (proc.status !== 0) {
+      if (addProc.status !== 0) {
         return false;
       }
 
-      const id = proc.stdout.trim();
+      const id = addProc.stdout.trim();
 
       options.ssid = (<string>options.ssid).replace('"', '\\"');
-      proc = child_process.spawnSync(
+      let setProc = child_process.spawnSync(
         'wpa_cli',
         // the ssid argument MUST be quoted
         ['-i', 'wlan0', 'set_network', id, 'ssid', `"${options.ssid}"`]
       );
-      if (proc.status !== 0) {
+      if (setProc.status !== 0) {
         return false;
       }
 
       if (options.key) {
         options.key = (<string>options.key).replace('"', '\\"');
-        proc = child_process.spawnSync(
+        setProc = child_process.spawnSync(
           'wpa_cli',
           // the psk argument MUST be quoted
           ['-i', 'wlan0', 'set_network', id, 'psk', `"${options.key}"`]
         );
       } else {
-        proc = child_process.spawnSync('wpa_cli', [
+        setProc = child_process.spawnSync('wpa_cli', [
           '-i',
           'wlan0',
           'set_network',
@@ -376,22 +387,26 @@ class LinuxRaspbianPlatform extends BasePlatform {
         ]);
       }
 
-      if (proc.status !== 0) {
+      if (setProc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'enable_network', id]);
-      if (proc.status !== 0) {
+      const enableProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'enable_network', id]);
+      if (enableProc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'save_config']);
-      if (proc.status !== 0) {
+      const saveProc = child_process.spawnSync('wpa_cli', ['-i', 'wlan0', 'save_config']);
+      if (saveProc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync('sudo', ['systemctl', 'disable', 'hostapd.service']);
-      if (proc.status !== 0) {
+      const disableProc = child_process.spawnSync('sudo', [
+        'systemctl',
+        'disable',
+        'hostapd.service',
+      ]);
+      if (disableProc.status !== 0) {
         return false;
       }
     } else {
@@ -409,30 +424,38 @@ class LinuxRaspbianPlatform extends BasePlatform {
 
       fs.writeFileSync('/tmp/hostapd.conf', config);
 
-      proc = child_process.spawnSync('sudo', [
+      const mvProc = child_process.spawnSync('sudo', [
         'mv',
         '/tmp/hostapd.conf',
         '/etc/hostapd/hostapd.conf',
       ]);
 
-      if (proc.status !== 0) {
+      if (mvProc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync('sudo', ['systemctl', 'start', 'hostapd.service']);
-      if (proc.status !== 0) {
+      const startProc = child_process.spawnSync('sudo', ['systemctl', 'start', 'hostapd.service']);
+      if (startProc.status !== 0) {
         return false;
       }
 
-      proc = child_process.spawnSync('sudo', ['systemctl', 'enable', 'hostapd.service']);
-      if (proc.status !== 0) {
+      const enableProc = child_process.spawnSync('sudo', [
+        'systemctl',
+        'enable',
+        'hostapd.service',
+      ]);
+      if (enableProc.status !== 0) {
         return false;
       }
     }
 
     if (options.ipaddr) {
-      proc = child_process.spawnSync('sudo', ['ifconfig', 'wlan0', <string>options.ipaddr]);
-      if (proc.status !== 0) {
+      const configProc = child_process.spawnSync('sudo', [
+        'ifconfig',
+        'wlan0',
+        <string>options.ipaddr,
+      ]);
+      if (configProc.status !== 0) {
         return false;
       }
 

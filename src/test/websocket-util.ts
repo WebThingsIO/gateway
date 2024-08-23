@@ -77,12 +77,15 @@ export async function webSocketRead(
  * @param {Object|string} message
  */
 export async function webSocketSend(ws: WebSocket, message: unknown): Promise<void> {
-  if (typeof message !== 'string') {
-    message = JSON.stringify(message);
+  let messageString: string;
+  if (typeof message == 'string') {
+    messageString = message;
+  } else {
+    messageString = JSON.stringify(message);
   }
 
   await new Promise<void>((resolve) => {
-    ws.send(message, () => {
+    ws.send(messageString, () => {
       resolve();
     });
   });
