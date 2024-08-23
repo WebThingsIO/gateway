@@ -121,7 +121,7 @@ export function withDependentSchema(
   schema = mergeSchemas(schema, dependentSchema);
   return typeof oneOf === 'undefined'
     ? schema
-    : withExactlyOneSubschema(schema, definitions, formData, dependencyKey, <unknown[]>oneOf);
+    : withExactlyOneSubschema(schema, definitions, formData, dependencyKey, <JsonSchema[]>oneOf);
 }
 
 export function withExactlyOneSubschema(
@@ -129,7 +129,7 @@ export function withExactlyOneSubschema(
   definitions: Record<string, unknown>,
   formData: Record<string, unknown>,
   dependencyKey: string,
-  oneOf: unknown[]
+  oneOf: JsonSchema[]
 ): Record<string, unknown> {
   if (!Array.isArray(oneOf)) {
     throw new Error(`invalid oneOf: it is some ${typeof oneOf} instead of an array`);
@@ -431,4 +431,12 @@ export function getOptionsList(schema: Record<string, unknown>): Record<string, 
       return { label, value };
     });
   }
+}
+
+interface JsonSchema {
+  properties: Record<string, PropertySchema>
+}
+
+interface PropertySchema {
+  type: string
 }
