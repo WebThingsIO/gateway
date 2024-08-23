@@ -78,7 +78,7 @@ export class AddonManager extends EventEmitter {
 
   private updateTimeout: NodeJS.Timeout | null = null;
 
-  private updateInterval: number | null = null;
+  private updateInterval: NodeJS.Timeout | null = null;
 
   private pairingTimeout: NodeJS.Timeout | null = null;
 

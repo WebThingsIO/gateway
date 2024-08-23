@@ -29,7 +29,7 @@ interface TestGlobals {
 }
 
 export const chai = _chai;
-(<NodeJS.Global & typeof globalThis & TestGlobals>global).chai = chai;
+(<typeof global & typeof globalThis & TestGlobals>global).chai = chai;
 
 expect.extend({
   assert(value, message = 'expected condition to be truthy') {
@@ -42,7 +42,7 @@ expect.extend({
 });
 
 import { servers, serverStartup } from '../app';
-(<NodeJS.Global & typeof globalThis & TestGlobals>global).server = servers.https!;
+(<typeof global & typeof globalThis & TestGlobals>global).server = servers.https!;
 
 import addonManager from '../addon-manager';
 
@@ -51,7 +51,7 @@ export function mockAdapter(): MockAdapter {
   expect(adapter).not.toBeUndefined();
   return <MockAdapter>(<unknown>adapter!);
 }
-(<NodeJS.Global & typeof globalThis & TestGlobals>global).mockAdapter = mockAdapter;
+(<typeof global & typeof globalThis & TestGlobals>global).mockAdapter = mockAdapter;
 
 function removeTestManifest(): void {
   const testManifestJsonFilename = path.join(

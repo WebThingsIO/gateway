@@ -45,7 +45,7 @@ const logger = winston.createLogger({
             error: 'red',
           },
         }),
-        winston.format.printf((info) => info.message)
+        winston.format.printf((info) => String(info.message))
       ),
     }),
     new DailyRotateFile({
@@ -59,7 +59,7 @@ const logger = winston.createLogger({
       format: winston.format.combine(
         timestampFormat,
         new CustomFormatter(),
-        winston.format.printf((info) => info.message)
+        winston.format.printf((info) => String(info.message))
       ),
     }),
   ],
