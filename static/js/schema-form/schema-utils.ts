@@ -434,9 +434,9 @@ export function getOptionsList(schema: Record<string, unknown>): Record<string, 
 }
 
 interface JsonSchema {
-  properties: Record<string, PropertySchema>
+  properties: Record<string, PropertySchema>;
 }
 
 interface PropertySchema {
-  type: string
+  type: string;
 }
