@@ -6,11 +6,13 @@ on:
       - master
       - v1.0.X
       - v1.1.X
+      - v1.2.X
   push:
     branches:
       - master
       - v1.0.X
       - v1.1.X
+      - v1.2.X
 
 jobs:
   build:
