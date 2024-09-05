@@ -62,6 +62,41 @@ export function getOS(): string {
     }
   }
 
+  // If not running inside a snap, give up at this point.
+  if (!isSnap()) {
+    console.log('Unknown Linux distribution');
+    return 'linux-unknown';
+  }
+
+  // Otherwise try to detect if running on Ubuntu Core.
+  try {
+    const osReleaseLines = fs
+      .readFileSync('/var/lib/snapd/hostfs/etc/os-release', {
+        encoding: 'utf8',
+      })
+      .split('\n');
+    // Iterate through the file
+    for (let line of osReleaseLines) {
+      // Trim whitespace
+      line = line.trim();
+      // Find the line containing ID
+      if (line.startsWith('ID=')) {
+        // Get the value of the ID
+        let id = line.substring(3, line.length);
+        // Remove any quotation marks
+        id = id.replace(/"/g, '');
+        if (id == 'ubuntu-core') {
+          return 'linux-ubuntu-core';
+        } else {
+          console.log('Unknown host Linux distribution');
+        }
+      }
+    }
+  } catch (error) {
+    console.log(`Error trying to read os-release file: ${error}`);
+    console.log('Check that the system-observe interface is connected');
+  }
+
   return 'linux-unknown';
 }
 
@@ -83,6 +118,19 @@ export function isContainer(): boolean {
       fs.readFileSync('/proc/1/cgroup').indexOf(':/docker/') >= 0) ||
     fs.existsSync('/pantavisor')
   );
+}
+
+/**
+ * Determine whether or not we're running inside a snap package.
+ *
+ * @returns boolean True if running inside snap, false if not.
+ */
+export function isSnap(): boolean {
+  if (process.env.SNAP_NAME == 'webthings-gateway') {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /**
