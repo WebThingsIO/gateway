@@ -16,6 +16,7 @@ apps:
     plugs:
       - network
       - network-bind
+      - system-observe
 
 parts:
   python-deps:
