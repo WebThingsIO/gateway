@@ -1,0 +1,47 @@
+type: model
+authority-id: dbEEEG9fkqNrL9KAaoHPHP4BC2h807oJ
+series: 16
+brand-id: dbEEEG9fkqNrL9KAaoHPHP4BC2h807oJ
+model: webthings-gateway-amd64
+architecture: amd64
+base: core22
+grade: dangerous
+snaps:
+  -
+    default-channel: 22/stable
+    id: UqFziVZDHLSyO3TqSWgNBoAdHbLI4dAH
+    name: pc
+    type: gadget
+  -
+    default-channel: 22/stable
+    id: pYVQrBcKmBa0mZ4CCN7ExT6jH8rY1hza
+    name: pc-kernel
+    type: kernel
+  -
+    default-channel: latest/stable
+    id: amcUKQILKXHHTlmSa7NMdnXSx02dNeeT
+    name: core22
+    type: base
+  -
+    default-channel: latest/stable
+    id: PMrrV4ml8uWuEUDBT8dSGnKUYbevVhc4
+    name: snapd
+    type: snapd
+  -
+    default-channel: latest/edge
+    id: qqVmy6PAmaTWqOsgJwP7xtJP19dqklHs
+    name: webthings-gateway
+    type: app
+timestamp: 2024-09-06T11:30:28+00:00
+sign-key-sha3-384: hUgNxqlolTGhXes89ckYYcnXfnQV4KmehRQP2E9Ivzmm0FUJ4cidQmOqCzbXzjcM
+
+AcLBcwQAAQoAHRYhBHTfacJCkuzQhCEd3pcV0BT18QlJBQJm2uhcAAoJEJcV0BT18QlJcs0QAK+f
+ZwN4rdJDY3QMKzAlvaumv9N5kj1XXjPcDvIqkgAB8BG4Ru5x3F71Q5nlxAVGtZLfVAGWrU9c9rno
+dc8k11mjZgZBj0Shg1UHeIaYh27x3wTDHuErf/OngCkqN4P22uwsseY6cQWZ0WAVXqedIXIBWXFf
+G/p34ddP4X5ESrquC5szl0BiC6kUXOBfwhIcN+oEgcC3+vW0acCf3hXf4iBJrRtSUil7MUmnkt59
+supTwYfk51HyBbhIKaevSTSvlWx93xp8UsD0iyHDS4CR6PsMloYbtELqmlfHoFoi548bO1Gciy4t
+Qy2ZJcrK8T9uTLFCrrd98/ZnEDo5aawWVQlOfpR7Q9MYnva4yNHgsqz+1ABpnH6QBeOoMGxjvN+Q
+sCdIekJ+ikIw3A6KhHuItRz8VXAf60uu/dr8SGEZd0M62/ppQVqUe21GpFBlVryQbFmLxr9lotDf
+Z9oWyZjktHxIEcEbcItKqU4lY8x7zo2AdHKUd4iZfUjQLgOdg57BIY/ULFrn+E8F9bVe+ofoGBIe
+Ypf7XGil4z2z5D44hqIziQJPK2S8HAraT188AGq2blLlcFt4AidMu7NvlgbmfICzvYB0VkcZcgyg
+eYUuFN9ghIGBYl8Vycg3/QZxy0ugEoAXI3W0znefxa2kECO9J3KB34ztRumGV1XVHbPmjluf

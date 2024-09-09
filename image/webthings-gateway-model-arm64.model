@@ -1,0 +1,47 @@
+type: model
+authority-id: dbEEEG9fkqNrL9KAaoHPHP4BC2h807oJ
+series: 16
+brand-id: dbEEEG9fkqNrL9KAaoHPHP4BC2h807oJ
+model: webthings-gateway-arm64
+architecture: arm64
+base: core22
+grade: dangerous
+snaps:
+  -
+    default-channel: 22/stable
+    id: YbGa9O3dAXl88YLI6Y1bGG74pwBxZyKg
+    name: pi
+    type: gadget
+  -
+    default-channel: 22/stable
+    id: jeIuP6tfFrvAdic8DMWqHmoaoukAPNbJ
+    name: pi-kernel
+    type: kernel
+  -
+    default-channel: latest/stable
+    id: amcUKQILKXHHTlmSa7NMdnXSx02dNeeT
+    name: core22
+    type: base
+  -
+    default-channel: latest/stable
+    id: PMrrV4ml8uWuEUDBT8dSGnKUYbevVhc4
+    name: snapd
+    type: snapd
+  -
+    default-channel: latest/edge
+    id: qqVmy6PAmaTWqOsgJwP7xtJP19dqklHs
+    name: webthings-gateway
+    type: app
+timestamp: 2024-09-06T11:30:28+00:00
+sign-key-sha3-384: hUgNxqlolTGhXes89ckYYcnXfnQV4KmehRQP2E9Ivzmm0FUJ4cidQmOqCzbXzjcM
+
+AcLBcwQAAQoAHRYhBHTfacJCkuzQhCEd3pcV0BT18QlJBQJm3xDAAAoJEJcV0BT18QlJkiEQALfG
+FLsVMZDXkDL9kF3FUBhLcq2e4KAUTO4z+uD+wGtKPlm9/BGXR4PlaGCVA/aSr+xrxibtUcxOzFZo
+G03MWUBRfGR5+nAzYz2PrEYPLlw+IJmhFs4SJLu8HDYIgbRJI9wAeDMbKhve0ABuSvZlExkb47QY
+up/fc/sMSaXnez0KnIvoYxEj6lLlJor2+JSaRzm8VdaYCo6KqJYMjVSg7JwWObOATcCHXbFeodxR
+J7WlZFSAbq/M0k7zqU2nHHA+AKfT1lkOD3+JVIXc9vDNMCSAjy+B+07oE3Mc0zcVEhWHLzLhh/cU
+5rqoFZrxC4E1JWPrMf+tznABaFFD0Z5ruElH8llcd5OVPyXs+6v2QHQrQ85aR1wTb+a87q3EPx45
+VYRbfj8WRmKZTzegvWJ6h/a/oram+Jtptnpf3yyQCVqr/nfVsoR4qp83shrZZ55ks8mUVoCAdsQ5
+dIqy+ZQ1A7Lm8sAjOxGZBYzyBuqxiq4j2BHUx+KOPPSk2Jo//SIKmCwjOlMSBUymKTxAm9edsUyH
+KgAxFTA537I5mYosy7jlA/rRIUYfhMo1odwJdao1bQWukn4JNK/OD0W+FsURtEZK7iH01KJ9Ydq/
+Yj79X8270NwmGiDpRdaja6IaMN3aBqiv9xjXspwKNsGnBAKoEckOx0gdcWg3yhttxbhH3t4v
