@@ -292,4 +292,11 @@ export default class BasePlatform {
   restartNtpSync(): boolean {
     throw new NotImplementedError('restartNtpSync');
   }
+
+  /**
+   * Gracefully stop any platform services on shutdown.
+   */
+  stop(): void {
+    throw new NotImplementedError('stop');
+  }
 }

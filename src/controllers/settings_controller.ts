@@ -22,6 +22,7 @@ import TunnelService from '../tunnel-service';
 import * as CertificateManager from '../certificate-manager';
 import pkg from '../package.json';
 import { HttpErrorWithCode } from '../errors';
+import { LanMode, NetworkAddresses } from '../platforms/types';
 
 function build(): express.Router {
   const auth = jwtMiddleware.middleware();
@@ -397,7 +398,11 @@ function build(): express.Router {
   });
 
   controller.get('/network/lan', auth, (_request, response) => {
-    if (Platform.implemented('getLanMode')) {
+    if (Platform.implemented('getLanModeAsync')) {
+      Platform.getLanModeAsync().then((mode: LanMode) => {
+        response.json(mode);
+      });
+    } else if (Platform.implemented('getLanMode')) {
       response.json(Platform.getLanMode());
     } else {
       response.status(500).send('LAN mode not implemented');
@@ -413,7 +418,15 @@ function build(): express.Router {
     const mode = request.body.mode;
     const options = request.body.options;
 
-    if (Platform.implemented('setLanMode')) {
+    if (Platform.implemented('setLanModeAsync')) {
+      Platform.setLanModeAsync(mode, options).then((result: boolean) => {
+        if (result == true) {
+          response.status(200).json({});
+        } else {
+          response.status(500).send('Failed to update LAN configuration');
+        }
+      });
+    } else if (Platform.implemented('setLanMode')) {
       if (Platform.setLanMode(mode, options)) {
         response.status(200).json({});
       } else {
@@ -433,7 +446,11 @@ function build(): express.Router {
   });
 
   controller.get('/network/wireless/networks', auth, (_request, response) => {
-    if (Platform.implemented('scanWirelessNetworks')) {
+    if (Platform.implemented('scanWirelessNetworksAsync')) {
+      Platform.scanWirelessNetworksAsync().then((networks) => {
+        response.json(networks);
+      });
+    } else if (Platform.implemented('scanWirelessNetworks')) {
       response.json(Platform.scanWirelessNetworks());
     } else {
       response.status(500).send('Wireless scanning not implemented');
@@ -450,7 +467,19 @@ function build(): express.Router {
     const mode = request.body.mode;
     const options = request.body.options;
 
-    if (Platform.implemented('setWirelessMode')) {
+    if (Platform.implemented('setWirelessModeAsync')) {
+      Platform.setWirelessModeAsync(enabled, mode, options)
+        .then((result) => {
+          if (result === true) {
+            response.status(200).json({});
+          } else {
+            response.status(500).send('Failed to update wireless configuration');
+          }
+        })
+        .catch(() => {
+          response.status(500).send('Failed to update wireless configuration');
+        });
+    } else if (Platform.implemented('setWirelessMode')) {
       if (Platform.setWirelessMode(enabled, mode, options)) {
         response.status(200).json({});
       } else {
@@ -462,7 +491,11 @@ function build(): express.Router {
   });
 
   controller.get('/network/addresses', auth, (_request, response) => {
-    if (Platform.implemented('getNetworkAddresses')) {
+    if (Platform.implemented('getNetworkAddressesAsync')) {
+      Platform.getNetworkAddressesAsync().then((networkAddresses: NetworkAddresses) => {
+        response.json(networkAddresses);
+      });
+    } else if (Platform.implemented('getNetworkAddresses')) {
       response.json(Platform.getNetworkAddresses());
     } else {
       response.status(500).send('Network addresses not implemented');

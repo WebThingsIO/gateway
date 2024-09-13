@@ -30,7 +30,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt -qq update
-          sudo apt install -y google-chrome-stable
+          sudo apt install -y google-chrome-stable libdbus-1-dev
       - name: Install node dependencies
         run: |
           npm ci
