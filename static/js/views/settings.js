@@ -836,6 +836,8 @@ const SettingsScreen = {
         switch (body.os) {
           case 'linux-debian':
           case 'linux-raspbian':
+          case 'linux-ubuntu':
+          case 'linux-ubuntu-core':
             this.elements.network.client.main.classList.remove('hidden');
             break;
           default:
@@ -873,9 +875,23 @@ const SettingsScreen = {
     API.getLanSettings()
       .then((body) => {
         this.elements.network.client.ethernet.mode.value = body.mode || 'dhcp';
-        this.elements.network.client.ethernet.ip.value = body.ipdaddr || '';
-        this.elements.network.client.ethernet.netmask.value = body.netmask || '255.255.255.0';
-        this.elements.network.client.ethernet.gateway.value = body.gateway || '';
+        this.elements.network.client.ethernet.ip.value = body.options.ipaddr || '';
+        this.elements.network.client.ethernet.netmask.value =
+          body.options.netmask || '255.255.255.0';
+        this.elements.network.client.ethernet.gateway.value = body.options.gateway || '';
+        const ethernetEls = [
+          this.elements.network.client.ethernet.ipLabel,
+          this.elements.network.client.ethernet.ip,
+          this.elements.network.client.ethernet.netmaskLabel,
+          this.elements.network.client.ethernet.netmask,
+          this.elements.network.client.ethernet.gatewayLabel,
+          this.elements.network.client.ethernet.gateway,
+        ];
+        if (body.mode === 'static') {
+          ethernetEls.forEach((el) => el.classList.remove('hidden'));
+        } else {
+          ethernetEls.forEach((el) => el.classList.add('hidden'));
+        }
       })
       .catch((e) => {
         console.error(`Failed to get ethernet config: ${e}`);

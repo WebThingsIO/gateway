@@ -14,6 +14,7 @@ import Events from '../models/events';
 import Logs from '../models/logs';
 import Things from '../models/things';
 import UserProfile from '../user-profile';
+import * as Platform from '../platform';
 import e2p from 'event-to-promise';
 import fs from 'fs';
 import path from 'path';
@@ -91,6 +92,9 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
+  if (Platform.implemented('stop')) {
+    Platform.stop();
+  }
   Logs.close();
   await addonManager.unloadAddons();
 

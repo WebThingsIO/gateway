@@ -17,3 +17,6 @@ npm-debug.log
 
 # Test artifacts
 /coverage/
+
+# Built packages
+*.snap

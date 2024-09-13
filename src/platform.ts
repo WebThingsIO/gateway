@@ -14,6 +14,7 @@ import LinuxArchPlatform from './platforms/linux-arch';
 import LinuxDebianPlatform from './platforms/linux-debian';
 import LinuxRaspbianPlatform from './platforms/linux-raspbian';
 import LinuxUbuntuPlatform from './platforms/linux-ubuntu';
+import LinuxUbuntuCorePlatform from './platforms/linux-ubuntu-core';
 import {
   LanMode,
   NetworkAddresses,
@@ -68,7 +69,7 @@ export function getOS(): string {
     return 'linux-unknown';
   }
 
-  // Otherwise try to detect if running on Ubuntu Core.
+  // Otherwise try to detect Ubuntu or Ubuntu Core from inside a snap
   try {
     const osReleaseLines = fs
       .readFileSync('/var/lib/snapd/hostfs/etc/os-release', {
@@ -85,10 +86,14 @@ export function getOS(): string {
         let id = line.substring(3, line.length);
         // Remove any quotation marks
         id = id.replace(/"/g, '');
-        if (id == 'ubuntu-core') {
-          return 'linux-ubuntu-core';
-        } else {
-          console.log('Unknown host Linux distribution');
+        switch (id) {
+          case 'ubuntu':
+            return 'linux-ubuntu';
+          case 'ubuntu-core':
+            return 'linux-ubuntu-core';
+          default:
+            console.log('Unknown host Linux distribution');
+            break;
         }
       }
     }
@@ -195,6 +200,9 @@ switch (getOS()) {
   case 'linux-ubuntu':
     platform = LinuxUbuntuPlatform;
     break;
+  case 'linux-ubuntu-core':
+    platform = LinuxUbuntuCorePlatform;
+    break;
   default:
     platform = null;
     break;
@@ -205,20 +213,34 @@ export const setDhcpServerStatus = wrapPlatform<boolean>(platform, 'setDhcpServe
 export const getHostname = wrapPlatform<string>(platform, 'getHostname');
 export const setHostname = wrapPlatform<boolean>(platform, 'setHostname');
 export const getLanMode = wrapPlatform<LanMode>(platform, 'getLanMode');
+export const getLanModeAsync = wrapPlatform<Promise<LanMode>>(platform, 'getLanModeAsync');
 export const setLanMode = wrapPlatform<boolean>(platform, 'setLanMode');
+export const setLanModeAsync = wrapPlatform<Promise<boolean>>(platform, 'setLanModeAsync');
 export const getMacAddress = wrapPlatform<string | null>(platform, 'getMacAddress');
 export const getMdnsServerStatus = wrapPlatform<boolean>(platform, 'getMdnsServerStatus');
 export const setMdnsServerStatus = wrapPlatform<boolean>(platform, 'setMdnsServerStatus');
 export const getNetworkAddresses = wrapPlatform<NetworkAddresses>(platform, 'getNetworkAddresses');
+export const getNetworkAddressesAsync = wrapPlatform<Promise<NetworkAddresses>>(
+  platform,
+  'getNetworkAddressesAsync'
+);
 export const getSshServerStatus = wrapPlatform<boolean>(platform, 'getSshServerStatus');
 export const setSshServerStatus = wrapPlatform<boolean>(platform, 'setSshServerStatus');
 export const getWirelessMode = wrapPlatform<WirelessMode>(platform, 'getWirelessMode');
 export const setWirelessMode = wrapPlatform<boolean>(platform, 'setWirelessMode');
+export const setWirelessModeAsync = wrapPlatform<Promise<boolean>>(
+  platform,
+  'setWirelessModeAsync'
+);
 export const restartGateway = wrapPlatform<boolean>(platform, 'restartGateway');
 export const restartSystem = wrapPlatform<boolean>(platform, 'restartSystem');
 export const scanWirelessNetworks = wrapPlatform<WirelessNetwork[]>(
   platform,
   'scanWirelessNetworks'
+);
+export const scanWirelessNetworksAsync = wrapPlatform<Promise<WirelessNetwork[]>>(
+  platform,
+  'scanWirelessNetworksAsync'
 );
 export const getSelfUpdateStatus = wrapPlatform<SelfUpdateStatus>(platform, 'getSelfUpdateStatus');
 export const setSelfUpdateStatus = wrapPlatform<boolean>(platform, 'setSelfUpdateStatus');
@@ -239,6 +261,7 @@ export const getNtpStatus = (): boolean => {
 
   return wrapPlatform<boolean>(platform, 'getNtpStatus')();
 };
+export const stop = wrapPlatform<string>(platform, 'stop');
 
 export const implemented = (fn: string): boolean => {
   if (platform === null) {

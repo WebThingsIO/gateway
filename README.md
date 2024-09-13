@@ -2,8 +2,6 @@
 
 [![Build Status](https://github.com/WebThingsIO/gateway/workflows/Build/badge.svg)](https://github.com/WebThingsIO/gateway/actions?query=workflow%3ABuild)
 [![codecov](https://codecov.io/gh/WebThingsIO/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/WebThingsIO/gateway)
-[![dependencies](https://david-dm.org/WebThingsIO/gateway.svg)](https://david-dm.org/WebThingsIO/gateway)
-[![devDependencies](https://david-dm.org/WebThingsIO/gateway/dev-status.svg)](https://david-dm.org/WebThingsIO/gateway?type=dev)
 [![license](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 
 Web of Things gateway.
@@ -12,9 +10,8 @@ Web of Things gateway.
 
 - If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://webthings.io/gateway/) a pre-built software image to an SD card.
 - If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/webthingsio/gateway), for both ARM and amd64. You can also build your own image from this repository.
-- On Fedora, Debian, Raspberry Pi OS, or Ubuntu, you can install the relevant .rpm or .deb package from the [releases page](https://github.com/WebThingsIO/gateway/releases).
-- On Arch Linux, you can install the [webthings-gateway AUR package](https://aur.archlinux.org/packages/webthings-gateway/). The PKGBUILD for this package can also be seen [here](https://github.com/WebThingsIO/gateway-aur).
-- Otherwise, you can build it from source yourself (see below).
+- On Ubuntu or Ubuntu Core you can install the experimental [snap package](https://snapcraft.io/webthings-gateway) with `$ snap install webthings-gateway --edge`. (Requires the `system-observe` and `network-manager` interfaces to be connected in order to configure network settings).
+- Otherwise, you can build WebThings Gateway from source yourself (see below).
 
 ## Documentation
 
@@ -50,6 +47,7 @@ $ sudo apt install \
     libbluetooth-dev \
     libboost-python-dev \
     libboost-thread-dev \
+    libdbus-1-dev \
     libffi-dev \
     libglib2.0-dev \
     libpng-dev \
@@ -93,9 +91,17 @@ $ brew update
 $ brew install \
     autoconf \
     libffi \
-    pkg-config
-$ sudo -H python2 -m pip install six
+    pkg-config \
+    python@3.10 \
+    dbus
 $ sudo -H python3 -m pip install git+https://github.com/WebThingsIO/gateway-addon-python#egg=gateway_addon
+```
+
+To get DBus to build properly, you currently need to symlink `python` to `python3` if a python binary is not already available. E.g.
+
+```
+$ echo 'export PATH=/opt/homebrew/opt/python@3.10/libexec/bin:$PATH' >> ~/.zprofile
+$ source ~/.zprofile
 ```
 
 ### Install Node.js
