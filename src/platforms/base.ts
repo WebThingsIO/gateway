@@ -50,6 +50,15 @@ export default class BasePlatform {
   }
 
   /**
+   * Get the LAN mode and options asynchronously.
+   *
+   * @returns {Promise<LanMode>} {mode: 'static|dhcp|...', options: {...}}
+   */
+  async getLanModeAsync(): Promise<LanMode> {
+    throw new NotImplementedError('getLanMode');
+  }
+
+  /**
    * Set the LAN mode and options.
    *
    * @param {string} mode - static, dhcp, ...

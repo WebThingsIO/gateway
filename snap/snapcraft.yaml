@@ -17,6 +17,7 @@ apps:
       - network
       - network-bind
       - system-observe
+      - network-manager
 
 parts:
   python-deps:

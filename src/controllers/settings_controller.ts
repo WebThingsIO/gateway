@@ -22,6 +22,7 @@ import TunnelService from '../tunnel-service';
 import * as CertificateManager from '../certificate-manager';
 import pkg from '../package.json';
 import { HttpErrorWithCode } from '../errors';
+import { LanMode } from '../platforms/types';
 
 function build(): express.Router {
   const auth = jwtMiddleware.middleware();
@@ -397,7 +398,12 @@ function build(): express.Router {
   });
 
   controller.get('/network/lan', auth, (_request, response) => {
-    if (Platform.implemented('getLanMode')) {
+    
+    if (Platform.implemented('getLanModeAsync')) {
+      Platform.getLanModeAsync().then((mode: LanMode) => {
+        response.json(mode);
+      });
+    } else if (Platform.implemented('getLanMode')) {
       response.json(Platform.getLanMode());
     } else {
       response.status(500).send('LAN mode not implemented');

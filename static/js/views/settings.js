@@ -836,6 +836,7 @@ const SettingsScreen = {
         switch (body.os) {
           case 'linux-debian':
           case 'linux-raspbian':
+          case 'linux-ubuntu':
             this.elements.network.client.main.classList.remove('hidden');
             break;
           default:
