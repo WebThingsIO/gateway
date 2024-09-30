@@ -30,10 +30,11 @@ parts:
     npm-include-node: true
     npm-node-version: 10.24.1
     build-environment:
-      - npm_config_unsafe_perm: true
-      - NODE_ENV: dev
+      - npm_config_unsafe_perm: "true"
+      - NODE_ENV: "dev"
       - CPPFLAGS: "$CPPFLAGS -DPNG_ARM_NEON_OPT=0"
     build-packages:
+      - autoconf
       - build-essential
       - libbluetooth-dev
       - libboost-python-dev
