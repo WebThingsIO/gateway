@@ -48,7 +48,7 @@ parts:
       craftctl default
       npm install --only-dev
       npm run-script build
-      cp -av build $CRAFT_PART_INSTALL/lib/node_modules/webthings-gateway/
+      cp -avf build $CRAFT_PART_INSTALL/lib/node_modules/webthings-gateway/
       # fix wrongly hardcoded /usr/bin/python interpreter in pagekite
       if [ -e $CRAFT_PART_INSTALL/lib/node_modules/webthings-gateway/pagekite.py ]; then
         sed -i 's;#!.*;#! /usr/bin/env python3;' \
