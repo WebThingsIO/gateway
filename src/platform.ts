@@ -211,6 +211,7 @@ export const getMacAddress = wrapPlatform<string | null>(platform, 'getMacAddres
 export const getMdnsServerStatus = wrapPlatform<boolean>(platform, 'getMdnsServerStatus');
 export const setMdnsServerStatus = wrapPlatform<boolean>(platform, 'setMdnsServerStatus');
 export const getNetworkAddresses = wrapPlatform<NetworkAddresses>(platform, 'getNetworkAddresses');
+export const getNetworkAddressesAsync = wrapPlatform<Promise<NetworkAddresses>>(platform, 'getNetworkAddressesAsync');
 export const getSshServerStatus = wrapPlatform<boolean>(platform, 'getSshServerStatus');
 export const setSshServerStatus = wrapPlatform<boolean>(platform, 'setSshServerStatus');
 export const getWirelessMode = wrapPlatform<WirelessMode>(platform, 'getWirelessMode');

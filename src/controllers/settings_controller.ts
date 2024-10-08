@@ -22,7 +22,7 @@ import TunnelService from '../tunnel-service';
 import * as CertificateManager from '../certificate-manager';
 import pkg from '../package.json';
 import { HttpErrorWithCode } from '../errors';
-import { LanMode } from '../platforms/types';
+import { LanMode, NetworkAddresses } from '../platforms/types';
 
 function build(): express.Router {
   const auth = jwtMiddleware.middleware();
@@ -468,7 +468,11 @@ function build(): express.Router {
   });
 
   controller.get('/network/addresses', auth, (_request, response) => {
-    if (Platform.implemented('getNetworkAddresses')) {
+    if (Platform.implemented('getNetworkAddressesAsync')) {
+      Platform.getNetworkAddressesAsync().then((networkAddresses: NetworkAddresses) => {
+        response.json(networkAddresses);
+      });
+    } else if (Platform.implemented('getNetworkAddresses')) {
       response.json(Platform.getNetworkAddresses());
     } else {
       response.status(500).send('Network addresses not implemented');

@@ -8,7 +8,7 @@
 
 import BasePlatform from './base';
 import DBus from 'dbus';
-import {LanMode} from './types';
+import {LanMode, NetworkAddresses} from './types';
 
 class LinuxUbuntuPlatform extends BasePlatform {
 
@@ -69,7 +69,7 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
-   * Get a list of network Ethernet adapters from the system network manager.
+   * Get a list of Ethernet network adapters from the system network manager.
    * 
    * @returns {Promise<Array<string>>} A promise which resolves with an array 
    *  of DBus object paths.
@@ -86,6 +86,26 @@ class LinuxUbuntuPlatform extends BasePlatform {
       }
     }
     return ethernetDevices;
+  }
+
+  /**
+   * Get a list of Wi-Fi network adapters from the system network manager.
+   * 
+   * @returns {Promise<Array<string>>} A promise which resolves with an array 
+   *  of DBus object paths.
+   */
+  private async getWifiDevices(): Promise<string[]> {
+    // Get a list of all network adapter devices
+    let devices = await this.getDevices();
+    let wifiDevices: string[] = [];
+    // Filter by type
+    for (const device of devices) {
+      const type = await this.getDeviceType(device);
+      if (type == 2) {
+        wifiDevices.push(device);
+      }
+    }
+    return wifiDevices;
   }
 
   /**
@@ -160,6 +180,49 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
+   * Get an IPv4 configuration for a given device path.
+   *
+   * @param {String} path Object path for a device.
+   * @returns {Promise<IP4Config>} Promise resolves with IP4Config object.
+   */
+  private getDeviceIp4Config(path: string): Promise<any> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.Device',
+        function(error, iface) {
+        if (error) {
+          console.error(error);
+          reject();
+        }
+        iface.getProperty('Ip4Config', function(error, ip4ConfigPath) {
+          if (error) {
+            console.error(error);
+            reject();
+          }
+          systemBus.getInterface('org.freedesktop.NetworkManager',
+            ip4ConfigPath,
+            'org.freedesktop.NetworkManager.IP4Config',
+            function(error, iface) {
+            if (error) {
+              console.error(error);
+              reject();
+            }
+            iface.getProperty('AddressData', function(error, value) {
+              if (error) {
+                console.error(error);
+                reject();
+              }
+              resolve(value);
+            });
+          });
+        });
+      });
+    });
+  }
+
+  /**
    * Get the LAN mode and options.
    *
    * @returns {Promise<LanMode>} Promise that resolves with 
@@ -188,34 +251,45 @@ class LinuxUbuntuPlatform extends BasePlatform {
     });
   }
 
-  // Currently unused code...
-
   /**
-   * Get the path to the IPv4 configuration for a given network adapter.
+   * Get the current addresses for Wi-Fi and LAN.
    *
-   * @param {String} path Object path for a device.
-   * @returns {Promise<string>} Promise resolves with path to configuration object.
+   * @returns {Promise<NetworkAddresses>} Promise that resolves with
+   *   {
+   *     lan: '...',
+   *     wlan: {
+   *      ip: '...',
+   *      ssid: '...',
+   *    }
+   *  }
    */
-  /*getDeviceIp4ConfigPath(path: string) {
-    return new Promise((resolve, reject) => {
-      this.systemBus.getInterface('org.freedesktop.NetworkManager',
-        path,
-        'org.freedesktop.NetworkManager.Device',
-        function(error, iface) {
-        if (error) {
-          console.error(error);
-          reject();
-        }
-        iface.getProperty('Ip4Config', function(error, value) {
-          if (error) {
-            console.error(error);
-            reject();
-          }
-          resolve(value);
-        });
-      });
+  async getNetworkAddressesAsync(): Promise<NetworkAddresses> {
+    // TODO: Handle the case where there is no Ethernet adapter or no Wi-Fi 
+    // adapter or one of them isn't assigned an IP
+    let result: NetworkAddresses = {
+      lan: '',
+      wlan: {
+        ip: '',
+        ssid: ''
+      }
+    };
+    return this.getEthernetDevices().then((ethernetDevices) => {
+      return this.getDeviceIp4Config(ethernetDevices[0]);
+    }).then((ethernetIp4Config) => {
+      result.lan = ethernetIp4Config[0].address;
+      return this.getWifiDevices();
+    }).then((wifiDevices) => {
+      return this.getDeviceIp4Config(wifiDevices[0]);
+    }).then((wifiIp4Config) => {
+      result.wlan.ip = wifiIp4Config[0].address;
+      return result;
+    }).catch((error) => {
+      console.error('Error getting IP addresses from NetworkManager: ' + error);
+      return result;
     });
-  }*/
+  }
+
+  // Currently unused code...
 
   /**
    * Get the DHCP configuration for a given network adapter.
