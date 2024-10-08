@@ -28,7 +28,7 @@ parts:
     source: https://github.com/WebThingsIO/gateway.git
     after: [ python-deps ]
     npm-include-node: true
-    npm-node-version: 10.24.1
+    npm-node-version: 12.22.1
     build-environment:
       - npm_config_unsafe_perm: "true"
       - NODE_ENV: "dev"
