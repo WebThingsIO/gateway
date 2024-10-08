@@ -34,7 +34,7 @@ parts:
       - NODE_ENV: "dev"
       - CPPFLAGS: "$CPPFLAGS -DPNG_ARM_NEON_OPT=0"
     build-packages:
-      - autoconf
+      - automake
       - build-essential
       - libbluetooth-dev
       - libboost-python-dev
