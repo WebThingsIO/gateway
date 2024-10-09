@@ -92,7 +92,9 @@ function build(): express.Router {
 
     // Issue a new JWT for this user.
     const jwt = await JSONWebToken.issueToken(user.getId()!);
-    limiter.resetKey(request.ip);
+    if (request.ip) {
+      limiter.resetKey(request.ip);
+    }
     response.status(200).json({ jwt });
   });
 
