@@ -223,6 +223,40 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
+   * Get the IP address of the first Ethernet adapter.
+   * 
+   * @returns {Promise<string>} A Promise which resolves with the IP address as 
+   *   a string or an empty string.
+   */
+  private async getEthernetIpAddress(): Promise<string> {
+    return this.getEthernetDevices().then((ethernetDevices) => {
+      return this.getDeviceIp4Config(ethernetDevices[0]);
+    }).then((ethernetIp4Config) => {
+      return ethernetIp4Config[0].address;
+    }).catch(() => {
+      console.log(`Unable to get detect Ethernet IP address.`);
+      return '';
+    });
+  }
+
+  /**
+   * Get the IP address of the first Wi-Fi adapter.
+   * 
+   * @returns {Promise<string>} A Promise which resolves with the IP address as 
+   *   a string or an empty string.
+   */
+  private async getWifiIpAddress(): Promise<string> {
+    return this.getWifiDevices().then((wifiDevices) => {
+      return this.getDeviceIp4Config(wifiDevices[0]);
+    }).then((wifiIp4Config) => {
+      return wifiIp4Config[0].address;
+    }).catch(() => {
+      console.log(`Unable to get detect Wi-Fi IP address.`);
+      return '';
+    });
+  }
+
+  /**
    * Get the LAN mode and options.
    *
    * @returns {Promise<LanMode>} Promise that resolves with 
@@ -264,8 +298,6 @@ class LinuxUbuntuPlatform extends BasePlatform {
    *  }
    */
   async getNetworkAddressesAsync(): Promise<NetworkAddresses> {
-    // TODO: Handle the case where there is no Ethernet adapter or no Wi-Fi 
-    // adapter or one of them isn't assigned an IP
     let result: NetworkAddresses = {
       lan: '',
       wlan: {
@@ -273,20 +305,9 @@ class LinuxUbuntuPlatform extends BasePlatform {
         ssid: ''
       }
     };
-    return this.getEthernetDevices().then((ethernetDevices) => {
-      return this.getDeviceIp4Config(ethernetDevices[0]);
-    }).then((ethernetIp4Config) => {
-      result.lan = ethernetIp4Config[0].address;
-      return this.getWifiDevices();
-    }).then((wifiDevices) => {
-      return this.getDeviceIp4Config(wifiDevices[0]);
-    }).then((wifiIp4Config) => {
-      result.wlan.ip = wifiIp4Config[0].address;
-      return result;
-    }).catch((error) => {
-      console.error('Error getting IP addresses from NetworkManager: ' + error);
-      return result;
-    });
+    result.lan = await this.getEthernetIpAddress();
+    result.wlan.ip = await this.getWifiIpAddress();
+    return result;
   }
 
   // Currently unused code...
