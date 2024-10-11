@@ -28,11 +28,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
         if (error) {
           console.error('Error accessing the NetworkManager DBus interface: ' + error);
           reject();
+          return;
         }
         iface.GetAllDevices(function(error: Error, result: string[]) {
           if (error) {
             console.error('Error calling GetAllDevices on NetworkManager DBus: ' + error);
             reject();
+            return;
           }
           resolve(result);
         });
@@ -56,11 +58,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
         if (error) {
           console.error(error);
           reject();
+          return;
         }
         iface.getProperty('DeviceType', function(error, value) {
           if (error) {
             console.error(error);
             reject();
+            return;
           }
           resolve(value);
         });
@@ -125,11 +129,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
         if (error) {
           console.error(error);
           reject();
+          return;
         }
         iface.getProperty('ActiveConnection', function(error, activeConnectionPath) {
           if (error) {
             console.error(error);
             reject();
+            return;
           }
           systemBus.getInterface('org.freedesktop.NetworkManager',
             activeConnectionPath,
@@ -138,11 +144,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
             if (error) {
               console.error(error);
               reject();
+              return;
             }
             iface.getProperty('Connection', function(error, value) {
               if (error) {
                 console.error(error);
                 reject();
+                return;
               }
               resolve(value);
             });
@@ -167,11 +175,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
         if (error) {
           console.error(error);
           reject();
+          return;
         }
         iface.GetSettings(function(error: Error, value: any) {
           if (error) {
             console.error(error);
             reject();
+            return;
           }
           resolve(value);
         });
@@ -195,11 +205,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
         if (error) {
           console.error(error);
           reject();
+          return;
         }
         iface.getProperty('Ip4Config', function(error, ip4ConfigPath) {
           if (error) {
             console.error(error);
             reject();
+            return;
           }
           systemBus.getInterface('org.freedesktop.NetworkManager',
             ip4ConfigPath,
@@ -208,11 +220,13 @@ class LinuxUbuntuPlatform extends BasePlatform {
             if (error) {
               console.error(error);
               reject();
+              return;
             }
             iface.getProperty('AddressData', function(error, value) {
               if (error) {
                 console.error(error);
                 reject();
+                return;
               }
               resolve(value);
             });
@@ -223,37 +237,90 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
-   * Get the IP address of the first Ethernet adapter.
-   * 
-   * @returns {Promise<string>} A Promise which resolves with the IP address as 
-   *   a string or an empty string.
+   * Get the SSID of the access point the Wi-Fi adapter is connected to.
+   *
+   * @param {String} path Object path for a Wi-Fi device.
+   * @returns {Promise<string>} Promise resolves with an ssid.
    */
-  private async getEthernetIpAddress(): Promise<string> {
-    return this.getEthernetDevices().then((ethernetDevices) => {
-      return this.getDeviceIp4Config(ethernetDevices[0]);
-    }).then((ethernetIp4Config) => {
-      return ethernetIp4Config[0].address;
-    }).catch(() => {
-      console.log(`Unable to get detect Ethernet IP address.`);
-      return '';
+  getDeviceActiveSsid(path: string): Promise<string> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.Device.Wireless',
+        function(error, iface) {
+        if (error) {
+          console.error(error);
+          reject();
+          return;
+        }
+        iface.getProperty('ActiveAccessPoint', function(error, accessPointPath) {
+          if (error) {
+            console.log('Unable to detect a connected Wi-Fi access point');
+            reject();
+            return;
+          }
+          systemBus.getInterface('org.freedesktop.NetworkManager',
+            accessPointPath,
+            'org.freedesktop.NetworkManager.AccessPoint',
+            function(error, iface) {
+            if (error) {
+              reject();
+              return;
+            }
+            iface.getProperty('Ssid', function(error, value: any) {
+              if (error) {
+                console.error(error);
+                reject();
+                return;
+              }
+              // Convert SSID from byte array to string.
+              let ssid = String.fromCharCode(...value);
+              resolve(ssid);
+            });
+          });
+        });
+      });
     });
   }
 
   /**
-   * Get the IP address of the first Wi-Fi adapter.
-   * 
-   * @returns {Promise<string>} A Promise which resolves with the IP address as 
-   *   a string or an empty string.
+   * Get the current addresses for Wi-Fi and LAN.
+   *
+   * @returns {Promise<NetworkAddresses>} Promise that resolves with
+   *   {
+   *     lan: '...',
+   *     wlan: {
+   *      ip: '...',
+   *      ssid: '...',
+   *    }
+   *  }
    */
-  private async getWifiIpAddress(): Promise<string> {
-    return this.getWifiDevices().then((wifiDevices) => {
-      return this.getDeviceIp4Config(wifiDevices[0]);
-    }).then((wifiIp4Config) => {
-      return wifiIp4Config[0].address;
-    }).catch(() => {
-      console.log(`Unable to get detect Wi-Fi IP address.`);
-      return '';
-    });
+  async getNetworkAddressesAsync(): Promise<NetworkAddresses> {
+    let result: NetworkAddresses = {
+      lan: '',
+      wlan: {
+        ip: '',
+        ssid: ''
+      }
+    };
+    try {
+      const ethernetDevices = await this.getEthernetDevices();
+      const ethernetIp4Config = await this.getDeviceIp4Config(ethernetDevices[0]);
+      result.lan = ethernetIp4Config[0].address;
+    } catch(error) {
+        console.log('Unable to detect an Ethernet IP address');
+    }
+    try {
+      const wifiDevices = await this.getWifiDevices();
+      const wifiIp4Config = await this.getDeviceIp4Config(wifiDevices[0]);
+      const ssid = await this.getDeviceActiveSsid(wifiDevices[0]);
+      result.wlan.ip = wifiIp4Config[0].address;
+      result.wlan.ssid = ssid;
+    } catch(error) {
+      console.log('Unable to detect a Wi-Fi IP address and active SSID');
+    }
+    return result;
   }
 
   /**
@@ -283,32 +350,7 @@ class LinuxUbuntuPlatform extends BasePlatform {
       // TODO: Throw error instead?
       return result;
     });
-  }
-
-  /**
-   * Get the current addresses for Wi-Fi and LAN.
-   *
-   * @returns {Promise<NetworkAddresses>} Promise that resolves with
-   *   {
-   *     lan: '...',
-   *     wlan: {
-   *      ip: '...',
-   *      ssid: '...',
-   *    }
-   *  }
-   */
-  async getNetworkAddressesAsync(): Promise<NetworkAddresses> {
-    let result: NetworkAddresses = {
-      lan: '',
-      wlan: {
-        ip: '',
-        ssid: ''
-      }
-    };
-    result.lan = await this.getEthernetIpAddress();
-    result.wlan.ip = await this.getWifiIpAddress();
-    return result;
-  }
+  } 
 
   // Currently unused code...
 
