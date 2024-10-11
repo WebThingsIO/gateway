@@ -24,11 +24,11 @@ interface TestGlobals {
 }
 
 beforeEach(() => {
-  (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox = sinon.createSandbox();
+  (<typeof global & typeof globalThis & TestGlobals>global).sandbox = sinon.createSandbox();
 });
 
 afterEach(() => {
-  (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox.restore();
+  (<typeof global & typeof globalThis & TestGlobals>global).sandbox.restore();
   // Clean up any nodes added to the DOM
   document.body.innerHTML = '';
 });

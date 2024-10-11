@@ -359,7 +359,7 @@ describe('Form', () => {
           foo: { type: 'string' },
         },
       };
-      const onSubmit = (<NodeJS.Global & typeof globalThis & TestGlobals>global).sandbox.stub();
+      const onSubmit = (<typeof global & typeof globalThis & TestGlobals>global).sandbox.stub();
 
       const { node } = createSchemaForm({
         schema,

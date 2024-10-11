@@ -145,7 +145,7 @@ export default class Plugin {
 
   asDict(): Record<string, unknown> {
     let pid: string | number = 'not running';
-    if (this.process.p) {
+    if (this.process.p && typeof this.process.p.pid != 'undefined') {
       pid = this.process.p.pid;
     }
     return {
