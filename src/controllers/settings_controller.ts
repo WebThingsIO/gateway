@@ -439,7 +439,11 @@ function build(): express.Router {
   });
 
   controller.get('/network/wireless/networks', auth, (_request, response) => {
-    if (Platform.implemented('scanWirelessNetworks')) {
+    if(Platform.implemented('scanWirelessNetworksAsync')) {
+      Platform.scanWirelessNetworksAsync().then((networks) => {
+        response.json(networks);
+      })
+    } else if(Platform.implemented('scanWirelessNetworks')) {
       response.json(Platform.scanWirelessNetworks());
     } else {
       response.status(500).send('Wireless scanning not implemented');

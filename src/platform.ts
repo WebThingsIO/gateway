@@ -222,6 +222,10 @@ export const scanWirelessNetworks = wrapPlatform<WirelessNetwork[]>(
   platform,
   'scanWirelessNetworks'
 );
+export const scanWirelessNetworksAsync = wrapPlatform<Promise<WirelessNetwork[]>>(
+  platform,
+  'scanWirelessNetworksAsync'
+);
 export const getSelfUpdateStatus = wrapPlatform<SelfUpdateStatus>(platform, 'getSelfUpdateStatus');
 export const setSelfUpdateStatus = wrapPlatform<boolean>(platform, 'setSelfUpdateStatus');
 export const getValidTimezones = wrapPlatform<string[]>(platform, 'getValidTimezones');

@@ -8,7 +8,7 @@
 
 import BasePlatform from './base';
 import DBus from 'dbus';
-import {LanMode, NetworkAddresses} from './types';
+import {LanMode, NetworkAddresses, WirelessNetwork} from './types';
 
 class LinuxUbuntuPlatform extends BasePlatform {
 
@@ -237,48 +237,218 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
-   * Get the SSID of the access point the Wi-Fi adapter is connected to.
-   *
-   * @param {String} path Object path for a Wi-Fi device.
-   * @returns {Promise<string>} Promise resolves with an ssid.
+   * Get the SSID of the Wi-Fi access point with a given DBUS object path.
+   * 
+   * @param {string} path DBUS object path of the Wi-Fi access point.
+   * @returns {Promise<string>} The SSID of the access point.
    */
-  getDeviceActiveSsid(path: string): Promise<string> {
+  private getAccessPointSsid(path: string): Promise<string> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.AccessPoint',
+        function(error, iface) {
+          if(error) {
+            console.error(error);
+            reject();
+            return;
+          }
+          iface.getProperty('Ssid', function(error, value: any) {
+            if(error) {
+              console.error(error);
+              reject();
+              return;
+            }
+            // Convert SSID from byte array to string.
+            let ssid = String.fromCharCode(...value);
+            resolve(ssid);
+          });
+        }
+    )
+    });
+  }
+
+  /**
+   * Get the signal strength of the Wi-Fi access point with a given DBUS object path.
+   * 
+   * @param {string} path DBUS object path of the Wi-Fi access point.
+   * @returns {Promise<number>} The strength of the signal as a percentage.
+   */
+  private getAccessPointStrength(path: string): Promise<number> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.AccessPoint',
+        function(error, iface) {
+          if(error) {
+            console.error(error);
+            reject();
+            return;
+          }
+          iface.getProperty('Strength', function(error, value: any) {
+            if(error) {
+              console.error(error);
+              reject();
+              return;
+            }
+            resolve(value);
+          });
+        }
+    )});
+  }
+
+  /**
+   * Gets the encryption status of the Wi-Fi access point with a given DBUS object path.
+   * 
+   * @param {string} path DBUS object path of the Wi-Fi access point.
+   * @returns {Promise<boolean>} true if encrypted, false if not.
+   */
+  private async getAccessPointSecurity(path: string): Promise<boolean> {
+    const systemBus = this.systemBus;
+    const wpaFlagRequest = new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.AccessPoint',
+        function(error, iface) {
+          if(error) {
+            console.error(error);
+            reject();
+            return;
+          }
+          iface.getProperty('WpaFlags', function(error, value: any) {
+            if(error) {
+              console.error(error);
+              reject();
+              return;
+            }
+            resolve(value);
+          });
+        }
+    )});
+    const wpa2FlagRequest = new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.AccessPoint',
+        function(error, iface) {
+          if(error) {
+            console.error(error);
+            reject();
+            return;
+          }
+          iface.getProperty('RsnFlags', function(error, value: any) {
+            if(error) {
+              console.error(error);
+              reject();
+              return;
+            }
+            resolve(value);
+          });
+        }
+    )});
+    // Request WPA and WPA2 flags for access point.
+    let requests = [];
+    requests.push(wpaFlagRequest);
+    requests.push(wpa2FlagRequest);
+    let responses = await Promise.all(requests);
+    if (responses[0] == 0 && responses[1] == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * 
+   * @param {string} path The DBUS path of an access point.
+   * @returns {WirelessNetwork} Wireless network object of the form:
+   * {
+   *   ssid: '...',
+   *   quality: <number>,
+   *   encryption: true|false,
+   *   configured: true|false,
+   *   connected: true| false
+   * }
+   * @throws {Error} Error if not able to get all access point details.
+   */
+  private async getAccessPointDetails(path: string): Promise<WirelessNetwork> {
+    let ssid: string;
+    let strength: number;
+    let security: boolean; 
+    try {
+      ssid = await this.getAccessPointSsid(path);
+      strength = await this.getAccessPointStrength(path);
+      security = await this.getAccessPointSecurity(path); 
+    } catch(error) {
+      console.error(error);
+      throw new Error('Failed to get access point details');
+    }
+    let response = {
+      'ssid': ssid,
+      'quality': strength,
+      'encryption': security,
+      'configured': false, // TODO: implement
+      'connected': false // TODO: implement          
+    };
+    // Resolve with access point details
+    return response;
+  }
+
+  /**
+   * Get the active Access Point a given Wi-Fi adapter is connected to.
+   *
+   * @param {String} path DBUS Object path for a Wi-Fi device.
+   * @returns {Promise<string>} Promise resolves with the DBUS object path of an access point.
+   */
+  private getActiveAccessPoint(path: string): Promise<string> {
     const systemBus = this.systemBus;
     return new Promise((resolve, reject) => {
       systemBus.getInterface('org.freedesktop.NetworkManager',
         path,
         'org.freedesktop.NetworkManager.Device.Wireless',
-        function(error, iface) {
+        (error, iface) => {
         if (error) {
           console.error(error);
           reject();
           return;
         }
-        iface.getProperty('ActiveAccessPoint', function(error, accessPointPath) {
+        iface.getProperty('ActiveAccessPoint', (error, accessPointPath) => {
           if (error) {
             console.log('Unable to detect a connected Wi-Fi access point');
             reject();
             return;
           }
-          systemBus.getInterface('org.freedesktop.NetworkManager',
-            accessPointPath,
-            'org.freedesktop.NetworkManager.AccessPoint',
-            function(error, iface) {
-            if (error) {
-              reject();
-              return;
-            }
-            iface.getProperty('Ssid', function(error, value: any) {
-              if (error) {
-                console.error(error);
-                reject();
-                return;
-              }
-              // Convert SSID from byte array to string.
-              let ssid = String.fromCharCode(...value);
-              resolve(ssid);
-            });
-          });
+          resolve(accessPointPath);
+        });
+      });
+    });
+  }
+
+  /**
+   * Get a list of access points for the wireless device at the given path.
+   * 
+   * @param {String} path The DBUS object path of a wireless device.
+   * @returns {Promise<Array<string>>} An array of DBus object paths of Access Points.
+   */
+  private getWifiAccessPoints(path: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      this.systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.Device.Wireless',
+        function(error, iface) {
+        if (error) {
+          console.error('Error getting a wireless device via NetworkManager: ' + error);
+          reject();
+          return;
+        }
+        iface.getProperty('AccessPoints', function(error: Error | null, result: any) {
+          if (error) {
+            console.error('Error getting AccessPoints from a wireless device: ' + error);
+            reject();
+            return;
+          }
+          resolve(result);
         });
       });
     });
@@ -314,7 +484,8 @@ class LinuxUbuntuPlatform extends BasePlatform {
     try {
       const wifiDevices = await this.getWifiDevices();
       const wifiIp4Config = await this.getDeviceIp4Config(wifiDevices[0]);
-      const ssid = await this.getDeviceActiveSsid(wifiDevices[0]);
+      const accessPoint = await this.getActiveAccessPoint(wifiDevices[0]);
+      const ssid = await this.getAccessPointSsid(accessPoint);
       result.wlan.ip = wifiIp4Config[0].address;
       result.wlan.ssid = ssid;
     } catch(error) {
@@ -350,7 +521,38 @@ class LinuxUbuntuPlatform extends BasePlatform {
       // TODO: Throw error instead?
       return result;
     });
-  } 
+  }
+
+  /**
+   * Scan for visible wireless networks on the first wireless device.
+   *
+   * @returns {Promise<WirelessNetwork[]>} Promise which resolves with an array of networks as objects:
+   *                     [
+   *                       {
+   *                         ssid: '...',
+   *                         quality: <number>,
+   *                         encryption: true|false,
+   *                         configured: true|false,
+   *                         connected: true|false
+   *                       },
+   *                       ...
+   *                     ]
+   */
+  async scanWirelessNetworksAsync(): Promise<WirelessNetwork[]> {
+    const wifiDevices = await this.getWifiDevices();
+    const wifiAccessPoints = await this.getWifiAccessPoints(wifiDevices[0]);
+    let apRequests: Array<Promise<WirelessNetwork>> = [];
+    wifiAccessPoints.forEach((ap) => {
+      try {
+        apRequests.push(this.getAccessPointDetails(ap));
+      } catch(error) {
+        console.error(`Error getting details for access point with path ${ap}`);
+        console.error(error);
+      }
+    })
+    let responses = await Promise.all(apRequests);
+    return responses;
+  }
 
   // Currently unused code...
 
