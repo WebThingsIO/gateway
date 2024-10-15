@@ -360,8 +360,10 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
+   * Get details about an access point reachable from a wireless device.
    * 
    * @param {string} path The DBUS path of an access point.
+   * @param {string|null} activeAccessPoint: The DBUS path of the active access point, if any.
    * @returns {WirelessNetwork} Wireless network object of the form:
    * {
    *   ssid: '...',
@@ -372,14 +374,20 @@ class LinuxUbuntuPlatform extends BasePlatform {
    * }
    * @throws {Error} Error if not able to get all access point details.
    */
-  private async getAccessPointDetails(path: string): Promise<WirelessNetwork> {
+  private async getAccessPointDetails(path: string, activeAccessPoint: string|null): Promise<WirelessNetwork> {
     let ssid: string;
     let strength: number;
-    let security: boolean; 
+    let security: boolean;
+    let connected: boolean;
+    if(path === activeAccessPoint) {
+      connected = true;
+    } else {
+      connected = false;
+    }
     try {
       ssid = await this.getAccessPointSsid(path);
       strength = await this.getAccessPointStrength(path);
-      security = await this.getAccessPointSecurity(path); 
+      security = await this.getAccessPointSecurity(path);
     } catch(error) {
       console.error(error);
       throw new Error('Failed to get access point details');
@@ -388,8 +396,8 @@ class LinuxUbuntuPlatform extends BasePlatform {
       'ssid': ssid,
       'quality': strength,
       'encryption': security,
-      'configured': false, // TODO: implement
-      'connected': false // TODO: implement          
+      'configured': connected, // TODO: Figure out what this is actually meant to mean
+      'connected': connected
     };
     // Resolve with access point details
     return response;
@@ -518,7 +526,6 @@ class LinuxUbuntuPlatform extends BasePlatform {
       return result;
     }).catch((error) => {
       console.error('Error getting LAN mode from Network Manager: ' + error);
-      // TODO: Throw error instead?
       return result;
     });
   }
@@ -527,29 +534,30 @@ class LinuxUbuntuPlatform extends BasePlatform {
    * Scan for visible wireless networks on the first wireless device.
    *
    * @returns {Promise<WirelessNetwork[]>} Promise which resolves with an array of networks as objects:
-   *                     [
-   *                       {
-   *                         ssid: '...',
-   *                         quality: <number>,
-   *                         encryption: true|false,
-   *                         configured: true|false,
-   *                         connected: true|false
-   *                       },
-   *                       ...
-   *                     ]
+   *  [
+   *    {
+   *      ssid: '...',
+   *      quality: <number>,
+   *      encryption: true|false,
+   *      configured: true|false,
+   *      connected: true|false
+   *    },
+   *    ...                 
+   *  ]
    */
   async scanWirelessNetworksAsync(): Promise<WirelessNetwork[]> {
     const wifiDevices = await this.getWifiDevices();
     const wifiAccessPoints = await this.getWifiAccessPoints(wifiDevices[0]);
+    let activeAccessPoint: string|null;
+    try {
+      activeAccessPoint = await this.getActiveAccessPoint(wifiDevices[0]);
+    } catch(error) {
+      activeAccessPoint = null;
+    }
     let apRequests: Array<Promise<WirelessNetwork>> = [];
     wifiAccessPoints.forEach((ap) => {
-      try {
-        apRequests.push(this.getAccessPointDetails(ap));
-      } catch(error) {
-        console.error(`Error getting details for access point with path ${ap}`);
-        console.error(error);
-      }
-    })
+      apRequests.push(this.getAccessPointDetails(ap, activeAccessPoint));
+    });
     let responses = await Promise.all(apRequests);
     return responses;
   }
