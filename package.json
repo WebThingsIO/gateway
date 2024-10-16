@@ -58,6 +58,7 @@
     "minipass": "^3.3.5",
     "mkdirp": "^1.0.4",
     "ncp": "^2.0.0",
+    "netmask": "^2.0.2",
     "nocache": "^2.1.0",
     "node-fetch": "^2.6.7",
     "node-getopt": "^0.3.2",

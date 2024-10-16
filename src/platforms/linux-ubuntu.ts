@@ -9,6 +9,7 @@
 import BasePlatform from './base';
 import DBus from 'dbus';
 import {LanMode, NetworkAddresses, WirelessNetwork} from './types';
+let Netmask = require('netmask').Netmask;
 
 class LinuxUbuntuPlatform extends BasePlatform {
 
@@ -137,7 +138,24 @@ class LinuxUbuntuPlatform extends BasePlatform {
             reject();
             return;
           }
-          resolve(activeConnectionPath);
+          systemBus.getInterface('org.freedesktop.NetworkManager',
+            activeConnectionPath,
+            'org.freedesktop.NetworkManager.Connection.Active',
+            function(error, iface) {
+            if (error) {
+              console.error(error);
+              reject();
+              return;
+            }
+            iface.getProperty('Connection', function(error, value) {
+              if (error) {
+                console.error(error);
+                reject();
+                return;
+              }
+              resolve(value);
+            });
+          });
         });
       });
     });
@@ -618,6 +636,21 @@ class LinuxUbuntuPlatform extends BasePlatform {
         result.mode = 'dhcp';
       } else if(settings.ipv4.method == 'manual') {
         result.mode = 'static';
+      }
+      if(settings.ipv4['address-data'][0] && 
+        settings.ipv4['address-data'][0].hasOwnProperty('address')) {
+        result.options.ipaddr = settings.ipv4['address-data'][0].address;
+      }
+      if(settings.ipv4.hasOwnProperty('gateway')) {
+        result.options.gateway = settings.ipv4.gateway;
+      }
+      if(result.options.ipaddr && 
+        settings.ipv4['address-data'][0].hasOwnProperty('prefix')) {
+        // Convert cidr style prefix to dot-decimal netmask
+        const ip = result.options.ipaddr;
+        const cidr = settings.ipv4['address-data'][0].prefix;
+        const block = new Netmask(`${ip}/${cidr}`);
+        result.options.netmask = block.mask;
       }
       return result;
     }).catch((error) => {
