@@ -460,7 +460,17 @@ function build(): express.Router {
     const mode = request.body.mode;
     const options = request.body.options;
 
-    if (Platform.implemented('setWirelessMode')) {
+    if (Platform.implemented('setWirelessModeAsync')) {
+      Platform.setWirelessModeAsync(enabled, mode, options).then((result) => {
+        if(result === true) {
+          response.status(200).json({});
+        } else {
+          response.status(500).send('Failed to update wireless configuration');
+        }
+      }).catch(() => {
+        response.status(500).send('Failed to update wireless configuration');
+      })
+    } else if (Platform.implemented('setWirelessMode')) {
       if (Platform.setWirelessMode(enabled, mode, options)) {
         response.status(200).json({});
       } else {

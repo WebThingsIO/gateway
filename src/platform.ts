@@ -216,6 +216,7 @@ export const getSshServerStatus = wrapPlatform<boolean>(platform, 'getSshServerS
 export const setSshServerStatus = wrapPlatform<boolean>(platform, 'setSshServerStatus');
 export const getWirelessMode = wrapPlatform<WirelessMode>(platform, 'getWirelessMode');
 export const setWirelessMode = wrapPlatform<boolean>(platform, 'setWirelessMode');
+export const setWirelessModeAsync = wrapPlatform<Promise<boolean>>(platform, 'setWirelessModeAsync');
 export const restartGateway = wrapPlatform<boolean>(platform, 'restartGateway');
 export const restartSystem = wrapPlatform<boolean>(platform, 'restartSystem');
 export const scanWirelessNetworks = wrapPlatform<WirelessNetwork[]>(

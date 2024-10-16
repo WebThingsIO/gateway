@@ -137,24 +137,7 @@ class LinuxUbuntuPlatform extends BasePlatform {
             reject();
             return;
           }
-          systemBus.getInterface('org.freedesktop.NetworkManager',
-            activeConnectionPath,
-            'org.freedesktop.NetworkManager.Connection.Active',
-            function(error, iface) {
-            if (error) {
-              console.error(error);
-              reject();
-              return;
-            }
-            iface.getProperty('Connection', function(error, value) {
-              if (error) {
-                console.error(error);
-                reject();
-                return;
-              }
-              resolve(value);
-            });
-          });
+          resolve(activeConnectionPath);
         });
       });
     });
@@ -463,6 +446,119 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
+   * Get an access point DBUS object bath for a given SSID.
+   * 
+   * @param {string} ssid The SSID of the network to search for.
+   * @returns {Promise<string>} A Promise which resolves with the DBUS object 
+   *   path of the access point, or null if not found;
+   */
+  private async getAccessPointbySsid(ssid: string): Promise<string|null> {
+    const wifiDevices = await this.getWifiDevices();
+    const wifiAccessPoints = await this.getWifiAccessPoints(wifiDevices[0]);
+    // Return the first access point that has a matching SSID
+    // TODO: Deal with duplicates
+    for (const accessPoint of wifiAccessPoints) {
+      const accessPointSsid = await this.getAccessPointSsid(accessPoint);
+      if (accessPointSsid == ssid) {
+        return accessPoint;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Connect to Wi-Fi access point.
+   *
+   * @param {string} wifiDevice DBUS object path of wireless device to use.
+   * @param {string} accessPoint DBUS object path of access point to connec to (e.g. 1)
+   * @param {string} ssid SSID of access point to connect to.
+   * @param {boolean} secure Whether or not authentication is provided.
+   * @param {string} password provided by user.
+   * @returns {Promise}
+   */
+  private connectToWifiAccessPoint(wifiDevice: string, accessPoint: string,
+    ssid: string, secure: boolean, password: string): Promise<any> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        '/org/freedesktop/NetworkManager',
+        'org.freedesktop.NetworkManager',
+        (error, iface) => {
+
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        // Convert SSID to an array of bytes
+        let ssidBytes = [];
+        for (let i = 0; i < ssid.length; ++i) {
+          ssidBytes.push(ssid.charCodeAt(i));
+        }
+
+        // Assemble connection information
+        let connectionInfo: Record<string, unknown> = {
+          '802-11-wireless': {
+            ssid: ssidBytes,
+          },
+          'connection': {
+            id: ssid,
+            type: '802-11-wireless',
+          }
+        };
+
+        if (secure) {
+          connectionInfo['802-11-wireless-security'] = {
+            'key-mgmt': 'wpa-psk',
+            'psk': password,
+          }
+        }
+
+        // TODO: Should we re-use an existing connection rather than add a new one
+        // if one already exists?
+        iface.AddAndActivateConnection(connectionInfo, wifiDevice,
+          accessPoint, function(error: Error, value: any) {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve(value);
+        });
+
+      });
+    });
+  }
+
+  /**
+   * Disconnect a network device.
+   * 
+   * @param {string} path DBUS object path of device.
+   * @returns {Promise<any>} A promise which resolves upon successful 
+   *   deactivation or rejects on failure.
+   */
+  private disconnectNetworkDevice(path: string): Promise<any> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.Device',
+        (error, iface) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          iface.Disconnect(function(error: Error, value: any) {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve(value);
+          });
+      })
+    });
+  }
+
+  /**
    * Get the current addresses for Wi-Fi and LAN.
    *
    * @returns {Promise<NetworkAddresses>} Promise that resolves with
@@ -562,7 +658,94 @@ class LinuxUbuntuPlatform extends BasePlatform {
     return responses;
   }
 
+  /**
+   * Set the wireless mode and options.
+   *
+   * @param {boolean} enabled - whether or not wireless is enabled
+   * @param {string} mode - ap, sta, ...
+   * @param {Object?} options - options specific to wireless mode
+   * @returns {Promise<boolean>} Boolean indicating success.
+   */
+  async setWirelessModeAsync(enabled: boolean, mode = 'ap', options: Record<string, any> = {}): Promise<boolean> {
+    const valid = [
+      //'ap', //TODO: Implement ap mode
+      'sta'
+    ];
+    if (enabled && !valid.includes(mode)) {
+      console.error(`Wireless mode ${mode} not supported on this platform`);
+      return false;
+    }
+    const wifiDevices = await this.getWifiDevices();
+
+    // If `enabled` set to false, disconnect wireless device
+    if(enabled === false) {
+      // Return false if no wifi device found
+      if(!wifiDevices[0]) {
+        return false;
+      }
+      try {
+        await this.disconnectNetworkDevice(wifiDevices[0]);
+      } catch(error) {
+        console.error(`Error whilst attempting to disconnect wireless device: ${error}`);
+        return false;
+      }
+      return true;
+    }
+
+    // Otherwise connect to Wi-Fi access point using provided options
+    if(!options.hasOwnProperty('ssid')) {
+      console.log('Could not connect to wireless network because no SSID provided');
+      return false;
+    }
+    const accessPoint = await this.getAccessPointbySsid(options.ssid);
+    if(accessPoint == null) {
+      console.log('No network with specified SSID found');
+      return false;
+    }
+    let secure = false;
+    if (options.key) {
+      secure = true;
+    }
+    try {
+      this.connectToWifiAccessPoint(wifiDevices[0], accessPoint, options.ssid, 
+        secure, options.key)
+    } catch(error) {
+      console.error(`Error connecting to Wi-Fi access point: ${error}`);
+      return false;
+    }
+    return true;
+  }
+
   // Currently unused code...
+
+  /**
+   * Deactivate a network connection.
+   * 
+   * @param {string} path DBUS object path of active connection.
+   * @returns {Promise<any>} A promise which resolves upon successful 
+   *   deactivation or rejects on failure.
+   */
+  /*private deactivateConnection(path: string): Promise<any> {
+    const systemBus = this.systemBus;
+    return new Promise((resolve, reject) => {
+      systemBus.getInterface('org.freedesktop.NetworkManager',
+        '/org/freedesktop/NetworkManager',
+        'org.freedesktop.NetworkManager',
+        (error, iface) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          iface.DeactivateConnection(path, function(error: Error, value: any) {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve(value);
+          });
+      })
+    });
+  }*/
 
   /**
    * Get the DHCP configuration for a given network adapter.
