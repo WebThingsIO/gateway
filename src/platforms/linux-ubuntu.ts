@@ -8,6 +8,7 @@
 
 import BasePlatform from './base';
 import DBus from 'dbus';
+import ipRegex from 'ip-regex';
 import {LanMode, NetworkAddresses, WirelessNetwork} from './types';
 let Netmask = require('netmask').Netmask;
 
@@ -167,7 +168,7 @@ class LinuxUbuntuPlatform extends BasePlatform {
    * @param {String} path Object path for a connection settings profile.
    * @returns {Promise<any>} Resolves with the settings of a connection.
    */
-  private getConnectionSettings(path: string) {
+  private getConnectionSettings(path: string): Promise<Record<string, any>> {
     return new Promise((resolve, reject) => {
       this.systemBus.getInterface('org.freedesktop.NetworkManager',
         path,
@@ -185,6 +186,29 @@ class LinuxUbuntuPlatform extends BasePlatform {
             return;
           }
           resolve(value);
+        });
+      });
+    });
+  }
+
+  private setConnectionSettings(path: string, settings: Record<string, any>): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.systemBus.getInterface('org.freedesktop.NetworkManager',
+        path,
+        'org.freedesktop.NetworkManager.Settings.Connection',
+        function(error, iface) {
+        if (error) {
+          console.error(error);
+          reject();
+          return;
+        }
+        iface.Update(settings, function(error: Error) {
+          if (error) {
+            console.error(error);
+            reject();
+            return;
+          }
+          resolve(true);
         });
       });
     });
@@ -617,7 +641,7 @@ class LinuxUbuntuPlatform extends BasePlatform {
   }
 
   /**
-   * Get the LAN mode and options.
+   * Get LAN network settings.
    *
    * @returns {Promise<LanMode>} Promise that resolves with 
    *   {mode: 'static|dhcp|...', options: {...}}
@@ -656,6 +680,74 @@ class LinuxUbuntuPlatform extends BasePlatform {
     }).catch((error) => {
       console.error('Error getting LAN mode from Network Manager: ' + error);
       return result;
+    });
+  }
+
+  /**
+   * Set LAN network settings.
+   *
+   * @param {string} mode static|dhcp|....
+   * @param {<Record<string, any>} options Mode-specific options.
+   * @returns {Promise<boolean>} Promise that resolves true if successful and false if not.
+   */
+  async setLanModeAsync(mode: string, options: Record<string, any>): Promise<boolean> {
+    let lanConnection: string;
+    return this.getEthernetDevices().then((devices) => {
+      return this.getDeviceConnection(devices[0]);
+    }).then((connection) => {
+      lanConnection = connection;
+      // First get current settings to carry over some values
+      return this.getConnectionSettings(lanConnection);
+    }).then((oldSettings) => {
+      let settings: Record<string, any> = {};
+      // Carry over some values from the old settings
+      settings.connection = {
+        id: oldSettings.connection.id,
+        uuid: oldSettings.connection.uuid,
+        type: oldSettings.connection.type
+      }
+      if(mode == 'dhcp') {
+        // Set dynamic IP
+        settings.ipv4 = {
+          method: 'auto'
+        };
+      } else if(mode == 'static') {
+        const regex = ipRegex({ exact: true });
+        if (
+          !(options.hasOwnProperty('ipaddr') && regex.test(<string>options.ipaddr) &&
+          options.hasOwnProperty('gateway') && regex.test(<string>options.gateway) &&
+          options.hasOwnProperty('netmask') && regex.test(<string>options.netmask))) {
+          console.log('Setting a static IP address requires a valid IP address, gateway and netmask');
+          return false;
+        }
+        // Set static IP address
+        // Convert dot-decimal netmask to cidr style prefix for storage
+        const netmask = new Netmask(options.ipaddr, options.netmask);
+        const prefix = netmask.bitmask;
+        // Convert dot-decimal IP and gateway to little endian integers for storage
+        const ipaddrInt = options.ipaddr.split('.').reverse().reduce(function(int: any, value: any) { return int * 256 + +value });
+        const gatewayInt = options.gateway.split('.').reverse().reduce(function(int: any, value: any) { return int * 256 + +value });
+        settings.ipv4 = {
+          'method': 'manual',
+          'addresses': [
+            [ipaddrInt, prefix, gatewayInt]
+          ],
+          // The NetworkManager docs say that the addresses property is deprecated,
+          // but using address-data and gateway doesn't seem to work on Ubuntu yet.
+          /*'address-data': [{
+            'address': options.ipaddr,
+            'prefix': prefix
+          }],
+          'gateway': options.gateway*/
+        }
+      } else {
+        console.error('LAN mode not recognised');
+        return false;
+      }
+      return this.setConnectionSettings(lanConnection, settings);
+    }).catch((error) => {
+      console.error('Error setting LAN settings: ' + error);
+      return false;
     });
   }
 
@@ -748,123 +840,6 @@ class LinuxUbuntuPlatform extends BasePlatform {
     }
     return true;
   }
-
-  // Currently unused code...
-
-  /**
-   * Deactivate a network connection.
-   * 
-   * @param {string} path DBUS object path of active connection.
-   * @returns {Promise<any>} A promise which resolves upon successful 
-   *   deactivation or rejects on failure.
-   */
-  /*private deactivateConnection(path: string): Promise<any> {
-    const systemBus = this.systemBus;
-    return new Promise((resolve, reject) => {
-      systemBus.getInterface('org.freedesktop.NetworkManager',
-        '/org/freedesktop/NetworkManager',
-        'org.freedesktop.NetworkManager',
-        (error, iface) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-          iface.DeactivateConnection(path, function(error: Error, value: any) {
-            if (error) {
-              reject(error);
-              return;
-            }
-            resolve(value);
-          });
-      })
-    });
-  }*/
-
-  /**
-   * Get the DHCP configuration for a given network adapter.
-   *
-   * @param {String} path Object path for device.
-   * @returns {Promise<any>} Promise resolves with configuration.
-   */
-  /*getDeviceDHCP4Config(path: string) {
-    return new Promise((resolve, reject) => {
-      let systemBus = this.systemBus;
-      systemBus.getInterface('org.freedesktop.NetworkManager',
-        path,
-        'org.freedesktop.NetworkManager.Device',
-        function(error, iface) {
-        if (error) {
-          console.error(error);
-          reject();
-        }
-        iface.getProperty('Dhcp4Config', function(error, dhcpPath) {
-          if (error) {
-            console.error(error);
-            reject();
-          }
-          systemBus.getInterface('org.freedesktop.NetworkManager',
-            dhcpPath,
-            'org.freedesktop.NetworkManager.DHCP4Config',
-            function(error, iface) {
-            if (error) {
-              console.error(error);
-              reject();
-            }
-            iface.getProperty('Options', function(error, value) {
-              if (error) {
-                console.error(error);
-                reject();
-              }
-              resolve(value);
-            });
-          });
-        });
-      });
-    });
-  }*/
-
-  /**
-   * Get a list of network connection configurations from the system network manager.
-   * 
-   * @returns {Array} An array of DBus object paths for connection configurations.
-   */
-  /*listConnections(): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-      this.systemBus.getInterface('org.freedesktop.NetworkManager',
-        '/org/freedesktop/NetworkManager/Settings',
-        'org.freedesktop.NetworkManager.Settings',
-        function(error, iface) {
-        if (error) {
-          console.error('Error accessing the NetworkManager Settings DBus interface: ' + error);
-          reject();
-        }
-        iface.ListConnections(function(error: Error, result: string[]) {
-          if (error) {
-            console.error('Error calling ListConnections on NetworkManager Settings DBus interface: ' + error);
-            reject();
-          }
-          resolve(result);
-        });
-      });
-    });
-  }*/
-
-  // Testing...
-  /*getLanMode(): LanMode {
-    this.getEthernetDevices().then((devices) => {
-      return this.getDeviceConnection(devices[0]);
-    }).then((connection) => {
-      return this.getConnectionSettings(connection);
-    }).then((settings) => {
-      console.log('Connection settings for eth0 are probably:');
-      console.dir(settings);
-    });
-
-    return {
-      mode: 'dhcp',
-      options: {}
-    }
-  }*/
 }
 
 export default new LinuxUbuntuPlatform();

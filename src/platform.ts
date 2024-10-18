@@ -207,6 +207,7 @@ export const setHostname = wrapPlatform<boolean>(platform, 'setHostname');
 export const getLanMode = wrapPlatform<LanMode>(platform, 'getLanMode');
 export const getLanModeAsync = wrapPlatform<Promise<LanMode>>(platform, 'getLanModeAsync');
 export const setLanMode = wrapPlatform<boolean>(platform, 'setLanMode');
+export const setLanModeAsync = wrapPlatform<Promise<boolean>>(platform, 'setLanModeAsync');
 export const getMacAddress = wrapPlatform<string | null>(platform, 'getMacAddress');
 export const getMdnsServerStatus = wrapPlatform<boolean>(platform, 'getMdnsServerStatus');
 export const setMdnsServerStatus = wrapPlatform<boolean>(platform, 'setMdnsServerStatus');

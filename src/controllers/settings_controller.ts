@@ -419,7 +419,15 @@ function build(): express.Router {
     const mode = request.body.mode;
     const options = request.body.options;
 
-    if (Platform.implemented('setLanMode')) {
+    if(Platform.implemented('setLanModeAsync')) {
+      Platform.setLanModeAsync(mode, options).then((result: boolean) => {
+        if (result == true) {
+          response.status(200).json({});
+        } else {
+          response.status(500).send('Failed to update LAN configuration');
+        }
+      });
+    } else if (Platform.implemented('setLanMode')) {
       if (Platform.setLanMode(mode, options)) {
         response.status(200).json({});
       } else {
