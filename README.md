@@ -257,7 +257,7 @@ $ npm run jest build/test/{test-name}.js
 - **`config/`** - Gateway configuration files
 - **`deb/`** - Tools for building .deb packages
 - **`docker/`** and **`Dockerfile`** - Tools for building Docker image
-- **`image/`** - Tools for building the Raspberry Pi image
+- **`image/`** - Tools for building an Ubuntu Core-based OS image
 - **`rpm/`** - Tools for building .rpm packages
 - **`src/`**
   - **`addons-test/`** - Add-ons used strictly for testing
