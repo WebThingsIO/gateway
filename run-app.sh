@@ -45,6 +45,13 @@ run_app() {
   npm run "${start_task}" -- $args
 }
 
+# If legacy .mozilla-iot directory exists, then move it to .webthings
+if [[ "$WEBTHINGS_HOME" == "$HOME/.webthings" &&
+      -d "$HOME/.mozilla-iot" &&
+      ! -e "$HOME/.webthings" ]]; then
+  mv "$HOME/.mozilla-iot" "$HOME/.webthings"
+fi
+
 if ! is_container; then
   if [ ! -f .post_upgrade_complete ]; then
     ./tools/post-upgrade.sh
@@ -53,18 +60,10 @@ else
   _node_version=$(node --version | egrep -o '[0-9]+' | head -n1)
   if [[ ! -f "${WEBTHINGS_HOME}/.node_version" ||
         "$(< "${WEBTHINGS_HOME}/.node_version")" != "${_node_version}" ]]; then
-    cd "${HOME}/webthings/gateway"
     mkdir -p "${WEBTHINGS_HOME}/config"
+    cd "${HOME}/webthings/gateway"
     ./tools/update-addons.sh
-    cd -
-    echo "${_node_version}" > "${WEBTHINGS_HOME}/.node_version"
   fi
-fi
-
-if [[ "$WEBTHINGS_HOME" == "$HOME/.webthings" &&
-      -d "$HOME/.mozilla-iot" &&
-      ! -e "$HOME/.webthings" ]]; then
-  mv "$HOME/.mozilla-iot" "$HOME/.webthings"
 fi
 
 mkdir -p "${WEBTHINGS_HOME}/log"
