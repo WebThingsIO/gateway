@@ -22,15 +22,15 @@ apps:
 parts:
   python-deps:
     plugin: python
-    source: https://github.com/WebThingsIO/gateway.git
+    source: .
     python-requirements:
       - requirements.txt
   webthings-gateway:
     plugin: npm
-    source: https://github.com/WebThingsIO/gateway.git
+    source: .
     after: [ python-deps ]
     npm-include-node: true
-    npm-node-version: 12.22.1
+    npm-node-version: 20.18.0
     build-environment:
       - npm_config_unsafe_perm: "true"
       - NODE_ENV: "dev"
