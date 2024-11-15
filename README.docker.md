@@ -1,6 +1,6 @@
 # WebThings Gateway
 
-Docker image based on Debian Buster for running the
+Docker image based on Debian Bookworm for running the
 [WebThings Gateway](https://github.com/WebThingsIO/gateway). The image
 is built for AMD64, ARMv7, and ARMv8 (AArch64).
 

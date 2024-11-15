@@ -1,10 +1,9 @@
-FROM node:12-buster-slim
+FROM node:20-bookworm-slim
 
 EXPOSE 8080 4443
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN set -x && \
-    echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list && \
     apt update && \
     apt dist-upgrade -y && \
     apt install -y \
@@ -15,6 +14,7 @@ RUN set -x && \
         git \
         iputils-ping \
         libcap2-bin \
+        libdbus-1-dev \
         libffi-dev \
         libnss-mdns \
         libpng-dev \
@@ -22,12 +22,13 @@ RUN set -x && \
         lsb-release \
         mosquitto \
         net-tools \
+        pipx \
         pkg-config \
-        python \
-        python-six \
         python3 \
         python3-pip \
         python3-setuptools \
+        python3-six \
+        python-is-python3 \
         sudo \
         zlib1g-dev && \
     apt clean && \
@@ -37,7 +38,9 @@ RUN set -x && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 COPY --chown=node:node . /home/node/webthings/gateway/
-RUN pip3 install -r /home/node/webthings/gateway/requirements.txt
+RUN pipx install cookiecutter && \
+    pipx runpip cookiecutter install -r \
+    /home/node/webthings/gateway/requirements.txt
 
 USER node
 WORKDIR /home/node/webthings/gateway
