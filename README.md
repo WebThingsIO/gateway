@@ -1,7 +1,6 @@
 # WebThings Gateway
 
 [![Build Status](https://github.com/WebThingsIO/gateway/workflows/Build/badge.svg)](https://github.com/WebThingsIO/gateway/actions?query=workflow%3ABuild)
-[![codecov](https://codecov.io/gh/WebThingsIO/gateway/branch/master/graph/badge.svg)](https://codecov.io/gh/WebThingsIO/gateway)
 [![license](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 
 Web of Things gateway.
