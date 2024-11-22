@@ -1,5 +1,5 @@
 Name: webthings-gateway
-Version: 1.2.0
+Version: 2.0.0
 Release: 1%{?dist}
 Summary: WebThings Gateway
 
@@ -10,7 +10,7 @@ BuildRequires: autoconf automake nodejs npm git python python3 python3-pip pytho
 Requires: {{nodejs}} {{python3}} python3-pip libffi python2-six
 Requires(pre): shadow-utils
 
-Source0: %{name}_1.2.0.orig.tar.gz
+Source0: %{name}_2.0.0.orig.tar.gz
 Source1: %{name}.service
 
 Patch0: fix-config.patch
@@ -78,6 +78,8 @@ fi
 /etc/profile.d/%{name}.sh
 
 %changelog
+* Fri Nov 22 2024 WebThingsIO <team@webthings.io>
+- Update to 2.0.0.
 * Wed Nov 30 2022 WebThingsIO <team@webthings.io>
 - Update to 1.2.0.
 * Wed Aug 18 2021 WebThingsIO <team@webthings.io>
