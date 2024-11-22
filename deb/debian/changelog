@@ -1,3 +1,9 @@
+webthings-gateway (2.0.0-1) UNRELEASED; urgency=medium
+
+  * Update to 2.0.0.
+
+ -- WebThingsIO <team@webthings.io>  Fri, 22 Nov 2024 18:30:00 +0000
+
 webthings-gateway (1.2.0-1) UNRELEASED; urgency=medium
 
   * Update to 1.2.0.
