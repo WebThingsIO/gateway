@@ -1,0 +1,43 @@
+{
+    "type": "model",
+    "series": "16",
+    "model": "webthings-gateway-amd64",
+    "architecture": "amd64",
+    "authority-id": "dbEEEG9fkqNrL9KAaoHPHP4BC2h807oJ",
+    "brand-id": "dbEEEG9fkqNrL9KAaoHPHP4BC2h807oJ",
+    "timestamp": "2024-09-06T11:30:28+00:00",
+    "base": "core22",
+    "grade": "dangerous",
+    "snaps": [
+        {
+            "name": "pc",
+            "type": "gadget",
+            "default-channel": "22/stable",
+            "id": "UqFziVZDHLSyO3TqSWgNBoAdHbLI4dAH"
+        },
+        {
+            "name": "pc-kernel",
+            "type": "kernel",
+            "default-channel": "22/stable",
+            "id": "pYVQrBcKmBa0mZ4CCN7ExT6jH8rY1hza"
+        },
+        {
+            "name": "core22",
+            "type": "base",
+            "default-channel": "latest/stable",
+            "id": "amcUKQILKXHHTlmSa7NMdnXSx02dNeeT"
+        },
+        {
+            "name": "snapd",
+            "type": "snapd",
+            "default-channel": "latest/stable",
+            "id": "PMrrV4ml8uWuEUDBT8dSGnKUYbevVhc4"
+        },
+        {
+            "name": "webthings-gateway",
+            "type": "app",
+            "default-channel": "latest/edge",
+            "id": "qqVmy6PAmaTWqOsgJwP7xtJP19dqklHs"
+        }
+    ]
+}
