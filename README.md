@@ -3,7 +3,12 @@
 [![Build Status](https://github.com/WebThingsIO/gateway/workflows/Build/badge.svg)](https://github.com/WebThingsIO/gateway/actions?query=workflow%3ABuild)
 [![license](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 
-Web of Things gateway.
+WebThings Gateway is a self-hosted web application for monitoring and controlling a building over the web.
+
+![Screenshot of a the WebThings Gateway web interface showing a collection of Things](https://webthings.io/gateway/images/things_ui_screenshot.png)
+
+It is an open source [Web of Things](https://www.w3.org/WoT/) gateway.
+
 
 ## Installation
 
