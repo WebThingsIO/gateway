@@ -18,6 +18,8 @@ apps:
       - network-bind
       - system-observe
       - network-manager
+      - serial-port
+      - hardware-observe
 
 parts:
   python-deps:

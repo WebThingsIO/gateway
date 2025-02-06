@@ -14,7 +14,7 @@ It is an open source [Web of Things](https://www.w3.org/WoT/) gateway.
 
 - If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://webthings.io/gateway/) a pre-built software image to an SD card.
 - If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/webthingsio/gateway), for both ARM and amd64. You can also build your own image from this repository.
-- On Ubuntu or Ubuntu Core you can install the experimental [snap package](https://snapcraft.io/webthings-gateway) with `$ snap install webthings-gateway --edge`. (Requires the `system-observe` and `network-manager` interfaces to be connected in order to configure network settings).
+- On Ubuntu or Ubuntu Core you can install the experimental [snap package](https://snapcraft.io/webthings-gateway).
 - Otherwise, you can build WebThings Gateway from source yourself (see below).
 
 ## Documentation
