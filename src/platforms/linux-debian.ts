@@ -20,6 +20,7 @@ export class LinuxDebianPlatform extends BasePlatform {
     return {
       available: false,
       enabled: false,
+      configurable: false
     };
   }
 
