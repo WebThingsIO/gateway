@@ -1,55 +1,12 @@
 import child_process from 'child_process';
 import config from 'config';
 import express from 'express';
-import fs from 'fs';
 import fetch from 'node-fetch';
-import semver from 'semver';
 import * as Platform from '../platform';
 import * as Utils from '../utils';
-import pkg from '../package.json';
 
 function build(): express.Router {
   const controller = express.Router();
-
-  function readVersion(packagePath: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      fs.readFile(packagePath, { encoding: 'utf8' }, (err, data) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        try {
-          const pkgJson = JSON.parse(data);
-
-          if (!semver.valid(pkgJson.version)) {
-            reject(new Error(`Invalid gateway semver: ${pkgJson.version}`));
-            return;
-          }
-
-          resolve(pkgJson.version);
-        } catch (e) {
-          reject(e);
-        }
-      });
-    });
-  }
-
-  function stat(path: string): Promise<fs.Stats | null> {
-    return new Promise((resolve, reject) => {
-      fs.stat(path, (err, stats) => {
-        if (err) {
-          if (err.code === 'ENOENT') {
-            resolve(null);
-          } else {
-            reject(err);
-          }
-        } else {
-          resolve(stats);
-        }
-      });
-    });
-  }
 
   const cacheLatest: {
     tag: string | null;
@@ -120,8 +77,33 @@ function build(): express.Router {
 
   /**
    * Send an object describing the update status of the gateway
+   * 
+   * Responds with an object of the form:
+   * {
+   *   "supported": true,
+   *   "success": true,
+   *   "version": 2.0.0-alpha.1,
+   *   "oldVersion": null,
+   *   "timestamp": null,
+   *   "userUpdateable": true
+   * }
    */
   controller.get('/status', async (_request, response) => {
+
+    if (!Platform.implemented('getUpdateStatusAsync')) {
+      response.json({
+        supported: false,
+        success: null,
+        version: null,
+        oldVersion: null,
+        timestamp: null,
+        userUpdateable: null
+      });
+    } else {
+      response.json(Platform.getUpdateStatusAsync());
+    }
+
+/*
     // gateway, gateway_failed, gateway_old
     // oldVersion -> gateway_old's package.json version
     // if (gateway_failed.version > thisversion) {
@@ -165,9 +147,9 @@ function build(): express.Router {
         success: true,
         version: currentVersion,
         oldVersion,
-        timestamp,
+        timestamp
       });
-    }
+*/
   });
 
   controller.post('/update', async (_request, response) => {
@@ -181,6 +163,7 @@ function build(): express.Router {
       response.json({
         available: false,
         enabled: false,
+        configurable: false
       });
     } else {
       response.json(Platform.getSelfUpdateStatus());

@@ -18,6 +18,7 @@ import LinuxUbuntuCorePlatform from './platforms/linux-ubuntu-core';
 import {
   LanMode,
   NetworkAddresses,
+  UpdateStatus,
   SelfUpdateStatus,
   WirelessMode,
   WirelessNetwork,
@@ -242,6 +243,8 @@ export const scanWirelessNetworksAsync = wrapPlatform<Promise<WirelessNetwork[]>
   platform,
   'scanWirelessNetworksAsync'
 );
+export const getUpdateStatus = wrapPlatform<UpdateStatus>(platform, 'getUpdateStatus');
+export const getUpdateStatusAsync = wrapPlatform<UpdateStatus>(platform, 'getUpdateStatusAsync');
 export const getSelfUpdateStatus = wrapPlatform<SelfUpdateStatus>(platform, 'getSelfUpdateStatus');
 export const setSelfUpdateStatus = wrapPlatform<boolean>(platform, 'setSelfUpdateStatus');
 export const getValidTimezones = wrapPlatform<string[]>(platform, 'getValidTimezones');

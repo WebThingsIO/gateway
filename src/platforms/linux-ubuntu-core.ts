@@ -10,7 +10,8 @@ import ip from 'ip';
 import { Netmask } from 'netmask';
 import BasePlatform from './base';
 import NetworkManager, { ConnectionSettings } from './utilities/network-manager';
-import { LanMode, NetworkAddresses, WirelessNetwork } from './types';
+import { LanMode, NetworkAddresses, WirelessNetwork, UpdateStatus, SelfUpdateStatus } from './types';
+import pkg from '../package.json';
 
 export class LinuxUbuntuCorePlatform extends BasePlatform {
   /**
@@ -293,6 +294,35 @@ export class LinuxUbuntuCorePlatform extends BasePlatform {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Gets the current update status of the gateway
+   */
+  async getUpdateStatus(): UpdateStatus {
+    const currentVersion = pkg.version;
+    return {
+      success: true,
+      version: currentVersion,
+      oldVersion: null,
+      failedVersion: null,
+      timestamp: null
+    };
+}
+
+
+
+  /**
+   * Determine whether or not the gateway can auto-update itself.
+   *
+   * @returns {Object} {available: <bool>, enabled: <bool>}
+   */
+  getSelfUpdateStatus(): SelfUpdateStatus {
+    return {
+      available: true,
+      enabled: true,
+      configurable: false
+    };
   }
 }
 
