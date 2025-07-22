@@ -23,7 +23,7 @@ jobs:
     - name: Dump upload url to file
       run: echo '${{ steps.create_release.outputs.upload_url }}' > upload_url
     - name: Upload upload_url
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: upload_url
         path: upload_url
@@ -60,11 +60,11 @@ jobs:
           cd image
           ./build.sh
       - name: Download upload_url
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: upload_url
       - name: Set upload_url
-        run: echo "UPLOAD_URL=$(cat upload_url/upload_url)" >> $GITHUB_ENV
+        run: echo "UPLOAD_URL=$(cat upload_url)" >> $GITHUB_ENV
       - name: Set release version
         run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
       - name: Upload image
