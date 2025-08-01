@@ -1,8 +1,8 @@
-const migrate = require('../build/migrate');
-const db = require('../build/db');
+const migrate = require('../build/migrate').default;
+const db = require('../build/db').default;
 db.open();
 
-const AddonManager = require('../build/addon-manager');
+const AddonManager = require('../build/addon-manager').default;
 
 migrate()
   .then(() => {

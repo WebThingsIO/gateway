@@ -499,21 +499,4 @@ class Things extends EventEmitter {
   }
 }
 
-const instance = new Things();
-
-AddonManager.on(Constants.THING_ADDED, (thing: ThingDescription) => {
-  instance.handleNewThing(thing);
-});
-
-AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
-  instance.handleThingRemoved(thing);
-});
-
-AddonManager.on(
-  Constants.CONNECTED,
-  ({ device, connected }: { device: DeviceSchema; connected: boolean }) => {
-    instance.handleConnected(device.id, connected);
-  }
-);
-
-export default instance;
+export default new Things();
