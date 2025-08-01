@@ -29,6 +29,7 @@ import path from 'path';
 import expressHandlebars from 'express-handlebars';
 import ipRegex from 'ip-regex';
 import * as SegfaultHandler from 'segfault-handler';
+import { Device as DeviceSchema } from 'gateway-addon/lib/schema';
 
 // Keep these imports here to prevent circular dependencies
 import './plugin/outlet-proxy';
@@ -45,6 +46,7 @@ import Router from './router';
 import RulesController from './controllers/rules_controller';
 import sleep from './sleep';
 import Things from './models/things';
+import { ThingDescription } from './models/thing';
 import TunnelService from './tunnel-service';
 import { WiFiSetupApp, isWiFiConfigured } from './wifi-setup';
 import { AddressInfo } from 'net';
@@ -400,3 +402,18 @@ TunnelService.switchToHttps = () => {
     }
   });
 };
+
+AddonManager.on(Constants.THING_ADDED, (thing: ThingDescription) => {
+  Things.handleNewThing(thing);
+});
+
+AddonManager.on(Constants.THING_REMOVED, (thing: DeviceSchema) => {
+  Things.handleThingRemoved(thing);
+});
+
+AddonManager.on(
+  Constants.CONNECTED,
+  ({ device, connected }: { device: DeviceSchema; connected: boolean }) => {
+    Things.handleConnected(device.id, connected);
+  }
+);
