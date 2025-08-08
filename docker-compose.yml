@@ -1,9 +1,9 @@
-version: "3"
+version: "2.1"
 
 services:
   webthings-gateway:
     container_name: webthings-gateway
-    image: webthingsio/gateway:latest
+    image: webthingsio/gateway:2.0.0-beta.1
     restart: unless-stopped
     network_mode: host
     # "ports" are ignored because of "network_mode: host". Either use "ports"
@@ -14,7 +14,7 @@ services:
     environment:
       - "TZ=America/Los_Angeles"
     volumes:
-      - /opt/docker/webthings-gateway:/home/node/.webthings
+      - webthings-data:/home/node/.webthings
     logging:
       driver: "json-file"
       options:
@@ -26,3 +26,6 @@ services:
     #  - /dev/ttyACM0:/dev/ttyACM0
     # If Bluetooth, the container needs to run in privileged mode.
     #privileged: true
+
+volumes:
+  webthings-data:
