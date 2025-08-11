@@ -1452,7 +1452,11 @@ const SettingsScreen = {
       }
 
       this.elements.update.enableSelfUpdatesCheckbox.checked = support.enabled;
-      this.elements.update.enableSelfUpdatesCheckbox.disabled = !support.available;
+      if (support.available && support.configurable) {
+        this.elements.update.enableSelfUpdatesCheckbox.disabled = false;
+      } else {
+        this.elements.update.enableSelfUpdatesCheckbox.disabled = true;
+      }
 
       if (support.available) {
         statusElt.textContent = statusText;

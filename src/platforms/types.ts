@@ -1,6 +1,15 @@
+export interface UpdateStatus {
+  success: boolean,
+  version: string|null,
+  oldVersion: string|null,
+  failedVersion: string|null,
+  timestamp: Date|null
+}
+
 export interface SelfUpdateStatus {
   available: boolean;
   enabled: boolean;
+  configurable: boolean;
 }
 
 export interface LanMode {

@@ -11,9 +11,12 @@ import child_process from 'child_process';
 import fs from 'fs';
 import ipRegex from 'ip-regex';
 import os from 'os';
+import semver from 'semver';
+import pkg from '../package.json';
 import {
   LanMode,
   NetworkAddresses,
+  UpdateStatus,
   SelfUpdateStatus,
   WirelessMode,
   WirelessNetwork,
@@ -782,8 +785,96 @@ class LinuxRaspbianPlatform extends BasePlatform {
     if (status.enabled && status.options) {
       result.wlan.ssid = <string>status.options.ssid;
     }
-
     return result;
+  }
+
+  async stat(path: string): Promise<fs.Stats | null> {  
+    return new Promise((resolve, reject) => {
+      fs.stat(path, (err, stats) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            resolve(null);
+          } else {
+            reject(err);
+          }
+        } else {
+          resolve(stats);
+        }
+      });
+    });
+  }
+
+  async readVersion(packagePath: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      fs.readFile(packagePath, { encoding: 'utf8' }, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        try {
+          const pkgJson = JSON.parse(data);
+
+          if (!semver.valid(pkgJson.version)) {
+            reject(new Error(`Invalid gateway semver: ${pkgJson.version}`));
+            return;
+          }
+
+          resolve(pkgJson.version);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+  }
+
+  /**
+   * Gets the current update status of the gateway
+   */
+  async getUpdateStatusAsync(): Promise<UpdateStatus> {
+    const currentVersion = pkg.version;
+
+    const oldStats = await this.stat('../gateway_old/package.json');
+    let oldVersion = null;
+    if (oldStats) {
+      try {
+        oldVersion = await this.readVersion('../gateway_old/package.json');
+      } catch (e) {
+        console.error('Failed to read ../gateway_old/package.json:', e);
+      }
+    }
+
+    const failedStats = await this.stat('../gateway_failed/package.json');
+    let failedVersion = null;
+    if (failedStats) {
+      try {
+        failedVersion = await this.readVersion('../gateway_failed/package.json');
+      } catch (e) {
+        console.error('Failed to read ../gateway_failed/package.json:', e);
+      }
+    }
+
+    if (failedVersion && semver.gt(failedVersion, currentVersion)) {
+      return {
+        success: false,
+        version: currentVersion,
+        oldVersion,
+        failedVersion,
+        timestamp: failedStats!.ctime,
+      };
+    } else {
+      let timestamp = null;
+      if (oldStats) {
+        timestamp = oldStats.ctime;
+      }
+      return {
+        success: true,
+        version: currentVersion,
+        oldVersion,
+        failedVersion,
+        timestamp
+      };
+    }
   }
 
   /**
@@ -799,6 +890,7 @@ class LinuxRaspbianPlatform extends BasePlatform {
     return {
       available: timerExists,
       enabled: proc.status === 0,
+      configurable: true
     };
   }
 
