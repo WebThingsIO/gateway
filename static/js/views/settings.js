@@ -838,6 +838,7 @@ const SettingsScreen = {
           case 'linux-raspbian':
           case 'linux-ubuntu':
           case 'linux-ubuntu-core':
+          case 'linux-balena-os':
             this.elements.network.client.main.classList.remove('hidden');
             break;
           default:
