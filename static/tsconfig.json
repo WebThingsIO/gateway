@@ -3,15 +3,12 @@
     "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "build",
-    "rootDir": "src",
+    "outDir": "../build/static",
+    "rootDir": ".",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -27,19 +24,8 @@
     "allowJs": true,
     "checkJs": false,
     "resolveJsonModule": true,
-    "types": [
-      "node",
-      "jest",
-      "webdriverio/async"
-    ]
+    "types": ["node", "jest"]
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "build",
-    "image",
-    "static"
-  ]
+  "include": ["./**/*.ts"],
+  "exclude": []
 }
