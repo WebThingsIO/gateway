@@ -3,7 +3,7 @@ version: "2.1"
 services:
   webthings-gateway:
     container_name: webthings-gateway
-    image: webthingsio/gateway:2.0.0-beta.1
+    build: .
     restart: unless-stopped
     network_mode: host
     # "ports" are ignored because of "network_mode: host". Either use "ports"

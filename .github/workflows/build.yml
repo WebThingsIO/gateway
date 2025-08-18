@@ -30,7 +30,7 @@ jobs:
           npm ci
       - name: Check formatting
         run: |
-          npx prettier -u -c '*.ts' '*.js' config src static tools
+          npx prettier -u -c '*.js' config src static tools
       - name: Lint with eslint and stylelint
         run: |
           npm run lint

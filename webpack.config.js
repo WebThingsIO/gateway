@@ -164,6 +164,7 @@ const webpackWeb = {
         loader: 'ts-loader',
         options: {
           onlyCompileBundledFiles: true,
+          configFile: path.resolve(__dirname, 'static', 'tsconfig.json'),
         },
       },
       {
