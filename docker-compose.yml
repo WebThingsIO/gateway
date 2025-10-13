@@ -23,9 +23,9 @@ services:
         max-file: "10"
     labels:
       io.balena.features.dbus: '1'
-    # If certain devices are needed, e.g. USB dongles, enable them here.
-    #devices:
-    #  - /dev/ttyUSB0:/dev/ttyUSB0
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    # If other devices are needed, e.g. USB dongles, enable them here.
     #  - /dev/ttyACM0:/dev/ttyACM0
     # If Bluetooth, the container needs to run in privileged mode.
     #privileged: true
