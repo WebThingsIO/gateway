@@ -1,4 +1,4 @@
-version: "2.1"
+version: "3"
 
 services:
   webthings-gateway:
@@ -15,7 +15,7 @@ services:
       - "TZ=America/Los_Angeles"
       - "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket"
     volumes:
-      - webthings-data:/root/.webthings
+      - /opt/docker/webthings-gateway:/home/node/.webthings
     logging:
       driver: "json-file"
       options:
@@ -29,6 +29,3 @@ services:
     #  - /dev/ttyACM0:/dev/ttyACM0
     # If Bluetooth, the container needs to run in privileged mode.
     #privileged: true
-
-volumes:
-  webthings-data:
