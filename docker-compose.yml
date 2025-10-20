@@ -13,7 +13,6 @@ services:
     #  - "4443:4443"
     environment:
       - "TZ=America/Los_Angeles"
-      - "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket"
     volumes:
       - /opt/docker/webthings-gateway:/home/node/.webthings
     logging:
@@ -21,8 +20,6 @@ services:
       options:
         max-size: "1m"
         max-file: "10"
-    labels:
-      io.balena.features.dbus: '1'
     # If certain devices are needed, e.g. USB dongles, enable them here.
     #devices:
     #  - /dev/ttyUSB0:/dev/ttyUSB0

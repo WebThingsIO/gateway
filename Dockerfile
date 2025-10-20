@@ -37,12 +37,13 @@ RUN set -x && \
     usermod -a -G sudo,dialout,gpio node && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-COPY --chown=root:root . /root/webthings/gateway/
+COPY --chown=node:node . /home/node/webthings/gateway/
 RUN pipx install cookiecutter && \
     pipx runpip cookiecutter install -r \
-    /root/webthings/gateway/requirements.txt
+    /home/node/webthings/gateway/requirements.txt
 
-WORKDIR /root/webthings/gateway
+USER node
+WORKDIR /home/node/webthings/gateway
 RUN set -x && \
     CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm ci && \
     npm run build && \
@@ -54,8 +55,8 @@ RUN set -x && \
         config/default.js
 
 USER root
-RUN cp /root/webthings/gateway/tools/udevadm /bin/udevadm && \
-    cp /root/webthings/gateway/docker/avahi-daemon.conf /etc/avahi/ && \
-    cp /root/webthings/gateway/docker/init.sh /
+RUN cp /home/node/webthings/gateway/tools/udevadm /bin/udevadm && \
+    cp /home/node/webthings/gateway/docker/avahi-daemon.conf /etc/avahi/ && \
+    cp /home/node/webthings/gateway/docker/init.sh /
 
 ENTRYPOINT ["/init.sh"]

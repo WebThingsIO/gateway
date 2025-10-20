@@ -19,14 +19,13 @@ if [[ "$WEBTHINGS_HOME" == "$HOME/.webthings" &&
 fi
 
 # If .webthings directory doesn't exist then create it
-if [[ ! -e /root/.webthings ]]; then
-    mkdir -p /root/.webthings
+if [[ ! -e /home/node/.webthings ]]; then
+    mkdir -p /home/node/.webthings
 fi
 
-# Make sure the root user owns the .webthings data directory
-chown -R root:root /root/.webthings
+# Give the Node user access to the .webthings data directory
+chown -R node:node /home/node/.webthings
 
 # Run the gateway
-export WEBTHINGS_HOME=/root/.webthings
-#su node -c "cd /home/node/webthings/gateway && ./run-app.sh"
-cd /root/webthings/gateway && ./run-app.sh
+export WEBTHINGS_HOME=/home/node/.webthings
+su node -c "cd /home/node/webthings/gateway && ./run-app.sh"

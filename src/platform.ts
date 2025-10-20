@@ -15,7 +15,6 @@ import LinuxDebianPlatform from './platforms/linux-debian';
 import LinuxRaspbianPlatform from './platforms/linux-raspbian';
 import LinuxUbuntuPlatform from './platforms/linux-ubuntu';
 import LinuxUbuntuCorePlatform from './platforms/linux-ubuntu-core';
-import LinuxBalenaOSPlatform from './platforms/linux-balena-os';
 import {
   LanMode,
   NetworkAddresses,
@@ -39,62 +38,14 @@ import {
  *                        * linux-debian
  *                        * linux-raspbian
  *                        * linux-ubuntu
- *                        * linux-ubuntu-core
- *                        * linux-balena-os
  *                        * linux-unknown
  */
 export function getOS(): string {
-  // Check for non-Linux operating systems
   const platform = process.platform;
   if (platform !== 'linux') {
     return platform;
   }
 
-  // Check if we're running inside a container
-  if (isContainer()) {
-    // Check for Balena as host OS
-    if (process.env.BALENA == '1') {
-      return 'linux-balena-os';
-    }
-  }
-
-  // Check if we're running inside the snap package
-  if (isSnap()) {
-    // Try to detect Ubuntu or Ubuntu Core from inside a snap
-    try {
-      const osReleaseLines = fs
-        .readFileSync('/var/lib/snapd/hostfs/etc/os-release', {
-          encoding: 'utf8',
-        })
-        .split('\n');
-      // Iterate through the file
-      for (let line of osReleaseLines) {
-        // Trim whitespace
-        line = line.trim();
-        // Find the line containing ID
-        if (line.startsWith('ID=')) {
-          // Get the value of the ID
-          let id = line.substring(3, line.length);
-          // Remove any quotation marks
-          id = id.replace(/"/g, '');
-          switch (id) {
-            case 'ubuntu':
-              return 'linux-ubuntu';
-            case 'ubuntu-core':
-              return 'linux-ubuntu-core';
-            default:
-              console.log('Running inside snap but unable to detect host OS');
-              return 'linux-ubuntu-unknown';
-          }
-        }
-      }
-    } catch (error) {
-      console.log(`Error trying to read os-release file from inside snap: ${error}`);
-      console.log('Check that the system-observe interface is connected');
-    }
-  }
-
-  // Check lsb_release for the name of a Linux distribution
   const proc = child_process.spawnSync('lsb_release', ['-i', '-s']);
   if (proc.status === 0) {
     const lsb_release = proc.stdout.toString().trim();
@@ -108,11 +59,50 @@ export function getOS(): string {
       case 'Ubuntu':
         return 'linux-ubuntu';
       default:
-        return 'linux-unknown';
+        break;
     }
-  } else {
+  }
+
+  // If not running inside a snap, give up at this point.
+  if (!isSnap()) {
+    console.log('Unknown Linux distribution');
     return 'linux-unknown';
   }
+
+  // Otherwise try to detect Ubuntu or Ubuntu Core from inside a snap
+  try {
+    const osReleaseLines = fs
+      .readFileSync('/var/lib/snapd/hostfs/etc/os-release', {
+        encoding: 'utf8',
+      })
+      .split('\n');
+    // Iterate through the file
+    for (let line of osReleaseLines) {
+      // Trim whitespace
+      line = line.trim();
+      // Find the line containing ID
+      if (line.startsWith('ID=')) {
+        // Get the value of the ID
+        let id = line.substring(3, line.length);
+        // Remove any quotation marks
+        id = id.replace(/"/g, '');
+        switch (id) {
+          case 'ubuntu':
+            return 'linux-ubuntu';
+          case 'ubuntu-core':
+            return 'linux-ubuntu-core';
+          default:
+            console.log('Unknown host Linux distribution');
+            break;
+        }
+      }
+    }
+  } catch (error) {
+    console.log(`Error trying to read os-release file: ${error}`);
+    console.log('Check that the system-observe interface is connected');
+  }
+
+  return 'linux-unknown';
 }
 
 /**
@@ -212,9 +202,6 @@ switch (getOS()) {
     break;
   case 'linux-ubuntu-core':
     platform = LinuxUbuntuCorePlatform;
-    break;
-  case 'linux-balena-os':
-    platform = LinuxBalenaOSPlatform;
     break;
   default:
     platform = null;
