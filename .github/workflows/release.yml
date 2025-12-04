@@ -30,18 +30,29 @@ jobs:
   build-docker-images:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Set release version
         run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
-      - name: Build image
-        uses: ilteoood/docker_buildx@master
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
         with:
-          publish: true
-          imageName: webthingsio/gateway
-          platform: linux/amd64,linux/arm/v7,linux/arm64
-          tag: latest,${{ env.RELEASE_VERSION }}
-          dockerUser: ${{ secrets.DOCKER_HUB_USER }}
-          dockerPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build and push Docker image (multi-arch)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          push: true
+          tags: webthingsio/gateway:${{ env.RELEASE_VERSION }}
+      - name: Clean up Docker
+        run: docker system prune -af
 
   build-raspbian-image:
     needs: create-release
