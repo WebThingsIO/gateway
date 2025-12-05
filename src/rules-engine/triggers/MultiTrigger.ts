@@ -9,7 +9,7 @@ import assert from 'assert';
 import * as Events from '../Events';
 import Trigger, { TriggerDescription } from './Trigger';
 
-const DEBUG = false || process.env.NODE_ENV === 'test';
+const DEBUG = false || process.env.DEBUG || process.env.NODE_ENV === 'test';
 
 const ops = {
   AND: 'AND',
