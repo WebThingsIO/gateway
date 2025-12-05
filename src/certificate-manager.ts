@@ -17,7 +17,7 @@ import { URLSearchParams } from 'url';
 import UserProfile from './user-profile';
 import { Server } from 'https';
 
-const DEBUG = false || process.env.NODE_ENV === 'test';
+const DEBUG = false || process.env.DEBUG || process.env.NODE_ENV === 'test';
 
 const DIRECTORY_URL = acme.directory.letsencrypt.production;
 

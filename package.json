@@ -12,8 +12,8 @@
     "start": "npm run build && node build/app.js",
     "watch": "npm-run-all --parallel start watch:build",
     "watch:build": "webpack --watch",
-    "debug-ide": "npm run build && node --inspect=5858 build/app.js",
-    "debug": "npm run build && node --inspect build/app.js",
+    "debug-ide": "DEBUG=true npm run build && node --inspect=5858 build/app.js",
+    "debug": "DEBUG=true npm run build && node --inspect build/app.js",
     "run-only": "node build/app.js",
     "build": "rm -rf build && cp -rL src build && find build -name '*.ts' -delete && tsc -p . && webpack"
   },
@@ -49,7 +49,7 @@
     "express-rate-limit": "^5.2.6",
     "express-ws": "^5.0.2",
     "find": "^0.3.0",
-    "gateway-addon": "^1.2.0-alpha.1",
+    "gateway-addon": "^2.0.0",
     "glob-to-regexp": "^0.4.1",
     "http-proxy": "^1.18.1",
     "ip": "^2.0.1",
@@ -75,7 +75,7 @@
     "web-push": "^3.4.4",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.2",
-    "ws": "^8.18.0"
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",
@@ -123,7 +123,7 @@
     "@types/tmp": "^0.2.0",
     "@types/uuid": "^8.3.0",
     "@types/web-push": "^3.3.0",
-    "@types/ws": "^8.5.13",
+    "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "@webcomponents/webcomponentsjs": "^2.5.0",
