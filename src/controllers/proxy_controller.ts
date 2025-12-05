@@ -37,7 +37,7 @@ function build(): express.Router & WithProxyMethods {
   });
 
   proxy.on('error', (e) => {
-    console.debug('Proxy error:', e);
+    console.error('Proxy error:', e);
   });
 
   /**

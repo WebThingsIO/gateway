@@ -11,7 +11,7 @@ import * as Events from './Events';
 import Trigger, { TriggerDescription } from './triggers/Trigger';
 import { State } from './State';
 
-const DEBUG = false || process.env.NODE_ENV === 'test';
+const DEBUG = false || process.env.DEBUG || process.env.NODE_ENV === 'test';
 
 export interface RuleDescription {
   enabled: boolean;
