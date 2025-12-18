@@ -4,22 +4,26 @@ A self-hosted web application for monitoring and controlling a building over the
 
 On Ubuntu Server/Ubuntu Desktop:
 
-`$ sudo snap install --edge webthings-gateway`
-`$ sudo snap connect webthings-gateway:system-observe`
-`$ sudo snap connect webthings-gateway:hardware-observe`
-`$ sudo snap connect webthings-gateway:network-manager`
-`$ sudo snap set system experimental.hotplug=true`
-`$ sudo snap restart webthings-gateway`
+```
+$ sudo snap install --edge webthings-gateway
+$ sudo snap connect webthings-gateway:system-observe
+$ sudo snap connect webthings-gateway:hardware-observe
+$ sudo snap connect webthings-gateway:network-manager
+$ sudo snap set system experimental.hotplug=true
+$ sudo snap restart webthings-gateway
+```
 
 On Ubuntu Core:
 
-`$ snap install --edge webthings-gateway`
-`$ snap install network-manager`
-`$ snap connect webthings-gateway:system-observe`
-`$ snap connect webthings-gateway:hardware-observe`
-`$ snap connect webthings-gateway:network-manager network-manager:service`
-`$ sudo snap set system experimental.hotplug=true`
-`$ snap restart webthings-gateway`
+```
+$ snap install --edge webthings-gateway
+$ snap install network-manager
+$ snap connect webthings-gateway:system-observe
+$ snap connect webthings-gateway:hardware-observe
+$ snap connect webthings-gateway:network-manager network-manager:service
+$ sudo snap set system experimental.hotplug=true
+$ snap restart webthings-gateway
+```
 
 Currently untested on other host operating systems.
 
