@@ -50,78 +50,78 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
-          tags: webthingsio/gateway:${{ env.RELEASE_VERSION }}
+          tags: webthingsio/gateway:latest,webthingsio/gateway:${{ env.RELEASE_VERSION }}
       - name: Clean up Docker
         run: docker system prune -af
 
-  build-raspbian-image:
-    needs: create-release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install qemu
-        run: |
-          sudo apt update
-          sudo apt install -y qemu qemu-user-static binfmt-support kpartx --no-install-recommends
-      - name: Setup qemu-user-static
-        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Build the image
-        run: |
-          cd image
-          ./build.sh
-      - name: Download upload_url
-        uses: actions/download-artifact@v4
-        with:
-          name: upload_url
-      - name: Set upload_url
-        run: echo "UPLOAD_URL=$(cat upload_url)" >> $GITHUB_ENV
-      - name: Set release version
-        run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
-      - name: Upload image
-        id: upload-release-asset-image
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./image/gateway-${{ env.RELEASE_VERSION }}.img.zip
-          asset_name: gateway-${{ env.RELEASE_VERSION }}.img.zip
-          asset_content_type: application/zip
-      - name: Upload image checksum
-        id: upload-release-asset-image-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./image/gateway-${{ env.RELEASE_VERSION }}.img.zip.sha256sum
-          asset_name: gateway-${{ env.RELEASE_VERSION }}.img.zip.sha256sum
-          asset_content_type: text/plain
-      - name: Find OTA packages
-        run: |
-          cd image
-          echo "GATEWAY_TARBALL=$(ls gateway-*.tar.gz | head -n1)" >> $GITHUB_ENV
-          echo "MODULES_TARBALL=$(ls node_modules-*.tar.gz | head -n1)" >> $GITHUB_ENV
-      - name: Upload gateway package
-        id: upload-release-asset-gateway
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./image/${{ env.GATEWAY_TARBALL }}
-          asset_name: ${{ env.GATEWAY_TARBALL }}
-          asset_content_type: application/zip
-      - name: Upload node modules package
-        id: upload-release-asset-node-modules
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ./image/${{ env.MODULES_TARBALL }}
-          asset_name: ${{ env.MODULES_TARBALL }}
-          asset_content_type: application/zip
+  # build-raspbian-image:
+  #   needs: create-release
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install qemu
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install -y qemu qemu-user-static binfmt-support kpartx --no-install-recommends
+  #     - name: Setup qemu-user-static
+  #       run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  #     - name: Build the image
+  #       run: |
+  #         cd image
+  #         ./build.sh
+  #     - name: Download upload_url
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: upload_url
+  #     - name: Set upload_url
+  #       run: echo "UPLOAD_URL=$(cat upload_url)" >> $GITHUB_ENV
+  #     - name: Set release version
+  #       run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
+  #     - name: Upload image
+  #       id: upload-release-asset-image
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ env.UPLOAD_URL }}
+  #         asset_path: ./image/gateway-${{ env.RELEASE_VERSION }}.img.zip
+  #         asset_name: gateway-${{ env.RELEASE_VERSION }}.img.zip
+  #         asset_content_type: application/zip
+  #     - name: Upload image checksum
+  #       id: upload-release-asset-image-checksum
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ env.UPLOAD_URL }}
+  #         asset_path: ./image/gateway-${{ env.RELEASE_VERSION }}.img.zip.sha256sum
+  #         asset_name: gateway-${{ env.RELEASE_VERSION }}.img.zip.sha256sum
+  #         asset_content_type: text/plain
+  #     - name: Find OTA packages
+  #       run: |
+  #         cd image
+  #         echo "GATEWAY_TARBALL=$(ls gateway-*.tar.gz | head -n1)" >> $GITHUB_ENV
+  #         echo "MODULES_TARBALL=$(ls node_modules-*.tar.gz | head -n1)" >> $GITHUB_ENV
+  #     - name: Upload gateway package
+  #       id: upload-release-asset-gateway
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ env.UPLOAD_URL }}
+  #         asset_path: ./image/${{ env.GATEWAY_TARBALL }}
+  #         asset_name: ${{ env.GATEWAY_TARBALL }}
+  #         asset_content_type: application/zip
+  #     - name: Upload node modules package
+  #       id: upload-release-asset-node-modules
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ env.UPLOAD_URL }}
+  #         asset_path: ./image/${{ env.MODULES_TARBALL }}
+  #         asset_name: ${{ env.MODULES_TARBALL }}
+  #         asset_content_type: application/zip
 
   # build-deb-packages:
   #   runs-on: ubuntu-latest
