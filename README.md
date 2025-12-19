@@ -12,22 +12,19 @@ It is an open source [Web of Things](https://www.w3.org/WoT/) gateway.
 
 ## Installation
 
-- If you have a Rasberry Pi, the easiest way to use the gateway is to [download and flash](http://webthings.io/gateway/) a pre-built software image to an SD card.
-- If you prefer to use Docker, we have a prebuilt Docker image available [here](https://hub.docker.com/r/webthingsio/gateway), for both ARM and amd64. You can also build your own image from this repository.
-- On Ubuntu or Ubuntu Core you can install the experimental [snap package](https://snapcraft.io/webthings-gateway).
-- Otherwise, you can build WebThings Gateway from source yourself (see below).
+As of the 2.0 release, the recommended way to install WebThings Gateway is using the [Docker image](https://hub.docker.com/r/webthingsio/gateway). There is also an experimental [snap package](https://snapcraft.io/webthings-gateway), or you can build from source yourself (see below).
 
 ## Documentation
 
-- [Getting Started Guide](https://webthings.io/docs/gateway-getting-started-guide.html)
-- [User Guide](https://webthings.io/docs/gateway-user-guide.html)
+- [Documentation](https://webthings.io/docs/gateway/introduction/)
+  - [Installation](https://webthings.io/docs/gateway/installation/)
+  - [Development](https://webthings.io/docs/gateway/hacking/)
 - [Wiki](https://github.com/WebThingsIO/wiki/wiki)
-- [Various other docs](https://webthings.io/docs/)
 
 ## Community
-
-- [Discourse](https://discourse.mozilla.org/c/iot)
-- [Matrix](https://matrix.to/#/#iot:mozilla.org) (`#iot:mozilla.org`)
+- [Community](https://webthings.io/community)
+  - [Discourse](https://discourse.mozilla.org/c/iot)
+  - [Matrix](https://matrix.to/#/#iot:mozilla.org) (`#iot:mozilla.org`)
 
 ## Prerequisites for Building
 
@@ -165,9 +162,9 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
 
   ```
   $ node --version
-  v10.23.0
+  v20.19.6
   $ npm --version
-  6.14.9
+  10.8.2
   ```
 
   Note: these versions might differ from the LTS version installed locally.
@@ -218,23 +215,6 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which python3`)
       ```
 
     - Load https://localhost:4443 in your web browser (or use the server's IP address if loading remotely). Since you're using a self-signed certificate, you'll need to add a security exception in the browser.
-
-## Browser Support
-
-The Gateway requires a browser that supports:
-- [Fetch](https://caniuse.com/fetch)
-- [Web Sockets](https://caniuse.com/websockets)
-- [ECMAScript 2015 (ES6)](https://caniuse.com/es6)
-- [CustomEvent](https://caniuse.com/customevent)
-- [Custom Elements (V1)](https://caniuse.com/custom-elementsv1)
-- [Shadow DOM (V1)](https://caniuse.com/shadowdomv1)
-
-Currently, that translates roughly to:
-- Firefox 63+
-- Chrome 54+
-- Edge 79+
-- Safari 10.1+
-- Opera 41+
 
 ## Debugging
 
