@@ -163,7 +163,7 @@
     "shaka-player": "^3.3.19",
     "simple-oauth2": "^3.4.0",
     "sinon": "^9.2.4",
-    "stylelint": "^13.13.1",
+    "stylelint": "^16.26.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
     "ts-jest": "^29.4.6",
