@@ -590,7 +590,7 @@ const SettingsScreen = {
   },
 
   validateWifi: function () {
-    const valid = this.elements.network.client.wifi.password.value.length >= 8;
+    const valid = (this.elements.network.client.wifi.password.value.length == 0 || this.elements.network.client.wifi.password.value.length >= 8);
 
     this.elements.network.client.wifi.connect.disabled = !valid;
   },
@@ -1162,7 +1162,7 @@ const SettingsScreen = {
     const components = new Map();
 
     // First, get the list of installed add-ons. Do this separately so that the
-    // add-ons can be displayed when no internet connection is present.
+    // add-ons can be displayed when no internet ion is present.
     this.fetchInstalledAddonList(true)
       .then(() => {
         const addonList = document.getElementById('installed-addons-list');
