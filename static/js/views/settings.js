@@ -778,6 +778,21 @@ const SettingsScreen = {
         this.elements.domain.update.disabled = true;
       }
     });
+
+    API.getPlatform().then((body) => {
+      switch (body.os) {
+        // Currently mDNS can only be toggle on and off on Raspbian, so
+        // disable the checkbox on other platforms
+        case 'linux-raspbian':
+          this.elements.domain.localCheckbox.disabled = false;
+          break;
+        default:
+          this.elements.domain.localCheckbox.disabled = true;
+          break;
+      }
+
+      return API.getNetworkAddresses();
+    });
   },
 
   onLocalDomainCheckboxChange: (e) => {

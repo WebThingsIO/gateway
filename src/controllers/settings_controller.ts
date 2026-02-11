@@ -153,7 +153,9 @@ function build(): express.Router {
   controller.get('/domain', auth, async (_request, response) => {
     try {
       let hostname = '';
-      if (Platform.implemented('getHostname')) {
+      if (Platform.implemented('getHostnameAsync')) {
+        hostname = await Platform.getHostnameAsync();
+      } else if (Platform.implemented('getHostname')) {
         hostname = Platform.getHostname();
       }
 
@@ -189,7 +191,25 @@ function build(): express.Router {
     try {
       if (request.body.hasOwnProperty('hostname')) {
         const hostname = <string>request.body.hostname;
-        if (!Platform.implemented('setHostname') || !Platform.setHostname(hostname)) {
+
+        if (Platform.implemented('setHostnameAsync')) {
+          try {
+            const success = await Platform.setHostnameAsync(hostname);
+            if (!success) {
+              response.sendStatus(500);
+              return;
+            }
+          } catch (error) {
+            response.sendStatus(500);
+            return;
+          }
+        } else if (Platform.implemented('setHostname')) {
+          const success = Platform.setHostname(hostname);
+          if (!success) {
+            response.sendStatus(500);
+            return;
+          }
+        } else {
           response.sendStatus(500);
           return;
         }
@@ -218,7 +238,9 @@ function build(): express.Router {
       }
 
       let domain = '';
-      if (Platform.implemented('getHostname')) {
+      if (Platform.implemented('getHostnameAsync')) {
+        domain = await Platform.getHostnameAsync();
+      } else if (Platform.implemented('getHostname')) {
         domain = Platform.getHostname();
       }
 
@@ -239,7 +261,9 @@ function build(): express.Router {
       console.error(`Failed setting domain with: ${err} `);
 
       let domain = '';
-      if (Platform.implemented('getHostname')) {
+      if (Platform.implemented('getHostnameAsync')) {
+        domain = await Platform.getHostnameAsync();
+      } else if (Platform.implemented('getHostname')) {
         domain = Platform.getHostname();
       }
 
