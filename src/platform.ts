@@ -211,7 +211,9 @@ switch (getOS()) {
 export const getDhcpServerStatus = wrapPlatform<boolean>(platform, 'getDhcpServerStatus');
 export const setDhcpServerStatus = wrapPlatform<boolean>(platform, 'setDhcpServerStatus');
 export const getHostname = wrapPlatform<string>(platform, 'getHostname');
+export const getHostnameAsync = wrapPlatform<Promise<string>>(platform, 'getHostnameAsync');
 export const setHostname = wrapPlatform<boolean>(platform, 'setHostname');
+export const setHostnameAsync = wrapPlatform<Promise<boolean>>(platform, 'setHostnameAsync');
 export const getLanMode = wrapPlatform<LanMode>(platform, 'getLanMode');
 export const getLanModeAsync = wrapPlatform<Promise<LanMode>>(platform, 'getLanModeAsync');
 export const setLanMode = wrapPlatform<boolean>(platform, 'setLanMode');
