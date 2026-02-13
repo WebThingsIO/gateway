@@ -799,6 +799,8 @@ class LinuxRaspbianPlatform extends BasePlatform {
     return {
       available: timerExists,
       enabled: proc.status === 0,
+      configurable: true,
+      triggerable: true,
     };
   }
 

@@ -177,10 +177,23 @@ function build(): express.Router {
   });
 
   controller.get('/self-update', async (_request, response) => {
+    // If the gateway is running inside a snap then auto updates are always
+    // enabled and can not be manually triggered from the UI
+    if (Platform.isSnap()) {
+      response.json({
+        available: true,
+        enabled: true,
+        configurable: false,
+        triggerable: false,
+      });
+      return;
+    }
     if (!Platform.implemented('getSelfUpdateStatus')) {
       response.json({
         available: false,
         enabled: false,
+        configurable: false,
+        triggerable: false,
       });
     } else {
       response.json(Platform.getSelfUpdateStatus());

@@ -751,7 +751,8 @@
   background-image: url('/images/authorization.svg');
 }
 
-#update-now.hidden {
+#update-now.hidden,
+#up-to-date-container.hidden {
   display: none;
 }
 
