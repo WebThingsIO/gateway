@@ -1,6 +1,8 @@
 export interface SelfUpdateStatus {
-  available: boolean;
-  enabled: boolean;
+  available: boolean; // Automatic updates are possible
+  enabled: boolean; // Automatic updates are enabled
+  configurable: boolean; // Automatic updates can be turned on and off
+  triggerable: boolean; // Updates can be manually triggered by the user
 }
 
 export interface LanMode {

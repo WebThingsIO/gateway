@@ -60,6 +60,8 @@ class DarwinPlatform extends BasePlatform {
     return {
       available: false,
       enabled: false,
+      configurable: false,
+      triggerable: false,
     };
   }
 

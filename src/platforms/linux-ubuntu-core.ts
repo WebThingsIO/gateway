@@ -10,7 +10,7 @@ import ip from 'ip';
 import { Netmask } from 'netmask';
 import BasePlatform from './base';
 import NetworkManager, { ConnectionSettings } from './utilities/network-manager';
-import { LanMode, NetworkAddresses, WirelessNetwork } from './types';
+import { LanMode, NetworkAddresses, WirelessNetwork, SelfUpdateStatus } from './types';
 
 export class LinuxUbuntuCorePlatform extends BasePlatform {
   /**
@@ -293,6 +293,27 @@ export class LinuxUbuntuCorePlatform extends BasePlatform {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Determine whether or not the gateway can auto-update itself.
+   *
+   * @returns {Object} {
+   *                      available: <bool>,
+   *                      enabled: <bool>,
+   *                      configurable: <bool>,
+   *                      triggerable: <bool>
+   *                   }
+   */
+  getSelfUpdateStatus(): SelfUpdateStatus {
+    // Automatic updates are supported on Ubuntu Core but can not be disabled
+    // or manually triggered from the UI
+    return {
+      available: true,
+      enabled: true,
+      configurable: false,
+      triggerable: false,
+    };
   }
 }
 
