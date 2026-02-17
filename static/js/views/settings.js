@@ -590,8 +590,7 @@ const SettingsScreen = {
   },
 
   validateWifi: function () {
-    const valid = this.elements.network.client.wifi.password.value.length >= 8;
-
+    const valid = (this.elements.network.client.wifi.password.value.length == 0 || this.elements.network.client.wifi.password.value.length >= 8);
     this.elements.network.client.wifi.connect.disabled = !valid;
   },
 
