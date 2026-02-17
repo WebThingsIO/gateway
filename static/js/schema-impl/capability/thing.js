@@ -33,6 +33,7 @@ const LevelDetail = require('../property/level');
 const LockActionDetail = require('../action/lock');
 const LockedDetail = require('../property/locked');
 const MotionDetail = require('../property/motion');
+const OccupiedDetail = require('../property/occupied');
 const NumberDetail = require('../property/number');
 const OnOffDetail = require('../property/on-off');
 const OpenDetail = require('../property/open');
@@ -217,6 +218,9 @@ class Thing {
             break;
           case 'MotionProperty':
             detail = new MotionDetail(this, name, convertedProperty);
+            break;
+          case 'OccupiedProperty':
+            detail = new OccupiedDetail(this, name, convertedProperty);
             break;
           case 'OpenProperty':
             detail = new OpenDetail(this, name, convertedProperty);

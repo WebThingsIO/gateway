@@ -197,6 +197,7 @@ export function sortCapabilities(capabilities: string[]): string[] {
     'EnergyMonitor',
     'DoorSensor',
     'MotionSensor',
+    'OccupancySensor',
     'LeakSensor',
     'SmokeSensor',
     'PushButton',
