@@ -863,6 +863,8 @@ class Log {
           return value ? fluent.getMessage('on') : fluent.getMessage('off');
         case 'MotionProperty':
           return value ? fluent.getMessage('motion') : fluent.getMessage('no-motion');
+        case 'OccupiedProperty':
+          return value ? fluent.getMessage('occupied') : fluent.getMessage('unoccupied');
         case 'OpenProperty':
           return value ? fluent.getMessage('open') : fluent.getMessage('closed');
         case 'LeakProperty':

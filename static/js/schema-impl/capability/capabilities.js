@@ -22,6 +22,7 @@ const Lock = require('./lock');
 const MotionSensor = require('./motion-sensor');
 const MultiLevelSensor = require('./multi-level-sensor');
 const MultiLevelSwitch = require('./multi-level-switch');
+const OccupancySensor = require('./occupancy-sensor');
 const OnOffSwitch = require('./on-off-switch');
 const PushButton = require('./push-button');
 const SmartPlug = require('./smart-plug');
@@ -56,6 +57,8 @@ function createThingFromCapability(capability, thingModel, description, format) 
         return new DoorSensor(thingModel, description, format);
       case 'MotionSensor':
         return new MotionSensor(thingModel, description, format);
+      case 'OccupancySensor':
+        return new OccupancySensor(thingModel, description, format);
       case 'LeakSensor':
         return new LeakSensor(thingModel, description, format);
       case 'SmokeSensor':
@@ -110,6 +113,8 @@ function getClassFromCapability(capability) {
       return 'door-sensor';
     case 'MotionSensor':
       return 'motion-sensor';
+    case 'OccupancySensor':
+      return 'occupancy-sensor';
     case 'LeakSensor':
       return 'leak-sensor';
     case 'SmokeSensor':

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 8.4666665 8.4666666"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="matrix(1.5884451,0,0,1.5884451,-2.4911224,-2.4908351)">
+    <path
+       style="baseline-shift:baseline;display:inline;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;stroke-miterlimit:10;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="m 2.2480469,4.2988281 -0.140625,0.2929688 c 0.6474375,0.3138593 1.3644564,0.4804687 2.125,0.4804687 0.7610559,0 1.5003714,-0.1665004 2.1289062,-0.4824219 L 6.2148437,4.3007812 C 5.6368786,4.5912848 4.9461536,4.7480469 4.2324219,4.7480469 c -0.7131854,0 -1.3808626,-0.1566531 -1.984375,-0.4492188 z"
+       id="path175-8-1" />
+    <path
+       style="baseline-shift:baseline;display:inline;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;stroke-miterlimit:10;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="m 1.7089844,5.2304687 -0.140625,0.2929688 c 0.791591,0.3826068 1.6874482,0.5996094 2.6640625,0.5996094 0.9768721,0 1.8744245,-0.2170026 2.6660156,-0.5996094 L 6.7578125,5.2304687 C 6.0089994,5.5923993 5.1610789,5.7988281 4.2324219,5.7988281 c -0.9283858,0 -1.7746245,-0.2064288 -2.5234375,-0.5683594 z"
+       id="path176-7-0" />
+    <path
+       style="baseline-shift:baseline;display:inline;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;stroke-miterlimit:10;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="M 2.796875,3.4199219 2.6738281,3.7207031 C 3.1496215,3.9146677 3.6771517,4.015625 4.234375,4.015625 c 0.5569686,0 1.0974863,-0.1012867 1.5605469,-0.296875 L 5.6679687,3.4199219 C 5.2515543,3.5958077 4.7516148,3.6914062 4.234375,3.6914063 c -0.5175143,0 -1.0020684,-0.093974 -1.4375,-0.2714844 z"
+       id="path177-1-6" />
+    <path
+       id="circle177-7-3"
+       style="fill:#ffffff;stroke-width:0.396872;stroke-linecap:round;stroke-linejoin:round"
+       d="m 4.6312405,2.7396486 a 0.39687499,0.39687499 0 0 1 -0.396875,0.396875 0.39687499,0.39687499 0 0 1 -0.396875,-0.396875 0.39687499,0.39687499 0 0 1 0.396875,-0.396875 0.39687499,0.39687499 0 0 1 0.396875,0.396875 z" />
+  </g>
+</svg>
