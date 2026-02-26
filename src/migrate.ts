@@ -11,7 +11,6 @@ process.env.ALLOW_CONFIG_MUTATIONS = 'true';
 import config from 'config';
 import fs from 'fs';
 import path from 'path';
-import mkdirp from 'mkdirp';
 import { ncp } from 'ncp';
 import rimraf, { sync as rimrafSync } from 'rimraf';
 import UserProfile from './user-profile';
@@ -63,22 +62,22 @@ export default function migrate(): Promise<unknown[]> {
   const pending = [];
   // Create all required profile directories.
   if (!fs.existsSync(UserProfile.configDir)) {
-    mkdirp.sync(UserProfile.configDir);
+    fs.mkdirSync(UserProfile.configDir, { recursive: true });
   }
   if (!fs.existsSync(UserProfile.dataDir)) {
-    mkdirp.sync(UserProfile.dataDir);
+    fs.mkdirSync(UserProfile.dataDir, { recursive: true });
   }
   if (!fs.existsSync(UserProfile.sslDir)) {
-    mkdirp.sync(UserProfile.sslDir);
+    fs.mkdirSync(UserProfile.sslDir, { recursive: true });
   }
   if (!fs.existsSync(UserProfile.uploadsDir)) {
-    mkdirp.sync(UserProfile.uploadsDir);
+    fs.mkdirSync(UserProfile.uploadsDir, { recursive: true });
   }
   if (!fs.existsSync(UserProfile.logDir)) {
-    mkdirp.sync(UserProfile.logDir);
+    fs.mkdirSync(UserProfile.logDir, { recursive: true });
   }
   if (!fs.existsSync(UserProfile.addonsDir)) {
-    mkdirp.sync(UserProfile.addonsDir);
+    fs.mkdirSync(UserProfile.addonsDir, { recursive: true });
   }
 
   // Relocate the database, if necessary, before opening it.
