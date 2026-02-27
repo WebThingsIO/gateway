@@ -223,6 +223,10 @@
   background-image: url('/images/thing-icons/motion_sensor.svg');
 }
 
+.new-thing.occupancy-sensor .new-thing-icon {
+  background-image: url('/images/thing-icons/occupancy_sensor.svg');
+}
+
 .new-thing.leak-sensor .new-thing-icon {
   background-image: url('/images/thing-icons/leak_sensor.svg');
 }
