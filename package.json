@@ -170,7 +170,7 @@
     "ts-loader": "^8.4.0",
     "ts-node": "^9.1.1",
     "typescript": "^5.9.3",
-    "webdriverio": "^7.40.0",
+    "webdriverio": "^9.21.0",
     "webpack": "^5.104.1",
     "webpack-cli": "^4.10.0"
   }
