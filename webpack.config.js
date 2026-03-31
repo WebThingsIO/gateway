@@ -52,8 +52,11 @@ const pluginsWeb = [
     ],
   }),
   new ImageMinimizerWebpackPlugin({
-    minimizerOptions: {
-      plugins: ['gifsicle', 'jpegtran', 'optipng', 'svgo'],
+    minimizer: {
+      implementation: ImageMinimizerWebpackPlugin.imageminMinify,
+      options: {
+        plugins: ['gifsicle', 'jpegtran', 'optipng', 'svgo'],
+      },
     },
   }),
   new webpack.SourceMapDevToolPlugin({
