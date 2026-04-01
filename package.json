@@ -49,7 +49,7 @@
     "express-rate-limit": "^5.5.1",
     "express-ws": "^5.0.2",
     "find": "^0.3.0",
-    "gateway-addon": "^2.0.0",
+    "gateway-addon": "^2.0.1",
     "glob-to-regexp": "^0.4.1",
     "http-proxy": "^1.18.1",
     "ip": "^2.0.1",
