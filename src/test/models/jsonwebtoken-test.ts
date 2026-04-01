@@ -33,8 +33,7 @@ describe('JSONWebToken', () => {
   });
 
   it('should fail to verify a JWT with the "none" alg', async () => {
-    const pair = ec.generateKeyPair();
-    const sig = jwt.sign({}, pair.private, {
+    const sig = jwt.sign({}, '', {
       algorithm: 'none',
       keyid: uuidv4(),
     });

@@ -22,7 +22,7 @@ import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 import semver from 'semver';
-import tar from 'tar';
+import * as tar from 'tar';
 import os from 'os';
 import promisePipe from 'promisepipe';
 import fetch from 'node-fetch';
@@ -1068,6 +1068,7 @@ export class AddonManager extends EventEmitter {
         ['package']
       );
     } catch (e) {
+      console.error(`Error extracting package: ${e}`);
       throw new Error(`Failed to extract package: ${e}`);
     }
 
