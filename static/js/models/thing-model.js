@@ -128,6 +128,21 @@ class ThingModel extends Model {
       if (message.hasOwnProperty('id') && message.id !== this.id) {
         return;
       }
+      if (typeof window.snoop_thing != 'undefined' && 
+         typeof window.snoop_thing[this.id] == 'object' && 
+         Array.isArray(window.snoop_thing[this.id])
+      ) {
+        for (let f = 0; f < window.snoop_thing[this.id].length; f++) {
+          if (typeof window.snoop_thing[this.id][f] === 'function') {
+            try {
+              window.snoop_thing[this.id][f](message);
+            }
+            catch (error) {
+              console.error(`thing-model.js: caught error passing message to thing id: ${this.id}, error: ${error}`);
+            }
+          }
+        }
+      }
       switch (message.messageType) {
         case 'propertyStatus':
           this.onPropertyStatus(message.data);
