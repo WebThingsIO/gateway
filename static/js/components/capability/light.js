@@ -166,7 +166,7 @@ class LightCapability extends BaseComponent {
       this._label.innerText = fluent.getMessage('off');
     }
 
-    if (this._haveColor || this._haveColorTmperature) {
+    if (this._haveColor || this._haveColorTemperature) {
       this._updateIconColor();
     } else if (this._on) {
       this._icon.style.fill = ON_FILL;
