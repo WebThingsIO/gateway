@@ -19,7 +19,8 @@ class Extension {
       timezone: App.TIMEZONE,
       units: App.UNITS,
     };
-    this.subscriptions = {};
+    this.property_subscriptions = {};
+    this.event_subscriptions = {};
     this.view = App.registerExtension(this);
   }
 
@@ -89,7 +90,7 @@ class Extension {
   }
 
   /**
-   * Allow extensions to subscribe to updates from Things so that
+   * Allow extensions to subscribe to property changes from Things so that
    * they don't need to create and manage their own websocket clients
    */
   subscribeToThingProperties(thingId,handler) {
@@ -98,7 +99,21 @@ class Extension {
       return false
     }
     App.gatewayModel.getThingModel(thingId).then((thingModel) => {
-      this.subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+      this.property_subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+    });
+  }
+
+  /**
+   * Allow extensions to subscribe to events from Things so that
+   * they don't need to create and manage their own websocket clients
+   */
+  subscribeToThingEvents(thingId,handler) {
+    if (typeof thingId !== 'string' || typeof handler !== 'function') {
+      console.error("extension: subscribeToThingEvents: invalid thingId or handler");
+      return false
+    }
+    App.gatewayModel.getThingModel(thingId).then((thingModel) => {
+      this.event_subscriptions[thingId] = thingModel.subscribe(Constants.EVENT_OCCURRED, handler);
     });
   }
 }
