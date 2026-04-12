@@ -79,7 +79,6 @@
 
 #things.single-thing > .thing > * {
   display: flex;
-  padding: 1rem;
   min-height: 14rem;
   min-width: 14rem;
   align-items: flex-start;
