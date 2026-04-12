@@ -7,6 +7,7 @@
  */
 'use strict';
 
+const Constants = require('./constants');
 const App = require('./app');
 const Menu = require('./views/menu');
 
@@ -18,6 +19,7 @@ class Extension {
       timezone: App.TIMEZONE,
       units: App.UNITS,
     };
+    this.subscriptions = {};
     this.view = App.registerExtension(this);
   }
 
@@ -84,6 +86,20 @@ class Extension {
     const backButton = document.getElementById('extension-back-button');
     backButton.href = href;
     backButton.classList.remove('hidden');
+  }
+
+  /**
+   * Allow extensions to subscribe to updates from Things so that
+   * they don't need to create and manage their own websocket clients
+   */
+  subscribeToThingProperties(thingId,handler) {
+    if (typeof thingId !== 'string' || typeof handler !== 'function') {
+      console.error("extension: subscribeToThingProperties: invalid thingId or handler");
+      return false
+    }
+    App.gatewayModel.getThingModel(thingId).then((thingModel) => {
+      this.subscriptions[thingId] = thingModel.subscribe(Constants.PROPERTY_STATUS, handler);
+    });
   }
 }
 
