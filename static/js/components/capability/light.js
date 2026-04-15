@@ -64,7 +64,8 @@ template.innerHTML = `
   <div id="container" class="webthing-light-capability-container">
     <div id="info" class="webthing-light-capability-info">
       <svg id="icon" class="webthing-light-capability-icon"
-        xmlns="http://www.w3.org/2000/svg" height="68" width="64">
+        xmlns="http://www.w3.org/2000/svg" height="68" width="64" 
+        viewBox="0 0 68 64">
         <g transform="translate(0,-987.36216)">
           <path
              d="m 41.6997,1041.6985 c 0,1.0723 -0.8727,1.9367 -1.9366,1.9367 l
