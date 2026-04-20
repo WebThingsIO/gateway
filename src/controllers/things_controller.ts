@@ -242,7 +242,7 @@ function build(): express.Router {
         } else if (isWotAdapterInstalled) {
           // thing-url-adapter is not installed or the ThingDescription was
           // recognized as a w3c thing description.
-          await loadThingInWotAdpater(description);
+          await loadThingInWotAdapter(description);
           adapterToBeReloaded = 'wot-adapter';
         }
       } catch (e) {
@@ -773,7 +773,7 @@ async function loadThingInThingUrlAdapter(description: { webthingUrl: string }):
   await Settings.setSetting(key, config);
 }
 
-async function loadThingInWotAdpater(description: { webthingUrl: string }): Promise<void> {
+async function loadThingInWotAdapter(description: { webthingUrl: string }): Promise<void> {
   const key = 'addons.config.wot-adapter';
   const config = <Record<string, unknown>>await Settings.getSetting(key);
   if (typeof config === 'undefined') {
