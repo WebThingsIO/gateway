@@ -71,11 +71,18 @@
   position: relative;
 }
 
-.thing-detail-contents {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+#things.single-thing > .thing {
+  width:100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#things.single-thing > .thing > * {
+  display: flex;
+  min-height: 14rem;
+  min-width: 14rem;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .thing-detail-label {

@@ -419,11 +419,12 @@ class Thing {
         action.attached = true;
       }
     }
-
+    /*
     this.layout = new ThingDetailLayout(
       this,
       this.element.querySelectorAll('.thing-detail-container')
     );
+    */
   }
 
   /**
