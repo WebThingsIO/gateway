@@ -161,7 +161,7 @@
     "qrcode-svg": "^1.1.0",
     "selenium-standalone": "^6.24.0",
     "shaka-player": "^3.3.19",
-    "simple-oauth2": "^3.4.0",
+    "simple-oauth2": "^5.1.0",
     "sinon": "^9.2.4",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
