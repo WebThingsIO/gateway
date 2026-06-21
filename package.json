@@ -78,7 +78,7 @@
     "ws": "^8.20.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
+    "@babel/core": "^7.29.6",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.29.2",
     "@types/archiver": "^5.3.4",
