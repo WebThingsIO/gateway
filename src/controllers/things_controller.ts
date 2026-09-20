@@ -230,7 +230,7 @@ function build(): express.Router {
     const isWotAdapterInstalled = AddonManager.isAddonInstalled('wot-adapter');
     const isThingUrlInstalled = AddonManager.isAddonInstalled('thing-url-adapter');
     // If we're adding a native webthing, we need to update the config for
-    // thing-url-adapter or wot-adpater so that it knows about it.
+    // thing-url-adapter or wot-adapter so that it knows about it.
     let webthing = false;
     let adapterToBeReloaded = 'thing-url-adapter';
     if (description.hasOwnProperty('webthingUrl')) {
@@ -265,7 +265,7 @@ function build(): express.Router {
       response.status(500).send(error);
     }
 
-    // If this is a web thing, we need to restart the adpater
+    // If this is a web thing, we need to restart the adapter
     if (webthing) {
       try {
         await AddonManager.unloadAddon(adapterToBeReloaded, true);
