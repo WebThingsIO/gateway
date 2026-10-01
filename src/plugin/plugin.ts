@@ -108,7 +108,7 @@ export default class Plugin {
 
   private stderrReadline?: readline.Interface;
 
-  private unloding = false;
+  private unloading = false;
 
   constructor(
     private pluginId: string,
@@ -325,7 +325,7 @@ export default class Plugin {
     switch (msg.messageType) {
       case MessageType.ADAPTER_ADDED_NOTIFICATION: {
         const data = msg.data as AdapterAddedNotificationMessageData;
-        if (this.unloding) {
+        if (this.unloading) {
           console.warn('Adapter', data.adapterId, 'added during unloading');
           return;
         }
@@ -869,7 +869,7 @@ export default class Plugin {
   unload(): void {
     console.log('Unloading plugin', this.pluginId);
     this.restart = false;
-    this.unloding = true;
+    this.unloading = true;
     this.sendMsg(MessageType.PLUGIN_UNLOAD_REQUEST, {});
   }
 
