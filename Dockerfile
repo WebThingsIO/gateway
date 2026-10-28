@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim
+FROM node:24.22.1-bookworm-slim
 
 EXPOSE 8080 4443
 
