@@ -32,7 +32,7 @@ parts:
     source: .
     after: [ python-deps ]
     npm-include-node: true
-    npm-node-version: 20.18.0
+    npm-node-version: 24.22.1
     build-environment:
       - npm_config_unsafe_perm: "true"
       - NODE_ENV: "dev"
