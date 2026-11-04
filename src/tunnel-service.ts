@@ -108,17 +108,13 @@ class TunnelService {
           let responseSent = false;
           this.tunnelToken = token;
           const endpoint = `${token.name}.${token.base}`;
-          this.pagekiteProcess = spawn(
-            config.get('ssltunnel.pagekite_cmd'),
-            [
-              '--clean',
-              `--frontend=${endpoint}:${config.get('ssltunnel.port')}`,
-              `--service_on=https:${endpoint}:localhost:${config.get('ports.https')}:${
-                this.tunnelToken!.token
-              }`,
-            ],
-            { shell: true }
-          );
+          this.pagekiteProcess = spawn(config.get('ssltunnel.pagekite_cmd'), [
+            '--clean',
+            `--frontend=${endpoint}:${config.get('ssltunnel.port')}`,
+            `--service_on=https:${endpoint}:localhost:${config.get('ports.https')}:${
+              this.tunnelToken!.token
+            }`,
+          ]);
 
           this.pagekiteProcess.stdout!.on('data', (data) => {
             if (DEBUG) {
