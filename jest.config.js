@@ -20,7 +20,9 @@ module.exports = {
     }],
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(@exodus/bytes|@asamuzakjp|@bramus|@csstools|parse5|tough-cookie)/)',
+    '/node_modules/(?!(' +
+      '@exodus/bytes|@asamuzakjp|@bramus|@csstools|entities|jsdom|parse5|tough-cookie' +
+      ')/)',
   ],
   setupFilesAfterEnv: [
     '<rootDir>/test/common.js',

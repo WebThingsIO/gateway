@@ -59,10 +59,6 @@ const pluginsWeb = [
       },
     },
   }),
-  new webpack.SourceMapDevToolPlugin({
-    test: /\.css$/,
-    filename: '[file].map',
-  }),
   new MiniCssExtractPlugin({
     filename: 'bundle/[contenthash]-[name].css',
   }),
