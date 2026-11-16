@@ -79,14 +79,25 @@ export function scopeAllowsRequest(scope: string | undefined, request: express.R
     const access = parts[1];
     const readwrite = access === Constants.READWRITE;
     path = parts[0];
+
+    if (requestPath === Constants.THINGS_PATH) {
+      const allowedCollectionRead =
+        path === Constants.THINGS_PATH || path.startsWith(Constants.THINGS_PATH);
+      if (!allowedCollectionRead) {
+        continue;
+      }
+      if (request.method === 'GET' || request.method === 'OPTIONS') {
+        return true;
+      }
+      return path === Constants.THINGS_PATH && readwrite;
+    }
+
     const allowedDirect = requestPath.startsWith(path);
-    const allowedThings =
-      requestPath === Constants.THINGS_PATH && path.startsWith(Constants.THINGS_PATH);
     // Allow access to media only if scope covers all things
     const allowedMedia =
       requestPath.startsWith(Constants.MEDIA_PATH) && path === Constants.THINGS_PATH;
 
-    if (allowedDirect || allowedThings || allowedMedia) {
+    if (allowedDirect || allowedMedia) {
       if (!readwrite && request.method !== 'GET' && request.method !== 'OPTIONS') {
         return false;
       }
