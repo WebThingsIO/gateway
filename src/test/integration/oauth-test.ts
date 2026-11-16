@@ -508,6 +508,78 @@ describe('oauth/', function () {
     expect(err.get('www-authenticate')).toEqual(expect.stringContaining('insufficient_scope'));
   });
 
+  it('rejects collection writes for a scoped thing token', async () => {
+    setupOAuth();
+    await addDevice();
+    await addDevice({
+      ...TEST_THING,
+      id: 'test-2',
+      title: 'test-2',
+    });
+
+    const res = await chai
+      .request(server)
+      .get(
+        `${Constants.OAUTH_PATH}/allow?${qs.stringify({
+          response_type: 'code',
+          client_id: CLIENT_ID,
+          scope: '/things/test-1:readwrite',
+          state: REQUEST_STATE,
+        })}`
+      )
+      .set('Accept', 'application/json')
+      .set(...headerAuth(userJWT));
+
+    const jwt = res.body.token.access_token;
+
+    const listRes = await chai
+      .request(server)
+      .get(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt));
+    expect(listRes.status).toEqual(200);
+    expect(listRes.body.length).toEqual(1);
+    expect(listRes.body[0].href).toEqual('/things/test-1');
+
+    const pinErr = await chai
+      .request(server)
+      .patch(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({ thingId: 'test-2', pin: '1234' });
+    expect(pinErr.status).toEqual(403);
+    expect(pinErr.header).toHaveProperty('www-authenticate');
+    expect(pinErr.get('www-authenticate')).toEqual(expect.stringContaining('insufficient_scope'));
+
+    const credentialsErr = await chai
+      .request(server)
+      .patch(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({ thingId: 'test-2', username: 'user', password: 'pass' });
+    expect(credentialsErr.status).toEqual(403);
+
+    const createErr = await chai
+      .request(server)
+      .post(Constants.THINGS_PATH)
+      .set('Accept', 'application/json')
+      .set(...headerAuth(jwt))
+      .send({
+        id: 'test-3',
+        title: 'test-3',
+        '@context': ['https://www.w3.org/2022/wot/td/v1.1', 'https://webthings.io/schemas'],
+        '@type': ['OnOffSwitch'],
+        properties: {
+          power: {
+            '@type': 'OnOffProperty',
+            type: 'boolean',
+            value: false,
+          },
+        },
+      });
+    expect(createErr.status).toEqual(403);
+  });
+
   it('rejects use of authorization code as access token', async () => {
     setupOAuth({}, function customCallbackHandler(req: express.Request, res: express.Response) {
       const code = req.query.code;
