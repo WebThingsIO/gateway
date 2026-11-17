@@ -36,6 +36,8 @@ parts:
     build-environment:
       - npm_config_unsafe_perm: "true"
       - NODE_ENV: "dev"
+      # Use the core22-compatible build instead of the sqlite3 prebuilt binary.
+      - npm_config_build_from_source: "sqlite3"
       - CPPFLAGS: "$CPPFLAGS -DPNG_ARM_NEON_OPT=0"
     build-packages:
       - automake
